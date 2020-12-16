@@ -4,5 +4,5 @@ import './index.css';
 
 
 
-ReactDOM.render(<div>shlomo is stormfront</div>,document.getElementById('root'));
+ReactDOM.render(<div>Hello World</div>,document.getElementById('root'));
 
