@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import { LoginComponent } from './pages/login page/LoginPage';
 
 
 
-ReactDOM.render(<div>Hello World</div>,document.getElementById('root'));
+ReactDOM.render(<LoginComponent/>,document.getElementById('root'));
 
