@@ -1,7 +1,7 @@
 import React from 'react';
 import LocalizedStrings from 'react-localization';
 import Dropdown, { DropdownContent, DropdownTrigger } from 'react-simple-dropdown';
-
+import './Dictionary.css'
 
 
 /* LocalizedStrings is holding our Dictionary so that all of the pages wiil be able to be translated.
@@ -157,9 +157,9 @@ export const Dictionary = new LocalizedStrings({
   },
   HE: {
     //login page
-    enterMail: `אנא הכניסי מייל`,
-    enterPass: `סיסמא`,
-    login: `התחברי`,
+    enterMail: `אנא הכניס דוא''ל`,
+    enterPass: `אנא הכנס סיסמא`,
+    login: `התחבר`,
     userDoesntExists: `גישה נדחתה`,
     logOutSuccessful: `משתמשת התנתקה בהצלחה`,
 
@@ -176,7 +176,7 @@ export const Dictionary = new LocalizedStrings({
     addUserBtn: `הוסיפי משתמש`,
     userAddedSuccefully: `משתמש חדש נוסף בהצלחה`,
     homePageBack: `עמוד הבית`,
-    signOut: `התנתקי`,
+    signOut: `התנתק`,
     admin: `מנהל`,
     feedbackTitle: 'משובים',
     didYouKnowTitle: 'עובדות',

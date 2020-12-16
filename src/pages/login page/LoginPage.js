@@ -5,6 +5,7 @@ import './LoginPage.css';
 import $ from 'jquery';
 import { auth } from '../../config/firebaseConfig';
 import MainUserPage from '../Main user page/MainUserPage'
+import {Dictionary, LangBtn} from '../../Dictionary'
 import { validate } from 'jquery-validation';
 // require('jquery-validation');
 
@@ -57,7 +58,7 @@ class LoginPage extends Component {
     render() {
         return (
             <div id="LPcover" className="cover">
-
+                <LangBtn/>
                 <div id="loginWrapper" className="wrapper">
                     <div className="loginContainer">
 
@@ -66,7 +67,7 @@ class LoginPage extends Component {
                                 < input type="email"
                                     id="email"
                                     name="email"
-                                    placeholder="Enter email"
+                                    placeholder={Dictionary.enterMail}
                                     autoComplete='off'
                                     defaultValue="" required
                                     onChange={this.handleChange}>
@@ -75,7 +76,7 @@ class LoginPage extends Component {
                                 < input type="password"
                                     id="password"
                                     name="password"
-                                    placeholder="Enter password"
+                                    placeholder={Dictionary.enterPass}
                                     autoComplete='off'
                                     defaultValue="" required
                                     onChange={this.handleChange}
@@ -83,10 +84,10 @@ class LoginPage extends Component {
                                 </input>
                                 <button id="loginbtn"
                                     type="submit"
-                                    text="login"
+                                    text={Dictionary.login}
                                     className="btn btn-success"
                                     onClick={this.login} >
-                                    Login
+                                    {Dictionary.login}
                                 </button>
                             </form>
                         </div>
