@@ -54,8 +54,8 @@ ul {
     cursor: pointer;
     width: 100px;
     padding: 5px;
-    background-color: rgb(165, 4, 165);
-    color: #adb5bd;
+    background-color:#ccc;
+    color: black;
     font-weight: bold;
     border-radius: 13%;
     margin-bottom: 2%;

@@ -61,7 +61,7 @@ class LoginPage extends Component {
                 <LangBtn/>
                 <div id="loginWrapper" className="wrapper">
                     <div className="loginContainer">
-
+                        
                         <div id="buttonWrapper123">
                             <form dir="RTL" id="login_form" name="login_form_name" role="form">
                                 < input type="email"
@@ -91,6 +91,7 @@ class LoginPage extends Component {
                                 </button>
                             </form>
                         </div>
+                        <img src ="http://up419.siz.co.il/up2/ljmkmijir2yn.png"></img>
                     </div>
                 </div>
             </div>
