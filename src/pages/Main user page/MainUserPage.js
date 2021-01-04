@@ -6,11 +6,17 @@ import axios from 'axios'
 
 
 function req(){
-    alert("sssss")
-    axios.get('http://127.0.0.1:5000/get/weights').then(response =>{
-        alert(response)
-    }).catch(error =>{
-        alert(error)
+    
+    // axios.get('http://127.0.0.1:5000/get/weights').then(response =>{
+    //     alert("yes")
+    // }).catch(error =>{
+    //     alert(error)
+    // })
+
+    fetch('http://127.0.0.1:5000/get/weights').then(res =>{
+        console.log(res)
+    }).catch(err =>{
+        alert("no")
     })
     
 }
