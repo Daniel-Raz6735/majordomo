@@ -1,6 +1,6 @@
 
 
-def create_table_query(table_name, cols):
+def create_table_query(table_name, cols,bull_val):
     """creates a create table query using the parameters
     input: table name: string with table name
             cols: list of lists. each list is an attribute [[column name, data type, key(optional),null/not null]...]
@@ -40,8 +40,8 @@ def insert_to_table_query(table_name, cols, values):
                 query += "'" + val + "', "
             else:
                 query += str(val) + ", "
-        query = query[:-2] + ")\n("
-    query = query[:-1] + ";"
+        query = query[:-2] + "),\n("
+    query = query[:-3] + ";"
     if entered_loop:
         return 200, query
     else:

@@ -15,18 +15,20 @@ def dict_factory(cursor, row):
     return d
 
 
-def phrase_parameters(params):
+def phrase_parameters(params, used_params):
     query_parameters = []
     non_used_params = []
+    print(params)
     for param in params:
         # id = query_parameters.get('id')
         # to_filter = []
         # info = [123, "new person", "dan", "hat", "City"]
-        print(param)
-
-        query_parameters.append([param[0], param[1]])
-        # info[0] = id
-    return query_parameters
+        p = params.get(param)
+        if param in used_params:
+            query_parameters.append([param, p])
+        else:
+            non_used_params.append([param, p])
+    return query_parameters,non_used_params
 
 
 def error_message(code, message):
@@ -48,120 +50,54 @@ def home():
 def get_weights_data():
     list_of_cols = ["a", "b", "c"]
     # create_proj_tables()
-    # query_arguments = phrase_parameters(request.args)
-    load_dummy_data()
+    # load_dummy_data()
+    used_p, non_used_p = phrase_parameters(request.args, list_of_cols)
+
     # return ask_db(db_queries.select_query(query_arguments))
     return '''<h1>Distant Reading Archive</h1>
        <p>A prototype API for distant reading of science fiction novels.</p>'''
-
-# @app.route('/api', methods=['GET'])
-# def api_filter():
-#     conn = None
-#     rows = ""
-#     try:
-#         # read connection parameters
-#         params = config("postgres")
-#
-#         # connect to the PostgreSQL server
-#         print('Connecting to the PostgreSQL database...')
-#         conn = psycopg2.connect(**params)
-#
-#         # create a cursor
-#         cur = conn.cursor()
-#         query_parameters = request.args
-#         id = query_parameters.get('id')
-#         to_filter = []
-#         info = [123, "new person", "dan", "hat", "City"]
-#
-#         if id:
-#             to_filter.append(["PersonID", id])
-#             info[0] = id
-#         # else:
-#         #     return page_not_found(404)
-#
-#         # create_table
-#         # for key in tables:
-#         #     cur.execute(db_queries.create_table(key, tables[key]["keys"], tables[key]["cols"]))
-#         #     print("adding table : ", key,tables[key]["keys"],tables[key]["cols"])
-#         # conn.commit()
-#
-#
-#         # add more data
-#         # cur.execute(db_queries.insert_to_table("shlomo", info))
-#         # conn.commit()
-#
-#
-#         # cur.execute("SELECT * from shlomo")
-#         cur.execute(db_queries.read_info_from_db("shlomo", ["PersonID", "FirstName", "LastName", "City"], to_filter))
-#         rows = cur.fetchall()
-#         print(rows)
-#         #
-#
-#
-#         # conn = sqlite3.connect('books.db')
-#         # conn.row_factory = dict_factory
-#         # cur = conn.cursor()
-#         # results = cur.execute(query, to_filter).fetchall()
-#
-#     except (Exception, psycopg2.DatabaseError) as error:
-#             print(error)
-#     finally:
-#         if conn is not None:
-#             # close the communication with the PostgreSQL
-#             conn.close()
-#             print('Database connection closed.')
-#             return jsonify(rows)
 
 
 def load_dummy_data():
     weight_columns = ["container_id", "weighing_time", "weight_value"]
     weight_data = [
-                    [1, 1609795520, 4],
-                    [1, 1609795603, 3],
-                    [1, 1609795611, 2],
-                    [1, 1609795620, 2.5],
-                    [2, 1609795520, 4.5],
-                    [2, 1609795603, 3.5],
-                    [2, 1609795611, 2.5],
-                    [2, 1609795620, 2.5],
-                    [3, 1609795520, 4.9],
-                    [3, 1609795603, 3.9],
-                    [3, 1609795611, 2.9],
-                    [3, 1609795620, 2.9],
+                    [1, '2004-10-19 10:23:54', 4],
+                    [1, '2004-10-20 10:23:54', 3],
+                    [1, '2004-10-21 10:23:54', 2],
+                    [1, '2004-10-22 10:23:54', 2.5],
+                    [2, '2004-10-23 10:23:54', 4.5],
+                    [2, '2004-10-24 10:23:54', 3.5],
+                    [2, '2004-10-25 10:23:54', 2.5],
+                    [2, '2004-10-26 10:23:54', 2.5],
+                    [3, '2004-10-27 10:23:54', 4.9],
+                    [3, '2004-10-28 10:23:54', 3.9],
+                    [3, '2004-11-19 10:23:54', 2.9],
+                    [3, '2004-12-19 10:23:54', 2.9],
     ]
     ask_db(db_queries.insert_to_table_query,"weights",weight_columns,weight_data)
 
     containers_columns = ["container_id", "using_start_date", "item_id", "client_id"]
     containers_data = [
-                        [1, 1578172837, 21, 50],
-                        [2, 1578172837, 22, 50],
-                        [3, 1578172837, 25, 2]]
-    # db_queries.insert_to_table_query("containers", containers_columns,containers_data)
-    ask_db(db_queries.insert_to_table_query,"containers",containers_columns,containers_data)
+                        [1, '2004-10-19 10:23:54', 21, 50],
+                        [2, '2004-10-19 10:23:54', 22, 50],
+                        [3, '2004-10-19 10:23:54', 25, 2]]
+    ask_db(db_queries.insert_to_table_query, "containers", containers_columns, containers_data)
 
-# container_vars = [["container_id", "varchar(10)", "NOT NULL"],
-#                   ["using_start_date", "date", "NOT NULL"],
-#                   ["item_id", "int", "NULL"],
-#                   ["client_id", "int", "NULL"]
-#                   ]
 
 def create_proj_tables():
-    weight = db_queries.create_table_query("weights",
-                                           [["container_id", "varchar(10)", "NOT NULL"],
-                                            ["weighing_time", "date", "NOT NULL"],
-                                            ["weight_value", "double", "NOT NULL"]])
+
 
     weights_vars =[["container_id", "int", "NOT NULL"],
-                                            ["weighing_time", "date", "NOT NULL"],
-                                            ["weight_value", "double", "NOT NULL"]]
+                                            ["weighing_time", "timestamp", "NOT NULL"],
+                                            ["weight_value", "real", "NOT NULL"]]
 
     container_vars = [["container_id", "int", "NOT NULL"],
-                      ["using_start_date", "date", "NOT NULL"],
+                      ["using_start_date", "timestamp", "NOT NULL"],
                       ["item_id", "int", "NULL"],
                       ["client_id", "int", "NULL"]
                       ]
-    ask_db(db_queries.create_table_query, "containers", container_vars)
     ask_db(db_queries.create_table_query, "weights", weights_vars)
+    ask_db(db_queries.create_table_query, "containers", container_vars)
 
 
 def ask_db(func, args, extra_args, more_args=None, expecting_result=False):
@@ -180,9 +116,9 @@ def ask_db(func, args, extra_args, more_args=None, expecting_result=False):
         print(args, extra_args)
         res_code, query = func(args, extra_args,more_args)
         if res_code == 200:
-            cur.execute(query)
-            print("query: ")
+            print("executing query: ")
             print(query)
+            cur.execute(query)
             conn.commit()
             if expecting_result:
                 rows = cur.fetchall()
@@ -206,6 +142,30 @@ def ask_db(func, args, extra_args, more_args=None, expecting_result=False):
         return '''<h1>Distant Reading Archive</h1>
            <p>A prototype API for distant reading of science fiction novels.</p>'''
 
+
+if __name__ == '__main__':
+    app.run()
+
+
+
+
+
+# usage examples
+# print(db_queries.select_query(  ["shlomo", "daniel"],
+#                                 [[["a", "b"], ["c"]], [["d"]]],
+#                                 [["and not",  "b", " = ", "d"],
+#                                  ["and","c",">","d"],
+#                                  ["or","c",">","d"]]))
+# print(db_queries.insert_to_table_query("shlomo", ["a", "b", "c"],
+#                                        [["a1", "b1", "c1", "d1"],
+#                                         ["a2", "b2", "c2"],
+#                                         ["a3", 3, 3],
+#                                         ["a4", "b4", "c4"]]))
+# print(db_queries.create_table_query("shlomo",
+#                                     [["a", "int", "PRIMARY KEY", " NOT NULL"],
+#                                      ["b", "varchar(20)", " NULL"],
+#                                      ["c", "varchar(20)", " NULL"]]))
+# ask_db(create_proj_tables, None, None)
         # create_table
         # for key in tables:
         #     cur.execute(db_queries.create_table(key, tables[key]["keys"], tables[key]["cols"]))
@@ -228,43 +188,6 @@ def ask_db(func, args, extra_args, more_args=None, expecting_result=False):
         # results = cur.execute(query, to_filter).fetchall()
 
 
-# def connect():
-#     """ Connect to the PostgreSQL database server """
-#     conn = None
-#     try:
-#         # read connection parameters
-#         params = config()
-#
-#         # connect to the PostgreSQL server
-#         print('Connecting to the PostgreSQL database...')
-#         conn = psycopg2.connect(**params)
-#
-#         # create a cursor
-#         cur = conn.cursor()
-#         for key in tables:
-#             cur.execute(db_queries.create_table(key, tables[key]["keys"], tables[key]["cols"]))
-#         conn.commit()
-#         cur.execute(db_queries.)
-#
-#
-#         conn.commit()
-#
-#         cur.execute("SELECT * from shlomo")
-#         rows = cur.fetchall()
-#         print(rows)
-#
-#
-#
-#         # close the communication with the PostgreSQL
-#         cur.close()
-#     except (Exception, psycopg2.DatabaseError) as error:
-#         print(error)
-#     finally:
-#         if conn is not None:
-#             conn.close()
-#             print('Database connection closed.')
-
-
 tables = {
     "shlomo": {
         "keys": [["PersonID", "int"]],
@@ -278,24 +201,3 @@ tables = {
 }
 
 # info =[PersonID, FirstName, LastName, Address, City]
-
-if __name__ == '__main__':
-    # create_proj_tables()
-    app.run()
-
-# usage examples
-# print(db_queries.select_query(  ["shlomo", "daniel"],
-#                                 [[["a", "b"], ["c"]], [["d"]]],
-#                                 [["and not",  "b", " = ", "d"],
-#                                  ["and","c",">","d"],
-#                                  ["or","c",">","d"]]))
-# print(db_queries.insert_to_table_query("shlomo", ["a", "b", "c"],
-#                                        [["a1", "b1", "c1", "d1"],
-#                                         ["a2", "b2", "c2"],
-#                                         ["a3", 3, 3],
-#                                         ["a4", "b4", "c4"]]))
-# print(db_queries.create_table_query("shlomo",
-#                                     [["a", "int", "PRIMARY KEY", " NOT NULL"],
-#                                      ["b", "varchar(20)", " NULL"],
-#                                      ["c", "varchar(20)", " NULL"]]))
-# ask_db(create_proj_tables, None, None)
