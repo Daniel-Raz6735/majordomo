@@ -1,0 +1,742 @@
+Index: src/pages/Main user page/MainUserPage.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { Component } from 'react';\r\nimport ReactDOM from 'react-dom';\r\nimport { Dictionary, LangBtn } from '../../Dictionary'\r\nimport { auth } from '../../config/firebaseConfig'\r\n\r\nclass MainUserPage extends Component {\r\n\r\n    constructor(props) {\r\n        super(props);\r\n\r\n    }\r\n    render() {\r\n        return (\r\n            <div>\r\n                Hello World\r\n                <LangBtn />\r\n                <button id=\"logoutBtn\" onClick={() => {\r\n                    auth.signOut()\r\n                    window.location.reload()\r\n                }} >{Dictionary.signOut}</button>\r\n            </div>\r\n        );\r\n\r\n    }\r\n}\r\nexport default MainUserPage
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/pages/Main user page/MainUserPage.js	(revision e434e5c45d350b1c2a0ac64b73002e452228169d)
++++ src/pages/Main user page/MainUserPage.js	(date 1609795692429)
+@@ -1,7 +1,20 @@
+ import React, { Component } from 'react';
+-import ReactDOM from 'react-dom';
+ import { Dictionary, LangBtn } from '../../Dictionary'
+ import { auth } from '../../config/firebaseConfig'
++import './MainUserPage.css'
++import axios from 'axios'
++
++
++function req(){
++    alert("sssss")
++    axios.get('http://127.0.0.1:5000/get/weights').then(response =>{
++        alert(response)
++    }).catch(error =>{
++        alert(error)
++    })
++    
++}
++
+ 
+ class MainUserPage extends Component {
+ 
+@@ -10,6 +23,7 @@
+ 
+     }
+     render() {
++        // window.location = "www.google.com"
+         return (
+             <div>
+                 Hello World
+@@ -18,6 +32,9 @@
+                     auth.signOut()
+                     window.location.reload()
+                 }} >{Dictionary.signOut}</button>
++                <button class ="test" onClick ={()=> req()}>1</button>
++                <button class ="test" onClick ={()=> window.location.replace("http://www.google.com") }>2</button>
++                <button class ="test" onClick ={()=> window.location.replace("http://www.google.com") }>3</button>
+             </div>
+         );
+ 
+Index: src/pages/Main user page/MainUserPage.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/pages/Main user page/MainUserPage.css	(revision e434e5c45d350b1c2a0ac64b73002e452228169d)
++++ src/pages/Main user page/MainUserPage.css	(date 1609791827513)
+@@ -1,0 +1,7 @@
++.test{
++    
++    top: 50%;
++    left: 50%;
++    height: 50px;
++    width: 100px;
++}
+\ No newline at end of file
+Index: package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n  \"name\": \"majordomo\",\r\n  \"version\": \"0.1.0\",\r\n  \"private\": true,\r\n  \"dependencies\": {\r\n    \"@testing-library/jest-dom\": \"^5.11.6\",\r\n    \"@testing-library/react\": \"^11.2.2\",\r\n    \"@testing-library/user-event\": \"^12.6.0\",\r\n    \"firebase\": \"^8.2.0\",\r\n    \"jquery\": \"^3.5.1\",\r\n    \"jquery-validation\": \"^1.19.2\",\r\n    \"react\": \"^17.0.1\",\r\n    \"react-dom\": \"^17.0.1\",\r\n    \"react-localization\": \"^1.0.15\",\r\n    \"react-router-dom\": \"^5.2.0\",\r\n    \"react-scripts\": \"4.0.1\",\r\n    \"react-simple-dropdown\": \"^3.2.3\",\r\n    \"web-vitals\": \"^0.2.4\"\r\n  },\r\n  \"scripts\": {\r\n    \"start\": \"react-scripts start\",\r\n    \"build\": \"react-scripts build\",\r\n    \"test\": \"react-scripts test\",\r\n    \"eject\": \"react-scripts eject\"\r\n  },\r\n  \"eslintConfig\": {\r\n    \"extends\": [\r\n      \"react-app\",\r\n      \"react-app/jest\"\r\n    ]\r\n  },\r\n  \"browserslist\": {\r\n    \"production\": [\r\n      \">0.2%\",\r\n      \"not dead\",\r\n      \"not op_mini all\"\r\n    ],\r\n    \"development\": [\r\n      \"last 1 chrome version\",\r\n      \"last 1 firefox version\",\r\n      \"last 1 safari version\"\r\n    ]\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- package.json	(revision e434e5c45d350b1c2a0ac64b73002e452228169d)
++++ package.json	(date 1609795580458)
+@@ -6,6 +6,7 @@
+     "@testing-library/jest-dom": "^5.11.6",
+     "@testing-library/react": "^11.2.2",
+     "@testing-library/user-event": "^12.6.0",
++    "axios-react": "^2.0.2",
+     "firebase": "^8.2.0",
+     "jquery": "^3.5.1",
+     "jquery-validation": "^1.19.2",
+Index: src/Dictionary.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react';\r\nimport LocalizedStrings from 'react-localization';\r\nimport Dropdown, { DropdownContent, DropdownTrigger } from 'react-simple-dropdown';\r\nimport './Dictionary.css';\r\nimport globe from './images/globe.png';\r\n\r\n\r\n/* LocalizedStrings is holding our Dictionary so that all of the pages wiil be able to be translated.\r\nto set a language you can call 'Dictionart.setLanguage([the language])'\r\nall pages can reference the text with 'Dictionery.[reference]\r\nthe references were devided to the main pages that is using them*/\r\nexport const Dictionary = new LocalizedStrings({\r\n  EN: {\r\n    //login page\r\n    enterMail: `Please enter email`,\r\n    enterPass: `Password`,\r\n    login: `Log in`, \r\n    signOut: `Sign out`,\r\n    \r\n    \r\n  },\r\n  HE: {\r\n    //login page\r\n    enterMail: `אנא הכניס דוא''ל`,\r\n    enterPass: `אנא הכנס סיסמא`,\r\n    login: `התחבר`,\r\n    signOut: `התנתק`,\r\n    \r\n  }});\r\n\r\n  \r\n//language array\r\nexport const langs = [\"HE\", \"EN\"];\r\n\r\n//set language that is in the session Storage\r\nvar language = sessionStorage.getItem(\"current_language\");\r\nif (language === null) {\r\n  language = langs[0];\r\n}\r\nDictionary.setLanguage(language);\r\n\r\n//save new language in session storage and reload page\r\nfunction changeLanguage(lang) {\r\n  return function () {\r\n    sessionStorage.setItem(\"current_language\", lang);\r\n    window.location.reload();\r\n  }\r\n}\r\n//get the current page direction needed\r\nexport function getRTL(lang) {\r\n  let targetLang = lang ? lang : Dictionary.getLanguage();\r\n\r\n  switch (targetLang) {\r\n    case \"EN\":\r\n      return \"ltr\";\r\n    case \"HE\":\r\n    default:\r\n      return \"rtl\";\r\n  }\r\n\r\n\r\n}\r\n//sets a globe image with three language buttons \r\nexport const LangBtn = () => {\r\n  var currentLng = Dictionary.getLanguage();\r\n  var HEId = \"\",\r\n    ENId = \"\";\r\n\r\n  if (currentLng === \"EN\") ENId = \"chosen\";\r\n  else HEId = \"chosen\";\r\n\r\n\r\n  return (\r\n    <div id=\"languages\">\r\n      <Dropdown >\r\n\r\n        <DropdownTrigger>\r\n          <div id=\"displayAndGlobe\">\r\n            <div>\r\n              <img src={globe} id=\"globus\" alt=\"lang\" />\r\n            </div>\r\n            <div>\r\n              <a id=\"currentLangDisplay\">{Dictionary.getLanguage()}</a>\r\n            </div>\r\n          </div>\r\n        </DropdownTrigger>\r\n\r\n        <DropdownContent>\r\n\r\n          <ul id=\"langlist\">\r\n            <li>\r\n              <button id={HEId} className=\"langButtons\" onClick={changeLanguage(\"HE\")}>עברית</button>\r\n            </li>\r\n            <li>\r\n              <button id={ENId} className=\"langButtons \" onClick={changeLanguage(\"EN\")} >English</button>\r\n            </li>\r\n          </ul>\r\n        </DropdownContent>\r\n      </Dropdown>\r\n    </div>\r\n  );\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/Dictionary.js	(revision e434e5c45d350b1c2a0ac64b73002e452228169d)
++++ src/Dictionary.js	(date 1609793621367)
+@@ -16,6 +16,8 @@
+     enterPass: `Password`,
+     login: `Log in`, 
+     signOut: `Sign out`,
++    inventory : "show inventory",
++    
+     
+     
+   },
+@@ -25,6 +27,7 @@
+     enterPass: `אנא הכנס סיסמא`,
+     login: `התחבר`,
+     signOut: `התנתק`,
++    inventory : "הצגת מלאי"
+     
+   }});
+ 
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"BranchesTreeState\">\r\n    <expand>\r\n      <path>\r\n        <item name=\"ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\r\n        <item name=\"LOCAL_ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\r\n      </path>\r\n      <path>\r\n        <item name=\"ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\r\n        <item name=\"REMOTE_ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\r\n      </path>\r\n      <path>\r\n        <item name=\"ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\r\n        <item name=\"REMOTE_ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\r\n        <item name=\"GROUP_NODE:origin\" type=\"e8cecc67:BranchNodeDescriptor\" />\r\n      </path>\r\n    </expand>\r\n    <select />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"87864e87-4142-4c78-bf71-c690cf7442a1\" name=\"Default Changelist\" comment=\"upload test\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/majordomo.iml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/majordomo.iml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/misc.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/misc.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/database.ini\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/backend/database.ini\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/db_queries.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/backend/db_queries.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/functions.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/backend/functions.py\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Pull.Settings\">\r\n    <option name=\"BRANCH\" value=\"master\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n    <option name=\"RESET_MODE\" value=\"HARD\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"1mZo9UA1xi6xwIAIaX30KsnzwNV\" />\r\n  <component name=\"ProjectLevelVcsManager\">\r\n    <OptionsSetting value=\"false\" id=\"Update\" />\r\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"ASKED_ADD_EXTERNAL_FILES\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\r\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$/../SD.py\" />\r\n    <property name=\"settings.editor.selected.configurable\" value=\"preferences.lookFeel\" />\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"functions\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"majordomo\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/backend\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/backend/functions.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Python.functions\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"87864e87-4142-4c78-bf71-c690cf7442a1\" name=\"Default Changelist\" comment=\"\" />\r\n      <created>1609710323345</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1609710323345</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"upload test\">\r\n      <created>1609750966983</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1609750966983</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.History.Properties\">\r\n    <option name=\"COLUMN_ORDER\">\r\n      <list>\r\n        <option value=\"0\" />\r\n        <option value=\"2\" />\r\n        <option value=\"3\" />\r\n        <option value=\"1\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n    <option name=\"oldMeFiltersMigrated\" value=\"true\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <option name=\"ADD_EXTERNAL_FILES_SILENTLY\" value=\"true\" />\r\n    <MESSAGE value=\"upload test\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"upload test\" />\r\n  </component>\r\n  <component name=\"WindowStateProjectService\">\r\n    <state x=\"-1180\" y=\"275\" key=\"FileChooserDialogImpl\" timestamp=\"1609756117353\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state x=\"-1180\" y=\"275\" key=\"FileChooserDialogImpl/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609756117353\" />\r\n    <state width=\"1899\" height=\"282\" key=\"GridCell.Tab.0.bottom\" timestamp=\"1609763497749\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state width=\"1899\" height=\"282\" key=\"GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609763497749\" />\r\n    <state width=\"1899\" height=\"282\" key=\"GridCell.Tab.0.center\" timestamp=\"1609763497749\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state width=\"1899\" height=\"282\" key=\"GridCell.Tab.0.center/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609763497749\" />\r\n    <state width=\"1899\" height=\"282\" key=\"GridCell.Tab.0.left\" timestamp=\"1609763497749\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state width=\"1899\" height=\"282\" key=\"GridCell.Tab.0.left/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609763497749\" />\r\n    <state width=\"1899\" height=\"282\" key=\"GridCell.Tab.0.right\" timestamp=\"1609763497749\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state width=\"1899\" height=\"282\" key=\"GridCell.Tab.0.right/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609763497749\" />\r\n    <state width=\"1899\" height=\"223\" key=\"GridCell.Tab.1.bottom\" timestamp=\"1609750693208\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state width=\"1899\" height=\"223\" key=\"GridCell.Tab.1.bottom/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609750693208\" />\r\n    <state width=\"1899\" height=\"223\" key=\"GridCell.Tab.1.center\" timestamp=\"1609750693208\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state width=\"1899\" height=\"223\" key=\"GridCell.Tab.1.center/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609750693208\" />\r\n    <state width=\"1899\" height=\"223\" key=\"GridCell.Tab.1.left\" timestamp=\"1609750693208\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state width=\"1899\" height=\"223\" key=\"GridCell.Tab.1.left/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609750693208\" />\r\n    <state width=\"1899\" height=\"223\" key=\"GridCell.Tab.1.right\" timestamp=\"1609750693208\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state width=\"1899\" height=\"223\" key=\"GridCell.Tab.1.right/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609750693208\" />\r\n    <state x=\"-1681\" y=\"75\" width=\"1343\" height=\"792\" key=\"MergeDialog\" timestamp=\"1609760927786\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state x=\"-1681\" y=\"75\" width=\"1343\" height=\"792\" key=\"MergeDialog/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609760927786\" />\r\n    <state x=\"-1322\" y=\"281\" key=\"MultipleFileMergeDialog\" timestamp=\"1609760916512\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state x=\"-1322\" y=\"281\" key=\"MultipleFileMergeDialog/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609760916512\" />\r\n    <state x=\"-1459\" y=\"165\" key=\"SettingsEditor\" timestamp=\"1609710552650\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state x=\"-1459\" y=\"165\" key=\"SettingsEditor/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609710552650\" />\r\n    <state x=\"-1148\" y=\"261\" key=\"Vcs.Push.Dialog.v2\" timestamp=\"1609760944226\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state x=\"-1148\" y=\"261\" key=\"Vcs.Push.Dialog.v2/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609760944226\" />\r\n    <state x=\"-1828\" y=\"92\" width=\"1736\" height=\"856\" key=\"com.intellij.history.integration.ui.views.FileHistoryDialog\" timestamp=\"1609749930411\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state x=\"-1828\" y=\"92\" width=\"1736\" height=\"856\" key=\"com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609749930411\" />\r\n    <state x=\"-1143\" y=\"434\" key=\"com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2\" timestamp=\"1609710495065\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state x=\"-1143\" y=\"434\" key=\"com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609710495065\" />\r\n    <state x=\"-1297\" y=\"225\" width=\"672\" height=\"678\" key=\"search.everywhere.popup\" timestamp=\"1609710545430\">\r\n      <screen x=\"-1920\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state x=\"-1297\" y=\"225\" width=\"672\" height=\"678\" key=\"search.everywhere.popup/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040\" timestamp=\"1609710545430\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/workspace.xml	(revision e434e5c45d350b1c2a0ac64b73002e452228169d)
++++ .idea/workspace.xml	(date 1609796181406)
+@@ -19,13 +19,14 @@
+     <select />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="upload test">
+-      <change beforePath="$PROJECT_DIR$/.idea/majordomo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/majordomo.iml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="connect to AWS">
++      <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/database.ini" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database.ini" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/db_queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db_queries.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/functions.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/Dictionary.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Dictionary.js" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/pages/Main user page/MainUserPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Main user page/MainUserPage.css" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/pages/Main user page/MainUserPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Main user page/MainUserPage.js" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -98,7 +99,14 @@
+       <option name="project" value="LOCAL" />
+       <updated>1609750966983</updated>
+     </task>
+-    <option name="localTasksCounter" value="2" />
++    <task id="LOCAL-00002" summary="connect to AWS">
++      <created>1609763895565</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1609763895566</updated>
++    </task>
++    <option name="localTasksCounter" value="3" />
+     <servers />
+   </component>
+   <component name="Vcs.Log.History.Properties">
+@@ -126,29 +134,30 @@
+   <component name="VcsManagerConfiguration">
+     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+     <MESSAGE value="upload test" />
+-    <option name="LAST_COMMIT_MESSAGE" value="upload test" />
++    <MESSAGE value="connect to AWS" />
++    <option name="LAST_COMMIT_MESSAGE" value="connect to AWS" />
+   </component>
+   <component name="WindowStateProjectService">
+     <state x="-1180" y="275" key="FileChooserDialogImpl" timestamp="1609756117353">
+       <screen x="-1920" y="0" width="1920" height="1040" />
+     </state>
+     <state x="-1180" y="275" key="FileChooserDialogImpl/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609756117353" />
+-    <state width="1899" height="282" key="GridCell.Tab.0.bottom" timestamp="1609763497749">
++    <state width="1899" height="282" key="GridCell.Tab.0.bottom" timestamp="1609763827077">
+       <screen x="-1920" y="0" width="1920" height="1040" />
+     </state>
+-    <state width="1899" height="282" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609763497749" />
+-    <state width="1899" height="282" key="GridCell.Tab.0.center" timestamp="1609763497749">
++    <state width="1899" height="282" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609763827077" />
++    <state width="1899" height="282" key="GridCell.Tab.0.center" timestamp="1609763827077">
+       <screen x="-1920" y="0" width="1920" height="1040" />
+     </state>
+-    <state width="1899" height="282" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609763497749" />
+-    <state width="1899" height="282" key="GridCell.Tab.0.left" timestamp="1609763497749">
++    <state width="1899" height="282" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609763827077" />
++    <state width="1899" height="282" key="GridCell.Tab.0.left" timestamp="1609763827077">
+       <screen x="-1920" y="0" width="1920" height="1040" />
+     </state>
+-    <state width="1899" height="282" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609763497749" />
+-    <state width="1899" height="282" key="GridCell.Tab.0.right" timestamp="1609763497749">
++    <state width="1899" height="282" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609763827077" />
++    <state width="1899" height="282" key="GridCell.Tab.0.right" timestamp="1609763827077">
+       <screen x="-1920" y="0" width="1920" height="1040" />
+     </state>
+-    <state width="1899" height="282" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609763497749" />
++    <state width="1899" height="282" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609763827077" />
+     <state width="1899" height="223" key="GridCell.Tab.1.bottom" timestamp="1609750693208">
+       <screen x="-1920" y="0" width="1920" height="1040" />
+     </state>
+@@ -177,10 +186,10 @@
+       <screen x="-1920" y="0" width="1920" height="1040" />
+     </state>
+     <state x="-1459" y="165" key="SettingsEditor/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609710552650" />
+-    <state x="-1148" y="261" key="Vcs.Push.Dialog.v2" timestamp="1609760944226">
++    <state x="-1148" y="261" key="Vcs.Push.Dialog.v2" timestamp="1609763903132">
+       <screen x="-1920" y="0" width="1920" height="1040" />
+     </state>
+-    <state x="-1148" y="261" key="Vcs.Push.Dialog.v2/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609760944226" />
++    <state x="-1148" y="261" key="Vcs.Push.Dialog.v2/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609763903132" />
+     <state x="-1828" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1609749930411">
+       <screen x="-1920" y="0" width="1920" height="1040" />
+     </state>
+Index: .eslintcache
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[{\"C:\\\\Users\\\\Daniel Raz\\\\Desktop\\\\majordomo\\\\src\\\\index.js\":\"1\",\"C:\\\\Users\\\\Daniel Raz\\\\Desktop\\\\majordomo\\\\src\\\\config\\\\firebaseConfig.js\":\"2\",\"C:\\\\Users\\\\Daniel Raz\\\\Desktop\\\\majordomo\\\\src\\\\pages\\\\login page\\\\LoginPage.js\":\"3\",\"C:\\\\Users\\\\Daniel Raz\\\\Desktop\\\\majordomo\\\\src\\\\pages\\\\Main user page\\\\MainUserPage.js\":\"4\",\"C:\\\\Users\\\\Daniel Raz\\\\Desktop\\\\majordomo\\\\src\\\\Dictionary.js\":\"5\"},{\"size\":218,\"mtime\":1608117662368,\"results\":\"6\",\"hashOfConfig\":\"7\"},{\"size\":661,\"mtime\":1608115850012,\"results\":\"8\",\"hashOfConfig\":\"7\"},{\"size\":6172,\"mtime\":1608238182083,\"results\":\"9\",\"hashOfConfig\":\"7\"},{\"size\":660,\"mtime\":1608140873505,\"results\":\"10\",\"hashOfConfig\":\"7\"},{\"size\":2723,\"mtime\":1608481158705,\"results\":\"11\",\"hashOfConfig\":\"7\"},{\"filePath\":\"12\",\"messages\":\"13\",\"errorCount\":0,\"warningCount\":0,\"fixableErrorCount\":0,\"fixableWarningCount\":0,\"usedDeprecatedRules\":\"14\"},\"hupcg5\",{\"filePath\":\"15\",\"messages\":\"16\",\"errorCount\":0,\"warningCount\":1,\"fixableErrorCount\":0,\"fixableWarningCount\":0,\"source\":\"17\",\"usedDeprecatedRules\":\"14\"},{\"filePath\":\"18\",\"messages\":\"19\",\"errorCount\":0,\"warningCount\":4,\"fixableErrorCount\":0,\"fixableWarningCount\":0,\"source\":\"20\",\"usedDeprecatedRules\":\"14\"},{\"filePath\":\"21\",\"messages\":\"22\",\"errorCount\":0,\"warningCount\":2,\"fixableErrorCount\":0,\"fixableWarningCount\":0,\"source\":\"23\",\"usedDeprecatedRules\":\"14\"},{\"filePath\":\"24\",\"messages\":\"25\",\"errorCount\":0,\"warningCount\":1,\"fixableErrorCount\":0,\"fixableWarningCount\":0,\"source\":null},\"C:\\\\Users\\\\Daniel Raz\\\\Desktop\\\\majordomo\\\\src\\\\index.js\",[],[\"26\",\"27\"],\"C:\\\\Users\\\\Daniel Raz\\\\Desktop\\\\majordomo\\\\src\\\\config\\\\firebaseConfig.js\",[\"28\"],\"import  firebase from 'firebase'\\r\\nimport 'firebase/auth';\\r\\n\\r\\n// For Firebase JS SDK v7.20.0 and later, measurementId is optional\\r\\nconst firebaseConfig = {\\r\\n    apiKey: \\\"AIzaSyBZN7e1k3080ug33Mozfe6kowulXLH0ADw\\\",\\r\\n    authDomain: \\\"majordomo-me.firebaseapp.com\\\",\\r\\n    databaseURL: \\\"https://majordomo-me-default-rtdb.firebaseio.com\\\",\\r\\n    projectId: \\\"majordomo-me\\\",\\r\\n    storageBucket: \\\"majordomo-me.appspot.com\\\",\\r\\n    messagingSenderId: \\\"213314761996\\\",\\r\\n    appId: \\\"1:213314761996:web:e9c6d9737bf213952c0529\\\",\\r\\n    measurementId: \\\"G-1X8TL73123\\\"\\r\\n  };\\r\\n\\r\\n  firebase.initializeApp(firebaseConfig);\\r\\n  export const auth = firebase.auth();\\r\\n\\r\\nexport default{firebase};\",\"C:\\\\Users\\\\Daniel Raz\\\\Desktop\\\\majordomo\\\\src\\\\pages\\\\login page\\\\LoginPage.js\",[\"29\",\"30\",\"31\",\"32\"],\"import React, { Component } from 'react';\\r\\nimport ReactDOM from 'react-dom';\\r\\nimport { BrowserRouter as Router, Route } from \\\"react-router-dom\\\";\\r\\nimport './LoginPage.css';\\r\\nimport $ from 'jquery';\\r\\nimport { auth } from '../../config/firebaseConfig';\\r\\nimport MainUserPage from '../Main user page/MainUserPage'\\r\\nimport {Dictionary, LangBtn} from '../../Dictionary'\\r\\nimport { validate } from 'jquery-validation';\\r\\n// require('jquery-validation');\\r\\n\\r\\n\\r\\n\\r\\nclass LoginPage extends Component {\\r\\n    constructor(props) {\\r\\n        super(props);\\r\\n        this.login = this.login.bind(this);\\r\\n        this.handleChange = this.handleChange.bind(this);\\r\\n        this.state = {\\r\\n            email: {},\\r\\n            password: {},\\r\\n        }\\r\\n    }\\r\\n\\r\\n    login(e) {\\r\\n        e.preventDefault();\\r\\n        $(\\\"#login_form\\\").validate({\\r\\n            // Specify validation rules\\r\\n            rules: {\\r\\n                email: {\\r\\n                    required: true,\\r\\n                    minlength: 1,\\r\\n                    email: true,\\r\\n                },\\r\\n                password: {\\r\\n                    required: true,\\r\\n                    minlength: 1,\\r\\n                },\\r\\n            },\\r\\n            messages: {}\\r\\n        });\\r\\n\\r\\n        if (!$(\\\"#login_form\\\").valid()) return;\\r\\n        auth.signInWithEmailAndPassword(this.state.email, this.state.password).then(() => {\\r\\n            window.location.reload();\\r\\n        }).catch(function (error) {\\r\\n            var errorCode = error.code;\\r\\n            var errorMessage = error.message;\\r\\n            alert(errorCode + \\\" : \\\" + errorMessage);\\r\\n            $(\\\"#password\\\").val(\\\"\\\");\\r\\n        });\\r\\n    }\\r\\n\\r\\n    handleChange(e) {\\r\\n        this.setState({ [e.target.name]: e.target.value });\\r\\n    }\\r\\n\\r\\n    render() {\\r\\n        return (\\r\\n            <div id=\\\"LPcover\\\" className=\\\"cover\\\">\\r\\n                <LangBtn/>\\r\\n                <div id=\\\"loginWrapper\\\" className=\\\"wrapper\\\">\\r\\n                    <div className=\\\"loginContainer\\\">\\r\\n                        \\r\\n                        <div id=\\\"buttonWrapper123\\\">\\r\\n                            <form dir=\\\"RTL\\\" id=\\\"login_form\\\" name=\\\"login_form_name\\\" role=\\\"form\\\">\\r\\n                                < input type=\\\"email\\\"\\r\\n                                    id=\\\"email\\\"\\r\\n                                    name=\\\"email\\\"\\r\\n                                    placeholder={Dictionary.enterMail}\\r\\n                                    autoComplete='off'\\r\\n                                    defaultValue=\\\"\\\" required\\r\\n                                    onChange={this.handleChange}>\\r\\n                                </input>\\r\\n                                <a>\u200F </a>\\r\\n                                < input type=\\\"password\\\"\\r\\n                                    id=\\\"password\\\"\\r\\n                                    name=\\\"password\\\"\\r\\n                                    placeholder={Dictionary.enterPass}\\r\\n                                    autoComplete='off'\\r\\n                                    defaultValue=\\\"\\\" required\\r\\n                                    onChange={this.handleChange}\\r\\n                                >\\r\\n                                </input>\\r\\n                                <button id=\\\"loginbtn\\\"\\r\\n                                    type=\\\"submit\\\"\\r\\n                                    text={Dictionary.login}\\r\\n                                    className=\\\"btn btn-success\\\"\\r\\n                                    onClick={this.login} >\\r\\n                                    {Dictionary.login}\\r\\n                                </button>\\r\\n                            </form>\\r\\n                        </div>\\r\\n                        <img src =\\\"http://up419.siz.co.il/up2/ljmkmijir2yn.png\\\"></img>\\r\\n                    </div>\\r\\n                </div>\\r\\n            </div>\\r\\n        )\\r\\n    }\\r\\n}\\r\\nexport default LoginPage;\\r\\n\\r\\n\\r\\n\\r\\nexport class LoginComponent extends Component {\\r\\n\\r\\n    constructor(props) {\\r\\n        super(props);\\r\\n        this.state = {\\r\\n            user: false,\\r\\n            page: [],\\r\\n            permission: false,\\r\\n        }\\r\\n\\r\\n    }\\r\\n\\r\\n    // authListener() {\\r\\n    //     auth.onAuthStateChanged((user) => {\\r\\n    //         if (user) this.setState({ user });\\r\\n    //         else this.setState({ user: false });\\r\\n    //         console.log(user)\\r\\n    //     })\\r\\n    // }\\r\\n\\r\\n    // signOutFun() {\\r\\n    //     auth.signOut();\\r\\n    // }\\r\\n    timeRefresh() {\\r\\n        //reset page to main page if page is inactive for a half an hour\\r\\n        var time = new Date().getTime();\\r\\n        $(document.body).bind(\\\"mousemove keypress touchmove \\\", function () {\\r\\n            time = new Date().getTime();\\r\\n        });\\r\\n\\r\\n        setInterval(function () {\\r\\n            if ((new Date().getTime() - time >= 180000)) {\\r\\n                window.location.href = \\\"/\\\";\\r\\n            }\\r\\n        }, 1000);\\r\\n    }\\r\\n\\r\\n    componentDidMount() {\\r\\n        auth.onAuthStateChanged(user => {\\r\\n            console.log(user)\\r\\n            if (user){\\r\\n                this.renderAdminDiv(user)\\r\\n            }\\r\\n            else\\r\\n            this.setState({page:<LoginPage/>})\\r\\n        })\\r\\n\\r\\n    }\\r\\n\\r\\n    renderAdminDiv(user) {\\r\\n        \\r\\n       \\r\\n        ReactDOM.render(\\r\\n            <Router>\\r\\n                {/* <Route exact path=\\\"/\\\" component={() => <AdminPage Admin={this.state.permission} />} />\\r\\n                <Route path=\\\"/WomanPage/:id\\\" component={props => <WomanPage {...props} Admin={this.state.permission} />} />\\r\\n                <Route path=\\\"/Category\\\" component={() => <Category Admin={this.state.permission} />} /> */}\\r\\n                <Route exect path=\\\"/\\\" component={() => <MainUserPage Admin={this.state.permission} />}/>\\r\\n            </Router>, document.getElementById('root')\\r\\n        );\\r\\n    }\\r\\n\\r\\n    renderVisitorDiv(user) {\\r\\n        this.timeRefresh();\\r\\n        ReactDOM.render(\\r\\n            <Router>\\r\\n                <Route exact path=\\\"/\\\" component={MainUserPage} />\\r\\n                {/* <Route path=\\\"/WomanPage/:id\\\" component={props => <WomanPage {...props} />} />\\r\\n                <Route path=\\\"/Category\\\" component={Category} /> */}\\r\\n            </Router>, document.getElementById('root')\\r\\n        );\\r\\n    }\\r\\n\\r\\n    render() {\\r\\n\\r\\n        return <div id=\\\"renderDiv\\\"> {this.state.page}</div>\\r\\n\\r\\n    }\\r\\n}\\r\\n\",\"C:\\\\Users\\\\Daniel Raz\\\\Desktop\\\\majordomo\\\\src\\\\pages\\\\Main user page\\\\MainUserPage.js\",[\"33\",\"34\"],\"import React, { Component } from 'react';\\r\\nimport ReactDOM from 'react-dom';\\r\\nimport { Dictionary, LangBtn } from '../../Dictionary'\\r\\nimport { auth } from '../../config/firebaseConfig'\\r\\n\\r\\nclass MainUserPage extends Component {\\r\\n\\r\\n    constructor(props) {\\r\\n        super(props);\\r\\n\\r\\n    }\\r\\n    render() {\\r\\n        return (\\r\\n            <div>\\r\\n                Hello World\\r\\n                <LangBtn />\\r\\n                <button id=\\\"logoutBtn\\\" onClick={() => {\\r\\n                    auth.signOut()\\r\\n                    window.location.reload()\\r\\n                }} >{Dictionary.signOut}</button>\\r\\n            </div>\\r\\n        );\\r\\n\\r\\n    }\\r\\n}\\r\\nexport default MainUserPage\",\"C:\\\\Users\\\\Daniel Raz\\\\Desktop\\\\majordomo\\\\src\\\\Dictionary.js\",[\"35\"],{\"ruleId\":\"36\",\"replacedBy\":\"37\"},{\"ruleId\":\"38\",\"replacedBy\":\"39\"},{\"ruleId\":\"40\",\"severity\":1,\"message\":\"41\",\"line\":19,\"column\":1,\"nodeType\":\"42\",\"endLine\":19,\"endColumn\":26},{\"ruleId\":\"43\",\"severity\":1,\"message\":\"44\",\"line\":9,\"column\":10,\"nodeType\":\"45\",\"messageId\":\"46\",\"endLine\":9,\"endColumn\":18},{\"ruleId\":\"47\",\"severity\":1,\"message\":\"48\",\"line\":66,\"column\":29,\"nodeType\":\"49\",\"endLine\":66,\"endColumn\":96},{\"ruleId\":\"50\",\"severity\":1,\"message\":\"51\",\"line\":75,\"column\":33,\"nodeType\":\"49\",\"endLine\":75,\"endColumn\":36},{\"ruleId\":\"52\",\"severity\":1,\"message\":\"53\",\"line\":94,\"column\":25,\"nodeType\":\"49\",\"endLine\":94,\"endColumn\":81},{\"ruleId\":\"43\",\"severity\":1,\"message\":\"54\",\"line\":2,\"column\":8,\"nodeType\":\"45\",\"messageId\":\"46\",\"endLine\":2,\"endColumn\":16},{\"ruleId\":\"55\",\"severity\":1,\"message\":\"56\",\"line\":8,\"column\":5,\"nodeType\":\"57\",\"messageId\":\"58\",\"endLine\":11,\"endColumn\":6},{\"ruleId\":\"50\",\"severity\":1,\"message\":\"51\",\"line\":83,\"column\":15,\"nodeType\":\"49\",\"endLine\":83,\"endColumn\":42},\"no-native-reassign\",[\"59\"],\"no-negated-in-lhs\",[\"60\"],\"import/no-anonymous-default-export\",\"Assign object to a variable before exporting as module default\",\"ExportDefaultDeclaration\",\"no-unused-vars\",\"'validate' is defined but never used.\",\"Identifier\",\"unusedVar\",\"jsx-a11y/no-redundant-roles\",\"The element form has an implicit role of form. Defining this explicitly is redundant and should be avoided.\",\"JSXOpeningElement\",\"jsx-a11y/anchor-is-valid\",\"The href attribute is required for an anchor to be keyboard accessible. Provide a valid, navigable address as the href value. If you cannot provide an href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/anchor-is-valid.md\",\"jsx-a11y/alt-text\",\"img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.\",\"'ReactDOM' is defined but never used.\",\"no-useless-constructor\",\"Useless constructor.\",\"MethodDefinition\",\"noUselessConstructor\",\"no-global-assign\",\"no-unsafe-negation\"]
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .eslintcache	(revision e434e5c45d350b1c2a0ac64b73002e452228169d)
++++ .eslintcache	(date 1609795819538)
+@@ -1,1 +1,1 @@
+-[{"C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\index.js":"1","C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\config\\firebaseConfig.js":"2","C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\pages\\login page\\LoginPage.js":"3","C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\pages\\Main user page\\MainUserPage.js":"4","C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\Dictionary.js":"5"},{"size":218,"mtime":1608117662368,"results":"6","hashOfConfig":"7"},{"size":661,"mtime":1608115850012,"results":"8","hashOfConfig":"7"},{"size":6172,"mtime":1608238182083,"results":"9","hashOfConfig":"7"},{"size":660,"mtime":1608140873505,"results":"10","hashOfConfig":"7"},{"size":2723,"mtime":1608481158705,"results":"11","hashOfConfig":"7"},{"filePath":"12","messages":"13","errorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0,"usedDeprecatedRules":"14"},"hupcg5",{"filePath":"15","messages":"16","errorCount":0,"warningCount":1,"fixableErrorCount":0,"fixableWarningCount":0,"source":"17","usedDeprecatedRules":"14"},{"filePath":"18","messages":"19","errorCount":0,"warningCount":4,"fixableErrorCount":0,"fixableWarningCount":0,"source":"20","usedDeprecatedRules":"14"},{"filePath":"21","messages":"22","errorCount":0,"warningCount":2,"fixableErrorCount":0,"fixableWarningCount":0,"source":"23","usedDeprecatedRules":"14"},{"filePath":"24","messages":"25","errorCount":0,"warningCount":1,"fixableErrorCount":0,"fixableWarningCount":0,"source":null},"C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\index.js",[],["26","27"],"C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\config\\firebaseConfig.js",["28"],"import  firebase from 'firebase'\r\nimport 'firebase/auth';\r\n\r\n// For Firebase JS SDK v7.20.0 and later, measurementId is optional\r\nconst firebaseConfig = {\r\n    apiKey: \"AIzaSyBZN7e1k3080ug33Mozfe6kowulXLH0ADw\",\r\n    authDomain: \"majordomo-me.firebaseapp.com\",\r\n    databaseURL: \"https://majordomo-me-default-rtdb.firebaseio.com\",\r\n    projectId: \"majordomo-me\",\r\n    storageBucket: \"majordomo-me.appspot.com\",\r\n    messagingSenderId: \"213314761996\",\r\n    appId: \"1:213314761996:web:e9c6d9737bf213952c0529\",\r\n    measurementId: \"G-1X8TL73123\"\r\n  };\r\n\r\n  firebase.initializeApp(firebaseConfig);\r\n  export const auth = firebase.auth();\r\n\r\nexport default{firebase};","C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\pages\\login page\\LoginPage.js",["29","30","31","32"],"import React, { Component } from 'react';\r\nimport ReactDOM from 'react-dom';\r\nimport { BrowserRouter as Router, Route } from \"react-router-dom\";\r\nimport './LoginPage.css';\r\nimport $ from 'jquery';\r\nimport { auth } from '../../config/firebaseConfig';\r\nimport MainUserPage from '../Main user page/MainUserPage'\r\nimport {Dictionary, LangBtn} from '../../Dictionary'\r\nimport { validate } from 'jquery-validation';\r\n// require('jquery-validation');\r\n\r\n\r\n\r\nclass LoginPage extends Component {\r\n    constructor(props) {\r\n        super(props);\r\n        this.login = this.login.bind(this);\r\n        this.handleChange = this.handleChange.bind(this);\r\n        this.state = {\r\n            email: {},\r\n            password: {},\r\n        }\r\n    }\r\n\r\n    login(e) {\r\n        e.preventDefault();\r\n        $(\"#login_form\").validate({\r\n            // Specify validation rules\r\n            rules: {\r\n                email: {\r\n                    required: true,\r\n                    minlength: 1,\r\n                    email: true,\r\n                },\r\n                password: {\r\n                    required: true,\r\n                    minlength: 1,\r\n                },\r\n            },\r\n            messages: {}\r\n        });\r\n\r\n        if (!$(\"#login_form\").valid()) return;\r\n        auth.signInWithEmailAndPassword(this.state.email, this.state.password).then(() => {\r\n            window.location.reload();\r\n        }).catch(function (error) {\r\n            var errorCode = error.code;\r\n            var errorMessage = error.message;\r\n            alert(errorCode + \" : \" + errorMessage);\r\n            $(\"#password\").val(\"\");\r\n        });\r\n    }\r\n\r\n    handleChange(e) {\r\n        this.setState({ [e.target.name]: e.target.value });\r\n    }\r\n\r\n    render() {\r\n        return (\r\n            <div id=\"LPcover\" className=\"cover\">\r\n                <LangBtn/>\r\n                <div id=\"loginWrapper\" className=\"wrapper\">\r\n                    <div className=\"loginContainer\">\r\n                        \r\n                        <div id=\"buttonWrapper123\">\r\n                            <form dir=\"RTL\" id=\"login_form\" name=\"login_form_name\" role=\"form\">\r\n                                < input type=\"email\"\r\n                                    id=\"email\"\r\n                                    name=\"email\"\r\n                                    placeholder={Dictionary.enterMail}\r\n                                    autoComplete='off'\r\n                                    defaultValue=\"\" required\r\n                                    onChange={this.handleChange}>\r\n                                </input>\r\n                                <a>‏ </a>\r\n                                < input type=\"password\"\r\n                                    id=\"password\"\r\n                                    name=\"password\"\r\n                                    placeholder={Dictionary.enterPass}\r\n                                    autoComplete='off'\r\n                                    defaultValue=\"\" required\r\n                                    onChange={this.handleChange}\r\n                                >\r\n                                </input>\r\n                                <button id=\"loginbtn\"\r\n                                    type=\"submit\"\r\n                                    text={Dictionary.login}\r\n                                    className=\"btn btn-success\"\r\n                                    onClick={this.login} >\r\n                                    {Dictionary.login}\r\n                                </button>\r\n                            </form>\r\n                        </div>\r\n                        <img src =\"http://up419.siz.co.il/up2/ljmkmijir2yn.png\"></img>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        )\r\n    }\r\n}\r\nexport default LoginPage;\r\n\r\n\r\n\r\nexport class LoginComponent extends Component {\r\n\r\n    constructor(props) {\r\n        super(props);\r\n        this.state = {\r\n            user: false,\r\n            page: [],\r\n            permission: false,\r\n        }\r\n\r\n    }\r\n\r\n    // authListener() {\r\n    //     auth.onAuthStateChanged((user) => {\r\n    //         if (user) this.setState({ user });\r\n    //         else this.setState({ user: false });\r\n    //         console.log(user)\r\n    //     })\r\n    // }\r\n\r\n    // signOutFun() {\r\n    //     auth.signOut();\r\n    // }\r\n    timeRefresh() {\r\n        //reset page to main page if page is inactive for a half an hour\r\n        var time = new Date().getTime();\r\n        $(document.body).bind(\"mousemove keypress touchmove \", function () {\r\n            time = new Date().getTime();\r\n        });\r\n\r\n        setInterval(function () {\r\n            if ((new Date().getTime() - time >= 180000)) {\r\n                window.location.href = \"/\";\r\n            }\r\n        }, 1000);\r\n    }\r\n\r\n    componentDidMount() {\r\n        auth.onAuthStateChanged(user => {\r\n            console.log(user)\r\n            if (user){\r\n                this.renderAdminDiv(user)\r\n            }\r\n            else\r\n            this.setState({page:<LoginPage/>})\r\n        })\r\n\r\n    }\r\n\r\n    renderAdminDiv(user) {\r\n        \r\n       \r\n        ReactDOM.render(\r\n            <Router>\r\n                {/* <Route exact path=\"/\" component={() => <AdminPage Admin={this.state.permission} />} />\r\n                <Route path=\"/WomanPage/:id\" component={props => <WomanPage {...props} Admin={this.state.permission} />} />\r\n                <Route path=\"/Category\" component={() => <Category Admin={this.state.permission} />} /> */}\r\n                <Route exect path=\"/\" component={() => <MainUserPage Admin={this.state.permission} />}/>\r\n            </Router>, document.getElementById('root')\r\n        );\r\n    }\r\n\r\n    renderVisitorDiv(user) {\r\n        this.timeRefresh();\r\n        ReactDOM.render(\r\n            <Router>\r\n                <Route exact path=\"/\" component={MainUserPage} />\r\n                {/* <Route path=\"/WomanPage/:id\" component={props => <WomanPage {...props} />} />\r\n                <Route path=\"/Category\" component={Category} /> */}\r\n            </Router>, document.getElementById('root')\r\n        );\r\n    }\r\n\r\n    render() {\r\n\r\n        return <div id=\"renderDiv\"> {this.state.page}</div>\r\n\r\n    }\r\n}\r\n","C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\pages\\Main user page\\MainUserPage.js",["33","34"],"import React, { Component } from 'react';\r\nimport ReactDOM from 'react-dom';\r\nimport { Dictionary, LangBtn } from '../../Dictionary'\r\nimport { auth } from '../../config/firebaseConfig'\r\n\r\nclass MainUserPage extends Component {\r\n\r\n    constructor(props) {\r\n        super(props);\r\n\r\n    }\r\n    render() {\r\n        return (\r\n            <div>\r\n                Hello World\r\n                <LangBtn />\r\n                <button id=\"logoutBtn\" onClick={() => {\r\n                    auth.signOut()\r\n                    window.location.reload()\r\n                }} >{Dictionary.signOut}</button>\r\n            </div>\r\n        );\r\n\r\n    }\r\n}\r\nexport default MainUserPage","C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\Dictionary.js",["35"],{"ruleId":"36","replacedBy":"37"},{"ruleId":"38","replacedBy":"39"},{"ruleId":"40","severity":1,"message":"41","line":19,"column":1,"nodeType":"42","endLine":19,"endColumn":26},{"ruleId":"43","severity":1,"message":"44","line":9,"column":10,"nodeType":"45","messageId":"46","endLine":9,"endColumn":18},{"ruleId":"47","severity":1,"message":"48","line":66,"column":29,"nodeType":"49","endLine":66,"endColumn":96},{"ruleId":"50","severity":1,"message":"51","line":75,"column":33,"nodeType":"49","endLine":75,"endColumn":36},{"ruleId":"52","severity":1,"message":"53","line":94,"column":25,"nodeType":"49","endLine":94,"endColumn":81},{"ruleId":"43","severity":1,"message":"54","line":2,"column":8,"nodeType":"45","messageId":"46","endLine":2,"endColumn":16},{"ruleId":"55","severity":1,"message":"56","line":8,"column":5,"nodeType":"57","messageId":"58","endLine":11,"endColumn":6},{"ruleId":"50","severity":1,"message":"51","line":83,"column":15,"nodeType":"49","endLine":83,"endColumn":42},"no-native-reassign",["59"],"no-negated-in-lhs",["60"],"import/no-anonymous-default-export","Assign object to a variable before exporting as module default","ExportDefaultDeclaration","no-unused-vars","'validate' is defined but never used.","Identifier","unusedVar","jsx-a11y/no-redundant-roles","The element form has an implicit role of form. Defining this explicitly is redundant and should be avoided.","JSXOpeningElement","jsx-a11y/anchor-is-valid","The href attribute is required for an anchor to be keyboard accessible. Provide a valid, navigable address as the href value. If you cannot provide an href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/anchor-is-valid.md","jsx-a11y/alt-text","img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.","'ReactDOM' is defined but never used.","no-useless-constructor","Useless constructor.","MethodDefinition","noUselessConstructor","no-global-assign","no-unsafe-negation"]
+\ No newline at end of file
++[{"C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\index.js":"1","C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\config\\firebaseConfig.js":"2","C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\pages\\login page\\LoginPage.js":"3","C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\pages\\Main user page\\MainUserPage.js":"4","C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\Dictionary.js":"5"},{"size":218,"mtime":1608117662368,"results":"6","hashOfConfig":"7"},{"size":661,"mtime":1608115850012,"results":"8","hashOfConfig":"7"},{"size":6172,"mtime":1608238182083,"results":"9","hashOfConfig":"7"},{"size":1233,"mtime":1609795692430,"results":"10","hashOfConfig":"7"},{"size":2801,"mtime":1609793621367,"results":"11","hashOfConfig":"7"},{"filePath":"12","messages":"13","errorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0,"usedDeprecatedRules":"14"},"hupcg5",{"filePath":"15","messages":"16","errorCount":0,"warningCount":1,"fixableErrorCount":0,"fixableWarningCount":0,"source":"17","usedDeprecatedRules":"14"},{"filePath":"18","messages":"19","errorCount":0,"warningCount":4,"fixableErrorCount":0,"fixableWarningCount":0,"source":"20","usedDeprecatedRules":"14"},{"filePath":"21","messages":"22","errorCount":0,"warningCount":1,"fixableErrorCount":0,"fixableWarningCount":0,"source":null},{"filePath":"23","messages":"24","errorCount":0,"warningCount":1,"fixableErrorCount":0,"fixableWarningCount":0,"source":"25","usedDeprecatedRules":"14"},"C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\index.js",[],["26","27"],"C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\config\\firebaseConfig.js",["28"],"import  firebase from 'firebase'\r\nimport 'firebase/auth';\r\n\r\n// For Firebase JS SDK v7.20.0 and later, measurementId is optional\r\nconst firebaseConfig = {\r\n    apiKey: \"AIzaSyBZN7e1k3080ug33Mozfe6kowulXLH0ADw\",\r\n    authDomain: \"majordomo-me.firebaseapp.com\",\r\n    databaseURL: \"https://majordomo-me-default-rtdb.firebaseio.com\",\r\n    projectId: \"majordomo-me\",\r\n    storageBucket: \"majordomo-me.appspot.com\",\r\n    messagingSenderId: \"213314761996\",\r\n    appId: \"1:213314761996:web:e9c6d9737bf213952c0529\",\r\n    measurementId: \"G-1X8TL73123\"\r\n  };\r\n\r\n  firebase.initializeApp(firebaseConfig);\r\n  export const auth = firebase.auth();\r\n\r\nexport default{firebase};","C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\pages\\login page\\LoginPage.js",["29","30","31","32"],"import React, { Component } from 'react';\r\nimport ReactDOM from 'react-dom';\r\nimport { BrowserRouter as Router, Route } from \"react-router-dom\";\r\nimport './LoginPage.css';\r\nimport $ from 'jquery';\r\nimport { auth } from '../../config/firebaseConfig';\r\nimport MainUserPage from '../Main user page/MainUserPage'\r\nimport {Dictionary, LangBtn} from '../../Dictionary'\r\nimport { validate } from 'jquery-validation';\r\n// require('jquery-validation');\r\n\r\n\r\n\r\nclass LoginPage extends Component {\r\n    constructor(props) {\r\n        super(props);\r\n        this.login = this.login.bind(this);\r\n        this.handleChange = this.handleChange.bind(this);\r\n        this.state = {\r\n            email: {},\r\n            password: {},\r\n        }\r\n    }\r\n\r\n    login(e) {\r\n        e.preventDefault();\r\n        $(\"#login_form\").validate({\r\n            // Specify validation rules\r\n            rules: {\r\n                email: {\r\n                    required: true,\r\n                    minlength: 1,\r\n                    email: true,\r\n                },\r\n                password: {\r\n                    required: true,\r\n                    minlength: 1,\r\n                },\r\n            },\r\n            messages: {}\r\n        });\r\n\r\n        if (!$(\"#login_form\").valid()) return;\r\n        auth.signInWithEmailAndPassword(this.state.email, this.state.password).then(() => {\r\n            window.location.reload();\r\n        }).catch(function (error) {\r\n            var errorCode = error.code;\r\n            var errorMessage = error.message;\r\n            alert(errorCode + \" : \" + errorMessage);\r\n            $(\"#password\").val(\"\");\r\n        });\r\n    }\r\n\r\n    handleChange(e) {\r\n        this.setState({ [e.target.name]: e.target.value });\r\n    }\r\n\r\n    render() {\r\n        return (\r\n            <div id=\"LPcover\" className=\"cover\">\r\n                <LangBtn/>\r\n                <div id=\"loginWrapper\" className=\"wrapper\">\r\n                    <div className=\"loginContainer\">\r\n                        \r\n                        <div id=\"buttonWrapper123\">\r\n                            <form dir=\"RTL\" id=\"login_form\" name=\"login_form_name\" role=\"form\">\r\n                                < input type=\"email\"\r\n                                    id=\"email\"\r\n                                    name=\"email\"\r\n                                    placeholder={Dictionary.enterMail}\r\n                                    autoComplete='off'\r\n                                    defaultValue=\"\" required\r\n                                    onChange={this.handleChange}>\r\n                                </input>\r\n                                <a>‏ </a>\r\n                                < input type=\"password\"\r\n                                    id=\"password\"\r\n                                    name=\"password\"\r\n                                    placeholder={Dictionary.enterPass}\r\n                                    autoComplete='off'\r\n                                    defaultValue=\"\" required\r\n                                    onChange={this.handleChange}\r\n                                >\r\n                                </input>\r\n                                <button id=\"loginbtn\"\r\n                                    type=\"submit\"\r\n                                    text={Dictionary.login}\r\n                                    className=\"btn btn-success\"\r\n                                    onClick={this.login} >\r\n                                    {Dictionary.login}\r\n                                </button>\r\n                            </form>\r\n                        </div>\r\n                        <img src =\"http://up419.siz.co.il/up2/ljmkmijir2yn.png\"></img>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        )\r\n    }\r\n}\r\nexport default LoginPage;\r\n\r\n\r\n\r\nexport class LoginComponent extends Component {\r\n\r\n    constructor(props) {\r\n        super(props);\r\n        this.state = {\r\n            user: false,\r\n            page: [],\r\n            permission: false,\r\n        }\r\n\r\n    }\r\n\r\n    // authListener() {\r\n    //     auth.onAuthStateChanged((user) => {\r\n    //         if (user) this.setState({ user });\r\n    //         else this.setState({ user: false });\r\n    //         console.log(user)\r\n    //     })\r\n    // }\r\n\r\n    // signOutFun() {\r\n    //     auth.signOut();\r\n    // }\r\n    timeRefresh() {\r\n        //reset page to main page if page is inactive for a half an hour\r\n        var time = new Date().getTime();\r\n        $(document.body).bind(\"mousemove keypress touchmove \", function () {\r\n            time = new Date().getTime();\r\n        });\r\n\r\n        setInterval(function () {\r\n            if ((new Date().getTime() - time >= 180000)) {\r\n                window.location.href = \"/\";\r\n            }\r\n        }, 1000);\r\n    }\r\n\r\n    componentDidMount() {\r\n        auth.onAuthStateChanged(user => {\r\n            console.log(user)\r\n            if (user){\r\n                this.renderAdminDiv(user)\r\n            }\r\n            else\r\n            this.setState({page:<LoginPage/>})\r\n        })\r\n\r\n    }\r\n\r\n    renderAdminDiv(user) {\r\n        \r\n       \r\n        ReactDOM.render(\r\n            <Router>\r\n                {/* <Route exact path=\"/\" component={() => <AdminPage Admin={this.state.permission} />} />\r\n                <Route path=\"/WomanPage/:id\" component={props => <WomanPage {...props} Admin={this.state.permission} />} />\r\n                <Route path=\"/Category\" component={() => <Category Admin={this.state.permission} />} /> */}\r\n                <Route exect path=\"/\" component={() => <MainUserPage Admin={this.state.permission} />}/>\r\n            </Router>, document.getElementById('root')\r\n        );\r\n    }\r\n\r\n    renderVisitorDiv(user) {\r\n        this.timeRefresh();\r\n        ReactDOM.render(\r\n            <Router>\r\n                <Route exact path=\"/\" component={MainUserPage} />\r\n                {/* <Route path=\"/WomanPage/:id\" component={props => <WomanPage {...props} />} />\r\n                <Route path=\"/Category\" component={Category} /> */}\r\n            </Router>, document.getElementById('root')\r\n        );\r\n    }\r\n\r\n    render() {\r\n\r\n        return <div id=\"renderDiv\"> {this.state.page}</div>\r\n\r\n    }\r\n}\r\n","C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\pages\\Main user page\\MainUserPage.js",["33"],"C:\\Users\\Daniel Raz\\Desktop\\majordomo\\src\\Dictionary.js",["34"],"import React from 'react';\r\nimport LocalizedStrings from 'react-localization';\r\nimport Dropdown, { DropdownContent, DropdownTrigger } from 'react-simple-dropdown';\r\nimport './Dictionary.css';\r\nimport globe from './images/globe.png';\r\n\r\n\r\n/* LocalizedStrings is holding our Dictionary so that all of the pages wiil be able to be translated.\r\nto set a language you can call 'Dictionart.setLanguage([the language])'\r\nall pages can reference the text with 'Dictionery.[reference]\r\nthe references were devided to the main pages that is using them*/\r\nexport const Dictionary = new LocalizedStrings({\r\n  EN: {\r\n    //login page\r\n    enterMail: `Please enter email`,\r\n    enterPass: `Password`,\r\n    login: `Log in`, \r\n    signOut: `Sign out`,\r\n    inventory : \"show inventory\",\r\n    \r\n    \r\n    \r\n  },\r\n  HE: {\r\n    //login page\r\n    enterMail: `אנא הכניס דוא''ל`,\r\n    enterPass: `אנא הכנס סיסמא`,\r\n    login: `התחבר`,\r\n    signOut: `התנתק`,\r\n    inventory : \"הצגת מלאי\"\r\n    \r\n  }});\r\n\r\n  \r\n//language array\r\nexport const langs = [\"HE\", \"EN\"];\r\n\r\n//set language that is in the session Storage\r\nvar language = sessionStorage.getItem(\"current_language\");\r\nif (language === null) {\r\n  language = langs[0];\r\n}\r\nDictionary.setLanguage(language);\r\n\r\n//save new language in session storage and reload page\r\nfunction changeLanguage(lang) {\r\n  return function () {\r\n    sessionStorage.setItem(\"current_language\", lang);\r\n    window.location.reload();\r\n  }\r\n}\r\n//get the current page direction needed\r\nexport function getRTL(lang) {\r\n  let targetLang = lang ? lang : Dictionary.getLanguage();\r\n\r\n  switch (targetLang) {\r\n    case \"EN\":\r\n      return \"ltr\";\r\n    case \"HE\":\r\n    default:\r\n      return \"rtl\";\r\n  }\r\n\r\n\r\n}\r\n//sets a globe image with three language buttons \r\nexport const LangBtn = () => {\r\n  var currentLng = Dictionary.getLanguage();\r\n  var HEId = \"\",\r\n    ENId = \"\";\r\n\r\n  if (currentLng === \"EN\") ENId = \"chosen\";\r\n  else HEId = \"chosen\";\r\n\r\n\r\n  return (\r\n    <div id=\"languages\">\r\n      <Dropdown >\r\n\r\n        <DropdownTrigger>\r\n          <div id=\"displayAndGlobe\">\r\n            <div>\r\n              <img src={globe} id=\"globus\" alt=\"lang\" />\r\n            </div>\r\n            <div>\r\n              <a id=\"currentLangDisplay\">{Dictionary.getLanguage()}</a>\r\n            </div>\r\n          </div>\r\n        </DropdownTrigger>\r\n\r\n        <DropdownContent>\r\n\r\n          <ul id=\"langlist\">\r\n            <li>\r\n              <button id={HEId} className=\"langButtons\" onClick={changeLanguage(\"HE\")}>עברית</button>\r\n            </li>\r\n            <li>\r\n              <button id={ENId} className=\"langButtons \" onClick={changeLanguage(\"EN\")} >English</button>\r\n            </li>\r\n          </ul>\r\n        </DropdownContent>\r\n      </Dropdown>\r\n    </div>\r\n  );\r\n}\r\n",{"ruleId":"35","replacedBy":"36"},{"ruleId":"37","replacedBy":"38"},{"ruleId":"39","severity":1,"message":"40","line":19,"column":1,"nodeType":"41","endLine":19,"endColumn":26},{"ruleId":"42","severity":1,"message":"43","line":9,"column":10,"nodeType":"44","messageId":"45","endLine":9,"endColumn":18},{"ruleId":"46","severity":1,"message":"47","line":66,"column":29,"nodeType":"48","endLine":66,"endColumn":96},{"ruleId":"49","severity":1,"message":"50","line":75,"column":33,"nodeType":"48","endLine":75,"endColumn":36},{"ruleId":"51","severity":1,"message":"52","line":94,"column":25,"nodeType":"48","endLine":94,"endColumn":81},{"ruleId":"53","severity":1,"message":"54","line":21,"column":5,"nodeType":"55","messageId":"56","endLine":24,"endColumn":6},{"ruleId":"49","severity":1,"message":"50","line":86,"column":15,"nodeType":"48","endLine":86,"endColumn":42},"no-native-reassign",["57"],"no-negated-in-lhs",["58"],"import/no-anonymous-default-export","Assign object to a variable before exporting as module default","ExportDefaultDeclaration","no-unused-vars","'validate' is defined but never used.","Identifier","unusedVar","jsx-a11y/no-redundant-roles","The element form has an implicit role of form. Defining this explicitly is redundant and should be avoided.","JSXOpeningElement","jsx-a11y/anchor-is-valid","The href attribute is required for an anchor to be keyboard accessible. Provide a valid, navigable address as the href value. If you cannot provide an href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/anchor-is-valid.md","jsx-a11y/alt-text","img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.","no-useless-constructor","Useless constructor.","MethodDefinition","noUselessConstructor","no-global-assign","no-unsafe-negation"]
+\ No newline at end of file
+Index: package-lock.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- package-lock.json	(revision e434e5c45d350b1c2a0ac64b73002e452228169d)
++++ package-lock.json	(date 1609795580752)
+@@ -2202,6 +2202,11 @@
+         }
+       }
+     },
++    "@sindresorhus/is": {
++      "version": "0.14.0",
++      "resolved": "https://registry.npmjs.org/@sindresorhus/is/-/is-0.14.0.tgz",
++      "integrity": "sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ=="
++    },
+     "@sinonjs/commons": {
+       "version": "1.8.1",
+       "resolved": "https://registry.npmjs.org/@sinonjs/commons/-/commons-1.8.1.tgz",
+@@ -2336,6 +2341,14 @@
+         "loader-utils": "^2.0.0"
+       }
+     },
++    "@szmarczak/http-timer": {
++      "version": "1.1.2",
++      "resolved": "https://registry.npmjs.org/@szmarczak/http-timer/-/http-timer-1.1.2.tgz",
++      "integrity": "sha512-XIB2XbzHTN6ieIjfIMV9hlVcfPU26s2vafYWQcZHWXHOxiaRZYEDKEwdl129Zyg50+foYV2jCgtrqSA6qNuNSA==",
++      "requires": {
++        "defer-to-connect": "^1.0.1"
++      }
++    },
+     "@testing-library/dom": {
+       "version": "7.29.0",
+       "resolved": "https://registry.npmjs.org/@testing-library/dom/-/dom-7.29.0.tgz",
+@@ -2507,6 +2520,14 @@
+       "resolved": "https://registry.npmjs.org/@types/aria-query/-/aria-query-4.2.0.tgz",
+       "integrity": "sha512-iIgQNzCm0v7QMhhe4Jjn9uRh+I6GoPmt03CbEtwx3ao8/EfoQcmgtqH4vQ5Db/lxiIGaWDv6nwvunuh0RyX0+A=="
+     },
++    "@types/axios": {
++      "version": "0.14.0",
++      "resolved": "https://registry.npmjs.org/@types/axios/-/axios-0.14.0.tgz",
++      "integrity": "sha1-7CMA++fX3d1+udOr+HmZlkyvzkY=",
++      "requires": {
++        "axios": "*"
++      }
++    },
+     "@types/babel__core": {
+       "version": "7.1.12",
+       "resolved": "https://registry.npmjs.org/@types/babel__core/-/babel__core-7.1.12.tgz",
+@@ -2580,6 +2601,14 @@
+       "resolved": "https://registry.npmjs.org/@types/html-minifier-terser/-/html-minifier-terser-5.1.1.tgz",
+       "integrity": "sha512-giAlZwstKbmvMk1OO7WXSj4OZ0keXAcl2TQq4LWHiiPH2ByaH7WeUzng+Qej8UPxxv+8lRTuouo0iaNDBuzIBA=="
+     },
++    "@types/is-online": {
++      "version": "8.1.0",
++      "resolved": "https://registry.npmjs.org/@types/is-online/-/is-online-8.1.0.tgz",
++      "integrity": "sha512-TCmf+Q+9GeUDh8NRJ0tMuDASzs3dl7qvKf0s1MAVgGtFedNnoyeYnIOdes3cjLSsRGdN7/xSzetdSrKp/AJjzA==",
++      "requires": {
++        "is-online": "*"
++      }
++    },
+     "@types/istanbul-lib-coverage": {
+       "version": "2.0.3",
+       "resolved": "https://registry.npmjs.org/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.3.tgz",
+@@ -2738,6 +2767,14 @@
+         }
+       }
+     },
++    "@types/window-or-global": {
++      "version": "1.0.3",
++      "resolved": "https://registry.npmjs.org/@types/window-or-global/-/window-or-global-1.0.3.tgz",
++      "integrity": "sha512-hUdkiEh+hUaI1kzDTahbY1VjO4Lsak63870fHCW5k8wOdwpuETwTPmCfVd2J9s/jUAkIcvR3sM3uRu8hvQB0Hg==",
++      "requires": {
++        "@types/node": "*"
++      }
++    },
+     "@types/yargs": {
+       "version": "15.0.12",
+       "resolved": "https://registry.npmjs.org/@types/yargs/-/yargs-15.0.12.tgz",
+@@ -3381,6 +3418,50 @@
+       "resolved": "https://registry.npmjs.org/axe-core/-/axe-core-4.1.1.tgz",
+       "integrity": "sha512-5Kgy8Cz6LPC9DJcNb3yjAXTu3XihQgEdnIg50c//zOC/MyLP0Clg+Y8Sh9ZjjnvBrDZU4DgXS9C3T9r4/scGZQ=="
+     },
++    "axios": {
++      "version": "0.19.2",
++      "resolved": "https://registry.npmjs.org/axios/-/axios-0.19.2.tgz",
++      "integrity": "sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==",
++      "requires": {
++        "follow-redirects": "1.5.10"
++      },
++      "dependencies": {
++        "debug": {
++          "version": "3.1.0",
++          "resolved": "https://registry.npmjs.org/debug/-/debug-3.1.0.tgz",
++          "integrity": "sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==",
++          "requires": {
++            "ms": "2.0.0"
++          }
++        },
++        "follow-redirects": {
++          "version": "1.5.10",
++          "resolved": "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.5.10.tgz",
++          "integrity": "sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==",
++          "requires": {
++            "debug": "=3.1.0"
++          }
++        },
++        "ms": {
++          "version": "2.0.0",
++          "resolved": "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz",
++          "integrity": "sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g="
++        }
++      }
++    },
++    "axios-react": {
++      "version": "2.0.2",
++      "resolved": "https://registry.npmjs.org/axios-react/-/axios-react-2.0.2.tgz",
++      "integrity": "sha512-Xflh2qJH6NjHBP707LzdqCVY2+702U9i4/53D2djCAJ/7hfhuKpcnLNaMTV3VdC8z2/CQmx/3OfzfmCXfMzqNQ==",
++      "requires": {
++        "@types/axios": "^0.14.0",
++        "@types/is-online": "^8.1.0",
++        "@types/window-or-global": "^1.0.2",
++        "axios": "^0.19.2",
++        "is-online": "^8.4.0",
++        "window-or-global": "^1.0.1"
++      }
++    },
+     "axobject-query": {
+       "version": "2.2.0",
+       "resolved": "https://registry.npmjs.org/axobject-query/-/axobject-query-2.2.0.tgz",
+@@ -4165,6 +4246,40 @@
+         "unset-value": "^1.0.0"
+       }
+     },
++    "cacheable-request": {
++      "version": "6.1.0",
++      "resolved": "https://registry.npmjs.org/cacheable-request/-/cacheable-request-6.1.0.tgz",
++      "integrity": "sha512-Oj3cAGPCqOZX7Rz64Uny2GYAZNliQSqfbePrgAQ1wKAihYmCUnraBtJtKcGR4xz7wF+LoJC+ssFZvv5BgF9Igg==",
++      "requires": {
++        "clone-response": "^1.0.2",
++        "get-stream": "^5.1.0",
++        "http-cache-semantics": "^4.0.0",
++        "keyv": "^3.0.0",
++        "lowercase-keys": "^2.0.0",
++        "normalize-url": "^4.1.0",
++        "responselike": "^1.0.2"
++      },
++      "dependencies": {
++        "get-stream": {
++          "version": "5.2.0",
++          "resolved": "https://registry.npmjs.org/get-stream/-/get-stream-5.2.0.tgz",
++          "integrity": "sha512-nBF+F1rAZVCu/p7rjzgA+Yb4lfYXrpl7a6VmJrU8wF9I1CKvP/QwPNZHnOlwbTkY6dvtFIzFMSyQXbLoTQPRpA==",
++          "requires": {
++            "pump": "^3.0.0"
++          }
++        },
++        "lowercase-keys": {
++          "version": "2.0.0",
++          "resolved": "https://registry.npmjs.org/lowercase-keys/-/lowercase-keys-2.0.0.tgz",
++          "integrity": "sha512-tqNXrS78oMOE73NMxK4EMLQsQowWf8jKooH9g7xPavRT706R6bkQJ6DY2Te7QukaZsulxa30wQ7bk0pm4XiHmA=="
++        },
++        "normalize-url": {
++          "version": "4.5.0",
++          "resolved": "https://registry.npmjs.org/normalize-url/-/normalize-url-4.5.0.tgz",
++          "integrity": "sha512-2s47yzUxdexf1OhyRi4Em83iQk0aPvwTddtFz4hnSSw9dCEsLEGf6SwIO8ss/19S9iBb5sJaOuTvTGDeZI00BQ=="
++        }
++      }
++    },
+     "call-bind": {
+       "version": "1.0.0",
+       "resolved": "https://registry.npmjs.org/call-bind/-/call-bind-1.0.0.tgz",
+@@ -4421,6 +4536,14 @@
+         "shallow-clone": "^3.0.0"
+       }
+     },
++    "clone-response": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npmjs.org/clone-response/-/clone-response-1.0.2.tgz",
++      "integrity": "sha1-0dyXOSAxTfZ/vrlCI7TuNQI56Ws=",
++      "requires": {
++        "mimic-response": "^1.0.0"
++      }
++    },
+     "co": {
+       "version": "4.6.0",
+       "resolved": "https://registry.npmjs.org/co/-/co-4.6.0.tgz",
+@@ -5170,6 +5293,14 @@
+       "resolved": "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.2.0.tgz",
+       "integrity": "sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU="
+     },
++    "decompress-response": {
++      "version": "3.3.0",
++      "resolved": "https://registry.npmjs.org/decompress-response/-/decompress-response-3.3.0.tgz",
++      "integrity": "sha1-gKTdMjdIOEv6JICDYirt7Jgq3/M=",
++      "requires": {
++        "mimic-response": "^1.0.0"
++      }
++    },
+     "dedent": {
+       "version": "0.7.0",
+       "resolved": "https://registry.npmjs.org/dedent/-/dedent-0.7.0.tgz",
+@@ -5207,6 +5338,11 @@
+         "ip-regex": "^2.1.0"
+       }
+     },
++    "defer-to-connect": {
++      "version": "1.1.3",
++      "resolved": "https://registry.npmjs.org/defer-to-connect/-/defer-to-connect-1.1.3.tgz",
++      "integrity": "sha512-0ISdNousHvZT2EiFlZeZAHBUvSxmKswVCEf8hW7KWgG4a8MVEu/3Vb6uWYozkjylyCxe0JBIiRB1jV45S70WVQ=="
++    },
+     "define-properties": {
+       "version": "1.1.3",
+       "resolved": "https://registry.npmjs.org/define-properties/-/define-properties-1.1.3.tgz",
+@@ -5410,6 +5546,24 @@
+         "safe-buffer": "^5.0.1"
+       }
+     },
++    "dns-socket": {
++      "version": "4.2.1",
++      "resolved": "https://registry.npmjs.org/dns-socket/-/dns-socket-4.2.1.tgz",
++      "integrity": "sha512-fNvDq86lS522+zMbh31X8cQzYQd6xumCNlxsuZF5TKxQThF/e+rJbVM6K8mmlsdcSm6yNjKJQq3Sf38viAJj8g==",
++      "requires": {
++        "dns-packet": "^5.1.2"
++      },
++      "dependencies": {
++        "dns-packet": {
++          "version": "5.2.1",
++          "resolved": "https://registry.npmjs.org/dns-packet/-/dns-packet-5.2.1.tgz",
++          "integrity": "sha512-JHj2yJeKOqlxzeuYpN1d56GfhzivAxavNwHj9co3qptECel27B1rLY5PifJAvubsInX5pGLDjAHuCfCUc2Zv/w==",
++          "requires": {
++            "ip": "^1.1.5"
++          }
++        }
++      }
++    },
+     "dns-txt": {
+       "version": "2.0.2",
+       "resolved": "https://registry.npmjs.org/dns-txt/-/dns-txt-2.0.2.tgz",
+@@ -5541,6 +5695,11 @@
+       "resolved": "https://registry.npmjs.org/duplexer/-/duplexer-0.1.2.tgz",
+       "integrity": "sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg=="
+     },
++    "duplexer3": {
++      "version": "0.1.4",
++      "resolved": "https://registry.npmjs.org/duplexer3/-/duplexer3-0.1.4.tgz",
++      "integrity": "sha1-7gHdHKwO08vH/b6jfcCo8c4ALOI="
++    },
+     "duplexify": {
+       "version": "3.7.1",
+       "resolved": "https://registry.npmjs.org/duplexify/-/duplexify-3.7.1.tgz",
+@@ -7363,6 +7522,24 @@
+         "node-forge": "^0.10.0"
+       }
+     },
++    "got": {
++      "version": "9.6.0",
++      "resolved": "https://registry.npmjs.org/got/-/got-9.6.0.tgz",
++      "integrity": "sha512-R7eWptXuGYxwijs0eV+v3o6+XH1IqVK8dJOEecQfTmkncw9AV4dcw/Dhxi8MdlqPthxxpZyizMzyg8RTmEsG+Q==",
++      "requires": {
++        "@sindresorhus/is": "^0.14.0",
++        "@szmarczak/http-timer": "^1.1.2",
++        "cacheable-request": "^6.0.0",
++        "decompress-response": "^3.3.0",
++        "duplexer3": "^0.1.4",
++        "get-stream": "^4.1.0",
++        "lowercase-keys": "^1.0.1",
++        "mimic-response": "^1.0.1",
++        "p-cancelable": "^1.0.0",
++        "to-readable-stream": "^1.0.0",
++        "url-parse-lax": "^3.0.0"
++      }
++    },
+     "graceful-fs": {
+       "version": "4.2.4",
+       "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.4.tgz",
+@@ -7714,6 +7891,11 @@
+         }
+       }
+     },
++    "http-cache-semantics": {
++      "version": "4.1.0",
++      "resolved": "https://registry.npmjs.org/http-cache-semantics/-/http-cache-semantics-4.1.0.tgz",
++      "integrity": "sha512-carPklcUh7ROWRK7Cv27RPtdhYhUsela/ue5/jKzjegVvXDqM2ILE9Q2BGn9JZJh1g87cp56su/FgQSzcWS8cQ=="
++    },
+     "http-deceiver": {
+       "version": "1.2.7",
+       "resolved": "https://registry.npmjs.org/http-deceiver/-/http-deceiver-1.2.7.tgz",
+@@ -8240,6 +8422,21 @@
+         "is-extglob": "^2.1.1"
+       }
+     },
++    "is-ip": {
++      "version": "3.1.0",
++      "resolved": "https://registry.npmjs.org/is-ip/-/is-ip-3.1.0.tgz",
++      "integrity": "sha512-35vd5necO7IitFPjd/YBeqwWnyDWbuLH9ZXQdMfDA8TEo7pv5X8yfrvVO3xbJbLUlERCMvf6X0hTUamQxCYJ9Q==",
++      "requires": {
++        "ip-regex": "^4.0.0"
++      },
++      "dependencies": {
++        "ip-regex": {
++          "version": "4.2.0",
++          "resolved": "https://registry.npmjs.org/ip-regex/-/ip-regex-4.2.0.tgz",
++          "integrity": "sha512-n5cDDeTWWRwK1EBoWwRti+8nP4NbytBBY0pldmnIkq6Z55KNFmWofh4rl9dPZpj+U/nVq7gweR3ylrvMt4YZ5A=="
++        }
++      }
++    },
+     "is-module": {
+       "version": "1.0.0",
+       "resolved": "https://registry.npmjs.org/is-module/-/is-module-1.0.0.tgz",
+@@ -8260,6 +8457,17 @@
+       "resolved": "https://registry.npmjs.org/is-obj/-/is-obj-2.0.0.tgz",
+       "integrity": "sha512-drqDG3cbczxxEJRoOXcOjtdp1J/lyp1mNn0xaznRs8+muBhgQcrnbspox5X5fOw0HnMnbfDzvnEMEtqDEJEo8w=="
+     },
++    "is-online": {
++      "version": "8.5.1",
++      "resolved": "https://registry.npmjs.org/is-online/-/is-online-8.5.1.tgz",
++      "integrity": "sha512-RKyTQx/rJqw2QOXHwy7TmXdlkpe0Hhj7GBsr6TQJaj4ebNOfameZCMspU5vYbwBBzJ2brWArdSvNVox6T6oCTQ==",
++      "requires": {
++        "got": "^9.6.0",
++        "p-any": "^2.0.0",
++        "p-timeout": "^3.0.0",
++        "public-ip": "^4.0.1"
++      }
++    },
+     "is-path-cwd": {
+       "version": "2.2.0",
+       "resolved": "https://registry.npmjs.org/is-path-cwd/-/is-path-cwd-2.2.0.tgz",
+@@ -10002,6 +10210,11 @@
+         "bignumber.js": "^9.0.0"
+       }
+     },
++    "json-buffer": {
++      "version": "3.0.0",
++      "resolved": "https://registry.npmjs.org/json-buffer/-/json-buffer-3.0.0.tgz",
++      "integrity": "sha1-Wx85evx11ne96Lz8Dkfh+aPZqJg="
++    },
+     "json-parse-better-errors": {
+       "version": "1.0.2",
+       "resolved": "https://registry.npmjs.org/json-parse-better-errors/-/json-parse-better-errors-1.0.2.tgz",
+@@ -10100,6 +10313,14 @@
+         "safe-buffer": "^5.0.1"
+       }
+     },
++    "keyv": {
++      "version": "3.1.0",
++      "resolved": "https://registry.npmjs.org/keyv/-/keyv-3.1.0.tgz",
++      "integrity": "sha512-9ykJ/46SN/9KPM/sichzQ7OvXyGDYKGTaDlKMGCAlg2UK8KRy4jb0d8sFc+0Tt0YYnThq8X2RZgCg74RPxgcVA==",
++      "requires": {
++        "json-buffer": "3.0.0"
++      }
++    },
+     "killable": {
+       "version": "1.0.1",
+       "resolved": "https://registry.npmjs.org/killable/-/killable-1.0.1.tgz",
+@@ -10290,6 +10511,11 @@
+         }
+       }
+     },
++    "lowercase-keys": {
++      "version": "1.0.1",
++      "resolved": "https://registry.npmjs.org/lowercase-keys/-/lowercase-keys-1.0.1.tgz",
++      "integrity": "sha512-G2Lj61tXDnVFFOi8VZds+SoQjtQC3dgokKdDG2mTm1tx4m50NUHBOZSBwQQHyy0V12A0JTG4icfZQH+xPyh8VA=="
++    },
+     "lru-cache": {
+       "version": "6.0.0",
+       "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-6.0.0.tgz",
+@@ -10474,6 +10700,11 @@
+       "resolved": "https://registry.npmjs.org/mimic-fn/-/mimic-fn-2.1.0.tgz",
+       "integrity": "sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg=="
+     },
++    "mimic-response": {
++      "version": "1.0.1",
++      "resolved": "https://registry.npmjs.org/mimic-response/-/mimic-response-1.0.1.tgz",
++      "integrity": "sha512-j5EctnkH7amfV/q5Hgmoal1g2QHFJRraOtmx0JpIqkxhBhI/lJSl1nMpQ45hVarwNETOoWEimndZ4QK0RHxuxQ=="
++    },
+     "min-indent": {
+       "version": "1.0.1",
+       "resolved": "https://registry.npmjs.org/min-indent/-/min-indent-1.0.1.tgz",
+@@ -11147,6 +11378,33 @@
+       "resolved": "https://registry.npmjs.org/os-browserify/-/os-browserify-0.3.0.tgz",
+       "integrity": "sha1-hUNzx/XCMVkU/Jv8a9gjj92h7Cc="
+     },
++    "p-any": {
++      "version": "2.1.0",
++      "resolved": "https://registry.npmjs.org/p-any/-/p-any-2.1.0.tgz",
++      "integrity": "sha512-JAERcaMBLYKMq+voYw36+x5Dgh47+/o7yuv2oQYuSSUml4YeqJEFznBrY2UeEkoSHqBua6hz518n/PsowTYLLg==",
++      "requires": {
++        "p-cancelable": "^2.0.0",
++        "p-some": "^4.0.0",
++        "type-fest": "^0.3.0"
++      },
++      "dependencies": {
++        "p-cancelable": {
++          "version": "2.0.0",
++          "resolved": "https://registry.npmjs.org/p-cancelable/-/p-cancelable-2.0.0.tgz",
++          "integrity": "sha512-wvPXDmbMmu2ksjkB4Z3nZWTSkJEb9lqVdMaCKpZUGJG9TMiNp9XcbG3fn9fPKjem04fJMJnXoyFPk2FmgiaiNg=="
++        },
++        "type-fest": {
++          "version": "0.3.1",
++          "resolved": "https://registry.npmjs.org/type-fest/-/type-fest-0.3.1.tgz",
++          "integrity": "sha512-cUGJnCdr4STbePCgqNFbpVNCepa+kAVohJs1sLhxzdH+gnEoOd8VhbYa7pD3zZYGiURWM2xzEII3fQcRizDkYQ=="
++        }
++      }
++    },
++    "p-cancelable": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npmjs.org/p-cancelable/-/p-cancelable-1.1.0.tgz",
++      "integrity": "sha512-s73XxOZ4zpt1edZYZzvhqFa6uvQc1vwUa0K0BdtIZgQMAJj9IbebH+JkgKZc9h+B05PKHLOTl4ajG1BmNrVZlw=="
++    },
+     "p-each-series": {
+       "version": "2.2.0",
+       "resolved": "https://registry.npmjs.org/p-each-series/-/p-each-series-2.2.0.tgz",
+@@ -11189,6 +11447,30 @@
+         "retry": "^0.12.0"
+       }
+     },
++    "p-some": {
++      "version": "4.1.0",
++      "resolved": "https://registry.npmjs.org/p-some/-/p-some-4.1.0.tgz",
++      "integrity": "sha512-MF/HIbq6GeBqTrTIl5OJubzkGU+qfFhAFi0gnTAK6rgEIJIknEiABHOTtQu4e6JiXjIwuMPMUFQzyHh5QjCl1g==",
++      "requires": {
++        "aggregate-error": "^3.0.0",
++        "p-cancelable": "^2.0.0"
++      },
++      "dependencies": {
++        "p-cancelable": {
++          "version": "2.0.0",
++          "resolved": "https://registry.npmjs.org/p-cancelable/-/p-cancelable-2.0.0.tgz",
++          "integrity": "sha512-wvPXDmbMmu2ksjkB4Z3nZWTSkJEb9lqVdMaCKpZUGJG9TMiNp9XcbG3fn9fPKjem04fJMJnXoyFPk2FmgiaiNg=="
++        }
++      }
++    },
++    "p-timeout": {
++      "version": "3.2.0",
++      "resolved": "https://registry.npmjs.org/p-timeout/-/p-timeout-3.2.0.tgz",
++      "integrity": "sha512-rhIwUycgwwKcP9yTOOFK/AKsAopjjCakVqLHePO3CC6Mir1Z99xT+R63jZxAT5lFZLa2inS5h+ZS2GvR99/FBg==",
++      "requires": {
++        "p-finally": "^1.0.0"
++      }
++    },
+     "p-try": {
+       "version": "2.2.0",
+       "resolved": "https://registry.npmjs.org/p-try/-/p-try-2.2.0.tgz",
+@@ -12695,6 +12977,16 @@
+         }
+       }
+     },
++    "public-ip": {
++      "version": "4.0.3",
++      "resolved": "https://registry.npmjs.org/public-ip/-/public-ip-4.0.3.tgz",
++      "integrity": "sha512-IofiJJWoZ8hZHBk25l4ozLvcET0pjZSxocbUfh4sGkjidMOm4iZNzzWxezGqGsVY7HuxiK7SkyJKHNeT0YQ7uw==",
++      "requires": {
++        "dns-socket": "^4.2.1",
++        "got": "^9.6.0",
++        "is-ip": "^3.1.0"
++      }
++    },
+     "pump": {
+       "version": "3.0.0",
+       "resolved": "https://registry.npmjs.org/pump/-/pump-3.0.0.tgz",
+@@ -13571,6 +13863,14 @@
+         }
+       }
+     },
++    "responselike": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npmjs.org/responselike/-/responselike-1.0.2.tgz",
++      "integrity": "sha1-kYcg7ztjHFZCvgaPFa3lpG9Loec=",
++      "requires": {
++        "lowercase-keys": "^1.0.0"
++      }
++    },
+     "ret": {
+       "version": "0.1.15",
+       "resolved": "https://registry.npmjs.org/ret/-/ret-0.1.15.tgz",
+@@ -15186,6 +15486,11 @@
+         }
+       }
+     },
++    "to-readable-stream": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npmjs.org/to-readable-stream/-/to-readable-stream-1.0.0.tgz",
++      "integrity": "sha512-Iq25XBt6zD5npPhlLVXGFN3/gyR2/qODcKNNyTMd4vbm39HUaOiAM4PMq0eMVC/Tkxz+Zjdsc55g9yyz+Yq00Q=="
++    },
+     "to-regex": {
+       "version": "3.0.2",
+       "resolved": "https://registry.npmjs.org/to-regex/-/to-regex-3.0.2.tgz",
+@@ -15520,6 +15825,21 @@
+         "requires-port": "^1.0.0"
+       }
+     },
++    "url-parse-lax": {
++      "version": "3.0.0",
++      "resolved": "https://registry.npmjs.org/url-parse-lax/-/url-parse-lax-3.0.0.tgz",
++      "integrity": "sha1-FrXK/Afb42dsGxmZF3gj1lA6yww=",
++      "requires": {
++        "prepend-http": "^2.0.0"
++      },
++      "dependencies": {
++        "prepend-http": {
++          "version": "2.0.0",
++          "resolved": "https://registry.npmjs.org/prepend-http/-/prepend-http-2.0.0.tgz",
++          "integrity": "sha1-6SQ0v6XqjBn0HN/UAddBo8gZ2Jc="
++        }
++      }
++    },
+     "use": {
+       "version": "3.1.1",
+       "resolved": "https://registry.npmjs.org/use/-/use-3.1.1.tgz",
+@@ -16770,6 +17090,11 @@
+       "resolved": "https://registry.npmjs.org/which-module/-/which-module-2.0.0.tgz",
+       "integrity": "sha1-2e8H3Od7mQK4o6j6SzHD4/fm6Ho="
+     },
++    "window-or-global": {
++      "version": "1.0.1",
++      "resolved": "https://registry.npmjs.org/window-or-global/-/window-or-global-1.0.1.tgz",
++      "integrity": "sha1-2+RboqKRqrxW1iz2bEW3+jIpRt4="
++    },
+     "word-wrap": {
+       "version": "1.2.3",
+       "resolved": "https://registry.npmjs.org/word-wrap/-/word-wrap-1.2.3.tgz",

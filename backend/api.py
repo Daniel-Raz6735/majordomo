@@ -1,9 +1,11 @@
 import flask
 from flask import request, jsonify
+from flask_cors import CORS
 import sqlite3
 import psycopg2
 
 app = flask.Flask(__name__)
+CORS(app)
 app.config["DEBUG"] = True
 
 
