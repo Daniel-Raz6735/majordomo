@@ -16,6 +16,8 @@ export const Dictionary = new LocalizedStrings({
     enterPass: `Password`,
     login: `Log in`, 
     signOut: `Sign out`,
+    inventory : "show inventory",
+    
     
     
   },
@@ -25,6 +27,7 @@ export const Dictionary = new LocalizedStrings({
     enterPass: `אנא הכנס סיסמא`,
     login: `התחבר`,
     signOut: `התנתק`,
+    inventory : "הצגת מלאי"
     
   }});
 
