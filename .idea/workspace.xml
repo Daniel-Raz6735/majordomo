@@ -20,28 +20,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/majordomo.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.firebase/hosting.YnVpbGQ.cache" beforeDir="false" afterPath="$PROJECT_DIR$/.firebase/hosting.YnVpbGQ.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Dictionary.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Dictionary.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Dictionary.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Dictionary.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/login page/LoginPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/login page/LoginPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/login page/LoginPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/login page/LoginPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/db_queries.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/majordomo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/majordomo.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/functions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Pull.Settings">
     <option name="BRANCH" value="master" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="1mZo9UA1xi6xwIAIaX30KsnzwNV" />
   <component name="ProjectLevelVcsManager">
@@ -55,6 +65,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
@@ -107,22 +118,9 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="-1459" y="165" key="SettingsEditor" timestamp="1609710552650">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1459" y="165" key="SettingsEditor/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609710552650" />
-    <state x="-1143" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1609710495065">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1143" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609710495065" />
-    <state x="-1297" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1609710545430">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1297" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609710545430" />
   </component>
 </project>

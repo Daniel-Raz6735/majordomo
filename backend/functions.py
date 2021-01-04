@@ -1,5 +1,7 @@
 import psycopg2
 from config import config
+import db_queries
+
 
 def connect():
     """ Connect to the PostgreSQL database server """
@@ -11,22 +13,22 @@ def connect():
         # connect to the PostgreSQL server
         print('Connecting to the PostgreSQL database...')
         conn = psycopg2.connect(**params)
-        # conn = psycopg2.connect(
-        #     host="localhost",
-        #     database="suppliers",
-        #     user="postgres",
-        #     password="password")
-        # conn = psycopg2.connect("dbname=suppliers user=postgres password=postgres")
+
         # create a cursor
         cur = conn.cursor()
+        for key in tables:
+            cur.execute(db_queries.create_table(key, tables[key]["keys"], tables[key]["cols"]))
+        conn.commit()
+        cur.execute(
+            "INSERT INTO STUDENT (PersonID,FirstName,LastName,Address,City ) VALUES (3420, 'John', 'Maclein', 'Computer Science', 'ICT')")
 
-        # execute a statement
-        print('PostgreSQL database version:')
-        cur.execute('SELECT version()')
+        conn.commit()
 
-        # display the PostgreSQL database server version
-        db_version = cur.fetchone()
-        print(db_version)
+        cur.execute("SELECT * from shlomo")
+        rows = cur.fetchall()
+        print(rows)
+
+
 
         # close the communication with the PostgreSQL
         cur.close()
@@ -38,5 +40,18 @@ def connect():
             print('Database connection closed.')
 
 
+tables = {
+       "shlomo": {
+            "keys": [["PersonID", "int"]],
+            "cols": [
+                ["FirstName", "varchar(255)"],
+                ["LastName", "varchar(255)"],
+                ["Address", "varchar(255)"],
+                ["City", "varchar(255)"],
+                    ]
+        }
+}
+
 if __name__ == '__main__':
     connect()
+
