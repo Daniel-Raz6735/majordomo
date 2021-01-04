@@ -30,7 +30,7 @@ def phrase_parameters(params):
 
 
 def error_message(code, message):
-    return "<h1>" + code + "</h1><p>" + message + "</p>" , code
+    return "<h1>" + code + "</h1><p>" + message + "</p>", code
 
 
 @app.errorhandler(404)
@@ -45,14 +45,14 @@ def home():
 
 
 @app.route('/get/weights', methods=['GET'])
-def get_shlomo_data():
+def get_weights_data():
     list_of_cols = ["a", "b", "c"]
-
-    query_arguments = phrase_parameters(request.args)
-
-
-    return ask_db(db_queries.select_query(query_arguments))
-
+    # create_proj_tables()
+    # query_arguments = phrase_parameters(request.args)
+    load_dummy_data()
+    # return ask_db(db_queries.select_query(query_arguments))
+    return '''<h1>Distant Reading Archive</h1>
+       <p>A prototype API for distant reading of science fiction novels.</p>'''
 
 # @app.route('/api', methods=['GET'])
 # def api_filter():
@@ -112,15 +112,59 @@ def get_shlomo_data():
 #             print('Database connection closed.')
 #             return jsonify(rows)
 
-def create_proj_tables(a,b):
-    return 200,(db_queries.create_table_query("weights",
-                                        [["container_id", "varchar(10)", "NOT NULL"],
-                                         ["weighing_time", "date", "NOT NULL"],
-                                         ["weight_value", "varchar(10)", "NOT NULL"]]))
+
+def load_dummy_data():
+    weight_columns = ["container_id", "weighing_time", "weight_value"]
+    weight_data = [
+                    [1, 1609795520, 4],
+                    [1, 1609795603, 3],
+                    [1, 1609795611, 2],
+                    [1, 1609795620, 2.5],
+                    [2, 1609795520, 4.5],
+                    [2, 1609795603, 3.5],
+                    [2, 1609795611, 2.5],
+                    [2, 1609795620, 2.5],
+                    [3, 1609795520, 4.9],
+                    [3, 1609795603, 3.9],
+                    [3, 1609795611, 2.9],
+                    [3, 1609795620, 2.9],
+    ]
+    ask_db(db_queries.insert_to_table_query,"weights",weight_columns,weight_data)
+
+    containers_columns = ["container_id", "using_start_date", "item_id", "client_id"]
+    containers_data = [
+                        [1, 1578172837, 21, 50],
+                        [2, 1578172837, 22, 50],
+                        [3, 1578172837, 25, 2]]
+    # db_queries.insert_to_table_query("containers", containers_columns,containers_data)
+    ask_db(db_queries.insert_to_table_query,"containers",containers_columns,containers_data)
+
+# container_vars = [["container_id", "varchar(10)", "NOT NULL"],
+#                   ["using_start_date", "date", "NOT NULL"],
+#                   ["item_id", "int", "NULL"],
+#                   ["client_id", "int", "NULL"]
+#                   ]
+
+def create_proj_tables():
+    weight = db_queries.create_table_query("weights",
+                                           [["container_id", "varchar(10)", "NOT NULL"],
+                                            ["weighing_time", "date", "NOT NULL"],
+                                            ["weight_value", "double", "NOT NULL"]])
+
+    weights_vars =[["container_id", "int", "NOT NULL"],
+                                            ["weighing_time", "date", "NOT NULL"],
+                                            ["weight_value", "double", "NOT NULL"]]
+
+    container_vars = [["container_id", "int", "NOT NULL"],
+                      ["using_start_date", "date", "NOT NULL"],
+                      ["item_id", "int", "NULL"],
+                      ["client_id", "int", "NULL"]
+                      ]
+    ask_db(db_queries.create_table_query, "containers", container_vars)
+    ask_db(db_queries.create_table_query, "weights", weights_vars)
 
 
-
-def ask_db(func, args, extra_args,expecting_result=False):
+def ask_db(func, args, extra_args, more_args=None, expecting_result=False):
     conn = None
     rows = ""
     try:
@@ -133,11 +177,12 @@ def ask_db(func, args, extra_args,expecting_result=False):
 
         # create a cursor
         cur = conn.cursor()
-
-        res_code, query = func(args, extra_args)
+        print(args, extra_args)
+        res_code, query = func(args, extra_args,more_args)
         if res_code == 200:
             cur.execute(query)
-#
+            print("query: ")
+            print(query)
             conn.commit()
             if expecting_result:
                 rows = cur.fetchall()
@@ -145,8 +190,9 @@ def ask_db(func, args, extra_args,expecting_result=False):
                     print(rows)
         else:
             conn.close()
-            print('Database connection closed.')
-            return error_message(res_code, query)
+            print(res_code, 'Database connection closed.')
+            if expecting_result:
+                return error_message(res_code, query)
 
     except (Exception, psycopg2.DatabaseError) as error:
         print("error: ", error)
@@ -154,11 +200,12 @@ def ask_db(func, args, extra_args,expecting_result=False):
         if conn is not None:
             # close the communication with the PostgreSQL
             conn.close()
-            print('Database connection closed.')
+            print(res_code, 'Database connection closed.')
             if expecting_result:
                 return jsonify(rows)
-            else:
-                return None
+        return '''<h1>Distant Reading Archive</h1>
+           <p>A prototype API for distant reading of science fiction novels.</p>'''
+
         # create_table
         # for key in tables:
         #     cur.execute(db_queries.create_table(key, tables[key]["keys"], tables[key]["cols"]))
@@ -179,6 +226,7 @@ def ask_db(func, args, extra_args,expecting_result=False):
         # conn.row_factory = dict_factory
         # cur = conn.cursor()
         # results = cur.execute(query, to_filter).fetchall()
+
 
 # def connect():
 #     """ Connect to the PostgreSQL database server """
@@ -218,37 +266,36 @@ def ask_db(func, args, extra_args,expecting_result=False):
 
 
 tables = {
-       "shlomo": {
-            "keys": [["PersonID", "int"]],
-            "cols": [
-                ["FirstName", "varchar(255)"],
-                ["LastName", "varchar(255)"],
-                ["Address", "varchar(255)"],
-                ["City", "varchar(255)"],
-                    ]
-        }
+    "shlomo": {
+        "keys": [["PersonID", "int"]],
+        "cols": [
+            ["FirstName", "varchar(255)"],
+            ["LastName", "varchar(255)"],
+            ["Address", "varchar(255)"],
+            ["City", "varchar(255)"],
+        ]
+    }
 }
-
 
 # info =[PersonID, FirstName, LastName, Address, City]
 
 if __name__ == '__main__':
+    # create_proj_tables()
     app.run()
 
 # usage examples
-    # print(db_queries.select_query(  ["shlomo", "daniel"],
-    #                                 [[["a", "b"], ["c"]], [["d"]]],
-    #                                 [["and not",  "b", " = ", "d"],
-    #                                  ["and","c",">","d"],
-    #                                  ["or","c",">","d"]]))
-    # print(db_queries.insert_to_table_query("shlomo", ["a", "b", "c"],
-    #                                        [["a1", "b1", "c1", "d1"],
-    #                                         ["a2", "b2", "c2"],
-    #                                         ["a3", 3, 3],
-    #                                         ["a4", "b4", "c4"]]))
-    # print(db_queries.create_table_query("shlomo",
-    #                                     [["a", "int", "PRIMARY KEY", " NOT NULL"],
-    #                                      ["b", "varchar(20)", " NULL"],
-    #                                      ["c", "varchar(20)", " NULL"]]))
-    # ask_db(create_proj_tables, None, None)
-    # create_proj_tables()
+# print(db_queries.select_query(  ["shlomo", "daniel"],
+#                                 [[["a", "b"], ["c"]], [["d"]]],
+#                                 [["and not",  "b", " = ", "d"],
+#                                  ["and","c",">","d"],
+#                                  ["or","c",">","d"]]))
+# print(db_queries.insert_to_table_query("shlomo", ["a", "b", "c"],
+#                                        [["a1", "b1", "c1", "d1"],
+#                                         ["a2", "b2", "c2"],
+#                                         ["a3", 3, 3],
+#                                         ["a4", "b4", "c4"]]))
+# print(db_queries.create_table_query("shlomo",
+#                                     [["a", "int", "PRIMARY KEY", " NOT NULL"],
+#                                      ["b", "varchar(20)", " NULL"],
+#                                      ["c", "varchar(20)", " NULL"]]))
+# ask_db(create_proj_tables, None, None)

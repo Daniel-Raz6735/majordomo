@@ -13,7 +13,7 @@ def create_table_query(table_name, cols):
             query += str(data) + "\t"
         query += ",\n"
     query = query[:-2] + ");"
-    return query
+    return 200, query
 
 
 def insert_to_table_query(table_name, cols, values):
@@ -43,9 +43,9 @@ def insert_to_table_query(table_name, cols, values):
         query = query[:-2] + ")\n("
     query = query[:-1] + ";"
     if entered_loop:
-        return query
+        return 200, query
     else:
-        return False
+        return 400, "Bad request"
 
 
 def select_query(tables, columns_per_table, conditions):
