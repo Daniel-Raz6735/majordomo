@@ -6,8 +6,10 @@ import psycopg2
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
+
 def connect_db():
     conn = psycopg2.connect("dbname=suppliers user=postgres password=password")
+
 
 def dict_factory(cursor, row):
     d = {}
