@@ -1,6 +1,5 @@
 import flask
 from flask import request, jsonify
-import sqlite3
 import psycopg2
 from config import config
 import db_queries
@@ -16,9 +15,28 @@ def dict_factory(cursor, row):
     return d
 
 
+def phrase_parameters(params):
+    query_parameters = []
+    non_used_params = []
+    for param in params:
+        # id = query_parameters.get('id')
+        # to_filter = []
+        # info = [123, "new person", "dan", "hat", "City"]
+        print(param)
+
+        query_parameters.append([param[0], param[1]])
+        # info[0] = id
+    return query_parameters
+
+
+def error_message(code, message):
+    return "<h1>" + code + "</h1><p>" + message + "</p>" , code
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return "<h1>404</h1><p>The resource could not be found.</p>", 404
+
 
 @app.route('/', methods=['GET'])
 def home():
@@ -26,9 +44,83 @@ def home():
 <p>A prototype API for distant reading of science fiction novels.</p>'''
 
 
+@app.route('/get/weights', methods=['GET'])
+def get_shlomo_data():
+    list_of_cols = ["a", "b", "c"]
 
-@app.route('/api', methods=['GET'])
-def api_filter():
+    query_arguments = phrase_parameters(request.args)
+
+
+    return ask_db(db_queries.select_query(query_arguments))
+
+
+# @app.route('/api', methods=['GET'])
+# def api_filter():
+#     conn = None
+#     rows = ""
+#     try:
+#         # read connection parameters
+#         params = config("postgres")
+#
+#         # connect to the PostgreSQL server
+#         print('Connecting to the PostgreSQL database...')
+#         conn = psycopg2.connect(**params)
+#
+#         # create a cursor
+#         cur = conn.cursor()
+#         query_parameters = request.args
+#         id = query_parameters.get('id')
+#         to_filter = []
+#         info = [123, "new person", "dan", "hat", "City"]
+#
+#         if id:
+#             to_filter.append(["PersonID", id])
+#             info[0] = id
+#         # else:
+#         #     return page_not_found(404)
+#
+#         # create_table
+#         # for key in tables:
+#         #     cur.execute(db_queries.create_table(key, tables[key]["keys"], tables[key]["cols"]))
+#         #     print("adding table : ", key,tables[key]["keys"],tables[key]["cols"])
+#         # conn.commit()
+#
+#
+#         # add more data
+#         # cur.execute(db_queries.insert_to_table("shlomo", info))
+#         # conn.commit()
+#
+#
+#         # cur.execute("SELECT * from shlomo")
+#         cur.execute(db_queries.read_info_from_db("shlomo", ["PersonID", "FirstName", "LastName", "City"], to_filter))
+#         rows = cur.fetchall()
+#         print(rows)
+#         #
+#
+#
+#         # conn = sqlite3.connect('books.db')
+#         # conn.row_factory = dict_factory
+#         # cur = conn.cursor()
+#         # results = cur.execute(query, to_filter).fetchall()
+#
+#     except (Exception, psycopg2.DatabaseError) as error:
+#             print(error)
+#     finally:
+#         if conn is not None:
+#             # close the communication with the PostgreSQL
+#             conn.close()
+#             print('Database connection closed.')
+#             return jsonify(rows)
+
+def create_proj_tables(a,b):
+    return 200,(db_queries.create_table_query("weights",
+                                        [["container_id", "varchar(10)", "NOT NULL"],
+                                         ["weighing_time", "date", "NOT NULL"],
+                                         ["weight_value", "varchar(10)", "NOT NULL"]]))
+
+
+
+def ask_db(func, args, extra_args,expecting_result=False):
     conn = None
     rows = ""
     try:
@@ -41,51 +133,52 @@ def api_filter():
 
         # create a cursor
         cur = conn.cursor()
-        query_parameters = request.args
-        id = query_parameters.get('id')
-        to_filter = []
 
-        if id:
-            to_filter.append(["PersonID", id])
-        # else:
-        #     return page_not_found(404)
-
-        # create_table
-        # for key in tables:
-        #     cur.execute(db_queries.create_table(key, tables[key]["keys"], tables[key]["cols"]))
-        #     print("table added: ", key,tables[key]["keys"],tables[key]["cols"])
-        # conn.commit()
-
-
-        # add more data
-        # cur.execute(db_queries.insert_to_table("shlomo", info))
-        # cur.execute("INSERT INTO SHLOMO (PersonID,FirstName,LastName,Address,City) VALUES (123, 'John', '18', 'Computer Science', 'ICT')")
-        # print("commit?")
-        # conn.commit()
-        # print("here?")
-
-        cur.execute("SELECT * from shlomo")
-        # cur.execute(db_queries.read_info_from_db("shlomo", ["PersonID", "FirstName", "LastName", "Address", "City"], to_filter))
-        rows = cur.fetchall()
-        print(rows)
-
-
-        # conn = sqlite3.connect('books.db')
-        # conn.row_factory = dict_factory
-        # cur = conn.cursor()
-        # results = cur.execute(query, to_filter).fetchall()
+        res_code, query = func(args, extra_args)
+        if res_code == 200:
+            cur.execute(query)
+#
+            conn.commit()
+            if expecting_result:
+                rows = cur.fetchall()
+                if rows:
+                    print(rows)
+        else:
+            conn.close()
+            print('Database connection closed.')
+            return error_message(res_code, query)
 
     except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
+        print("error: ", error)
     finally:
         if conn is not None:
             # close the communication with the PostgreSQL
             conn.close()
             print('Database connection closed.')
-            return jsonify(rows)
+            if expecting_result:
+                return jsonify(rows)
+            else:
+                return None
+        # create_table
+        # for key in tables:
+        #     cur.execute(db_queries.create_table(key, tables[key]["keys"], tables[key]["cols"]))
+        #     print("adding table : ", key,tables[key]["keys"],tables[key]["cols"])
+        # conn.commit()
 
+        # add more data
+        # cur.execute(db_queries.insert_to_table("shlomo", info))
+        # conn.commit()
 
+        # cur.execute("SELECT * from shlomo")
+        # cur.execute(
+        #     db_queries.read_info_from_db("shlomo", ["PersonID", "FirstName", "LastName", "City"], to_filter))
 
+        #
+
+        # conn = sqlite3.connect('books.db')
+        # conn.row_factory = dict_factory
+        # cur = conn.cursor()
+        # results = cur.execute(query, to_filter).fetchall()
 
 # def connect():
 #     """ Connect to the PostgreSQL database server """
@@ -138,9 +231,24 @@ tables = {
 
 
 # info =[PersonID, FirstName, LastName, Address, City]
-info =[123, "daniel", "ca", "blabal", "City"]
-
 
 if __name__ == '__main__':
     app.run()
 
+# usage examples
+    # print(db_queries.select_query(  ["shlomo", "daniel"],
+    #                                 [[["a", "b"], ["c"]], [["d"]]],
+    #                                 [["and not",  "b", " = ", "d"],
+    #                                  ["and","c",">","d"],
+    #                                  ["or","c",">","d"]]))
+    # print(db_queries.insert_to_table_query("shlomo", ["a", "b", "c"],
+    #                                        [["a1", "b1", "c1", "d1"],
+    #                                         ["a2", "b2", "c2"],
+    #                                         ["a3", 3, 3],
+    #                                         ["a4", "b4", "c4"]]))
+    # print(db_queries.create_table_query("shlomo",
+    #                                     [["a", "int", "PRIMARY KEY", " NOT NULL"],
+    #                                      ["b", "varchar(20)", " NULL"],
+    #                                      ["c", "varchar(20)", " NULL"]]))
+    # ask_db(create_proj_tables, None, None)
+    # create_proj_tables()
