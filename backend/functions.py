@@ -30,6 +30,7 @@ def home():
 @app.route('/api', methods=['GET'])
 def api_filter():
     conn = None
+    rows = ""
     try:
         # read connection parameters
         params = config()
@@ -45,25 +46,28 @@ def api_filter():
         to_filter = []
 
         if id:
-            to_filter.append(["id", id])
+            to_filter.append(["PersonID", id])
         # else:
         #     return page_not_found(404)
 
         # create_table
         # for key in tables:
         #     cur.execute(db_queries.create_table(key, tables[key]["keys"], tables[key]["cols"]))
+        #     print("table added: ", key,tables[key]["keys"],tables[key]["cols"])
         # conn.commit()
 
+
         # add more data
-        cur.execute(db_queries.insert_to_table("shlomo",info))
-        conn.commit()
+        # cur.execute(db_queries.insert_to_table("shlomo", info))
+        # cur.execute("INSERT INTO SHLOMO (PersonID,FirstName,LastName,Address,City) VALUES (123, 'John', '18', 'Computer Science', 'ICT')")
+        # print("commit?")
+        # conn.commit()
+        # print("here?")
 
-
-        # cur.execute("SELECT * from shlomo")
-        cur.execute(db_queries.read_info_from_db("shlomo", ["PersonID", "FirstName", "LastName", "Address", "City"], to_filter))
+        cur.execute("SELECT * from shlomo")
+        # cur.execute(db_queries.read_info_from_db("shlomo", ["PersonID", "FirstName", "LastName", "Address", "City"], to_filter))
         rows = cur.fetchall()
         print(rows)
-
 
 
         # conn = sqlite3.connect('books.db')
@@ -134,7 +138,7 @@ tables = {
 
 
 # info =[PersonID, FirstName, LastName, Address, City]
-info =[123, "shlomo", "ca", "blabal", "City"]
+info =[123, "daniel", "ca", "blabal", "City"]
 
 
 if __name__ == '__main__':

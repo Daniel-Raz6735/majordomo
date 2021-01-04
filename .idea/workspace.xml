@@ -19,8 +19,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="">
+    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="upload test">
+      <change beforePath="$PROJECT_DIR$/.idea/majordomo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/majordomo.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database.ini" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/db_queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db_queries.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/functions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,7 +51,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../SD.py" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunManager">
@@ -87,6 +91,14 @@
       <option name="presentableId" value="Default" />
       <updated>1609710323345</updated>
     </task>
+    <task id="LOCAL-00001" summary="upload test">
+      <created>1609750966983</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1609750966983</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -113,24 +125,30 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="upload test" />
+    <option name="LAST_COMMIT_MESSAGE" value="upload test" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1899" height="282" key="GridCell.Tab.0.bottom" timestamp="1609750782898">
+    <state x="-1180" y="275" key="FileChooserDialogImpl" timestamp="1609756117353">
       <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="282" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609750782898" />
-    <state width="1899" height="282" key="GridCell.Tab.0.center" timestamp="1609750782898">
+    <state x="-1180" y="275" key="FileChooserDialogImpl/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609756117353" />
+    <state width="1899" height="282" key="GridCell.Tab.0.bottom" timestamp="1609763497749">
       <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="282" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609750782898" />
-    <state width="1899" height="282" key="GridCell.Tab.0.left" timestamp="1609750782898">
+    <state width="1899" height="282" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609763497749" />
+    <state width="1899" height="282" key="GridCell.Tab.0.center" timestamp="1609763497749">
       <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="282" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609750782898" />
-    <state width="1899" height="282" key="GridCell.Tab.0.right" timestamp="1609750782898">
+    <state width="1899" height="282" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609763497749" />
+    <state width="1899" height="282" key="GridCell.Tab.0.left" timestamp="1609763497749">
       <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="282" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609750782898" />
+    <state width="1899" height="282" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609763497749" />
+    <state width="1899" height="282" key="GridCell.Tab.0.right" timestamp="1609763497749">
+      <screen x="-1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="282" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609763497749" />
     <state width="1899" height="223" key="GridCell.Tab.1.bottom" timestamp="1609750693208">
       <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
@@ -147,10 +165,22 @@
       <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="223" key="GridCell.Tab.1.right/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609750693208" />
+    <state x="-1681" y="75" width="1343" height="792" key="MergeDialog" timestamp="1609760927786">
+      <screen x="-1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-1681" y="75" width="1343" height="792" key="MergeDialog/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609760927786" />
+    <state x="-1322" y="281" key="MultipleFileMergeDialog" timestamp="1609760916512">
+      <screen x="-1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-1322" y="281" key="MultipleFileMergeDialog/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609760916512" />
     <state x="-1459" y="165" key="SettingsEditor" timestamp="1609710552650">
       <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
     <state x="-1459" y="165" key="SettingsEditor/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609710552650" />
+    <state x="-1148" y="261" key="Vcs.Push.Dialog.v2" timestamp="1609760944226">
+      <screen x="-1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-1148" y="261" key="Vcs.Push.Dialog.v2/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609760944226" />
     <state x="-1828" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1609749930411">
       <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
