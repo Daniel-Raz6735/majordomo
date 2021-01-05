@@ -19,21 +19,21 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="merge">
+    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/containers.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/majordomo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/majordomo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/db_queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db_queries.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Main user page/MainUserPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Main user page/MainUserPage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="Git.Pull.Settings">
-    <option name="BRANCH" value="master" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -54,7 +54,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../SD.py" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
-  <component name="RunManager" selected="Python.api">
+  <component name="RunManager" selected="Python.functions">
     <configuration name="api" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="majordomo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -99,8 +99,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.api" />
         <item itemvalue="Python.functions" />
+        <item itemvalue="Python.api" />
       </list>
     </recent_temporary>
   </component>
@@ -134,7 +134,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609796304209</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="interpreter push">
+      <created>1609799681785</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1609799681785</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -164,76 +171,7 @@
     <MESSAGE value="upload test" />
     <MESSAGE value="connect to AWS" />
     <MESSAGE value="merge" />
-    <option name="LAST_COMMIT_MESSAGE" value="merge" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="-1180" y="275" key="FileChooserDialogImpl" timestamp="1609756117353">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1180" y="275" key="FileChooserDialogImpl/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609756117353" />
-    <state x="-2079" y="370" key="FileDocumentManager.FileCacheConflict" timestamp="1609796260271">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-2079" y="370" key="FileDocumentManager.FileCacheConflict/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609796260271" />
-    <state width="1899" height="282" key="GridCell.Tab.0.bottom" timestamp="1609798600275">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="282" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609798600275" />
-    <state width="1899" height="282" key="GridCell.Tab.0.center" timestamp="1609798600275">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="282" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609798600275" />
-    <state width="1899" height="282" key="GridCell.Tab.0.left" timestamp="1609798600274">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="282" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609798600274" />
-    <state width="1899" height="282" key="GridCell.Tab.0.right" timestamp="1609798600275">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="282" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609798600275" />
-    <state width="1899" height="223" key="GridCell.Tab.1.bottom" timestamp="1609750693208">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="223" key="GridCell.Tab.1.bottom/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609750693208" />
-    <state width="1899" height="223" key="GridCell.Tab.1.center" timestamp="1609750693208">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="223" key="GridCell.Tab.1.center/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609750693208" />
-    <state width="1899" height="223" key="GridCell.Tab.1.left" timestamp="1609750693208">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="223" key="GridCell.Tab.1.left/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609750693208" />
-    <state width="1899" height="223" key="GridCell.Tab.1.right" timestamp="1609750693208">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="223" key="GridCell.Tab.1.right/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609750693208" />
-    <state x="-1681" y="75" width="1343" height="792" key="MergeDialog" timestamp="1609796267725">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1681" y="75" width="1343" height="792" key="MergeDialog/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609796267725" />
-    <state x="-1322" y="281" key="MultipleFileMergeDialog" timestamp="1609760916512">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1322" y="281" key="MultipleFileMergeDialog/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609760916512" />
-    <state x="-1459" y="165" key="SettingsEditor" timestamp="1609710552650">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1459" y="165" key="SettingsEditor/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609710552650" />
-    <state x="-1148" y="261" key="Vcs.Push.Dialog.v2" timestamp="1609796310948">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1148" y="261" key="Vcs.Push.Dialog.v2/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609796310948" />
-    <state x="-1828" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1609749930411">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1828" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609749930411" />
-    <state x="-1143" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1609710495065">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1143" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609710495065" />
-    <state x="-1297" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1609710545430">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1297" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1609710545430" />
+    <MESSAGE value="interpreter push" />
+    <option name="LAST_COMMIT_MESSAGE" value="interpreter push" />
   </component>
 </project>

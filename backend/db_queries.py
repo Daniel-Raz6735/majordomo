@@ -54,7 +54,10 @@ def select_query(tables, columns_per_table, conditions):
                         columns = [[table 1 column names[column name, column nick]...]...]
                         conditions [[string containing the condition and/not/or, var1, condition, var2]...]
         expected output: sql query if all parameters legal None if not"""
-    columns_len = len(columns_per_table)
+    if columns_per_table:
+        columns_len = len(columns_per_table)
+    else:
+        columns_len = 0
     query = "SELECT "
     if not columns_per_table or columns_len != len(tables):
         query += "* "
@@ -84,7 +87,7 @@ def select_query(tables, columns_per_table, conditions):
                     if first == "not" or first == "or not" or first == "and not":
                         condition.insert(0, "NOT")
                 for cond in condition:
-                    query += str(cond) + " "  # +  str(condition[1]) + " = " + str(condition[1]) + " AND "
+                    query += str(cond) + " "
             if i != len(conditions):
                 query += " \n\t\t"
-    return query + ';'
+    return 200, query + ';'

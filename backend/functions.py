@@ -3,8 +3,11 @@ from flask import request, jsonify
 import psycopg2
 from config import config
 import db_queries
+from flask_cors import CORS
+
 
 app = flask.Flask(__name__)
+CORS(app)
 app.config["DEBUG"] = True
 
 
@@ -46,16 +49,23 @@ def home():
 <p>A prototype API for distant reading of science fiction novels.</p>'''
 
 
-@app.route('/get/weights', methods=['GET'])
+@app.route('/get/containers', methods=['GET'])
 def get_weights_data():
-    list_of_cols = ["a", "b", "c"]
+    list_of_cols = ["container_id"]
     # create_proj_tables()
     # load_dummy_data()
     used_p, non_used_p = phrase_parameters(request.args, list_of_cols)
+    conditions = []
+    # for lis in used_p:
+    #     conditions.append(["AND", lis[0], "=", lis[1]])
+    # print(conditions)
+    res = ask_db(db_queries.select_query, ["containers"], conditions,expecting_result=True)
+    return res
+
+
 
     # return ask_db(db_queries.select_query(query_arguments))
-    return '''<h1>Distant Reading Archive</h1>
-       <p>A prototype API for distant reading of science fiction novels.</p>'''
+
 
 
 def load_dummy_data():
@@ -74,13 +84,13 @@ def load_dummy_data():
                     [3, '2004-11-19 10:23:54', 2.9],
                     [3, '2004-12-19 10:23:54', 2.9],
     ]
-    ask_db(db_queries.insert_to_table_query,"weights",weight_columns,weight_data)
+    # ask_db(db_queries.insert_to_table_query, "weights", weight_columns, weight_data)
 
     containers_columns = ["container_id", "using_start_date", "item_id", "client_id"]
     containers_data = [
-                        [1, '2004-10-19 10:23:54', 21, 50],
-                        [2, '2004-10-19 10:23:54', 22, 50],
-                        [3, '2004-10-19 10:23:54', 25, 2]]
+                        [4, '2014-10-19 10:23:54', 21, 50],
+                        [5, '2014-10-19 10:23:54', 22, 50],
+                        [6, '2014-10-19 10:23:54', 25, 2]]
     ask_db(db_queries.insert_to_table_query, "containers", containers_columns, containers_data)
 
 
@@ -123,7 +133,7 @@ def ask_db(func, args, extra_args, more_args=None, expecting_result=False):
             if expecting_result:
                 rows = cur.fetchall()
                 if rows:
-                    print(rows)
+                    print("info received:", (rows))
         else:
             conn.close()
             print(res_code, 'Database connection closed.')
@@ -132,6 +142,9 @@ def ask_db(func, args, extra_args, more_args=None, expecting_result=False):
 
     except (Exception, psycopg2.DatabaseError) as error:
         print("error: ", error)
+        if expecting_result:
+            return error
+
     finally:
         if conn is not None:
             # close the communication with the PostgreSQL
