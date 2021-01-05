@@ -1,0 +1,52 @@
+
+# usage examples
+# print(db_queries.select_query(  ["shlomo", "daniel"],
+#                                 [[["a", "b"], ["c"]], [["d"]]],
+#                                 [["and not",  "b", " = ", "d"],
+#                                  ["and","c",">","d"],
+#                                  ["or","c",">","d"]]))
+# print(db_queries.insert_to_table_query("shlomo", ["a", "b", "c"],
+#                                        [["a1", "b1", "c1", "d1"],
+#                                         ["a2", "b2", "c2"],
+#                                         ["a3", 3, 3],
+#                                         ["a4", "b4", "c4"]]))
+# print(db_queries.create_table_query("shlomo",
+#                                     [["a", "int", "PRIMARY KEY", " NOT NULL"],
+#                                      ["b", "varchar(20)", " NULL"],
+#                                      ["c", "varchar(20)", " NULL"]]))
+# ask_db(create_proj_tables, None, None)
+        # create_table
+        # for key in tables:
+        #     cur.execute(db_queries.create_table(key, tables[key]["keys"], tables[key]["cols"]))
+        #     print("adding table : ", key,tables[key]["keys"],tables[key]["cols"])
+        # conn.commit()
+
+        # add more data
+        # cur.execute(db_queries.insert_to_table("shlomo", info))
+        # conn.commit()
+
+        # cur.execute("SELECT * from shlomo")
+        # cur.execute(
+        #     db_queries.read_info_from_db("shlomo", ["PersonID", "FirstName", "LastName", "City"], to_filter))
+
+        #
+
+        # conn = sqlite3.connect('books.db')
+        # conn.row_factory = dict_factory
+        # cur = conn.cursor()
+        # results = cur.execute(query, to_filter).fetchall()
+
+
+tables = {
+    "shlomo": {
+        "keys": [["PersonID", "int"]],
+        "cols": [
+            ["FirstName", "varchar(255)"],
+            ["LastName", "varchar(255)"],
+            ["Address", "varchar(255)"],
+            ["City", "varchar(255)"],
+        ]
+    }
+}
+
+# info =[PersonID, FirstName, LastName, Address, City]

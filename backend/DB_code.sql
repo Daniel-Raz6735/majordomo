@@ -22,7 +22,7 @@ CREATE TABLE "supplier" (
     "supplier_id" int   NOT NULL,
     "item_id" int   NOT NULL,
     "days_to_provide" varchar(7)   NOT NULL,
-    "preferd_contact" varchar(10)   NOT NULL,
+    "preferred_contact" varchar(10)   ,
     CONSTRAINT "pk_supplier" PRIMARY KEY (
         "supplier_id"
      )
