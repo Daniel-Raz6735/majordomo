@@ -40,7 +40,7 @@ def ask_db(func, args, extra_args, more_args=None, expecting_result=False):
         # create a cursor
         cur = conn.cursor()
         print(args, extra_args)
-        res_code, query = func(args, extra_args,more_args)
+        res_code, query = func(args, extra_args, more_args)
         if res_code == 200:
             print("executing query: ")
             print(query)
@@ -117,13 +117,51 @@ def get_weights_data():
     return res
 
 
+@app.route('/get/restart', methods=['GET'])
+def restart_tables():
+    drop_tables()
+    print("*****************removed********************")
+    code = ask_db(db_queries.add_table_code, None, None, None)
+    return str(code)
+
+
+@app.route('/get/create', methods=['GET'])
+def create():
+
+    code = ask_db(db_queries.add_table_code, None, None, None)
+    return str(code)
+
+
+@app.route('/get/drop/all', methods=['GET'])
+def drop_tables():
+    tables_to_read = [
+        "users",
+        "supplier",
+        "food_items",
+        "client",
+        "department",
+        "worker",
+        "orders",
+        "order_content",
+        "recipes",
+        "recipe_content",
+        "containers",
+        "weights"
+    ]
+    if not tables_to_read :
+        return "500"
+    for table in tables_to_read:
+        ask_db(db_queries.drop_table_query, table, None, None)
+    return "200"
+
+
 @app.route('/get/add/dummy_data', methods=['GET'])
 def add_dummy():
     tables_to_read = [
                       "users",
-                      "supplier",
-                      "food_items",
                       "client",
+                      "food_items",
+                      "supplier",
                       "department",
                       "worker",
                       "orders",
@@ -133,8 +171,6 @@ def add_dummy():
                       "containers",
                       "weights"
                       ]
-
-    # create_proj_tables()
     res = load_dummy_data(tables_to_read, table_info.tables)
     return str(res)
 

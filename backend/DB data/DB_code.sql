@@ -20,18 +20,17 @@ CREATE TABLE "users" (
 -- a list of suppliers and one item they provide in each row
 CREATE TABLE "supplier" (
     "supplier_id" int   NOT NULL,
+    "client_id" int   NOT NULL,
     "item_id" int   NOT NULL,
     "days_to_provide" varchar(7)   NOT NULL,
-    "preferred_contact" varchar(10)   ,
-    CONSTRAINT "pk_supplier" PRIMARY KEY (
-        "supplier_id"
-     )
+    "preferred_contact" varchar(10)   NOT NULL
 );
 
 -- list of businesses
 CREATE TABLE "client" (
     "client_id" int   NOT NULL,
     "admin" int   NOT NULL,
+    "client_name" varchar   NOT NULL,
     CONSTRAINT "pk_client" PRIMARY KEY (
         "client_id"
      )
@@ -47,20 +46,19 @@ CREATE TABLE "department" (
      )
 );
 
+CREATE TABLE "worker" (
+    "worker_id" int   NOT NULL,
+    "department_id" int   NOT NULL
+);
+
 -- contains recipes for businesses in each row
 CREATE TABLE "recipes" (
     "recipe_id" int   NOT NULL,
     "client_id" int   NOT NULL,
+    "recipe_name" varchar(30)   NOT NULL,
     CONSTRAINT "pk_recipes" PRIMARY KEY (
         "recipe_id"
      )
-);
-
--- contains of recipes in each row
-CREATE TABLE "recipe_content" (
-    "recipe_id" int   NOT NULL,
-    "item_id" int   NOT NULL,
-    "amount" int   NOT NULL
 );
 
 -- contains a name for each item
@@ -75,30 +73,33 @@ CREATE TABLE "food_items" (
 -- contains a list of orders in every row
 CREATE TABLE "orders" (
     "order_id" int   NOT NULL,
-    "client_id" int   NOT NULL,
+    "order_date" timestamp   NOT NULL,
     "order_creator_id" int   NOT NULL,
+    "client_id" int   NOT NULL,
     "supplier_id" int   NOT NULL,
     "price" real   NULL,
     CONSTRAINT "pk_orders" PRIMARY KEY (
-        "order_id"
+        "order_id","order_date"
      )
 );
 
 -- contains an item orderd in every row
 CREATE TABLE "order_content" (
-    "order_date" timestamp   NOT NULL,
-    "item_id" int   NOT NULL,
     "order_id" int   NOT NULL,
-    "amount" int   NOT NULL,
-    "unit" varchar(2)   NOT NULL,
-    "price" real   NULL,
+    "item_id" int   NOT NULL,
     "price_per_unit" real   NULL,
-    CONSTRAINT "pk_order_content" PRIMARY KEY (
-        "order_date"
-     )
+    "amount" int   NOT NULL,
+    "unit" varchar(2)   NOT NULL
 );
 
--- has a cntainer and its contence id in every row
+-- contains of recipes in each row
+CREATE TABLE "recipe_content" (
+    "recipe_id" int   NOT NULL,
+    "item_id" int   NOT NULL,
+    "amount" int   NOT NULL,
+    "unit" varchar(2)   NOT NULL
+);
+
 CREATE TABLE "containers" (
     "container_id" int   NOT NULL,
     "client_id" int   NOT NULL,
@@ -108,8 +109,6 @@ CREATE TABLE "containers" (
         "container_id"
      )
 );
-
--- Free plan table limit reached. SUBSCRIBE for more.
 
 -- contains a weight that was taken in every row
 CREATE TABLE "weights" (
@@ -122,9 +121,12 @@ CREATE TABLE "weights" (
      )
 );
 
--- Free plan table limit reached. SUBSCRIBE for more.
 
+ALTER TABLE "supplier" ADD CONSTRAINT "fk_supplier_supplier_id" FOREIGN KEY("supplier_id")
+REFERENCES "users" ("user_id");
 
+ALTER TABLE "supplier" ADD CONSTRAINT "fk_supplier_client_id" FOREIGN KEY("client_id")
+REFERENCES "client" ("client_id");
 
 ALTER TABLE "supplier" ADD CONSTRAINT "fk_supplier_item_id" FOREIGN KEY("item_id")
 REFERENCES "food_items" ("item_id");
@@ -135,8 +137,29 @@ REFERENCES "users" ("user_id");
 ALTER TABLE "department" ADD CONSTRAINT "fk_department_client_id" FOREIGN KEY("client_id")
 REFERENCES "client" ("client_id");
 
+ALTER TABLE "worker" ADD CONSTRAINT "fk_worker_worker_id" FOREIGN KEY("worker_id")
+REFERENCES "users" ("user_id");
+
+ALTER TABLE "worker" ADD CONSTRAINT "fk_worker_department_id" FOREIGN KEY("department_id")
+REFERENCES "department" ("department_id");
+
 ALTER TABLE "recipes" ADD CONSTRAINT "fk_recipes_client_id" FOREIGN KEY("client_id")
 REFERENCES "client" ("client_id");
+
+ALTER TABLE "orders" ADD CONSTRAINT "fk_orders_order_creator_id" FOREIGN KEY("order_creator_id")
+REFERENCES "users" ("user_id");
+
+ALTER TABLE "orders" ADD CONSTRAINT "fk_orders_client_id" FOREIGN KEY("client_id")
+REFERENCES "client" ("client_id");
+
+ALTER TABLE "orders" ADD CONSTRAINT "fk_orders_supplier_id" FOREIGN KEY("supplier_id")
+REFERENCES "supplier" ("supplier_id");
+
+ALTER TABLE "order_content" ADD CONSTRAINT "fk_order_content_order_id" FOREIGN KEY("order_id")
+REFERENCES "orders" ("order_id");
+
+ALTER TABLE "order_content" ADD CONSTRAINT "fk_order_content_item_id" FOREIGN KEY("item_id")
+REFERENCES "food_items" ("item_id");
 
 ALTER TABLE "recipe_content" ADD CONSTRAINT "fk_recipe_content_recipe_id" FOREIGN KEY("recipe_id")
 REFERENCES "recipes" ("recipe_id");
@@ -144,35 +167,15 @@ REFERENCES "recipes" ("recipe_id");
 ALTER TABLE "recipe_content" ADD CONSTRAINT "fk_recipe_content_item_id" FOREIGN KEY("item_id")
 REFERENCES "food_items" ("item_id");
 
-ALTER TABLE "orders" ADD CONSTRAINT "fk_orders_client_id" FOREIGN KEY("client_id")
-REFERENCES "client" ("client_id");
-
-ALTER TABLE "orders" ADD CONSTRAINT "fk_orders_order_creator_id" FOREIGN KEY("order_creator_id")
-REFERENCES "users" ("user_id");
-
-ALTER TABLE "orders" ADD CONSTRAINT "fk_orders_supplier_id" FOREIGN KEY("supplier_id")
-REFERENCES "supplier" ("supplier_id");
-
-ALTER TABLE "order_content" ADD CONSTRAINT "fk_order_content_item_id" FOREIGN KEY("item_id")
-REFERENCES "food_items" ("item_id");
-
-ALTER TABLE "order_content" ADD CONSTRAINT "fk_order_content_order_id" FOREIGN KEY("order_id")
-REFERENCES "orders" ("order_id");
-
 ALTER TABLE "containers" ADD CONSTRAINT "fk_containers_client_id" FOREIGN KEY("client_id")
 REFERENCES "client" ("client_id");
 
 ALTER TABLE "containers" ADD CONSTRAINT "fk_containers_item_id" FOREIGN KEY("item_id")
 REFERENCES "food_items" ("item_id");
 
-
 ALTER TABLE "weights" ADD CONSTRAINT "fk_weights_container_id" FOREIGN KEY("container_id")
 REFERENCES "containers" ("container_id");
--- Free plan table limit reached. SUBSCRIBE for more.
 
-
-
--- Free plan table limit reached. SUBSCRIBE for more.
 
 
 

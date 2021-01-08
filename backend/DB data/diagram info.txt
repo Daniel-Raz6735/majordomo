@@ -1,0 +1,108 @@
+#this is the information enterd in to https://app.quickdatabasediagrams.com/ 
+#to make our rational scheme
+
+
+
+
+#a list of all users in the system
+users
+-------
+user_id int PK
+first_name varchar(20)  NULL
+last_name varchar(20) NULL
+email varchar(40) NULL
+address varchar(40) NULL
+phone_number varchar(20) NULL
+department_id int NULL
+
+#a list of suppliers and one item they provide in each row
+supplier
+-------
+supplier_id int FK >- users.user_id
+client_id FK >- client.client_id
+item_id int FK >- food_items.item_id
+days_to_provide varchar(7)
+preferred_contact varchar(10)
+
+# list of businesses
+client 
+------------
+client_id int PK FK 
+admin int FK >- users.user_id
+client_name varchar
+
+# list the departments in a business
+department 
+----
+department_id int PK
+client_id int FK >- client.client_id
+department_name varchar(15)
+
+
+worker
+-----
+worker_id int FK >- users.user_id
+department_id int FK >- department.department_id
+
+
+#contains recipes for businesses in each row
+recipes 
+----
+recipe_id int PK
+client_id int FK >- client.client_id
+recipe_name varchar(30)
+
+
+#contains a name for each item
+food_items 
+----
+item_id int PK
+item_name varchar(20)
+
+
+#contains a list of orders in every row
+orders 
+----
+order_id int PK
+order_date timestamp PK
+order_creator_id int FK >- users.user_id
+client_id int FK >- client.client_id
+supplier_id int FK >- supplier.supplier_id
+price real Null
+
+#contains an item orderd in every row
+order_content 
+----
+order_id int FK >- orders.order_id
+item_id int FK >- food_items.item_id
+price_per_unit real null
+amount int
+unit varchar(2)
+
+
+#contains of recipes in each row
+recipe_content
+----
+recipe_id int FK >- recipes.recipe_id
+item_id int FK >- food_items.item_id
+amount int
+unit varchar(2)
+
+
+#has a cntainer and its contence id in every row
+containers 
+----
+container_id int PK 
+client_id int FK >- client.client_id
+item_id int FK >- food_items.item_id
+using_start_date timestamp
+
+
+#contains a weight that was taken in every row
+weights 
+----
+weighing_date timestamp PK
+container_id int FK >- containers.container_id
+weight_value int
+last_user int NULL
+

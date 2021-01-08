@@ -19,15 +19,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="added DB and a few queries">
-      <change afterPath="$PROJECT_DIR$/backend/examples.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/table_info.py" afterDir="false" />
+    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/DB data/DB_code.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/DB data/diagram info.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/DB_code.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/DB_code.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/api.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/books.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/DB_code.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/db_queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db_queries.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/table_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/table_info.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +158,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609866435128</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="added DB dummy data and method to insert">
+      <created>1609888956724</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1609888956725</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -191,6 +197,7 @@
     <MESSAGE value="merge" />
     <MESSAGE value="interpreter push" />
     <MESSAGE value="added DB and a few queries" />
-    <option name="LAST_COMMIT_MESSAGE" value="added DB and a few queries" />
+    <MESSAGE value="added DB dummy data and method to insert" />
+    <option name="LAST_COMMIT_MESSAGE" value="added DB dummy data and method to insert" />
   </component>
 </project>
