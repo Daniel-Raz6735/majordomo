@@ -4,7 +4,7 @@ import { auth } from '../../config/firebaseConfig'
 import './MainUserPage.css'
 import axios from 'axios'
 import $, { data } from 'jquery';
-import {Container, Item_block} from "../../components/containers"
+import {BottomBar, Container, Item_block} from "../../components/containers"
 import ReactDOM from 'react-dom';
 
 const base_url = "http://127.0.0.1:5000"
@@ -49,7 +49,7 @@ function req_container(callback, user_id ,container_number){
             callback(res);
         },
         error: function (err) {
-            alert(err);
+            // alert(err);
         }
     });
     }
@@ -70,7 +70,7 @@ class MainUserPage extends Component {
         // window.location = "www.google.com"
         const func = render_container;
         return (
-            <div>
+            <div id="main_user_page_container">
                 Hello World
                 <table id="res_table">
                     <th></th>
@@ -86,10 +86,11 @@ class MainUserPage extends Component {
                 <button className ="test" onClick ={()=> req_container(func,3) }>3</button>
                 <button className ="test" onClick ={()=> req_container(func) }>all</button> */}
                 <div id ="data_insert"></div>
-                <div>
+               
                 {req_container(render_container,1,"id")}
                 <Item_block name="Tapuach" weight ={2} unit = "kg" weight_date = "20.1.12" />
-                </div>
+                <BottomBar />
+                
              
                 
             </div>

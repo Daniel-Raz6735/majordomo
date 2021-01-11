@@ -18,3 +18,24 @@
     flex-direction: column;
     align-items: center;
 }
+
+#bottom-bar{
+    /* position: fixed; */
+    display:flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color:rgb(194, 79, 79); 
+    bottom: 0%;
+    width: 100%;
+}
+
+.bottom-bar-btn{
+  /* flex-grow: 4; */
+
+}
+
+footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

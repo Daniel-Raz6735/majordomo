@@ -1,8 +1,29 @@
 import React, { Component } from 'react';
 import { Dictionary } from '../Dictionary';
 import "./containers.css"
+import inventory from '../images/inventory.png'
+import home from '../images/home.png'
+import cart from '../images/cart.png'
+import profile from '../images/profile.png'
+
+export const BottomBar = (props) =>{
+
+    return(
+        <footer>
+        <div id = "bottom-bar">
+
+            <img className="bottom-bar-btn" src={home} onClick={()=> alert("yess")}></img>
+            <img className="bottom-bar-btn" src={inventory}></img>
+            <img className="bottom-bar-btn" src={cart}></img>
+            <img className="bottom-bar-btn" src={profile}></img>
+
+        </div>
+        </footer>
+
+    )
 
 
+}
 
 export class Container extends Component {
     constructor(props) {

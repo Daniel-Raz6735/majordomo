@@ -46,7 +46,7 @@ class LoginPage extends Component {
         }).catch(function (error) {
             var errorCode = error.code;
             var errorMessage = error.message;
-            alert(errorCode + " : " + errorMessage);
+            // alert(errorCode + " : " + errorMessage);
             $("#password").val("");
         });
     }
