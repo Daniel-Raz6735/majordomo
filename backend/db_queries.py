@@ -66,13 +66,11 @@ def break_select_parameters(tables, columns_per_table, conditions, group_by_cols
     else:
         columns_len = 0
     select = []
-    table_cols = []
     from_q = []
     where = ""
     group_by = []
     having = []
 
-    aggregation_table = -1
     aggregation_info = None
     if not columns_per_table or columns_len != len(tables):
         select.append(["*"])
@@ -80,46 +78,55 @@ def break_select_parameters(tables, columns_per_table, conditions, group_by_cols
         for i in range(columns_len):  # find first aggregation if exists
             columns_per_table[i].sort(key=len)
             if columns_per_table[i] and columns_per_table[i][0] and len(columns_per_table[i][0]) == 3:
-                aggregation_info = columns_per_table[i]
-                aggregation_op = columns_per_table[i][0].pop(-1)  #pop out the aggregator found and receive a table without it
-                aggregation_column =
+
+                aggregation_op = columns_per_table[i][0].pop(-1)  # pop out the aggregator found and receive a table without it
+                aggregator_name = columns_per_table[i][0][1]
+                aggregation_info = True
+                if not aggregator_name:
+                    aggregator_name = columns_per_table[i][0][0]
+
                 for j in range(len(columns_per_table)):
+                    for col in range(len(columns_per_table[j])):  # get column per tables
+                        column = columns_per_table[j][col]
+                        if j != i or col != 0:
+                            try:
+                                if column[1]:
+                                    group_by.append(column[1])
+                            except IndexError:
+                                string_to_append = str(tables[j]) + "." + column[0]
+                                if len(column) > 2:
+                                    group_by.append(column[2]+"("+string_to_append+")")
+                                else:
+                                    group_by.append(string_to_append)
 
-                    for column in columns_per_table[i]: # get column per tables
+                q = select_query(tables, columns_per_table, conditions, group_by, iteration=iteration+1)
+
+                select = [[aggregation_op+"(" + aggregator_name + ")"]]
+                tables = [["("+q[1][:-1]+")", "t"+str(iteration)]]
+                columns_per_table = [[aggregator_name]]
+                group_by = []
+                conditions = []
+                break
+        else:
+            for i in range(len(columns_per_table)):
+                if columns_per_table[i]:
+                    for col in columns_per_table[i]:
+                        if not aggregation_info:
+                            addition = str(tables[i]) + "." + col[0]
+                        else:
+                            addition = str(tables[i])
                         try:
-                            if column[1]:
-                                group_by.append(column[1])
+                            select.append([addition, col[1]])
+                            group_by.append(col[1])
                         except IndexError:
-                            string_to_append = str(tables[j]) + "." + column[0]
-                            if len(column) > 2:
-                                group_by.append(column[2]+"("+string_to_append+")")
-                            else:
-                                group_by.append(string_to_append)
-
-
-                q = select_query(tables, columns_per_table, conditions, group_by)
-                print(q)
-                tables = [[q, "t"+str(iteration)]]
-                # columns_per_table[]
-
-                print("\n", q[1], "\n")
-
-                # addition = col[2] + "(" + addition + ")"
-
-        for i in range(len(columns_per_table)):
-            if columns_per_table[i]:
-                for col in columns_per_table[i]:
-                    addition = tables[i] + "." + col[0]
-                    col_len = len(col)
-                    try:
-                        select.append([addition, col[1]])
-                        group_by.append(col[1])
-                    except IndexError:
-                        select.append([addition])
-                        group_by.append(addition)
+                            select.append([addition])
+                            group_by.append(addition)
 
     for table in tables:
-        from_q.append([table])
+        if type(table) == list:
+            from_q.append(table)
+        else:
+            from_q.append([table])
 
     if conditions:
         for i in range(len(conditions)):
@@ -132,8 +139,8 @@ def break_select_parameters(tables, columns_per_table, conditions, group_by_cols
                         condition.insert(0, " NOT ")
                 for cond in condition:
                     where += " " + str(cond)+" "
-                where += ", "
-        where = where[:-2]
+
+        # where = where[:-2]
     return select, from_q, where, group_by
 
 
@@ -144,21 +151,21 @@ def parse_params_with_nick(lis):
     res = ""
     for arr in lis:
         try:
-            res += arr[0] + " AS " + arr[1]
+            res += str(arr[0]) + " AS " + str(arr[1])
         except IndexError:
-            res += arr[0]
+            res += str(arr[0])
         finally:
             res += ", "
     return res[:-2]
 
 
-def select_query(tables, columns_per_table, conditions, group_by_cols=None):
+def select_query(tables, columns_per_table, conditions, group_by_cols=None, iteration=0):
     """creates a select sql query
            expected input: tables =[table1,table2...]
                            columns = [[table 1 column names[column name, column nick, min/max functions]...]...]
                            conditions [[string containing the condition and/not/or, var1, condition, var2]...]
            expected output: sql query if all parameters legal None if not"""
-    select, from_q, where, group_by = break_select_parameters(tables, columns_per_table, conditions, group_by_cols)
+    select, from_q, where, group_by = break_select_parameters(tables, columns_per_table, conditions, group_by_cols, iteration)
     query = "SELECT "
     txt = parse_params_with_nick(select)
     query += txt + "\nFROM "

@@ -26,7 +26,7 @@ def load_dummy_data(tables_to_read, tables):
     return 200
 
 
-def ask_db(func, args=None, extra_args=None, more_args=None, expecting_result=False):
+def ask_db(func, args=None, extra_args=None, more_args=None, even_more_args=None,expecting_result=False):
     conn = None
     rows = ""
     try:
@@ -39,7 +39,7 @@ def ask_db(func, args=None, extra_args=None, more_args=None, expecting_result=Fa
 
         # create a cursor
         cur = conn.cursor()
-        res_code, query = func(args, extra_args, more_args)
+        res_code, query = func(args, extra_args, more_args, even_more_args)
         if res_code == 200:
             print("executing query: ")
             print(query)
@@ -116,8 +116,8 @@ def get_weights_data():
 
     conditions.append(["AND", "food_items.item_id", "=", "containers.item_id"])
     res = ask_db(db_queries.select_query, ["containers", "weights", "food_items"],
-                 [[["container_id"]], [["weight_value", "weight", "MAX"]], [["item_name"]]],
-                 conditions, expecting_result=True)
+                 [[["container_id"]], [["weight_value", "weight"]], [["item_name"]]],
+                 conditions, [ "weight","containers.container_id","food_items.item_name"], expecting_result=True)
     return res
 
 
@@ -184,7 +184,7 @@ def tests():
                   ["AND", "weights.container_id", "=", "containers.container_id"],
                   ["AND", "food_items.item_id", "=", "containers.item_id"]]
     res = db_queries.select_query(["containers", "weights", "food_items"],
-                 [[["container_id"]], [["weight_value", "weight", "MAX"]], [["item_name"]]], conditions)
+                 [[["container_id"]], [["weight_value", "weight"]], [["item_name"]]], conditions,["container_id", "weight"])
     if res[0] == 200 and res[1] == """SELECT containers.container_id, weights.weight_value AS weight, food_items.item_name
 FROM containers, weights, food_items
 WHERE  client_id  =  1 ,  AND  containers.container_id  =  1 ,  AND  weights.container_id  =  containers.container_id ,  AND  food_items.item_id  =  containers.item_id ;""":
@@ -196,8 +196,8 @@ WHERE  client_id  =  1 ,  AND  containers.container_id  =  1 ,  AND  weights.con
 
 
 if __name__ == '__main__':
-    # app.run()
-    tests()
+    app.run()
+    # tests()
 
 def create_proj_tables():
     weights_vars = [
