@@ -17,6 +17,9 @@ export const Dictionary = new LocalizedStrings({
     login: `Log in`, 
     signOut: `Sign out`,
     inventory : "show inventory",
+
+    //containers
+    add_to_order :"add to order",
     
     
     
@@ -27,7 +30,11 @@ export const Dictionary = new LocalizedStrings({
     enterPass: `אנא הכנס סיסמא`,
     login: `התחבר`,
     signOut: `התנתק`,
-    inventory : "הצגת מלאי"
+    inventory : "הצגת מלאי",
+
+
+    //containers
+    add_to_order :"הוסף להזמנה",
     
   }});
 

@@ -1,10 +1,10 @@
 
 
-def drop_table_query(table_name, null_val1, null_val2):
+def drop_table_query(table_name, null_val1=None, null_val2=None):
     return 200, "DROP TABLE " + table_name + " CASCADE;"
 
 
-def create_table_query(table_name, cols,null_val):
+def create_table_query(table_name, cols=None, null_val=None):
     """creates a create table query using the parameters
     input: table name: string with table name
             cols: list of lists. each list is an attribute [[column name, data type, key(optional),null/not null]...]
@@ -55,48 +55,122 @@ def insert_to_table_query(table_name, cols, values):
         return 400, "Bad request"
 
 
-def select_query(tables, columns_per_table, conditions):
+def break_select_parameters(tables, columns_per_table, conditions, group_by_cols=None, iteration=0):
     """creates a select sql query
         expected input: tables =[table1,table2...]
-                        columns = [[table 1 column names[column name, column nick]...]...]
+                        columns = [[table 1 column names[column name, column nick, min/max functions]...]...]
                         conditions [[string containing the condition and/not/or, var1, condition, var2]...]
         expected output: sql query if all parameters legal None if not"""
     if columns_per_table:
         columns_len = len(columns_per_table)
     else:
         columns_len = 0
-    query = "SELECT "
+    select = []
+    table_cols = []
+    from_q = []
+    where = ""
+    group_by = []
+    having = []
+
+    aggregation_table = -1
+    aggregation_info = None
     if not columns_per_table or columns_len != len(tables):
-        query += "* "
+        select.append(["*"])
     else:
-        for i in range(columns_len):
-            for col in columns_per_table[i]:
-                query += tables[i] + "."
-                try:
-                    query += col[0] + " AS " + col[1] + ", "
-                except IndexError:
-                    query += col[0] + ", "
+        for i in range(columns_len):  # find first aggregation if exists
+            columns_per_table[i].sort(key=len)
+            if columns_per_table[i] and columns_per_table[i][0] and len(columns_per_table[i][0]) == 3:
+                aggregation_table = i
+                aggregation_info = columns_per_table[i]
+                aggregation_op = columns_per_table[i][0].pop(-1)  #pop out the aggregator found and receive a table without it
+                columns_per_table_copy =[]
+                for j in range(len(columns_per_table)):
+                    table_col =[]
+                    for column in columns_per_table[i]: # get column per tables
+                        try:
+                            if column[1]:
+                                table_col.append(column[1])
+                        except IndexError:
+                            string_to_append = str(tables[j]) + "." + column[0]
+                            if len(column)>2:
+                                table_col.append(column[2]+"("+string_to_append+")")
+                            else:
+                                table_col.append(string_to_append)
+                    group_by.append(table_col)
 
-        query = query[:-2]
+                q = select_query(tables, columns_per_table, conditions,group_by)
+                tables = [[q, "t"+str(iteration)]]
+                # columns_per_table[]
 
-    query += "\nFROM "
+                print("\n", q[1], "\n")
+
+                # addition = col[2] + "(" + addition + ")"
+
+        for i in range(len(columns_per_table)):
+            if columns_per_table[i]:
+                for col in columns_per_table[i]:
+                    addition = tables[i] + "." + col[0]
+                    col_len = len(col)
+                    try:
+                        select.append([addition, col[1]])
+                        group_by.append(col[1])
+                    except IndexError:
+                        select.append([addition])
+                        group_by.append(addition)
+
     for table in tables:
-        query += table + ","
-    query = query[:-1]
+        from_q.append([table])
+
     if conditions:
-        query += "\nWHERE "
         for i in range(len(conditions)):
             condition = conditions[i]
             if len(condition) == 4:
                 if i == 0:
                     first = condition.pop(0).lower()
-
-                    if first == "not" or first == "or not" or first == "and not":
-                        condition.insert(0, "NOT")
+                    not_arr = ["not", "or not", "and not"]
+                    if first in not_arr:
+                        condition.insert(0, " NOT ")
                 for cond in condition:
-                    query += str(cond) + " "
-            if i != len(conditions):
-                query += " \n\t\t"
+                    where += " " + str(cond)+" "
+                where += ", "
+        where = where[:-2]
+    return select, from_q, where, group_by
+
+
+def parse_params_with_nick(lis):
+    """receives a list that contains a list of lists and returns an SQL string that represents them
+        input:[[sql key 1],[sql key 2, nick],[sql key 3]......]
+        output: sql key 1, sql key 2 AS nick, sql key 3...... """
+    res = ""
+    for arr in lis:
+        try:
+            res += arr[0] + " AS " + arr[1]
+        except IndexError:
+            res += arr[0]
+        finally:
+            res += ", "
+    return res[:-2]
+
+
+def select_query(tables, columns_per_table, conditions, group_by_cols=None):
+    """creates a select sql query
+           expected input: tables =[table1,table2...]
+                           columns = [[table 1 column names[column name, column nick, min/max functions]...]...]
+                           conditions [[string containing the condition and/not/or, var1, condition, var2]...]
+           expected output: sql query if all parameters legal None if not"""
+    select, from_q, where, group_by = break_select_parameters(tables, columns_per_table, conditions, group_by_cols)
+    query = "SELECT "
+    txt = parse_params_with_nick(select)
+    query += txt + "\nFROM "
+    txt = parse_params_with_nick(from_q)
+    query += txt
+    if where:
+        query += "\nWHERE " + where
+    if group_by_cols:
+        query += " GROUP BY "
+        for group in group_by_cols:
+            query += group + ", "
+        query = query[:-2]
     return 200, query + ';'
 
 
