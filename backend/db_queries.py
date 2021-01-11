@@ -80,25 +80,25 @@ def break_select_parameters(tables, columns_per_table, conditions, group_by_cols
         for i in range(columns_len):  # find first aggregation if exists
             columns_per_table[i].sort(key=len)
             if columns_per_table[i] and columns_per_table[i][0] and len(columns_per_table[i][0]) == 3:
-                aggregation_table = i
                 aggregation_info = columns_per_table[i]
                 aggregation_op = columns_per_table[i][0].pop(-1)  #pop out the aggregator found and receive a table without it
-                columns_per_table_copy =[]
+                aggregation_column =
                 for j in range(len(columns_per_table)):
-                    table_col =[]
+
                     for column in columns_per_table[i]: # get column per tables
                         try:
                             if column[1]:
-                                table_col.append(column[1])
+                                group_by.append(column[1])
                         except IndexError:
                             string_to_append = str(tables[j]) + "." + column[0]
-                            if len(column)>2:
-                                table_col.append(column[2]+"("+string_to_append+")")
+                            if len(column) > 2:
+                                group_by.append(column[2]+"("+string_to_append+")")
                             else:
-                                table_col.append(string_to_append)
-                    group_by.append(table_col)
+                                group_by.append(string_to_append)
 
-                q = select_query(tables, columns_per_table, conditions,group_by)
+
+                q = select_query(tables, columns_per_table, conditions, group_by)
+                print(q)
                 tables = [[q, "t"+str(iteration)]]
                 # columns_per_table[]
 

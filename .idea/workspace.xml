@@ -20,17 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_4_2021_10_26_AM_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_4_2021_10_26_AM__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/db_queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db_queries.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Dictionary.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Dictionary.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/containers.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/containers.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Main user page/MainUserPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Main user page/MainUserPage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -181,7 +172,21 @@
       <option name="project" value="LOCAL" />
       <updated>1609888956725</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="improved select db query in backend">
+      <created>1610394061892</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1610394061892</updated>
+    </task>
+    <task id="LOCAL-00008" summary="improved select db query in backend">
+      <created>1610394068942</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1610394068942</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -215,25 +220,30 @@
     <MESSAGE value="interpreter push" />
     <MESSAGE value="added DB and a few queries" />
     <MESSAGE value="added DB dummy data and method to insert" />
-    <option name="LAST_COMMIT_MESSAGE" value="added DB dummy data and method to insert" />
+    <MESSAGE value="improved select db query in backend" />
+    <option name="LAST_COMMIT_MESSAGE" value="improved select db query in backend" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1259" height="163" key="GridCell.Tab.0.bottom" timestamp="1610386434723">
+    <state x="211" y="0" key="CommitChangelistDialog2" timestamp="1610394067967">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="163" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1610386434723" />
-    <state width="1259" height="163" key="GridCell.Tab.0.center" timestamp="1610386434723">
+    <state x="211" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1610394067967" />
+    <state width="1259" height="163" key="GridCell.Tab.0.bottom" timestamp="1610394388694">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="163" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1610386434723" />
-    <state width="1259" height="163" key="GridCell.Tab.0.left" timestamp="1610386434722">
+    <state width="1259" height="163" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1610394388694" />
+    <state width="1259" height="163" key="GridCell.Tab.0.center" timestamp="1610394388694">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="163" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1610386434722" />
-    <state width="1259" height="163" key="GridCell.Tab.0.right" timestamp="1610386434723">
+    <state width="1259" height="163" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1610394388694" />
+    <state width="1259" height="163" key="GridCell.Tab.0.left" timestamp="1610394388693">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="163" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1610386434723" />
+    <state width="1259" height="163" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1610394388693" />
+    <state width="1259" height="163" key="GridCell.Tab.0.right" timestamp="1610394388694">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state width="1259" height="163" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1610394388694" />
     <state width="1259" height="204" key="GridCell.Tab.1.bottom" timestamp="1610370683714">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
@@ -250,6 +260,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state width="1259" height="204" key="GridCell.Tab.1.right/0.0.1280.680@0.0.1280.680" timestamp="1610370683714" />
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1610394071277">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1610394071277" />
     <state x="303" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1610383628191">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
