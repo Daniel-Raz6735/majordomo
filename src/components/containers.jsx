@@ -5,6 +5,7 @@ import inventory from '../images/inventory.svg'
 import home from '../images/home.svg'
 import cart from '../images/cart.svg'
 import profile from '../images/profile.svg'
+import styles from "./containers.css"
 
 export const BottomBar = (props) =>{
 
@@ -123,16 +124,38 @@ export class Notification extends Component{
         return(
             <div className = "notification_container">
 
-                <img src ={this.state.action} className="notification_image"></img>
+                <div >
+
+                <img id="left_img" src ={this.state.action} className="notification_image"></img>
+                </div>
                 <div className = "notification">
                     {this.state.status}
                 </div>
-                <img src ={this.state.alert_image} className="notification_image"></img>
+                <div>
 
+               <NotificationAlert symbolNumber={0} color={1}  />
+                </div>
             </div>
         )
     }
 
 
+
+}
+
+export const NotificationAlert = (props) =>{
+
+    var symbolArr = [cart],styleArr=[styles.redArea,styles.yellowArea,styles.greenArea]
+    var color = props.color,symbol = symbolArr[props.symbolNumber]
+    
+    
+    return(
+        <div className={ "redArea notification_symbol"} >
+                <img  src ={symbol} className="notification_image right_img"></img>
+        </div>
+    )
+
+
+    
 
 }
