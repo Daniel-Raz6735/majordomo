@@ -63,6 +63,7 @@ class LoginPage extends Component {
                     <div className="loginContainer">
                         
                         <div id="buttonWrapper123">
+                        <img src ="http://up419.siz.co.il/up2/ljmkmijir2yn.png"></img>
                             <form dir="RTL" id="login_form" name="login_form_name" role="form">
                                 < input type="email"
                                     id="email"
@@ -91,7 +92,7 @@ class LoginPage extends Component {
                                 </button>
                             </form>
                         </div>
-                        <img src ="http://up419.siz.co.il/up2/ljmkmijir2yn.png"></img>
+                      
                     </div>
                 </div>
             </div>

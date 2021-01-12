@@ -96,6 +96,7 @@ def get_weights_data():
     conditions = []
     if "client_id" in used_p:
         conditions.append(["AND", "client_id", "=", int(used_p["client_id"])])
+        print(used_p["client_id"])
     if "container_id" in used_p:
         conditions.append(["AND", "containers.container_id", "=", int(used_p["container_id"])])
     conditions.append(["AND", "weights.container_id", "=", "containers.container_id"])

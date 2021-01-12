@@ -5,9 +5,21 @@
     width: 40vh;
 }
 
-body{
+/* body{
     color: #0b467c;
-}
+} */
+
+body {
+    margin: 0;
+    padding: 0;
+    font: Poppins;
+    /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif; */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    height: 100%;
+  }
 
 input {
 
@@ -99,4 +111,12 @@ input {
 
 .loginContainer {
     text-align: center
+}
+
+#renderDiv{
+    margin: auto;
+    background-image: url('../../images/loginBacground.svg') ;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
 }
