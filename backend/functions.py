@@ -94,6 +94,7 @@ def get_weights_data():
     list_of_cols = ["container_id", "client_id"]
     used_p, non_used_p = phrase_parameters(request.args, list_of_cols)
     conditions = []
+    print(str(used_p))
     if "client_id" in used_p:
         conditions.append(["AND", "client_id", "=", int(used_p["client_id"])])
         print(used_p["client_id"])

@@ -19,22 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/images/cart.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/images/home.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/images/inventory.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/images/profile.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/majordomo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/majordomo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="db query select method updated and working">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/containers.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/containers.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/containers.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/containers.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/logo.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Main user page/MainUserPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Main user page/MainUserPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/login page/LoginPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/login page/LoginPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/login page/LoginPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/login page/LoginPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/functions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,7 +179,21 @@
       <option name="project" value="LOCAL" />
       <updated>1610394068942</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="added improved select query">
+      <created>1610402812092</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1610402812092</updated>
+    </task>
+    <task id="LOCAL-00010" summary="db query select method updated and working">
+      <created>1610457728227</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1610457728227</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -226,34 +227,32 @@
     <MESSAGE value="added DB and a few queries" />
     <MESSAGE value="added DB dummy data and method to insert" />
     <MESSAGE value="improved select db query in backend" />
-    <option name="LAST_COMMIT_MESSAGE" value="improved select db query in backend" />
+    <MESSAGE value="added improved select query" />
+    <MESSAGE value="db query select method updated and working" />
+    <option name="LAST_COMMIT_MESSAGE" value="db query select method updated and working" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="211" y="0" key="CommitChangelistDialog2" timestamp="1610394067967">
+    <state x="211" y="0" key="CommitChangelistDialog2" timestamp="1610458195180">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="211" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1610394067967" />
-    <state width="1899" height="374" key="GridCell.Tab.0.bottom" timestamp="1610458509483">
-      <screen x="-1920" y="0" width="1920" height="1040" />
+    <state x="211" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1610458195180" />
+    <state width="1259" height="163" key="GridCell.Tab.0.bottom" timestamp="1610458394417">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="163" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1610402330047" />
-    <state width="1899" height="374" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610458509483" />
-    <state width="1899" height="374" key="GridCell.Tab.0.center" timestamp="1610458509483">
-      <screen x="-1920" y="0" width="1920" height="1040" />
+    <state width="1259" height="163" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1610458394417" />
+    <state width="1259" height="163" key="GridCell.Tab.0.center" timestamp="1610458394417">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="163" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1610402330047" />
-    <state width="1899" height="374" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610458509483" />
-    <state width="1899" height="374" key="GridCell.Tab.0.left" timestamp="1610458509483">
-      <screen x="-1920" y="0" width="1920" height="1040" />
+    <state width="1259" height="163" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1610458394417" />
+    <state width="1259" height="163" key="GridCell.Tab.0.left" timestamp="1610458394417">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="163" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1610402330047" />
-    <state width="1899" height="374" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610458509483" />
-    <state width="1899" height="374" key="GridCell.Tab.0.right" timestamp="1610458509483">
-      <screen x="-1920" y="0" width="1920" height="1040" />
+    <state width="1259" height="163" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1610458394417" />
+    <state width="1259" height="163" key="GridCell.Tab.0.right" timestamp="1610458394417">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="163" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1610402330047" />
-    <state width="1899" height="374" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610458509483" />
-    <state width="1259" height="204" key="GridCell.Tab.1.bottom" timestamp="1610399336261">
+    <state width="1259" height="163" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1610458394417" />
+    <state width="1259" height="189" key="GridCell.Tab.1.bottom" timestamp="1610451955559">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state width="1259" height="204" key="GridCell.Tab.1.bottom/0.0.1280.680@0.0.1280.680" timestamp="1610399336261" />
@@ -268,15 +267,11 @@
     <state width="1259" height="204" key="GridCell.Tab.1.right" timestamp="1610399336261">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="204" key="GridCell.Tab.1.right/0.0.1280.680@0.0.1280.680" timestamp="1610399336261" />
-    <state x="-1582" y="172" key="MergeDialog" timestamp="1610457887518">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1582" y="172" key="MergeDialog/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610457887518" />
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1610394071277">
+    <state width="1259" height="189" key="GridCell.Tab.1.right/0.0.1280.680@0.0.1280.680" timestamp="1610451955559" />
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1610457729832">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1610394071277" />
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1610457729832" />
     <state x="303" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1610383628191">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
