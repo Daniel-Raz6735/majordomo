@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Dictionary, LangBtn } from '../../Dictionary'
 import { auth } from '../../config/firebaseConfig'
 import './MainUserPage.css'
-import axios from 'axios'
 import $, { data } from 'jquery';
-import {BottomBar, Container, Item_block} from "../../components/containers"
+import {BottomBar, Container, Item_block, Notification} from "../../components/containers"
 import ReactDOM from 'react-dom';
+import f from '../../images/USA.svg'
 
 const base_url = "http://127.0.0.1:5000"
 
@@ -23,9 +23,7 @@ function render_container(data){
     var res = [];
     var max = -Number.MAX_SAFE_INTEGER;
     if (data){
-        console.log(data)
         data.forEach(element => {
-            
             res.push(<Item_block name={element[3]} weight ={element[1]} weight_date = {element[2]} />)
         });
     }
@@ -73,17 +71,9 @@ class MainUserPage extends Component {
 
 
     componentDidMount(){
-       var arr = ["Tapuz","Tapuach"]
-       var arr2 = [2,8]
-       var unit = "kg"
-       var date = "20.1.12"
-        var  request =""
+     
        req_container(render_container,1)
-       
-       var page = []
 
-   
-    this.setState({page:page})
     }
 
     render() {
@@ -92,7 +82,6 @@ class MainUserPage extends Component {
 
         return (
             <div id="main_user_page_container">
-                Hello World
                 <table id="res_table">
                     <th></th>
                 </table>
@@ -101,21 +90,15 @@ class MainUserPage extends Component {
                     auth.signOut()
                     window.location.reload()
                 }} >{Dictionary.signOut}</button>
+                <div className="notification_block">
+                <Notification status="few" action={f} alert_image={f} />
+                <Notification status="few" action={f} alert_image={f} />
 
-                {/* <button className ="test" onClick ={()=> req_container(func,1)}>1</button>
-                <button className ="test" onClick ={()=> req_container(func,2) }>2</button>
-                <button className ="test" onClick ={()=> req_container(func,3) }>3</button>
-                <button className ="test" onClick ={()=> req_container(func) }>all</button> */}
+                </div>
+
                 <div id ="data_insert"></div>
-               
-                {/* {req_container(render_container,1,"id")} */ }
-                {/* <Item_block name="Tapuach" weight ={2} unit = "kg" weight_date = "20.1.12" />
-                <Item_block name="tapoz" weight ={8} unit = "kg" weight_date = "28.1.12" /> */}
-                
                 <BottomBar />
-                
-             
-                
+       
             </div>
         );
 

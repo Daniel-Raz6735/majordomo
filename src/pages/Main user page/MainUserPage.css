@@ -10,3 +10,17 @@
     
     width: 100%;
 }
+
+#data_insert{
+    width: 50%;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.notification_block{
+    width: 50%;
+    margin: auto;
+}
