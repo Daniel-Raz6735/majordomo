@@ -124,15 +124,15 @@ export class Notification extends Component{
         return(
             <div className = "notification_container">
 
-                <div >
-
+                <div className="center_items right_not_symbol">
                 <img id="left_img" src ={this.state.action} className="notification_image"></img>
                 </div>
-                <div className = "notification">
+
+                <div className = "notification center_items">
                     {this.state.status}
                 </div>
-                <div>
 
+                <div className="center_items">
                <NotificationAlert symbolNumber={0} color={1}  />
                 </div>
             </div>
@@ -150,7 +150,7 @@ export const NotificationAlert = (props) =>{
     
     
     return(
-        <div className={ "redArea notification_symbol"} >
+        <div className={ "redArea notification_symbol center_items"} >
                 <img  src ={symbol} className="notification_image right_img"></img>
         </div>
     )

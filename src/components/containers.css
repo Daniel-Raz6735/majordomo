@@ -37,46 +37,58 @@ footer{
 }
 
 .notification_container{
-    height: 100px;
+    height: 55px;
     width: 90%;
     margin: auto;
     display: flex;
-    padding: 5px;
+    margin: 5px;
     /* align-items: baseline; */
     justify-content: space-between;
+    background-color: #F9F9F9;
+    border-radius: 12px;
     
     
 }
 .notification_block{
-    height:100px;
-    width: 20%;
+    height:100%;
+    width: 25%;
     margin: auto;
     display: flex;
     align-content: space-between;
     flex-flow: column;
-    background-color: grey;
+    /* overflow-y:scroll ; */
+   
     
 }
 .notification_image{
-    height: 50px;
+    max-height: 80%;
+    width: 80%;
+    margin: auto;
+
+}
+.notification_symbol{
+    height: 100%;
+    border-radius: 0 12px 12px 0;
+}
+.center_items{
+    display: flex;
+    align-items: center;
 }
 
-#left_img{
-    float: left;
+
+.right_not_symbol{
+    width: 20%;
 }
 
 
-#right_img{
-    float: right;
-}
 .redArea{
-background-color: lightcoral;
+background-color: #EB6868;
 
 }
 .yellowArea{
-background-color: yellow;
+background-color: #F1C033;
 
 }
 .greenArea{
-background-color: green;
+background-color: #6FB91C;
 }
