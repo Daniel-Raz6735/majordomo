@@ -40,10 +40,43 @@ footer{
     height: 100px;
     width: 90%;
     margin: auto;
+    display: flex;
+    padding: 5px;
+    /* align-items: baseline; */
+    justify-content: space-between;
+    
+    
 }
 .notification_block{
     height:100px;
+    width: 20%;
+    margin: auto;
+    display: flex;
+    align-content: space-between;
+    flex-flow: column;
+    background-color: grey;
+    
 }
 .notification_image{
     height: 50px;
+}
+
+#left_img{
+    float: left;
+}
+
+
+#right_img{
+    float: right;
+}
+.redArea{
+background-color: lightcoral;
+
+}
+.yellowArea{
+background-color: yellow;
+
+}
+.greenArea{
+background-color: green;
 }
