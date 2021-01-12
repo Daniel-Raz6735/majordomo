@@ -3,6 +3,8 @@ import LocalizedStrings from 'react-localization';
 import Dropdown, { DropdownContent, DropdownTrigger } from 'react-simple-dropdown';
 import './Dictionary.css';
 import globe from './images/globe.png';
+import israelFlag from './images/israel.svg';
+import usaFlag from './images/USA.svg';
 
 
 /* LocalizedStrings is holding our Dictionary so that all of the pages wiil be able to be translated.
@@ -79,6 +81,7 @@ export const LangBtn = () => {
   if (currentLng === "EN") ENId = "chosen";
   else HEId = "chosen";
 
+var lang_arr = {"EN":usaFlag,"HE":israelFlag} 
 
   return (
     <div id="languages">
@@ -87,10 +90,7 @@ export const LangBtn = () => {
         <DropdownTrigger>
           <div id="displayAndGlobe">
             <div>
-              <img src={globe} id="globus" alt="lang" />
-            </div>
-            <div>
-              <a id="currentLangDisplay">{Dictionary.getLanguage()}</a>
+              <img src={lang_arr[Dictionary.getLanguage()]} id="globus" alt="lang" />
             </div>
           </div>
         </DropdownTrigger>
@@ -99,10 +99,16 @@ export const LangBtn = () => {
 
           <ul id="langlist">
             <li>
-              <button id={HEId} className="langButtons" onClick={changeLanguage("HE")}>עברית</button>
+              <div className="flags">
+              <img src={israelFlag} id={HEId} className="langButtons" onClick={changeLanguage("HE")}></img>
+              <div>עברית</div>
+              </div>
             </li>
             <li>
-              <button id={ENId} className="langButtons " onClick={changeLanguage("EN")} >English</button>
+            <div className="flags">
+              <img src ={usaFlag} id={ENId} className="langButtons " onClick={changeLanguage("EN")} ></img>
+              <div>English</div>
+            </div>
             </li>
           </ul>
         </DropdownContent>

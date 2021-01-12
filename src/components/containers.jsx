@@ -104,3 +104,35 @@ export class Item_block extends Component {
         )
     }
 }
+
+export class Notification extends Component{
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            status:props.status,
+            alert_image:props.alert_image,
+            number:props.number,
+            action:props.action
+                 
+        }
+    }
+
+    render(){
+
+        return(
+            <div className = "notification_container">
+
+                <img src ={this.state.action} className="notification_image"></img>
+                <div className = "notification">
+                    {this.state.status}
+                </div>
+                <img src ={this.state.alert_image} className="notification_image"></img>
+
+            </div>
+        )
+    }
+
+
+
+}
