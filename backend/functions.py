@@ -26,9 +26,9 @@ def load_dummy_data(tables_to_read, tables):
     return 200
 
 
-def ask_db(func, args=None, extra_args=None, more_args=None, even_more_args=None,expecting_result=False):
+def ask_db(query):
     conn = None
-    rows = ""
+    rows = "Result not found"
     try:
         # read connection parameters
         params = config()
@@ -39,51 +39,38 @@ def ask_db(func, args=None, extra_args=None, more_args=None, even_more_args=None
 
         # create a cursor
         cur = conn.cursor()
-        res_code, query = func(args, extra_args, more_args, even_more_args)
-        if res_code == 200:
-            print("executing query: ")
-            print(query)
-            cur.execute(query)
-            conn.commit()
-            if expecting_result:
-                rows = cur.fetchall()
-                if rows:
-                    print("info received:", rows)
-        else:
-            conn.close()
-            print(res_code, 'Database connection closed.\nwrong query')
-            if expecting_result:
-                return error_message(res_code, query)
+        print("executing query: ")
+        print(query)
+        cur.execute(query)
+        conn.commit()
+        rows = cur.fetchall()
+        if rows:
+            print("info received:", rows)
 
     except (Exception, psycopg2.DatabaseError) as error:
         print("error: ", error)
-        if expecting_result:
-            return error
+        return 400, error
 
     finally:
         if conn is not None:
             # close the communication with the PostgreSQL
             conn.close()
             # print(res_code, 'Database connection closed.')
-            if expecting_result:
-                return jsonify(rows)
-        return '''<h1>Distant Reading Archive</h1>
-           <p>A prototype API for distant reading of science fiction novels.</p>'''
+            if rows:
+                return 200, jsonify(rows)
+        return 500,rows
 
 
 def phrase_parameters(params, used_params):
-    query_parameters = []
-    non_used_params = []
+    query_parameters = {}
+    non_used_params = {}
     print(params)
     for param in params:
-        # id = query_parameters.get('id')
-        # to_filter = []
-        # info = [123, "new person", "dan", "hat", "City"]
         p = params.get(param)
         if param in used_params:
-            query_parameters.append([param, p])
+            query_parameters[param] = p
         else:
-            non_used_params.append([param, p])
+            non_used_params[param] = p
     return query_parameters, non_used_params
 
 
@@ -107,18 +94,30 @@ def get_weights_data():
     list_of_cols = ["container_id", "client_id"]
     used_p, non_used_p = phrase_parameters(request.args, list_of_cols)
     conditions = []
-    for cond in used_p:
-        if cond[0] == "client_id":
-            conditions.append(["AND", "client_id", "=", int(cond[1])])
-        elif cond[0] == "container_id":
-            conditions.append(["AND", "containers.container_id", "=", int(cond[1])])
-            conditions.append(["AND", "weights.container_id", "=", "containers.container_id"])
-
+    if "client_id" in used_p:
+        conditions.append(["AND", "client_id", "=", int(used_p["client_id"])])
+    if "container_id" in used_p:
+        conditions.append(["AND", "containers.container_id", "=", int(used_p["container_id"])])
+    conditions.append(["AND", "weights.container_id", "=", "containers.container_id"])
+    max_table = db_queries.select_query(["containers", "weights"],
+                                        [[["container_id"]], [["weighing_date", "date", "MAX"]]],
+                                        conditions)
+    max_table = max_table[1][:-1]
     conditions.append(["AND", "food_items.item_id", "=", "containers.item_id"])
-    res = ask_db(db_queries.select_query, ["containers", "weights", "food_items"],
-                 [[["container_id"]], [["weight_value", "weight"]], [["item_name"]]],
-                 conditions, [ "weight","containers.container_id","food_items.item_name"], expecting_result=True)
-    return res
+    conditions.append(["AND", "t1.date", "=", "weights.weighing_date"])
+    conditions.append(["AND", "t1.container_id", "=", "containers.container_id"])
+
+    res_code, final_query = db_queries.select_query(["containers", "weights", "food_items", ["("+max_table+")", "t1"]],
+                 [[["container_id"]], [["weight_value", "weight"], ["weighing_date", "date"]], [["item_name"]], []],
+                 conditions)
+    if res_code != 200:
+        return error_message(500, "server side error")
+
+    res_code, result = ask_db(final_query)
+    if res_code == 200:
+        return result
+    else:
+        return error_message(res_code, "unable to process request")
 
 
 @app.route('/get/restart', methods=['GET'])
@@ -184,7 +183,8 @@ def tests():
                   ["AND", "weights.container_id", "=", "containers.container_id"],
                   ["AND", "food_items.item_id", "=", "containers.item_id"]]
     res = db_queries.select_query(["containers", "weights", "food_items"],
-                 [[["container_id"]], [["weight_value", "weight"]], [["item_name"]]], conditions,["container_id", "weight"])
+                                  [[["container_id"]], [["weight_value", "weight"]], [["item_name"]]], conditions,
+                                  ["container_id", "weight"])
     if res[0] == 200 and res[1] == """SELECT containers.container_id, weights.weight_value AS weight, food_items.item_name
 FROM containers, weights, food_items
 WHERE  client_id  =  1 ,  AND  containers.container_id  =  1 ,  AND  weights.container_id  =  containers.container_id ,  AND  food_items.item_id  =  containers.item_id ;""":
@@ -194,10 +194,10 @@ WHERE  client_id  =  1 ,  AND  containers.container_id  =  1 ,  AND  weights.con
     print(res[1])
 
 
-
 if __name__ == '__main__':
     app.run()
     # tests()
+
 
 def create_proj_tables():
     weights_vars = [
@@ -214,5 +214,3 @@ def create_proj_tables():
 
     ask_db(db_queries.create_table_query, "weights", weights_vars)
     ask_db(db_queries.create_table_query, "containers", containers_vars)
-
-
