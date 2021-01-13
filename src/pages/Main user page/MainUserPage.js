@@ -6,6 +6,7 @@ import $, { data } from 'jquery';
 import {BottomBar, Container, Item_block, Notification} from "../../components/containers"
 import ReactDOM from 'react-dom';
 import f from '../../images/USA.svg'
+import cart_plus from '../../images/cart_plus.svg'
 
 const base_url = "http://127.0.0.1:5000"
 
@@ -77,29 +78,28 @@ class MainUserPage extends Component {
     }
 
     render() {
-        // window.location = "www.google.com"
-        const func = render_container;
 
         return (
             <div id="main_user_page_container">
-                <table id="res_table">
-                    <th></th>
-                </table>
+                <header className="header"> 
                 <LangBtn />
+                <img alt="Majordomo logo" id="majordomoLogo" src ="http://up419.siz.co.il/up2/ljmkmijir2yn.png"></img>
                 <button id="logoutBtn" onClick={() => {
                     auth.signOut()
                     window.location.reload()
-                }} >{Dictionary.signOut}</button>
+                }} >{Dictionary.signOut}</button></header>
+            
+               
                 <div className="notification_block">
-                <Notification status="few" action={f} alert_image={f} />
-                <Notification status="few" action={f} alert_image={f} />
-
+                <Notification status="few" action={cart_plus} alert_image={f} />
+                <Notification status="few" action={cart_plus} alert_image={f} />
                 </div>
 
                 <div id ="data_insert"></div>
                 <BottomBar />
        
             </div>
+          
         );
 
     }

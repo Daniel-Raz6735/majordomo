@@ -6,19 +6,18 @@ import home from '../images/home.svg'
 import cart from '../images/cart.svg'
 import profile from '../images/profile.svg'
 import styles from "./containers.css"
+import warning from '../images/warning.svg'
+import circle_warning from '../images/circle_warning.svg'
+import cart_plus from '../images/cart_plus.svg'
 
 export const BottomBar = (props) =>{
 
     return(
-        <footer>
-        <div id = "bottom-bar">
-            
+        <footer id = "bottom-bar">
             <img className="bottom-bar-btn" src={home} onClick={()=> alert("yess")}></img>
             <img className="bottom-bar-btn" src={inventory}></img>
             <img className="bottom-bar-btn" src={cart}></img>
             <img className="bottom-bar-btn" src={profile}></img>
-
-        </div>
         </footer>
 
     )
@@ -132,9 +131,9 @@ export class Notification extends Component{
                     {this.state.status}
                 </div>
 
-                <div className="center_items">
+                
                <NotificationAlert symbolNumber={0} color={1}  />
-                </div>
+                
             </div>
         )
     }
@@ -145,7 +144,7 @@ export class Notification extends Component{
 
 export const NotificationAlert = (props) =>{
 
-    var symbolArr = [cart],styleArr=[styles.redArea,styles.yellowArea,styles.greenArea]
+    var symbolArr = [warning,circle_warning,cart_plus],styleArr=[styles.redArea,styles.yellowArea,styles.greenArea]
     var color = props.color,symbol = symbolArr[props.symbolNumber]
     
     
