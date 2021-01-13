@@ -22,8 +22,9 @@ def load_dummy_data(tables_to_read, tables):
     if not tables_to_read or not tables:
         return 500
     for table in tables_to_read:
-        ask_db(db_queries.insert_to_table_query, table, tables[table]["column"], tables[table]["data"])
-    return 200
+        res_code, query = db_queries.insert_to_table_query(table, tables[table]["column"], tables[table]["data"])
+        res_code, res = ask_db(query)
+    return res_code
 
 
 def ask_db(query):
@@ -74,8 +75,11 @@ def phrase_parameters(params, used_params):
     return query_parameters, non_used_params
 
 
-def error_message(code, message):
-    return "<h1>" + code + "</h1><p>" + message + "</p>", code
+def error_message(code, message , info):
+    res = "<h1>" + str(code) + "</h1><p>" + message + "</p>"
+    if info:
+        return str(res) + "\n" + info, code
+    return res, code
 
 
 @app.errorhandler(404)
@@ -85,8 +89,33 @@ def page_not_found(e):
 
 @app.route('/', methods=['GET'])
 def home():
-    return '''<h1>Distant Reading Archive</h1>
-<p>A prototype API for distant reading of science fiction novels.</p>'''
+    return '''<h1>Majordomo back end</h1>'''
+
+
+@app.route('/get/preferences', methods=['GET'])
+def get_user_preferences():
+    list_of_cols = ["user_email"]
+    used_p, non_used_p = phrase_parameters(request.args, list_of_cols)
+    conditions = []
+    if "user_email" in used_p and ";" not in used_p["user_email"]:
+        email = used_p["user_email"].split("@")
+        if len(email) != 2:
+            return error_message(400, "Bad request", " invalid email")
+        conditions.append(["AND", "users.email_userName", "=", email[0]])
+        conditions.append(["AND", "users.email_domainName", "=", email[0]])
+    else:
+        return error_message(400, "Bad request", " user email not sent")
+    res_code, final_query = db_queries.select_query(["user_preference", "users"],
+                                        [[["lang"]], [["user_id"]]],
+                                        conditions)
+    if res_code != 200:
+        return error_message(res_code, final_query)
+    print(final_query)
+    res_code, result = ask_db(final_query)
+    if res_code == 200:
+        return result
+    else:
+        return error_message(res_code, "unable to process request")
 
 
 @app.route('/get/containers', methods=['GET'])
@@ -94,10 +123,10 @@ def get_weights_data():
     list_of_cols = ["container_id", "client_id"]
     used_p, non_used_p = phrase_parameters(request.args, list_of_cols)
     conditions = []
-    print(str(used_p))
     if "client_id" in used_p:
         conditions.append(["AND", "client_id", "=", int(used_p["client_id"])])
-        print(used_p["client_id"])
+    else:
+        return error_message(400, "Bad request", "no client id sent")
     if "container_id" in used_p:
         conditions.append(["AND", "containers.container_id", "=", int(used_p["container_id"])])
     conditions.append(["AND", "weights.container_id", "=", "containers.container_id"])
@@ -113,13 +142,13 @@ def get_weights_data():
                  [[["container_id"]], [["weight_value", "weight"], ["weighing_date", "date"]], [["item_name"]], []],
                  conditions)
     if res_code != 200:
-        return error_message(500, "server side error")
+        return error_message(res_code, final_query)
 
     res_code, result = ask_db(final_query)
     if res_code == 200:
         return result
     else:
-        return error_message(res_code, "unable to process request")
+        return error_message(res_code, result,"unable to process request")
 
 
 @app.route('/get/restart', methods=['GET'])
@@ -199,6 +228,7 @@ WHERE  client_id  =  1 ,  AND  containers.container_id  =  1 ,  AND  weights.con
 if __name__ == '__main__':
     app.run()
     # tests()
+
 
 
 def create_proj_tables():
