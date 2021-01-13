@@ -17,11 +17,13 @@
     cursor: pointer;
     flex-direction: column;
     align-items: center;
-    padding: 10px;
+    margin: 10px;
+    height: 110px;
+    overflow: hidden;
 }
 
 #bottom-bar{
-    /* position: fixed; */
+    position: fixed;
     display:flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -30,11 +32,7 @@
     width: 100%;
 }
 
-footer{
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
+ 
 
 .notification_container{
     height: 55px;
@@ -51,7 +49,7 @@ footer{
 }
 .notification_block{
     height:100%;
-    width: 25%;
+    width: 300px;
     margin: auto;
     display: flex;
     align-content: space-between;
@@ -61,14 +59,15 @@ footer{
     
 }
 .notification_image{
-    max-height: 80%;
-    width: 80%;
+    max-height: 50%;
+    width: 50%;
     margin: auto;
 
 }
 .notification_symbol{
     height: 100%;
     border-radius: 0 12px 12px 0;
+    width: 15%;
 }
 .center_items{
     display: flex;
