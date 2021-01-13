@@ -3,8 +3,8 @@ import LocalizedStrings from 'react-localization';
 import Dropdown, { DropdownContent, DropdownTrigger } from 'react-simple-dropdown';
 import './Dictionary.css';
 import globe from './images/globe.png';
-import israelFlag from './images/israel.svg';
-import usaFlag from './images/USA.svg';
+import israelFlag from './images/icons/israel.svg';
+import usaFlag from './images/icons/USA.svg';
 
 
 /* LocalizedStrings is holding our Dictionary so that all of the pages wiil be able to be translated.

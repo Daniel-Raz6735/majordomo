@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { Dictionary } from '../Dictionary';
 import "./containers.css"
-import inventory from '../images/inventory.svg'
-import home from '../images/home.svg'
-import cart from '../images/cart.svg'
-import profile from '../images/profile.svg'
-import styles from "./containers.css"
-import warning from '../images/warning.svg'
-import circle_warning from '../images/circle_warning.svg'
-import cart_plus from '../images/cart_plus.svg'
+import inventory from '../images/icons/inventory.svg'
+import home from '../images/icons/home.svg'
+import cart from '../images/icons/cart.svg'
+import profile from '../images/icons/profile.svg'
+import warning from '../images/icons/warning.svg'
+import circle_warning from '../images/icons/circle red warning.svg'
+import cart_plus from '../images/icons/cart_plus.svg'
 
 export const BottomBar = (props) =>{
 
@@ -81,17 +80,16 @@ export class Item_block extends Component {
         }
     }
 
-    handleChange(e) {
-        this.setState({ [e.target.name]: e.target.value });
-    }
-    componentWillMount() {
+    // handleChange(e) {
+    //     this.setState({ [e.target.name]: e.target.value });
+    // }
+    // componentWillMount() {
        
-    }
+    // }
     render() {
 
         return (
             <div className="item_container">
-
             <div className = "item_squere">
                 <div>
                     {this.state.name}
@@ -111,7 +109,6 @@ export class Notification extends Component{
         super(props);
         this.state = {
             status:props.status,
-            alert_image:props.alert_image,
             number:props.number,
             action:props.action
                  
@@ -122,18 +119,15 @@ export class Notification extends Component{
 
         return(
             <div className = "notification_container">
-
-                <div className="center_items right_not_symbol">
-                <img id="left_img" src ={this.state.action} className="notification_image"></img>
+                <div className="center_items left_notification_area">
+                <img id="left_img" src ={this.state.action} className="notification_image" alt="item action"></img>
                 </div>
 
                 <div className = "notification center_items">
                     {this.state.status}
                 </div>
 
-                
-               <NotificationAlert symbolNumber={0} color={1}  />
-                
+               <NotificationSymbol symbolNumber={this.state.number}/>                
             </div>
         )
     }
@@ -142,14 +136,15 @@ export class Notification extends Component{
 
 }
 
-export const NotificationAlert = (props) =>{
+export const NotificationSymbol= (props) =>{
 
-    var symbolArr = [warning,circle_warning,cart_plus],styleArr=[styles.redArea,styles.yellowArea,styles.greenArea]
-    var color = props.color,symbol = symbolArr[props.symbolNumber]
+    var symbolArr = [warning,circle_warning,circle_warning],styleArr=["rgba(235, 104, 104, 0.32)","rgba(241, 192, 51, 0.32)","rgba(115, 213, 4, 0.32)"]
+    var symbolNumber = props.symbolNumber, symbol = symbolArr[symbolNumber]
     
+    var color = {"background-color": styleArr[symbolNumber]}
     
     return(
-        <div className={ "redArea notification_symbol center_items"} >
+        <div className={ "notification_symbol center_items"} style={color}>
                 <img  src ={symbol} className="notification_image right_img"></img>
         </div>
     )

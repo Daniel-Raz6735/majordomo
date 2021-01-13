@@ -115,7 +115,7 @@ input {
 
 #renderDiv{
     margin: auto;
-    background-image: url('../../images/loginBacground.svg') ;
+    background-image: url('../../images/icons/loginBacground.svg') ;
     background-size: cover;
     height: 100%;
     width: 100%;

@@ -1,7 +1,6 @@
 #this is the information entered in to https://app.quickdatabasediagrams.com/
 #to make our rational scheme
 
-
 #a list of all users in the system
 users
 -------
@@ -12,7 +11,8 @@ email_userName varchar(30)
 email_domainName varchar(30)
 address varchar(40) NULL
 phone_number varchar(20) NULL
-department_id int NULL
+business_id int FK >- business.business_id
+department_id int NULL FK >- department.department_id
 
 user_preference
 ------------
@@ -21,9 +21,9 @@ lang varchar(2)
 
 
 # list of businesses
-client
+business
 ------------
-client_id int PK FK
+business_id int PK FK
 admin int FK >- users.user_id
 client_name varchar
 
@@ -41,31 +41,39 @@ category_id int FK >- categories.category_id
 supplier
 -------
 supplier_id int FK -< users.user_id
-client_id int FK -< client.client_id
+business_id int FK -< business.business_id
 item_id int FK -< food_items.item_id
 days_to_provide varchar(7)
+frequency varchar(10)
 preferred_contact varchar(10)
 
 # list the departments in a business
 department
 ----
 department_id int PK
-client_id int FK >- client.client_id
+business_id int FK >- business.business_id
 department_name varchar(15)
 
 
-worker
------
-department_id int FK >- department.department_id
-worker_id int FK >- users.user_id
 
 #contains recipes for businesses in each row
 recipes
 ----
 recipe_id int PK
-client_id int FK >- client.client_id
+business_id int FK >- business.business_id
 recipe_name varchar(30)
 
+
+
+# notificatoin information
+notifications
+---------
+code int
+message varchar(255)
+active boolean
+business_id int FK >- business.business_id
+closed_by_user int FK >- users.user_id
+notification_level int
 
 
 
@@ -73,10 +81,10 @@ recipe_name varchar(30)
 orders
 ------------
 order_id int PK
-order_date timestamp PK
+order_date timestamp
 order_creator_id int FK >- users.user_id
+business_id int FK >- business.business_id
 supplier_id int FK >- supplier.supplier_id
-client_id int FK >- client.client_id
 price real Null
 
 #contains an item orderd in every row
@@ -102,7 +110,7 @@ unit varchar(2)
 containers
 ------------
 container_id int PK
-client_id int FK >- client.client_id
+business_id int FK >- business.business_id
 item_id int FK >- food_items.item_id
 using_start_date timestamp FK >- ruels.container_using_start_date
 defult_order_value real
@@ -113,7 +121,8 @@ weights
 weighing_date timestamp PK
 container_id int FK >- containers.container_id
 weight_value int
-last_user int NULL
+last_user int NULL FK >- users.user_id
+
 
 categories
 -----------
@@ -124,15 +133,19 @@ category_name varchar(40)
 ruels
 ----------
 container_id int FK >- containers.container_id
+container_using_start_date timestamp
 content_minimum_per_day real
 content_maximum_per_day real
 content_total_minimum real
 content_total_maximum real
-container_using_start_date timestamp
 active boolean
 
-# server indexes
+
+# server indexes maximum index for client
 indexes
 -----------
 index_name varchar(20)
 index_val int
+
+
+

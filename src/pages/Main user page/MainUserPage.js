@@ -5,8 +5,8 @@ import './MainUserPage.css'
 import $, { data } from 'jquery';
 import {BottomBar, Container, Item_block, Notification} from "../../components/containers"
 import ReactDOM from 'react-dom';
-import f from '../../images/USA.svg'
-import cart_plus from '../../images/cart_plus.svg'
+import f from '../../images/icons/USA.svg'
+import cart_plus from '../../images/icons/cart_plus.svg'
 
 const base_url = "http://127.0.0.1:5000"
 
@@ -91,8 +91,9 @@ class MainUserPage extends Component {
             
                
                 <div className="notification_block">
-                <Notification status="few" action={cart_plus} alert_image={f} />
-                <Notification status="few" action={cart_plus} alert_image={f} />
+                <Notification status="red" action={cart_plus} number={0} alert_image={f} />
+                <Notification status="green" action={cart_plus} number={2} alert_image={f} />
+                <Notification status="yellow" action={cart_plus} number={1} alert_image={f} />
                 </div>
 
                 <div id ="data_insert"></div>

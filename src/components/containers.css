@@ -75,19 +75,7 @@
 }
 
 
-.right_not_symbol{
+.left_notification_area{
     width: 20%;
 }
 
-
-.redArea{
-background-color: #EB6868;
-
-}
-.yellowArea{
-background-color: #F1C033;
-
-}
-.greenArea{
-background-color: #6FB91C;
-}
