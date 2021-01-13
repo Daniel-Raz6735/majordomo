@@ -5,6 +5,8 @@ from config import config
 import db_queries
 from flask_cors import CORS
 import table_info
+import os
+from old_firebase.old_firebase import receive_old_container
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -226,8 +228,9 @@ WHERE  client_id  =  1 ,  AND  containers.container_id  =  1 ,  AND  weights.con
 
 
 if __name__ == '__main__':
-    app.run()
+    # app.run()
     # tests()
+    receive_old_container(os.path.join("old_firebase"))
 
 
 
