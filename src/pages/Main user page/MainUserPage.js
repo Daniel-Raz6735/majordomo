@@ -7,6 +7,9 @@ import {BottomBar, Container, Item_block, Notification} from "../../components/c
 import ReactDOM from 'react-dom';
 import f from '../../images/icons/USA.svg'
 import cart_plus from '../../images/icons/cart_plus.svg'
+import logo from '../../images/icons/Majordomo logo.svg'
+
+
 
 const base_url = "http://127.0.0.1:5000"
 
@@ -81,15 +84,10 @@ class MainUserPage extends Component {
 
         return (
             <div id="main_user_page_container">
-                <header className="header"> 
-                <LangBtn />
-                <img alt="Majordomo logo" id="majordomoLogo" src ="http://up419.siz.co.il/up2/ljmkmijir2yn.png"></img>
-                <button id="logoutBtn" onClick={() => {
-                    auth.signOut()
-                    window.location.reload()
-                }} >{Dictionary.signOut}</button></header>
-            
                
+                <Nav_bar/>
+                <div className="main_info_container" >
+                
                 <div className="notification_block">
                 <Notification status="red" action={cart_plus} number={0} alert_image={f} />
                 <Notification status="green" action={cart_plus} number={2} alert_image={f} />
@@ -97,6 +95,7 @@ class MainUserPage extends Component {
                 </div>
 
                 <div id ="data_insert"></div>
+                </div>
                 <BottomBar />
        
             </div>
@@ -106,3 +105,33 @@ class MainUserPage extends Component {
     }
 }
 export default MainUserPage
+
+export class Nav_bar extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+
+        }
+
+    }
+
+
+    componentDidMount(){
+    }
+
+    render() {
+
+        return (
+            <header className="header"> 
+                <LangBtn />
+                <img alt="Majordomo logo" id="majordomoLogo" src ={logo} onClick={() => {window.location = '/';}}></img>
+                <button id="logoutBtn" onClick={() => {
+                    auth.signOut()
+                    window.location.reload()
+                }} >{Dictionary.signOut}</button>
+                </header>
+        );
+
+    }
+}

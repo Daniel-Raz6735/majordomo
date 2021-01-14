@@ -8,6 +8,7 @@ import profile from '../images/icons/profile.svg'
 import warning from '../images/icons/warning.svg'
 import circle_warning from '../images/icons/circle red warning.svg'
 import cart_plus from '../images/icons/cart_plus.svg'
+import logo from '../images/icons/Majordomo logo.svg'
 
 export const BottomBar = (props) =>{
 

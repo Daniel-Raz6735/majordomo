@@ -61,9 +61,8 @@ class LoginPage extends Component {
                 <LangBtn/>
                 <div id="loginWrapper" className="wrapper">
                     <div className="loginContainer">
-                        
                         <div id="buttonWrapper123">
-                        <img src ="http://up419.siz.co.il/up2/ljmkmijir2yn.png"></img>
+                        <img src ='../images/icons/Majordomo logo.svg'></img>
                             <form dir="RTL" id="login_form" name="login_form_name" role="form">
                                 < input type="email"
                                     id="email"

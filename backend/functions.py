@@ -11,7 +11,29 @@ from old_firebase.old_firebase import receive_old_container
 app = flask.Flask(__name__)
 CORS(app)
 app.config["DEBUG"] = True
-
+indexes={
+    "container_id" : 0,
+    "user_id" : 0,
+    "business_id":0
+}
+tables_to_read = [
+    "indexes",
+    "categories",
+    "users",
+    "user_preference",
+    "business",
+    "food_items",
+    "supplier",
+    "department",
+    "notifications",
+    "orders",
+    "order_content",
+    "recipes",
+    "recipe_content",
+    "containers",
+    "weights",
+    "rules"
+]
 
 def dict_factory(cursor, row):
     d = {}
@@ -61,7 +83,7 @@ def ask_db(query):
             # print(res_code, 'Database connection closed.')
             if rows:
                 return 200, jsonify(rows)
-        return 500,rows
+        return 500, rows
 
 
 def phrase_parameters(params, used_params):
@@ -157,58 +179,55 @@ def get_weights_data():
 def restart_tables():
     drop_tables()
     print("*****************removed********************")
-    code = ask_db(db_queries.add_table_code)
+    code, query = db_queries.add_table_code()
+    code = ask_db(query)
     return str(code)
 
 
 @app.route('/get/create', methods=['GET'])
 def create():
-    code = ask_db(db_queries.add_table_code)
+    code,query= db_queries.add_table_code()
+    code = ask_db(query)
     return str(code)
 
 
 @app.route('/get/drop/all', methods=['GET'])
 def drop_tables():
-    tables_to_read = [
-        "users",
-        "supplier",
-        "food_items",
-        "client",
-        "department",
-        "worker",
-        "orders",
-        "order_content",
-        "recipes",
-        "recipe_content",
-        "containers",
-        "weights"
-    ]
+
     if not tables_to_read:
         return "500"
     for table in tables_to_read:
-        ask_db(db_queries.drop_table_query, table)
+        res_code, query = db_queries.drop_table_query(table)
+        ask_db(query)
     return "200"
 
 
 @app.route('/get/add/dummy_data', methods=['GET'])
 def add_dummy():
     tables_to_read = [
+        "indexes",
+        "categories",
         "users",
-        "client",
+        "user_preference",
+        "business",
         "food_items",
         "supplier",
         "department",
-        "worker",
+        "notifications",
         "orders",
         "order_content",
         "recipes",
         "recipe_content",
         "containers",
-        "weights"
+        "weights",
+        "rules"
     ]
     res = load_dummy_data(tables_to_read, table_info.tables)
-    return str(res)
+    res_code, result = ask_db(res)
+    return result,res_code
 
+def call_indexes():
+    print(indexes)
 
 def tests():
     conditions = [["AND", "client_id", "=", 1],
@@ -228,9 +247,10 @@ WHERE  client_id  =  1 ,  AND  containers.container_id  =  1 ,  AND  weights.con
 
 
 if __name__ == '__main__':
-    # app.run()
+    call_indexes()
+    app.run()
     # tests()
-    receive_old_container(os.path.join("old_firebase"))
+    # receive_old_container(os.path.join("old_firebase"))
 
 
 
