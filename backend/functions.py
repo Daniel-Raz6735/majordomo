@@ -11,10 +11,10 @@ from old_firebase.old_firebase import receive_old_container
 app = flask.Flask(__name__)
 CORS(app)
 app.config["DEBUG"] = True
-indexes={
-    "container_id" : 0,
-    "user_id" : 0,
-    "business_id":0
+indexes = {
+    "container_id": 0,
+    "user_id": 0,
+    "business_id": 0
 }
 tables_to_read = [
     "indexes",
@@ -34,6 +34,7 @@ tables_to_read = [
     "weights",
     "rules"
 ]
+
 
 def dict_factory(cursor, row):
     d = {}
@@ -99,7 +100,7 @@ def phrase_parameters(params, used_params):
     return query_parameters, non_used_params
 
 
-def error_message(code, message , info):
+def error_message(code, message, info):
     res = "<h1>" + str(code) + "</h1><p>" + message + "</p>"
     if info:
         return str(res) + "\n" + info, code
@@ -125,13 +126,14 @@ def get_user_preferences():
         email = used_p["user_email"].split("@")
         if len(email) != 2:
             return error_message(400, "Bad request", " invalid email")
-        conditions.append(["AND", "users.email_userName", "=", email[0]])
-        conditions.append(["AND", "users.email_domainName", "=", email[0]])
+        conditions.append(["AND", "users.email_user_name", "=", "'" + email[0] + "'"])
+        conditions.append(["AND", "users.email_domain_name", "=", "'" + email[1] + "'"])
+        conditions.append(["AND", "users.user_id", "=", "user_preference.user_id"])
     else:
         return error_message(400, "Bad request", " user email not sent")
     res_code, final_query = db_queries.select_query(["user_preference", "users"],
-                                        [[["lang"]], [["user_id"]]],
-                                        conditions)
+                                                    [[["lang"]], [["user_id"]]],
+                                                    conditions)
     if res_code != 200:
         return error_message(res_code, final_query)
     print(final_query)
@@ -162,9 +164,10 @@ def get_weights_data():
     conditions.append(["AND", "t1.date", "=", "weights.weighing_date"])
     conditions.append(["AND", "t1.container_id", "=", "containers.container_id"])
 
-    res_code, final_query = db_queries.select_query(["containers", "weights", "food_items", ["("+max_table+")", "t1"]],
-                 [[["container_id"]], [["weight_value", "weight"], ["weighing_date", "date"]], [["item_name"]], []],
-                 conditions)
+    res_code, final_query = db_queries.select_query(
+        ["containers", "weights", "food_items", ["(" + max_table + ")", "t1"]],
+        [[["container_id"]], [["weight_value", "weight"], ["weighing_date", "date"]], [["item_name"]], []],
+        conditions)
     if res_code != 200:
         return error_message(res_code, final_query)
 
@@ -172,7 +175,7 @@ def get_weights_data():
     if res_code == 200:
         return result
     else:
-        return error_message(res_code, result,"unable to process request")
+        return error_message(res_code, result, "unable to process request")
 
 
 @app.route('/get/restart', methods=['GET'])
@@ -186,14 +189,13 @@ def restart_tables():
 
 @app.route('/get/create', methods=['GET'])
 def create():
-    code,query= db_queries.add_table_code()
+    code, query = db_queries.add_table_code()
     code = ask_db(query)
     return str(code)
 
 
 @app.route('/get/drop/all', methods=['GET'])
 def drop_tables():
-
     if not tables_to_read:
         return "500"
     for table in tables_to_read:
@@ -224,10 +226,12 @@ def add_dummy():
     ]
     res = load_dummy_data(tables_to_read, table_info.tables)
     res_code, result = ask_db(res)
-    return result,res_code
+    return result, res_code
+
 
 def call_indexes():
     print(indexes)
+
 
 def tests():
     conditions = [["AND", "client_id", "=", 1],
@@ -251,7 +255,6 @@ if __name__ == '__main__':
     app.run()
     # tests()
     # receive_old_container(os.path.join("old_firebase"))
-
 
 
 def create_proj_tables():
