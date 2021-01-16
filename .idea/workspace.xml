@@ -19,9 +19,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="db query select method updated and working">
+    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Main user page/MainUserPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Main user page/MainUserPage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -244,7 +247,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610575098916</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="get user preference">
+      <created>1610645762650</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1610645762650</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -282,32 +292,33 @@
     <MESSAGE value="added improved select query" />
     <MESSAGE value="db query select method updated and working" />
     <MESSAGE value="added old container support" />
-    <option name="LAST_COMMIT_MESSAGE" value="added old container support" />
+    <MESSAGE value="get user preference" />
+    <option name="LAST_COMMIT_MESSAGE" value="get user preference" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="211" y="0" key="CommitChangelistDialog2" timestamp="1610575098080">
+    <state x="211" y="0" key="CommitChangelistDialog2" timestamp="1610757555533">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="211" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1610575098080" />
-    <state width="1259" height="87" key="GridCell.Tab.0.bottom" timestamp="1610639827889">
+    <state x="211" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1610757555533" />
+    <state width="1259" height="183" key="GridCell.Tab.0.bottom" timestamp="1610756253197">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="87" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1610639827889" />
+    <state width="1259" height="183" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1610756253197" />
     <state width="1899" height="374" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610527430363" />
-    <state width="1259" height="87" key="GridCell.Tab.0.center" timestamp="1610639827889">
+    <state width="1259" height="183" key="GridCell.Tab.0.center" timestamp="1610756253196">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="87" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1610639827889" />
+    <state width="1259" height="183" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1610756253196" />
     <state width="1899" height="374" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610527430363" />
-    <state width="1259" height="87" key="GridCell.Tab.0.left" timestamp="1610639827889">
+    <state width="1259" height="183" key="GridCell.Tab.0.left" timestamp="1610756253196">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="87" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1610639827889" />
+    <state width="1259" height="183" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1610756253196" />
     <state width="1899" height="374" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610527430361" />
-    <state width="1259" height="87" key="GridCell.Tab.0.right" timestamp="1610639827889">
+    <state width="1259" height="183" key="GridCell.Tab.0.right" timestamp="1610756253197">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="87" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1610639827889" />
+    <state width="1259" height="183" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1610756253197" />
     <state width="1899" height="374" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610527430363" />
     <state width="1259" height="189" key="GridCell.Tab.1.bottom" timestamp="1610451955559">
       <screen x="0" y="0" width="1280" height="680" />
@@ -329,10 +340,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="142" y="0" key="SettingsEditor/0.0.1280.680@0.0.1280.680" timestamp="1610480342071" />
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1610575101799">
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1610645764581">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1610575101799" />
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1610645764581" />
     <state x="337" y="165" key="com.intellij.ide.util.TipDialog" timestamp="1610478998175">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

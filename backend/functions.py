@@ -178,6 +178,67 @@ def get_weights_data():
         return error_message(res_code, result, "unable to process request")
 
 
+@app.route('/get/notifications', methods=['GET'])
+def get_notifications():
+    """method for getting the active notifications by business id
+        parameters received: required: business_id, optional: active, notification_id
+        output:[["code", "message", "food_item_id", "active", "closed_by_user"]]"""
+    list_of_cols = ["business_id", "active", "notification_id"]
+    used_p, non_used_p = phrase_parameters(request.args, list_of_cols)
+    conditions = []
+    if "business_id" in used_p:
+        conditions.append(["AND", "notifications.business_id", "=", int(used_p["business_id"])])
+    else:
+        return error_message(400, "Bad request", "no business id sent")
+    if "active" in used_p:
+        conditions.append(["AND", "notifications.active", "=", used_p["active"]])
+    if "notification_id" in used_p:
+        conditions.append(["AND", "notifications.notification_id", "=", used_p["notification_id"]])
+    res_code, final_query = db_queries.select_query(
+        ["notifications"],
+        [[["code"], ["message"], ["food_item_id"], ["active"], ["closed_by_user"]]],
+        conditions)
+    if res_code != 200:
+        return error_message(res_code, final_query)
+
+    res_code, result = ask_db(final_query)
+    if res_code == 200:
+        return result
+    else:
+        return error_message(res_code, result, "unable to process request")
+
+
+@app.route('/get/rules', methods=['GET'])
+def get_rules():
+    """method for getting the rules by business id
+        parameters received: required: business_id, optional: active, rule_id
+        output:[["rule_id", "item_id", "content_minimum_per_day", "content_maximum_per_day",
+            "content_total_minimum", "content_total_maximum", "active"]....]"""
+
+    list_of_cols = ["business_id", "active", "rule_id"]
+    used_p, non_used_p = phrase_parameters(request.args, list_of_cols)
+    conditions = []
+    if "business_id" in used_p:
+        conditions.append(["AND", "rules.business_id", "=", int(used_p["business_id"])])
+    else:
+        return error_message(400, "Bad request", "no business id sent")
+    if "active" in used_p:
+        conditions.append(["AND", "rules.active", "=", used_p["business_id"]])
+    res_code, final_query = db_queries.select_query(
+        ["rules"],
+        [[["rule_id"], ["item_id"], ["content_minimum_per_day"], ["content_maximum_per_day"],
+            ["content_total_minimum"], ["content_total_maximum"], ["active"]]],
+        conditions)
+    if res_code != 200:
+        return error_message(res_code, final_query)
+
+    res_code, result = ask_db(final_query)
+    if res_code == 200:
+        return result
+    else:
+        return error_message(res_code, result, "unable to process request")
+
+
 @app.route('/get/restart', methods=['GET'])
 def restart_tables():
     drop_tables()
@@ -231,6 +292,12 @@ def add_dummy():
 
 def call_indexes():
     print(indexes)
+
+
+def calculate_rules():
+    rules = get_rules()
+    notifications = get_notifications()
+    print(rules, notifications)
 
 
 def tests():
