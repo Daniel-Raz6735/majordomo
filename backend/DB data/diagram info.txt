@@ -7,12 +7,12 @@ users
 user_id int PK
 first_name varchar(20)  NULL
 last_name varchar(20) NULL
-email_userName varchar(30)
-email_domainName varchar(30)
+email_user_name varchar(30)
+email_domain_name varchar(30)
 address varchar(40) NULL
 phone_number varchar(20) NULL
-business_id int FK >- business.business_id
-department_id int NULL FK >- department.department_id
+business_id int FK - business.business_id null
+department_id int NULL
 
 user_preference
 ------------
@@ -24,8 +24,8 @@ lang varchar(2)
 business
 ------------
 business_id int PK FK
-admin int FK >- users.user_id
-client_name varchar
+admin int FK - users.user_id
+business_name varchar(100)
 
 
 #contains a name for each item
@@ -40,19 +40,20 @@ category_id int FK >- categories.category_id
 #a list of suppliers and one item they provide in each row
 supplier
 -------
-supplier_id int FK -< users.user_id
+supplier_id int FK - users.user_id
 business_id int FK -< business.business_id
 item_id int FK -< food_items.item_id
 days_to_provide varchar(7)
 frequency varchar(10)
-preferred_contact varchar(10)
+preferred_contact varchar(10) null
 
 # list the departments in a business
 department
 ----
 department_id int PK
 business_id int FK >- business.business_id
-department_name varchar(15)
+department_name varchar(50)
+manager_id int FK >- users.user_id
 
 
 
@@ -61,7 +62,7 @@ recipes
 ----
 recipe_id int PK
 business_id int FK >- business.business_id
-recipe_name varchar(30)
+recipe_name varchar(100)
 
 
 
@@ -69,10 +70,11 @@ recipe_name varchar(30)
 notifications
 ---------
 code int
-message varchar(255)
-active boolean
+message varchar(255) null
 business_id int FK >- business.business_id
-closed_by_user int FK >- users.user_id
+food_item_id int FK >- food_items.item_id
+active boolean
+closed_by_user int FK >- users.user_id null
 notification_level int
 
 
@@ -93,7 +95,7 @@ order_content
 item_id int FK >- food_items.item_id
 order_id int FK >- orders.order_id
 price_per_unit real null
-amount int
+amount int null
 unit varchar(2)
 
 
@@ -112,8 +114,8 @@ containers
 container_id int PK
 business_id int FK >- business.business_id
 item_id int FK >- food_items.item_id
-using_start_date timestamp FK >- ruels.container_using_start_date
-defult_order_value real
+using_start_date timestamp
+default_order_value real
 
 #contains a weight that was taken in every row
 weights
@@ -127,13 +129,14 @@ last_user int NULL FK >- users.user_id
 categories
 -----------
 category_id PK int
-category_name varchar(40)
+category_name varchar(100)
 
 
-ruels
+rules
 ----------
-container_id int FK >- containers.container_id
-container_using_start_date timestamp
+rule_id int PK
+business_id int FK >- business.business_id
+item_id int FK >- food_items.item_id
 content_minimum_per_day real
 content_maximum_per_day real
 content_total_minimum real

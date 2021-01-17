@@ -77,38 +77,6 @@ def break_select_parameters(tables, columns_per_table, conditions):
     else:
         for i in range(columns_len):  # find first aggregation if exists
             columns_per_table[i].sort(key=len)
-            # if columns_per_table[i] and columns_per_table[i][0] and len(columns_per_table[i][0]) == 3:
-            #
-            #     aggregation_op = columns_per_table[i][0].pop(-1)  # pop out the aggregator found and receive a table without it
-            #     aggregator_name = columns_per_table[i][0][1]
-            #     aggregation_info = True
-            #     if not aggregator_name:
-            #         aggregator_name = columns_per_table[i][0][0]
-            #
-            #     for j in range(len(columns_per_table)):
-            #         for col in range(len(columns_per_table[j])):  # get column per tables
-            #             column = columns_per_table[j][col]
-            #             if j != i or col != 0:
-            #                 try:
-            #                     if column[1]:
-            #                         group_by.append(column[1])
-            #                 except IndexError:
-            #                     string_to_append = str(tables[j]) + "." + column[0]
-            #                     if len(column) > 2:
-            #                         group_by.append(column[2])
-            #                     else:
-            #                         group_by.append(string_to_append)
-            #
-            #     q = select_query(tables, columns_per_table, conditions, group_by, iteration=iteration+1)
-            #
-            #     select = [[aggregation_op+"(" + aggregator_name + ")"]]
-            #     tables = [["("+q[1][:-1]+")", "t"+str(iteration)]]
-            #     columns_per_table = [[aggregator_name]]
-            #     group_by = []
-            #     conditions = []
-            #     break
-        # else:
-        # for i in range(len(columns_per_table)):
             if columns_per_table[i]:
                 for col in columns_per_table[i]:
                     if col:
@@ -145,7 +113,6 @@ def break_select_parameters(tables, columns_per_table, conditions):
                 where += " " + str(cond)+" "
     if not aggregation_info:
         group_by = None
-        # where = where[:-2]
     return select, from_q, where, group_by
 
 
