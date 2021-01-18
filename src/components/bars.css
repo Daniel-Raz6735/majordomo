@@ -1,0 +1,9 @@
+#bottom-bar{
+    position: fixed;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color:rgb(194, 79, 79); 
+    bottom: 0%;
+    width: 100%;
+}
