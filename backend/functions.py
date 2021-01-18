@@ -206,13 +206,13 @@ def get_notifications():
     """method for getting the active notifications by business id
         parameters received: required: business_id, optional: active, notification_id
         output:[["code", "message", "food_item_id", "active", "closed_by_user"]]"""
-    list_of_cols = ["business_id", "active", "notification_id"]
+    list_of_cols = ["client_id", "active", "notification_id"]
     used_p, non_used_p = phrase_parameters(request.args, list_of_cols)
     conditions = []
-    if "business_id" in used_p:
-        conditions.append(["AND", "notifications.business_id", "=", int(used_p["business_id"])])
+    if "client_id" in used_p:
+        conditions.append(["AND", "notifications.business_id", "=", int(used_p["client_id"])])
     else:
-        return error_message(400, "Bad request", "no business id sent")
+        return error_message(400, "Bad request", "no client id sent")
     if "active" in used_p:
         conditions.append(["AND", "notifications.active", "=", used_p["active"]])
     if "notification_id" in used_p:

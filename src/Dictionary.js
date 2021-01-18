@@ -5,6 +5,7 @@ import './Dictionary.css';
 import globe from './images/globe.png';
 import israelFlag from './images/icons/israel.svg';
 import usaFlag from './images/icons/USA.svg';
+import {base_url} from './index'
 
 
 /* LocalizedStrings is holding our Dictionary so that all of the pages wiil be able to be translated.
@@ -20,9 +21,18 @@ export const Dictionary = new LocalizedStrings({
     signOut: `Sign out`,
     inventory : "show inventory",
 
-    //containers
-    add_to_order :"add to order",
     
+    
+    //containers
+    
+    //notifications
+    just_few:"Just a few left",
+    running_low:"Running low",
+    must_use:"Must use ASAP",
+    add_to_order :"Add to order",
+    suggest_dish :"Suggest Dish",
+
+
     
     
   },
@@ -37,6 +47,11 @@ export const Dictionary = new LocalizedStrings({
 
     //containers
     add_to_order :"הוסף להזמנה",
+    
+     //notifications
+     just_few:"נותרו רק כמה",
+     running_low:"אוזל",
+     must_use:"צריך להשתמש בדחיפות",
     
   }});
 

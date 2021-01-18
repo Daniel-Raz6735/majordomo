@@ -3,15 +3,14 @@ import { Dictionary, LangBtn } from '../../Dictionary'
 import { auth } from '../../config/firebaseConfig'
 import './MainUserPage.css'
 import $, { data } from 'jquery';
-import {BottomBar, Container, Item_block, Notification} from "../../components/containers"
+import {Notification_block} from "../../components/notifications"
+import {Item_block, Container} from "../../components/containers"
+import {BottomBar} from "../../components/bars"
 import ReactDOM from 'react-dom';
-import f from '../../images/icons/USA.svg'
+
 import cart_plus from '../../images/icons/cart_plus.svg'
 import logo from '../../images/icons/Majordomo logo.svg'
-
-
-
-const base_url = "http://127.0.0.1:5000"
+import {base_url} from '../../index'
 
 
 
@@ -87,13 +86,7 @@ class MainUserPage extends Component {
                
                 <Nav_bar/>
                 <div className="main_info_container" >
-                
-                <div className="notification_block">
-                <Notification status="red" action={cart_plus} number={0} alert_image={f} />
-                <Notification status="green" action={cart_plus} number={2} alert_image={f} />
-                <Notification status="yellow" action={cart_plus} number={1} alert_image={f} />
-                </div>
-
+                <Notification_block/>
                 <div id ="data_insert"></div>
                 </div>
                 <BottomBar />

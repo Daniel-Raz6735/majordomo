@@ -19,13 +19,23 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/images/icons/overflow sign.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/images/icons/serving dish.svg" afterDir="false" />
+    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="select query fixed and updated">
+      <change afterPath="$PROJECT_DIR$/src/components/bars.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/bars.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/notifications.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/notifications.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/icons/triangle_warning.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/DB data/diagram info.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/DB data/diagram info.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/db_queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db_queries.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Dictionary.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Dictionary.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/containers.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/containers.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/containers.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/containers.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/icons/circle_warning.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/images/icons/circle_warning.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/icons/serving dish.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/icons/warning.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Main user page/MainUserPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Main user page/MainUserPage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -255,7 +265,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610645762650</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="select query fixed and updated">
+      <created>1610923166101</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1610923166101</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -294,42 +311,43 @@
     <MESSAGE value="db query select method updated and working" />
     <MESSAGE value="added old container support" />
     <MESSAGE value="get user preference" />
-    <option name="LAST_COMMIT_MESSAGE" value="get user preference" />
+    <MESSAGE value="select query fixed and updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="select query fixed and updated" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="-1141" y="0" key="CommitChangelistDialog2" timestamp="1610922968552">
+    <state x="-1141" y="0" key="CommitChangelistDialog2" timestamp="1610923186324">
       <screen x="-1366" y="0" width="1366" height="728" />
     </state>
-    <state x="-1141" y="0" key="CommitChangelistDialog2/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1610922968552" />
+    <state x="-1141" y="0" key="CommitChangelistDialog2/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1610923186324" />
     <state x="211" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1610757555533" />
-    <state width="1345" height="206" key="GridCell.Tab.0.bottom" timestamp="1610922100819">
+    <state width="1345" height="162" key="GridCell.Tab.0.bottom" timestamp="1610923206577">
       <screen x="-1366" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="206" key="GridCell.Tab.0.bottom/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1610922100819" />
+    <state width="1345" height="162" key="GridCell.Tab.0.bottom/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1610923206577" />
     <state width="1259" height="183" key="GridCell.Tab.0.bottom/0.0.1280.680/1920.0.1366.728@0.0.1280.680" timestamp="1610870173655" />
     <state width="1345" height="162" key="GridCell.Tab.0.bottom/0.0.1280.680/1920.0.1366.728@1920.0.1366.728" timestamp="1610919917738" />
     <state width="1259" height="183" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1610869014125" />
     <state width="1899" height="374" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610527430363" />
-    <state width="1345" height="206" key="GridCell.Tab.0.center" timestamp="1610922100819">
+    <state width="1345" height="162" key="GridCell.Tab.0.center" timestamp="1610923206577">
       <screen x="-1366" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="206" key="GridCell.Tab.0.center/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1610922100819" />
+    <state width="1345" height="162" key="GridCell.Tab.0.center/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1610923206577" />
     <state width="1259" height="183" key="GridCell.Tab.0.center/0.0.1280.680/1920.0.1366.728@0.0.1280.680" timestamp="1610870173655" />
     <state width="1345" height="162" key="GridCell.Tab.0.center/0.0.1280.680/1920.0.1366.728@1920.0.1366.728" timestamp="1610919917738" />
     <state width="1259" height="183" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1610869014125" />
     <state width="1899" height="374" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610527430363" />
-    <state width="1345" height="206" key="GridCell.Tab.0.left" timestamp="1610922100818">
+    <state width="1345" height="162" key="GridCell.Tab.0.left" timestamp="1610923206577">
       <screen x="-1366" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="206" key="GridCell.Tab.0.left/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1610922100818" />
+    <state width="1345" height="162" key="GridCell.Tab.0.left/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1610923206577" />
     <state width="1259" height="183" key="GridCell.Tab.0.left/0.0.1280.680/1920.0.1366.728@0.0.1280.680" timestamp="1610870173655" />
     <state width="1345" height="162" key="GridCell.Tab.0.left/0.0.1280.680/1920.0.1366.728@1920.0.1366.728" timestamp="1610919917738" />
     <state width="1259" height="183" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1610869014125" />
     <state width="1899" height="374" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610527430361" />
-    <state width="1345" height="206" key="GridCell.Tab.0.right" timestamp="1610922100819">
+    <state width="1345" height="162" key="GridCell.Tab.0.right" timestamp="1610923206577">
       <screen x="-1366" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="206" key="GridCell.Tab.0.right/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1610922100819" />
+    <state width="1345" height="162" key="GridCell.Tab.0.right/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1610923206577" />
     <state width="1259" height="183" key="GridCell.Tab.0.right/0.0.1280.680/1920.0.1366.728@0.0.1280.680" timestamp="1610870173655" />
     <state width="1345" height="162" key="GridCell.Tab.0.right/0.0.1280.680/1920.0.1366.728@1920.0.1366.728" timestamp="1610919917738" />
     <state width="1259" height="183" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1610869014125" />
@@ -358,9 +376,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="142" y="0" key="SettingsEditor/0.0.1280.680@0.0.1280.680" timestamp="1610480342071" />
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1610645764581">
-      <screen x="0" y="0" width="1280" height="680" />
+    <state x="-1117" y="79" key="Vcs.Push.Dialog.v2" timestamp="1610923172081">
+      <screen x="-1366" y="0" width="1366" height="728" />
     </state>
+    <state x="-1117" y="79" key="Vcs.Push.Dialog.v2/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1610923172081" />
     <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1610645764581" />
     <state x="337" y="165" key="com.intellij.ide.util.TipDialog" timestamp="1610478998175">
       <screen x="0" y="0" width="1280" height="680" />

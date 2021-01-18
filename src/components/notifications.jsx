@@ -8,6 +8,7 @@ import overflow_sign from '../images/icons/overflow sign.svg'
 import { Dictionary } from '../Dictionary';
 import {base_url} from '../index'
 import $ from 'jquery'
+import ReactDOM from 'react-dom'
 
 
 
@@ -37,8 +38,14 @@ function get_notifications(callback, client_id){
 }
 
 function process_notifications(data){
-     console.log(data)
+    var page = []
+    var items = ["abc","cucumber","tomato"]
+    if(typeof(data)=="object")
 
+        data.forEach(element => {
+            page.push(<Notification number={element["code"]%2} item_name={items[element["food_item_id"]]}  />)
+        });
+    ReactDOM.render( <div id ="first_notification" className="notification_block">{page}</div>,document.getElementById('first_notification'))
 }
 
 
@@ -56,13 +63,16 @@ export class Notification_block extends Component{
         }
     }
 
-    componentDidMount(){
+
+
+    componentWillMount(){
         get_notifications(process_notifications,1)
     }
     render(){
 
+
         return(
-            <div className="notification_block">
+            <div id ="first_notification" className="notification_block">
                 <Notification number={0} item_name="red" total_weight={26} />
                 <Notification  number={1} item_name="yellow" total_weight={26}/>
                 <Notification number={2} item_name="orange" total_weight={26}/>
@@ -85,19 +95,25 @@ export class Notification extends Component{
         var action_by_number = {
                                 0:{"action":arr[0],"action_desc":text_descp[0],"message":Dictionary["just_few"]},
                                 1:{"action":arr[0],"action_desc":text_descp[0],"message":Dictionary["running_low"]},
-                                2:{"action":arr[1],"action_desc":text_descp[1],"message":Dictionary["must_use"]},
-        }
-        var number = props.number
+                                2:{"action":arr[1],"action_desc":text_descp[1],"message":Dictionary["must_use"]}
+        };
+        var mess = action_by_number[props.number].message,
+        image = action_by_number[props.number].action,
+        desc = action_by_number[props.number].action_desc
+ 
         this.state = {
-            action_image:action_by_number[number]["action"],
-            action_desc:action_by_number[number]["action_desc"],
+            number:props.number,            
             item_name:props.item_name,
-            total_weight: props.total_weight,
-            message:props.message?props.message:action_by_number[number]["message"],
-            number:number                
+            total_weight: props.total_weight, 
+            message:props.message?this.state.message:mess,
+            action_image: image ,
+            action_desc:desc,
         }
     }
-    
+    componentWillMount(){
+
+        
+    }
 
     render(){
 
