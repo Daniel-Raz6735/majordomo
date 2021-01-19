@@ -12,8 +12,6 @@ import ReactDOM from 'react-dom'
 
 
 
-
-
 function get_notifications(callback, client_id){
     //request all notifications for a business
     var request = base_url+'/get/notifications';
@@ -39,14 +37,30 @@ function get_notifications(callback, client_id){
 
 function process_notifications(data){
     var page = []
+    
     var items = ["abc","cucumber","tomato"]
     if(typeof(data)=="object")
 
         data.forEach(element => {
+
             page.push(<Notification number={element["code"]%2} item_name={items[element["food_item_id"]]}  />)
         });
-    ReactDOM.render( <div id ="first_notification" className="notification_block">{page}</div>,document.getElementById('first_notification'))
+    ReactDOM.render( <div id ="first_notification" className="notification_block">{page}<div id ="insert_div"></div></div>,document.getElementById('first_notification'))
+    
+    sleep(5000).then(() => {
+        ReactDOM.render( <Notification number={0}  item_name="Avocado" total_weight = {0.5} />,document.getElementById('insert_div')) 
+        // Do something after the sleep!
+      });  
+
+
 }
+
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+  }
+  
+  // Usage!
+  
 
 
 
@@ -58,6 +72,7 @@ export class Notification_block extends Component{
         this.state = {
             status:props.status,
             number:props.number,
+            page: [],
             action:props.action
                  
         }
