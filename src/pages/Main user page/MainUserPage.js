@@ -5,7 +5,7 @@ import './MainUserPage.css'
 import $, { data } from 'jquery';
 import {Notification_block} from "../../components/notifications"
 import {Item_block, Container} from "../../components/containers"
-import {BottomBar} from "../../components/bars"
+import {BottomBar, Nav_bar} from "../../components/bars"
 import ReactDOM from 'react-dom';
 
 import cart_plus from '../../images/icons/cart_plus.svg'
@@ -99,32 +99,3 @@ class MainUserPage extends Component {
 }
 export default MainUserPage
 
-export class Nav_bar extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        }
-
-    }
-
-
-    componentDidMount(){
-    }
-
-    render() {
-
-        return (
-            <header className="header"> 
-                <LangBtn />
-                <img alt="Majordomo logo" id="majordomoLogo" src ={logo} onClick={() => {window.location = '/';}}></img>
-                <button id="logoutBtn" onClick={() => {
-                    auth.signOut()
-                    window.location.reload()
-                }} >{Dictionary.signOut}</button>
-                </header>
-        );
-
-    }
-}

@@ -4,6 +4,11 @@ import home from '../images/icons/home.svg'
 import cart from '../images/icons/cart.svg'
 import profile from '../images/icons/profile.svg'
 import {base_url} from '../index'
+import React, { Component } from 'react';
+import { auth } from '../config/firebaseConfig'
+import { Dictionary , LangBtn} from '../Dictionary';
+import logo from '../images/icons/Majordomo logo.svg'
+
 
 
 export const BottomBar = (props) =>{
@@ -19,4 +24,34 @@ export const BottomBar = (props) =>{
     )
 
 
+}
+
+export class Nav_bar extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+
+        }
+
+    }
+
+
+    componentDidMount(){
+    }
+
+    render() {
+
+        return (
+            <header className="header"> 
+                <LangBtn />
+                <img alt="Majordomo logo" id="majordomoLogo" src ={logo} onClick={() => {window.location = '/';}}></img>
+                <button id="logoutBtn" onClick={() => {
+                    auth.signOut()
+                    window.location.reload()
+                }} >{Dictionary.signOut}</button>
+                </header>
+        );
+
+    }
 }
