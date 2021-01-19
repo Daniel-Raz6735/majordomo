@@ -24,13 +24,15 @@ export const Dictionary = new LocalizedStrings({
     
     
     //containers
-    
+    unknown_date : "unknown date",
+
     //notifications
     just_few:"Just a few left",
     running_low:"Running low",
     must_use:"Must use ASAP",
     add_to_order :"Add to order",
     suggest_dish :"Suggest Dish",
+    
 
 
     
@@ -47,6 +49,7 @@ export const Dictionary = new LocalizedStrings({
 
     //containers
     add_to_order :"הוסף להזמנה",
+    unknown_date : "תאריך לא ידוע",
     
      //notifications
      just_few:"נותרו רק כמה",

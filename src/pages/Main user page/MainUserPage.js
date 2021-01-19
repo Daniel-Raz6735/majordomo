@@ -27,12 +27,16 @@ function render_container(data){
     var max = -Number.MAX_SAFE_INTEGER;
     if (data){
         data.forEach(element => {
-            res.push(<Item_block name={element[3]} weight ={element[1]} weight_date = {element[2]} />)
+            console.log(element)
+            res.push(<Item_block name={element["item_name"]} weight ={element["weight"]} weight_date = {element["date"]} />)
         });
     }
-    // res = <Item_block name="Agvania" weight ={max} weight_date = "20.1.12" />
+    res.push(<Item_block id="replace_cont" name="Avocado" weight ={1.2} weight_date = {"Mon, 20 Oct 2014 07:00:03 GMT"} />)
+    
     ReactDOM.render(res, document.getElementById('data_insert'));
 }
+
+
 
 
 function req_container(callback, user_id ,container_number){
