@@ -9,6 +9,7 @@ import { Dictionary } from '../Dictionary';
 import {base_url} from '../index'
 import $ from 'jquery'
 import ReactDOM from 'react-dom'
+import { Item_block } from './containers';
 
 
 
@@ -48,6 +49,7 @@ function process_notifications(data){
     ReactDOM.render( <div id ="first_notification" className="notification_block">{page}<div id ="insert_div"></div></div>,document.getElementById('first_notification'))
     
     sleep(5000).then(() => {
+        ReactDOM.render( <Item_block id="replace_cont" name="Avocado" weight ={0.5} weight_date ={new Date(Date.now())} />,document.getElementById('replace_cont')) 
         ReactDOM.render( <Notification number={0}  item_name="Avocado" total_weight = {0.5} />,document.getElementById('insert_div')) 
         // Do something after the sleep!
       });  

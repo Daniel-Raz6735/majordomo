@@ -50,11 +50,13 @@ export class Item_block extends Component {
     */
     constructor(props) {
         super(props);
+        var date =  getDate(props.weight_date);
+
         this.state = {
             name: props.name,
             weight: props.weight,
             unit: props.unit?props.unit:"kg",
-            weight_date: props.weight_date,
+            weight_date: date,
             color: props.color,
             symbol: props.symbol
                  
@@ -63,7 +65,7 @@ export class Item_block extends Component {
     render() {
 
         return (
-            <div className="item_container">
+            <div id={this.props.id} className="item_container">
             <div className = "item_squere">
                 <div>
                     {this.state.name}
@@ -75,6 +77,29 @@ export class Item_block extends Component {
             </div>
         )
     }
+}
+
+function getDate(elementDate){
+
+    if(!elementDate)
+        return Dictionary["unknown_date"]
+    var temp =  Date.now()
+    var now = new Date(temp)
+    var dataTime = new Date(elementDate)
+    var str
+
+            if((now.getMonth()+1 == dataTime.getMonth()+1) && (now.getDate() == dataTime.getDate()))
+            {
+                let hour = dataTime.getHours()
+                let minutes = dataTime.getMinutes()
+                let Seconds = dataTime.getSeconds()
+
+                str = hour +":"+minutes+":"+Seconds
+            }
+            else
+                str = dataTime.getDate() + "/" +  (dataTime.getMonth()+1) +"/" + dataTime.getFullYear()
+        
+            return str.toString()
 }
 
 
