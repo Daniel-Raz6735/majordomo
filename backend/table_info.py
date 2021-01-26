@@ -198,3 +198,21 @@ tables = {
     },
 
 }
+table_list = [
+    "indexes",
+    "categories",
+    "users",
+    "user_preference",
+    "business",
+    "food_items",
+    "supplier",
+    "department",
+    "notifications",
+    "orders",
+    "order_content",
+    "recipes",
+    "recipe_content",
+    "containers",
+    "weights",
+    "rules"
+]
