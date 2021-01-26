@@ -1,14 +1,9 @@
-
 from backend.queries.read_queries import ReadQueries as readQ
 from backend.queries.create_queries import CreateQueries as createQ
 from backend.queries.update_queries import UpdateQueries as updateQ
 from backend.queries.delete_queries import DeleteQueries as deleteQ
-
-from psycopg2.extras import RealDictCursor
-from flask import request, jsonify
-from backend.config import config
-import psycopg2
 import flask
+from flask import request
 from flask_cors import CORS
 
 
@@ -23,11 +18,23 @@ indexes = {
 
 
 @app.route('/get/containers', methods=['GET'])
+def get_containers():
+    """gets all current weight for all items of a specific business
+         provided optional params: can get specific containers
+        required parameters: business_id
+        optional parameters: container_id """
+    res_code, query = readQ.get_current_weight(request.args, get_by_container=True)
+    return process_read_query(query, res_code)
+
+
+@app.route('/get/current_weights', methods=['GET'])
 def get_current_weight():
     """gets all current weight for all items of a specific business
+     provided optional params: can get specific items by item id
     required parameters: business_id
-    optional parameters: container_id """
-    return readQ.get_current_weight(request.args)
+    optional parameters: item_ids"""
+    res_code, query = readQ.get_current_weight(request.args)
+    return process_read_query(query, res_code)
 
 
 @app.route('/get/preferences', methods=['GET'])
@@ -35,7 +42,8 @@ def get_user_preferences():
     """gets preferences for a specific user based on user_email
         required parameters: user_email
         optional parameters: none"""
-    return readQ.get_user_preferences(request.args)
+    res_code, query = readQ.get_user_preferences(request.args)
+    return process_read_query(query,res_code)
 
 
 @app.route('/get/notifications', methods=['GET'])
@@ -45,7 +53,8 @@ def get_notifications():
             required parameters: business_id
             optional parameters: active ,notification_id
     """
-    return readQ.get_notifications(request.args)
+    res_code, query = readQ.get_notifications(request.args)
+    return process_read_query(query,res_code)
 
 
 @app.route('/get/rules', methods=['GET'])
@@ -55,7 +64,9 @@ def get_rules():
            required parameters: business_id
            optional parameters: active ,rule_id
            """
-    return readQ.get_rules(request.args)
+
+    res_code, query = readQ.get_rules(request.args)
+    return process_read_query(query,res_code)
 
 
 # @app.route('/get/create', methods=['GET'])
@@ -83,8 +94,22 @@ def home():
     return '''<h1>Majordomo back end</h1>'''
 
 
+def error_message(code, message, info=None):
+    res = "<h1>" + str(code) + "</h1><p>" + str(message) + "</p>"
+
+    if info:
+        res += "<p>" + str(info) + "</p>"
+    return res, code
 
 
+def process_read_query(query, res_code):
+    if res_code != 200:
+        return query
+    result, res_code = readQ.select_connection(query)
+    if res_code == 200:
+        return result
+    else:
+        return error_message(res_code, result, "unable to process request")
 # @app.route('/get/restart', methods=['GET'])
 # def restart_tables():
 #     drop_tables()
@@ -92,7 +117,6 @@ def home():
 #     code, query = db_queries.add_table_code()
 #     result, code = select_connection(query, False)
 #     return str(code)
-
 
 if __name__ == '__main__':
     app.run()

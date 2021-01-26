@@ -88,7 +88,7 @@ class DbQueries:
     @staticmethod
     def select_query(tables, columns_per_table, conditions):
         """creates a select sql query
-               expected input: tables =[table1,table2...]
+               expected input: tables =[[table1],[table2, table nick]...]
                                columns = [[table 1 column names[column name, column nick, min/max functions]...]...]
                                conditions [[string containing the condition and/not/or, var1, condition, var2]...]
                expected output: sql query if all parameters legal None if not"""
