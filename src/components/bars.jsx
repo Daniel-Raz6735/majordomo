@@ -8,7 +8,8 @@ import React, { Component } from 'react';
 import { auth } from '../config/firebaseConfig'
 import { Dictionary , LangBtn} from '../Dictionary';
 import logo from '../images/icons/Majordomo logo.svg';
-import { Demo } from "./drawer"
+import { CategoryDrawer } from "./drawer"
+import { Link } from "react-router-dom"
 
 
 
@@ -17,7 +18,7 @@ export const BottomBar = (props) =>{
     return(
         <footer id = "bottom-bar">
             <img className="bottom-bar-btn" src={home} onClick={()=> alert("yess")}></img>
-            <img className="bottom-bar-btn" src={inventory}></img>
+           <Link to="/inventory"><img className="bottom-bar-btn" src={inventory} ></img></Link> 
             <img className="bottom-bar-btn" src={cart}></img>
             <img className="bottom-bar-btn" src={profile}></img>
         </footer>
@@ -51,7 +52,7 @@ export class Nav_bar extends Component {
                     auth.signOut()
                     window.location.reload()
                 }} >{Dictionary.signOut}</button>
-                <Demo />
+                <CategoryDrawer />
                 </header>
         );
 

@@ -4,7 +4,7 @@ import Paragraph from 'antd/lib/skeleton/Paragraph';
 import ReactDOM from 'react-dom';
 import 'rsuite/dist/styles/rsuite-default.css'
 
-export class Demo extends React.Component {
+export class CategoryDrawer extends React.Component {
     constructor(props) {
       super(props);
       this.state = {

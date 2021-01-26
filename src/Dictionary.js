@@ -19,7 +19,7 @@ export const Dictionary = new LocalizedStrings({
     enterPass: `Password`,
     login: `Log in`, 
     signOut: `Sign out`,
-    inventory : "show inventory",
+    show_inventory : "show inventory",
 
     
     
@@ -32,7 +32,10 @@ export const Dictionary = new LocalizedStrings({
     must_use:"Must use ASAP",
     add_to_order :"Add to order",
     suggest_dish :"Suggest Dish",
-    kg:" kg"
+    kg:" kg",
+
+    //inventory
+    inventory:"inventory"
     
 
 
@@ -45,7 +48,7 @@ export const Dictionary = new LocalizedStrings({
     enterPass: `אנא הכנס סיסמא`,
     login: `התחבר`,
     signOut: `התנתק`,
-    inventory : "הצגת מלאי",
+    show_inventory : "הצגת מלאי",
 
 
     //containers
@@ -56,7 +59,12 @@ export const Dictionary = new LocalizedStrings({
      just_few:"נותרו רק כמה",
      running_low:"אוזל",
      must_use:"צריך להשתמש בדחיפות",
-     kg:" ק''ג"
+     kg:" ק''ג",
+
+     //inventory
+     inventory:"מלאי"
+
+     
     
   }});
 
