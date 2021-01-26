@@ -7,6 +7,7 @@ import { auth } from '../../config/firebaseConfig';
 import MainUserPage from '../Main user page/MainUserPage'
 import {Dictionary, LangBtn} from '../../Dictionary'
 import { validate } from 'jquery-validation';
+import InventoryPage from '../inventory_page';
 // require('jquery-validation');
 
 
@@ -160,6 +161,7 @@ export class LoginComponent extends Component {
                 <Route path="/WomanPage/:id" component={props => <WomanPage {...props} Admin={this.state.permission} />} />
                 <Route path="/Category" component={() => <Category Admin={this.state.permission} />} /> */}
                 <Route exect path="/" component={() => <MainUserPage Admin={this.state.permission} />}/>
+                <Route path = "/inventory" component = {InventoryPage}/>
             </Router>, document.getElementById('root')
         );
     }
@@ -169,6 +171,8 @@ export class LoginComponent extends Component {
         ReactDOM.render(
             <Router>
                 <Route exact path="/" component={MainUserPage} />
+                <Route path = "/inventory" component = {<InventoryPage/>}/>
+                
                 {/* <Route path="/WomanPage/:id" component={props => <WomanPage {...props} />} />
                 <Route path="/Category" component={Category} /> */}
             </Router>, document.getElementById('root')
