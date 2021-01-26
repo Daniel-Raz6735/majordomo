@@ -45,11 +45,9 @@ function process_notifications(data){
         data.forEach(element => {
             console.log(element)
 
-            page.push(<Notification number={element["code"]%2} item_name={element["item_name"]}  />)
+            page.push(<Notification number={element["code"]%3} item_name={element["item_name"]} total_weight={element["weight"]} />)
         });
     ReactDOM.render( <div id ="first_notification" className="notification_block">{page}<div id ="insert_div"></div></div>,document.getElementById('first_notification'))
-      
-
 
 }
 

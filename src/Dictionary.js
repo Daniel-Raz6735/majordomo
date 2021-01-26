@@ -32,6 +32,7 @@ export const Dictionary = new LocalizedStrings({
     must_use:"Must use ASAP",
     add_to_order :"Add to order",
     suggest_dish :"Suggest Dish",
+    kg:" kg"
     
 
 
@@ -55,6 +56,7 @@ export const Dictionary = new LocalizedStrings({
      just_few:"נותרו רק כמה",
      running_low:"אוזל",
      must_use:"צריך להשתמש בדחיפות",
+     kg:" ק''ג"
     
   }});
 
