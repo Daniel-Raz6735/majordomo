@@ -39,14 +39,14 @@ function render_container(data){
 
 
 
-function req_container(callback, user_id ,container_number){
+function req_weights(callback, user_id ,item_id=null){
     //request a container  for somone or all of the containers for a user
-    var request = base_url+'/get/containers';
+    var request = base_url+'/get/current_weights';
 
     if (user_id){
-        request += "?client_id="+user_id
-        if(container_number)
-            request += "&container_id=" + container_number
+        request += "?business_id="+user_id
+        if(item_id)
+            request += "&container_id=" + item_id
     console.log(request)
     $.ajax({
         url: request, 
@@ -79,7 +79,7 @@ class MainUserPage extends Component {
 
     componentDidMount(){
      
-       req_container(render_container,1)
+       req_weights(render_container,1)
 
     }
 

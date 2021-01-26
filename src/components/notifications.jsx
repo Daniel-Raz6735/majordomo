@@ -18,7 +18,7 @@ function get_notifications(callback, client_id){
     var request = base_url+'/get/notifications';
 
     if (client_id){
-        request += "?client_id="+client_id + "&active=true"
+        request += "?business_id="+ client_id + "&active=true"
     console.log(request)
     $.ajax({
         url: request, 
@@ -39,30 +39,21 @@ function get_notifications(callback, client_id){
 function process_notifications(data){
     var page = []
     
-    var items = ["abc","cucumber","tomato"]
+    
     if(typeof(data)=="object")
 
         data.forEach(element => {
+            console.log(element)
 
-            page.push(<Notification number={element["code"]%2} item_name={items[element["food_item_id"]]}  />)
+            page.push(<Notification number={element["code"]%2} item_name={element["item_name"]}  />)
         });
     ReactDOM.render( <div id ="first_notification" className="notification_block">{page}<div id ="insert_div"></div></div>,document.getElementById('first_notification'))
-    
-    sleep(5000).then(() => {
-        ReactDOM.render( <Item_block id="replace_cont" name="Avocado" weight ={0.5} weight_date ={new Date(Date.now())} />,document.getElementById('replace_cont')) 
-        ReactDOM.render( <Notification number={0}  item_name="Avocado" total_weight = {0.5} />,document.getElementById('insert_div')) 
-        // Do something after the sleep!
-      });  
+      
 
 
 }
 
-function sleep (time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-  }
-  
-  // Usage!
-  
+
 
 
 
@@ -90,9 +81,9 @@ export class Notification_block extends Component{
 
         return(
             <div id ="first_notification" className="notification_block">
-                <Notification number={0} item_name="red" total_weight={26} />
+                {/* <Notification number={0} item_name="red" total_weight={26} />
                 <Notification  number={1} item_name="yellow" total_weight={26}/>
-                <Notification number={2} item_name="orange" total_weight={26}/>
+                <Notification number={2} item_name="orange" total_weight={26}/> */}
                 </div>
         )
     }
