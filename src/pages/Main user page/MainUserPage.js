@@ -31,8 +31,6 @@ function render_container(data){
             res.push(<Item_block name={element["item_name"]} weight ={element["weight"]} weight_date = {element["date"]} />)
         });
     }
-    res.push(<Item_block id="replace_cont" name="Avocado" weight ={1.2} weight_date = {"Mon, 20 Oct 2014 07:00:03 GMT"} />)
-    
     ReactDOM.render(res, document.getElementById('data_insert'));
 }
 
@@ -44,7 +42,7 @@ function req_container(callback, user_id ,container_number){
     var request = base_url+'/get/containers';
 
     if (user_id){
-        request += "?client_id="+user_id
+        request += "?business_id="+user_id
         if(container_number)
             request += "&container_id=" + container_number
     console.log(request)
@@ -87,7 +85,6 @@ class MainUserPage extends Component {
 
         return (
             <div id="main_user_page_container">
-               
                 <Nav_bar/>
                 <div className="main_info_container" >
                 <Notification_block/>

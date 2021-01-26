@@ -7,7 +7,8 @@ import {base_url} from '../index'
 import React, { Component } from 'react';
 import { auth } from '../config/firebaseConfig'
 import { Dictionary , LangBtn} from '../Dictionary';
-import logo from '../images/icons/Majordomo logo.svg'
+import logo from '../images/icons/Majordomo logo.svg';
+import { Demo } from "./drawer"
 
 
 
@@ -50,6 +51,7 @@ export class Nav_bar extends Component {
                     auth.signOut()
                     window.location.reload()
                 }} >{Dictionary.signOut}</button>
+                <Demo />
                 </header>
         );
 
