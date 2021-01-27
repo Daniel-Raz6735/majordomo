@@ -2,43 +2,85 @@ import React, { Component } from 'react';
 import { Dictionary } from '../Dictionary';
 import "./containers.css"
 import {base_url} from '../index'
+import $ from 'jquery'
+import ReactDOM from 'react-dom'
+
+
+export var fake_containers={
+    "Vegetables":{
+        0:{"date":'2017-10-20 07:00:03', "item_id": 1, "item_name": "Pottato", "weight":"24", "symbol":null, "category_name":"Vegetables", "category_id":1 },
+        1:{"date":'2017-10-20 08:00:03', "item_id": 2, "item_name": "Pepper", "weight":"2", "symbol":null, "category_name":"Vegetables", "category_id":1 },
+        2:{"date":'2017-10-20 09:00:03', "item_id": 3, "item_name": "Zucchini", "weight":"3", "symbol":null, "category_name":"Vegetables", "category_id":1 },
+
+    },
+    "fruit":{
+        3:{"date":'2017-10-21 10:00:03', "item_id": 4, "item_name": "Orange", "weight":"5", "symbol":null, "category_name":"fruit", "category_id":2 },
+        2:{"date":'2017-10-22 11:00:03', "item_id": 5, "item_name": "Pineapple", "weight":"20", "symbol":null, "category_name":"fruit", "category_id":2 },
+    }
+}
+
+export function req_weights(callback, user_id ,item_id=null){
+    //request a container  for somone or all of the containers for a user
+    var request = base_url+'/get/current_weights';
+
+    if (user_id){
+        request += "?business_id="+user_id
+        if(item_id)
+            request += "&item_id=" + item_id
+    console.log(request)
+    $.ajax({
+        url: request, 
+        success: function (res) {
+            callback(res);
+            
+        },
+        error: function (err) {
+            // alert(err);
+        }
+    });
+    }
+    else{
+        console.log("no user id enterd. nothing happend")
+    }
+    
+}
+
+
+export function render_container(data){
+    //gets a list of weights and puts and renders the maximal  
+    var res = [];
+    console.log(data)
+    if (data){
+        Object.keys(data).forEach(key => {
+            console.log(key)
+            res.push(<Item_block name={data[key]["item_name"]} weight ={data[key]["weight"]} weight_date = {data[key]["date"]} />)
+        });
+    }
+    return res
+    // ReactDOM.render(res, document.getElementById('data_insert'));
+};
 
 
 
-export class Container extends Component {
+export class Containers extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            all_weights: props.all_weights,
+            data: props.data,
             page:[]
             
         }
     }
 
-    handleChange(e) {
-        this.setState({ [e.target.name]: e.target.value });
-    }
+  
     componentWillMount() {
-        var all_weights = this.state.all_weights
-        if(all_weights){
-            var page = []
-            console.log(all_weights)
-            all_weights.forEach(weight => {
-                var row = []
-                weight.forEach(element => {
-                     row.push(<td>{element}</td>)
-                });
-                page.push(<tr>{row}</tr>)
-            });
-            this.setState({page:page})
-        }
+       
     }
     render() {
-
         return (
-            <table><tr><th>container id</th><th>time eddad</th><th>item id</th><th>client id</th></tr>
-            {this.state.page}
-            </table>
+            <div>
+            {render_container(this.state.data)}
+            </div>
         )
     }
 }

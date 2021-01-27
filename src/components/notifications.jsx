@@ -3,57 +3,15 @@ import "./notifications.css"
 import {base_url} from '../index'
 import $ from 'jquery'
 import ReactDOM from 'react-dom'
-import { Item_block } from './containers';
+import { fake_containers, Item_block, render_container } from './containers';
 import { Button, Animation, ButtonToolbar} from 'rsuite';
 import { notification_dict } from './notifications_data';
 import { Dictionary } from '../Dictionary';
+import { CategoryDrawer } from './drawer';
+
 
 
 const { Fade, Collapse, Transition } = Animation;
-
-export class Notification_list extends Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            page:'',
-            dict:props.dict
-        }
-        this.render_by_category = this.render_by_category.bind(this)
-    }
-    componentWillMount(){
-        // var action_by_number = {
-        //     0:{"action":arr[0],"action_desc":text_descp[0],"message":Dictionary["just_few"]},
-        //     1:{"action":arr[0],"action_desc":text_descp[0],"message":Dictionary["running_low"]},
-        //     2:{"action":arr[1],"action_desc":text_descp[1],"message":Dictionary["must_use"]}
-        //     };
-        
-    }
-    render_by_category(cat){
-        var page = []
-        var selected_dict = this.state.dict[cat]
-        Object.keys(selected_dict).forEach(category =>{
-            page.push(<Notification_ctegory category_name = {category} data ={selected_dict[category]}/>)
-        })
-        this.setState({page:page})
-    }
-
-    render(){
-        this.render_by_category('category')
-
-        return(
-            <div className = "notification_container">
-                <ButtonToolbar>
-                    <Button appearance="ghost">{Dictionary["item_type"]}</Button>                
-                    <Button appearance="ghost">{Dictionary["supplier"]}</Button>
-                </ButtonToolbar>
-                {this.state.page}
-            </div>
-        )
-    }
-
-
-
-}
 
 export function get_notifications(callback, client_id){
     //request all notifications for a business
@@ -78,11 +36,13 @@ export function get_notifications(callback, client_id){
     
 }
 
+
 export function process_notifications(data){
     var page = []   
     if(typeof(data)=="object"){
+        console.log(data)
         var dict = create_notification_dict(data);      
-        ReactDOM.render( <div id ="first_notification" className="notification_block"><Notification_list dict = {dict} />{page}<div id ="insert_div"></div></div>,document.getElementById('first_notification'))
+        ReactDOM.render( <Notification_list dict = {dict} />,document.getElementById('first_notification'))
     }
 
 
@@ -107,23 +67,48 @@ function create_notification_dict(data){
     return dict
 }
 
-const Panel = React.forwardRef(({ ...props }, ref) => (
-    <div
-      {...props}
-      ref={ref}
-      style={{
-        background: '#000',
-        width: 100,
-        overflow: 'hidden'
-      }}
-    >
-      <p>{props.category_name}</p>
-     
-      <p>Content Content Content</p>
-    </div>
-  ));
-  
-  class Notification_ctegory extends Component {
+//1
+export class Notification_list extends Component{
+    constructor(props) {
+        super(props);
+        this.render_by_category = this.render_by_category.bind(this);
+        this.state = {
+            page:[],
+            dict:props.dict
+        }
+    }
+    componentWillMount(){
+        this.render_by_category('category')
+        
+        
+    }
+    render_by_category(cat){
+        var page = []
+        var selected_dict = this.state.dict[cat]
+        Object.keys(selected_dict).forEach(category =>{
+            page.push(<Notification_ctegory category_name = {category} data ={selected_dict[category]}/>)
+        })
+        this.setState({page});
+    }
+
+    render(){
+        
+
+        return(
+            <div className = "notification_container">
+                <ButtonToolbar>
+                    <Button appearance="ghost">{Dictionary["item_type"]}</Button>                
+                    <Button appearance="ghost">{Dictionary["supplier"]}</Button>
+                </ButtonToolbar>
+                {this.state.page}
+            </div>
+        )
+    }
+
+}
+
+ //2
+ class Notification_ctegory extends Component {
     constructor(props) {
       super(props);
       this.handleToggle = this.handleToggle.bind(this);
@@ -135,7 +120,9 @@ const Panel = React.forwardRef(({ ...props }, ref) => (
         data:props.data
       };
     }
-  
+    componentDidMount(){
+        
+    }
     handleToggle() {
       this.setState({
         show: !this.state.show
@@ -146,33 +133,114 @@ const Panel = React.forwardRef(({ ...props }, ref) => (
         var page =[]
         Object.keys(data).forEach(item_name =>{
             var obj = data[item_name]
-            console.log(obj)
             page.push(<Notification number={obj["number"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]}  />)
         })
 
-        this.setState({
-          page:page
-        });
+       return page;
       }
 
-
-  
     render() {
-
-        // this.extract_items(this.state.data)
-
-
+        
       return (
         <div className="row">
-          <Button onClick={this.handleToggle}>toggle</Button>
-          
-          <Collapse in={this.state.show}>{(props, ref) => <Panel {...props} ref={ref} />}</Collapse>
+
+          <Notification_Header on_click = {this.handleToggle}item_contents = {fake_containers[this.state.category_name]} />
+          {/* <Button onClick={this.handleToggle}>{this.state.category_name}</Button> */}
+          <Collapse in={this.state.show}>{(props, ref) => 
+            <Panel {...props} ref={ref} notifications ={this.extract_items(this.state.data)} />}
+            
+          </Collapse>
         </div>
       );
     }
   }
-  
 
+
+//3
+  export class Notification extends Component{
+
+    constructor(props) {
+        super(props);
+        var number = props.number
+        this.state = {
+            number:number,            
+            item_name:props.item_name,
+            total_weight: props.total_weight, 
+            message:props.message?props.message:notification_dict[number]["message"],
+            action_image: notification_dict[number]["action_image"] ,
+            action_desc:notification_dict[number]["action_desc"],
+            error_symbol:notification_dict[number]["error_symbol"],
+            color:notification_dict[number]["color"]
+        }
+    }
+    componentWillMount(){       
+    }
+
+    render(){
+
+        return(
+            <div className = "notification_container">
+                <div className="center_items left_notification_area">
+                <img src ={this.state.action_image} className="notification_image left_img" alt={this.state.action_desc}/>
+                {this.state.action_desc}
+                </div>
+                <div className="center_items notification_item_name">
+                {this.state.item_name}
+                </div>
+                <div className="center_items notification_weight">
+                <div>{this.state.total_weight}</div>
+                </div>
+
+                <div className = "notification center_items">
+                    {this.state.message}
+                </div>
+               <NotificationSymbol color = {this.state.color} error_symbol = {this.state.error_symbol}/>                
+            </div>
+        )
+    }
+}
+
+
+//3 container
+const Panel = React.forwardRef(({ ...props }, ref) => (
+    <div
+      {...props}
+      ref={ref}
+      style={{
+        background: '#000',
+        width: '100%',
+        overflow: 'hidden'
+      }}
+    >
+      <p>{props.notifications}</p>
+
+      
+    </div>
+  ));
+  
+  //Panels button
+  export class Notification_Header extends Component{
+
+    constructor(props) {
+        super(props);
+        this.state = {   
+            item_contents:props.item_contents,
+            on_click:props.on_click        
+        }
+    }
+
+    render(){
+        
+        return(
+            <div className="notification_header" onClick = {()=>this.state.on_click()} >
+                <CategoryDrawer data = {this.state.item_contents}/>
+            </div>
+          
+        )
+    }
+}
+  
+//discontinued. will be deleted shortly
 export class Notification_block extends Component{
 
     constructor(props) {
@@ -216,83 +284,9 @@ export class Notification_block extends Component{
 
 
 }
-export class Notification_Header extends Component{
-
-    constructor(props) {
-        super(props);
-        this.state = {                
-        }
-    }
-
-    componentWillMount(){
-        
-    }
-    render(){
-        return(
-            <div className="notification_header">
-                </div>
-        )
-    }
 
 
-
-}
-
-
-//   ReactDOM.render(<CollapseDemo />);
-
-export class Notification extends Component{
-
-    constructor(props) {
-        super(props);
-        var number = props.number
-        this.state = {
-            number:number,            
-            item_name:props.item_name,
-            total_weight: props.total_weight, 
-            message:props.message?props.message:notification_dict[number]["message"],
-            action_image: notification_dict[number]["action_image"] ,
-            action_desc:notification_dict[number]["action_desc"],
-            error_symbol:notification_dict[number]["error_symbol"],
-            color:notification_dict[number]["color"]
-        }
-    }
-    componentWillMount(){
-
-        
-    }
-
-    render(){
-
-        return(
-            <div className = "notification_container">
-                <div className="center_items left_notification_area">
-                <img src ={this.state.action_image} className="notification_image left_img" alt={this.state.action_desc}/>
-                {this.state.action_desc}
-                </div>
-                <div className="center_items notification_item_name">
-                {this.state.item_name}
-                </div>
-                <div className="center_items notification_weight">
-                <div>{this.state.total_weight}</div>
-                </div>
-
-                <div className = "notification center_items">
-                    {this.state.message}
-                </div>
-               <NotificationSymbol color = {this.state.color} error_symbol = {this.state.error_symbol}/>                
-            </div>
-        )
-    }
-
-
-
-}
-
-
-
-
-
+//reresents the corner of a notification with a symbol
 export const NotificationSymbol= (props) =>{ 
     var  symbol = props.error_symbol,
         color = {"background-color": props.color}
@@ -302,8 +296,4 @@ export const NotificationSymbol= (props) =>{
                 <img src ={symbol} className="notification_symbol"></img>
         </div>
     )
-
-
-    
-
 }

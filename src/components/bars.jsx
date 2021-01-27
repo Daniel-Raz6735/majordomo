@@ -53,7 +53,6 @@ export class Nav_bar extends Component {
                     auth.signOut()
                     window.location.reload()
                 }} >{Dictionary.signOut}</button>
-                <CategoryDrawer />
                 </header>
         );
 

@@ -1,10 +1,8 @@
 import { Component } from "react";
 import { BottomBar, Nav_bar } from "../components/bars";
-import { Notification_list ,get_notifications,process_notifications} from "../components/notifications";
+import {get_notifications,process_notifications} from "../components/notifications";
 import { Dictionary } from "../Dictionary";
 import './inventory_page.css'
-
-
 
 
 
@@ -37,11 +35,13 @@ class InventoryPage extends Component{
         );
 
     }
-
-
 }
 export default InventoryPage
 
 
+//this function will call all of the data of notifications and food status
+function call_current_info(){
+
+}
 
 

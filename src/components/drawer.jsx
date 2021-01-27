@@ -1,20 +1,23 @@
-import { Drawer, Button, Radio, ButtonToolbar, RadioGroup, IconButton, Icon } from 'rsuite';
+import { Drawer, ButtonToolbar, IconButton, Icon } from 'rsuite';
 import React, { Component } from 'react';
-import Paragraph from 'antd/lib/skeleton/Paragraph';
-import ReactDOM from 'react-dom';
 import 'rsuite/dist/styles/rsuite-default.css'
-
+import { Containers } from './containers';
 export class CategoryDrawer extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
         size: 'sm',
         placemnt: 'bottom',
-        show: false
+        show: false,
+        data:props.data
       };
       this.close = this.close.bind(this);
       this.toggleDrawer = this.toggleDrawer.bind(this);
       this.handleChangeSize = this.handleChangeSize.bind(this);
+      
+    }
+    componentDidMount(){
+      
     }
     close() {
       this.setState({
@@ -32,7 +35,7 @@ export class CategoryDrawer extends React.Component {
     }
     render() {
       const { size, placement, show } = this.state;
-  
+      
       return (
         <div>
           <ButtonToolbar>
@@ -40,7 +43,7 @@ export class CategoryDrawer extends React.Component {
               icon={<Icon icon="angle-up" />}
               onClick={() => this.toggleDrawer()}
             >
-              Bottom
+              Show items
             </IconButton>
           </ButtonToolbar>
   
@@ -52,7 +55,7 @@ export class CategoryDrawer extends React.Component {
             backdrop = {true}
           >
             <Drawer.Body>
-                blalalalalal
+            <Containers data = {this.state.data}/>
             </Drawer.Body>
             
           </Drawer>

@@ -68,3 +68,6 @@
     display: flex;
     justify-content: center;
 }
+#first_notification{
+    height: 100%;
+}

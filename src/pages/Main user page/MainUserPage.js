@@ -11,56 +11,8 @@ import ReactDOM from 'react-dom';
 import cart_plus from '../../images/icons/cart_plus.svg'
 import logo from '../../images/icons/Majordomo logo.svg'
 import {base_url} from '../../index'
+import { render_container, req_weights } from '../../components/containers';
 
-
-
-// function render_container(data){
-//     ReactDOM.render(<Container all_weights ={data}/>, document.getElementById('data_insert'));
-// }
-// weighing_date
-// container_id
-// weight_value
-// last_user
-function render_container(data){
-    //gets a list of weights and puts and renders the maximal  
-    var res = [];
-    var max = -Number.MAX_SAFE_INTEGER;
-    if (data){
-        data.forEach(element => {
-            console.log(element)
-            res.push(<Item_block name={element["item_name"]} weight ={element["weight"]} weight_date = {element["date"]} />)
-        });
-    }
-    ReactDOM.render(res, document.getElementById('data_insert'));
-}
-
-
-
-
-function req_weights(callback, user_id ,item_id=null){
-    //request a container  for somone or all of the containers for a user
-    var request = base_url+'/get/current_weights';
-
-    if (user_id){
-        request += "?business_id="+user_id
-        if(item_id)
-            request += "&item_id=" + item_id
-    console.log(request)
-    $.ajax({
-        url: request, 
-        success: function (res) {
-            callback(res);
-        },
-        error: function (err) {
-            // alert(err);
-        }
-    });
-    }
-    else{
-        console.log("no user id enterd. nothing happend")
-    }
-    
-}
 
 
 class MainUserPage extends Component {
@@ -77,18 +29,18 @@ class MainUserPage extends Component {
 
     componentDidMount(){
      
-       req_weights(render_container,1)
+
+    // req_weights(render_container,1)
 
     }
 
     render() {
-
         return (
             <div id="main_user_page_container">
                 <Nav_bar/>
+                <div id ="data_insert" ></div>
                 <div className="main_info_container" >
                 <Notification_block/>
-                <div id ="data_insert"></div>
                 </div>
                 <BottomBar />
        
