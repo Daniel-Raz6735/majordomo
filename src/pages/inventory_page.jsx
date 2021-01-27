@@ -1,8 +1,9 @@
 import { Component } from "react";
-import { Button, ButtonToolbar } from "rsuite";
 import { BottomBar, Nav_bar } from "../components/bars";
+import { Notification_list ,get_notifications,process_notifications} from "../components/notifications";
 import { Dictionary } from "../Dictionary";
 import './inventory_page.css'
+
 
 
 
@@ -23,11 +24,13 @@ class InventoryPage extends Component{
 
                var str = date +"."+months+"."+year
 
+               get_notifications(process_notifications,1)
+        
         return (
             <div id="inventory_page">
                <Nav_bar/>
                     <div className="page_title">{Dictionary["inventory"] + " | "+str}</div>
-                    <Selctors />
+                    <div id="first_notification"></div>
                 <BottomBar />
             </div>
             
@@ -40,13 +43,5 @@ class InventoryPage extends Component{
 export default InventoryPage
 
 
-export const Selctors = (props) =>{
 
-    return(
-        <ButtonToolbar>
-            <Button appearance="ghost">{Dictionary["item_type"]}</Button>                
-            <Button appearance="ghost">{Dictionary["supplier"]}</Button>
-         </ButtonToolbar>
-    )
-}
 

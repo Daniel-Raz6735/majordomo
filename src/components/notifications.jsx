@@ -4,8 +4,9 @@ import {base_url} from '../index'
 import $ from 'jquery'
 import ReactDOM from 'react-dom'
 import { Item_block } from './containers';
-import { Button, Animation} from 'rsuite';
+import { Button, Animation, ButtonToolbar} from 'rsuite';
 import { notification_dict } from './notifications_data';
+import { Dictionary } from '../Dictionary';
 
 
 const { Fade, Collapse, Transition } = Animation;
@@ -14,10 +15,10 @@ export class Notification_list extends Component{
     constructor(props) {
         super(props);
         this.state = {
+            page:'',
             dict:props.dict
         }
-        
- 
+        this.render_by_category = this.render_by_category.bind(this)
     }
     componentWillMount(){
         // var action_by_number = {
@@ -30,31 +31,22 @@ export class Notification_list extends Component{
     render_by_category(cat){
         var page = []
         var selected_dict = this.state.dict[cat]
-        selected_dict.forEach(category =>{
-            console.log(category)
-            page.push(<Notification_ctegory category = {category}/>)
+        Object.keys(selected_dict).forEach(category =>{
+            page.push(<Notification_ctegory category_name = {category} data ={selected_dict[category]}/>)
         })
+        this.setState({page:page})
     }
 
     render(){
+        this.render_by_category('category')
 
         return(
             <div className = "notification_container">
-                {/* <div className="center_items left_notification_area">
-                <img src ={this.state.action_image} className="notification_image left_img" alt={this.state.action_desc}/>
-                {this.state.action_desc}
-                </div>
-                <div className="center_items notification_item_name">
-                {this.state.item_name}
-                </div>
-                <div className="center_items notification_weight">
-                <div>{this.state.total_weight}</div>
-                </div>
-
-                <div className = "notification center_items">
-                    {this.state.message}
-                </div>
-               <NotificationSymbol symbolNumber={this.state.number}/>                 */}
+                <ButtonToolbar>
+                    <Button appearance="ghost">{Dictionary["item_type"]}</Button>                
+                    <Button appearance="ghost">{Dictionary["supplier"]}</Button>
+                </ButtonToolbar>
+                {this.state.page}
             </div>
         )
     }
@@ -63,7 +55,7 @@ export class Notification_list extends Component{
 
 }
 
-function get_notifications(callback, client_id){
+export function get_notifications(callback, client_id){
     //request all notifications for a business
     var request = base_url+'/get/notifications';
 
@@ -86,7 +78,7 @@ function get_notifications(callback, client_id){
     
 }
 
-function process_notifications(data){
+export function process_notifications(data){
     var page = []   
     if(typeof(data)=="object"){
         var dict = create_notification_dict(data);      
@@ -125,7 +117,7 @@ const Panel = React.forwardRef(({ ...props }, ref) => (
         overflow: 'hidden'
       }}
     >
-      <p>Panel</p>
+      <p>{props.category_name}</p>
      
       <p>Content Content Content</p>
     </div>
@@ -135,9 +127,12 @@ const Panel = React.forwardRef(({ ...props }, ref) => (
     constructor(props) {
       super(props);
       this.handleToggle = this.handleToggle.bind(this);
+      this.extract_items = this.extract_items.bind(this);
       this.state = {
+        page:'',
         show: true,
-        category:props.category
+        category_name:props.category_name,
+        data:props.data
       };
     }
   
@@ -146,10 +141,27 @@ const Panel = React.forwardRef(({ ...props }, ref) => (
         show: !this.state.show
       });
     }
+
+    extract_items(data) {
+        var page =[]
+        Object.keys(data).forEach(item_name =>{
+            var obj = data[item_name]
+            console.log(obj)
+            page.push(<Notification number={obj["number"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]}  />)
+        })
+
+        this.setState({
+          page:page
+        });
+      }
+
+
   
     render() {
-        console.log("this.state.category")
-        console.log(this.state.category)
+
+        // this.extract_items(this.state.data)
+
+
       return (
         <div className="row">
           <Button onClick={this.handleToggle}>toggle</Button>
