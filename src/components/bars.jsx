@@ -17,7 +17,7 @@ export const BottomBar = (props) =>{
 
     return(
         <footer id = "bottom-bar">
-            <Link to="/inventory"><img className="bottom-bar-btn" src={home} onClick={()=> alert("yess")}/></Link>
+            <Link to="/homePage"><img className="bottom-bar-btn" src={home} /></Link>
             <Link to="/inventory"><img className="bottom-bar-btn" src={inventory} /></Link> 
             <Link to="/inventory"><img className="bottom-bar-btn" src={cart}/></Link>
             <Link to="/inventory"> <img className="bottom-bar-btn" src={profile}/></Link>
