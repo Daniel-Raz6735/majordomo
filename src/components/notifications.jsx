@@ -5,7 +5,7 @@ import $ from 'jquery'
 import ReactDOM from 'react-dom'
 import { fake_containers, Item_block, render_container } from './containers';
 import { Button, Animation, ButtonToolbar} from 'rsuite';
-import { notification_dict } from './notifications_data';
+import { action_btn, notification_dict } from './notifications_data';
 import { Dictionary } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
 
@@ -79,8 +79,6 @@ export class Notification_list extends Component{
     }
     componentWillMount(){
         this.render_by_category('category')
-        
-        
     }
     render_by_category(cat){
         var page = []
@@ -95,7 +93,7 @@ export class Notification_list extends Component{
         
 
         return(
-            <div className = "notification_container">
+            <div className = "notification_cover">
                 <ButtonToolbar>
                     <Button appearance="ghost">{Dictionary["item_type"]}</Button>                
                     <Button appearance="ghost">{Dictionary["supplier"]}</Button>
@@ -142,7 +140,7 @@ export class Notification_list extends Component{
     render() {
         
       return (
-        <div className="row">
+        <div className="notification_category_container">
 
           <Notification_Header on_click = {this.handleToggle}item_contents = {fake_containers[this.state.category_name]} />
           {/* <Button onClick={this.handleToggle}>{this.state.category_name}</Button> */}
@@ -167,8 +165,7 @@ export class Notification_list extends Component{
             item_name:props.item_name,
             total_weight: props.total_weight, 
             message:props.message?props.message:notification_dict[number]["message"],
-            action_image: notification_dict[number]["action_image"] ,
-            action_desc:notification_dict[number]["action_desc"],
+            action_btn: action_btn(props.defult_weight,number) ,
             error_symbol:notification_dict[number]["error_symbol"],
             color:notification_dict[number]["color"]
         }
@@ -177,12 +174,12 @@ export class Notification_list extends Component{
     }
 
     render(){
+        
 
         return(
             <div className = "notification_container">
                 <div className="center_items left_notification_area">
-                <img src ={this.state.action_image} className="notification_image left_img" alt={this.state.action_desc}/>
-                {this.state.action_desc}
+                {this.state.action_btn}
                 </div>
                 <div className="center_items notification_item_name">
                 {this.state.item_name}
@@ -191,7 +188,7 @@ export class Notification_list extends Component{
                 <div>{this.state.total_weight}</div>
                 </div>
 
-                <div className = "notification center_items">
+                <div className = "notification_message center_items">
                     {this.state.message}
                 </div>
                <NotificationSymbol color = {this.state.color} error_symbol = {this.state.error_symbol}/>                
@@ -204,15 +201,16 @@ export class Notification_list extends Component{
 //3 container
 const Panel = React.forwardRef(({ ...props }, ref) => (
     <div
-      {...props}
-      ref={ref}
+    {...props}
+    ref={ref}
+    id = "notification_collapse"     
       style={{
         background: '#000',
         width: '100%',
         overflow: 'hidden'
       }}
     >
-      <p>{props.notifications}</p>
+    {props.notifications}
 
       
     </div>

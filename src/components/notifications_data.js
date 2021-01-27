@@ -21,3 +21,19 @@ export const notification_dict = {
     2:{"color":styleArr[1],"error_symbol":error_symbol[1],message:messages[1],"action_symbol":action_symbol[1],"action_desc":text_descp[1]},
     3:{"color":styleArr[2],"error_symbol":error_symbol[2],message:messages[2],"action_symbol":action_symbol[2],"action_desc":text_descp[2]}
 }
+export function action_btn(defult_val, code){
+    switch (code) {
+        case 2:
+            return suggest_dish
+            
+        case 0:
+        case 1:
+        default:
+            return cart_plus
+            
+    }
+    
+    
+
+
+}
