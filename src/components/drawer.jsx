@@ -8,7 +8,7 @@ export class CategoryDrawer extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        size: 'md',
+        size: 'sm',
         placemnt: 'bottom',
         show: false
       };
