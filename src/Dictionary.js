@@ -37,7 +37,8 @@ export const Dictionary = new LocalizedStrings({
     kg:" kg",
 
     //inventory
-    inventory:"Inventory"
+    inventory:"Inventory",
+    
     
 
 
@@ -66,7 +67,8 @@ export const Dictionary = new LocalizedStrings({
      kg:" ק''ג",
 
      //inventory
-     inventory:"מלאי"
+     inventory:"מלאי",
+     
 
      
     

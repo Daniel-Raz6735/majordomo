@@ -14,3 +14,13 @@
     font-size: 30px;
     color: black;
 }
+
+.rs-modal-content{
+    background-color: whitesmoke;
+    display: table;
+}
+
+.rs-input-number-btn-group-vertical{
+    display: none;
+}
+
