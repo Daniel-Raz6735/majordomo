@@ -20,6 +20,8 @@ export const Dictionary = new LocalizedStrings({
     login: `Log in`, 
     signOut: `Sign out`,
     show_inventory : "show inventory",
+    supplier:'Supplier',
+    item_type:'Item Type',
 
     
     
@@ -35,7 +37,7 @@ export const Dictionary = new LocalizedStrings({
     kg:" kg",
 
     //inventory
-    inventory:"inventory"
+    inventory:"Inventory"
     
 
 
@@ -49,6 +51,8 @@ export const Dictionary = new LocalizedStrings({
     login: `התחבר`,
     signOut: `התנתק`,
     show_inventory : "הצגת מלאי",
+    supplier:'ספק',
+    item_type:'סוג מוצר',
 
 
     //containers

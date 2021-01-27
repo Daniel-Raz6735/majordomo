@@ -17,10 +17,11 @@ export const BottomBar = (props) =>{
 
     return(
         <footer id = "bottom-bar">
-            <img className="bottom-bar-btn" src={home} onClick={()=> alert("yess")}></img>
-           <Link to="/inventory"><img className="bottom-bar-btn" src={inventory} ></img></Link> 
-            <img className="bottom-bar-btn" src={cart}></img>
-            <img className="bottom-bar-btn" src={profile}></img>
+            <Link to="/inventory"><img className="bottom-bar-btn" src={home} onClick={()=> alert("yess")}/></Link>
+            <Link to="/inventory"><img className="bottom-bar-btn" src={inventory} /></Link> 
+            <Link to="/inventory"><img className="bottom-bar-btn" src={cart}/></Link>
+            <Link to="/inventory"> <img className="bottom-bar-btn" src={profile}/></Link>
+
         </footer>
 
     )
