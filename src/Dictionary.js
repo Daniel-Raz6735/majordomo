@@ -108,9 +108,7 @@ export const LangBtn = () => {
 
   if (currentLng === "EN") ENId = "chosen";
   else HEId = "chosen";
-
-var lang_arr = {"EN":usaFlag,"HE":israelFlag} 
-
+  var lang_arr = {"EN":usaFlag,"HE":israelFlag} 
   return (
     <div id="languages">
       <Dropdown >
