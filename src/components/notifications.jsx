@@ -12,6 +12,62 @@ import ReactDOM from 'react-dom'
 import { Item_block } from './containers';
 
 
+export class Notification_category extends Component{
+
+    constructor(props) {
+        super(props);
+        var arr = [cart_plus,suggest_dish] 
+        var text_descp = [Dictionary["add_to_order"],Dictionary["suggest_dish"]] 
+        
+        // var mess = action_by_number[props.number].message,
+        // image = action_by_number[props.number].action,
+        // desc = action_by_number[props.number].action_desc
+ 
+        // this.state = {
+        //     symbols: [],
+        //     number:props.number,            
+        //     item_name:props.item_name,
+        //     total_weight: props.total_weight, 
+        //     message:props.message?this.state.message:mess,
+        //     action_image: image ,
+        //     action_desc:desc,
+        // }
+    }
+    componentWillMount(){
+        // var action_by_number = {
+        //     0:{"action":arr[0],"action_desc":text_descp[0],"message":Dictionary["just_few"]},
+        //     1:{"action":arr[0],"action_desc":text_descp[0],"message":Dictionary["running_low"]},
+        //     2:{"action":arr[1],"action_desc":text_descp[1],"message":Dictionary["must_use"]}
+        //     };
+        
+    }
+
+    render(){
+
+        return(
+            <div className = "notification_container">
+                {/* <div className="center_items left_notification_area">
+                <img src ={this.state.action_image} className="notification_image left_img" alt={this.state.action_desc}/>
+                {this.state.action_desc}
+                </div>
+                <div className="center_items notification_item_name">
+                {this.state.item_name}
+                </div>
+                <div className="center_items notification_weight">
+                <div>{this.state.total_weight}</div>
+                </div>
+
+                <div className = "notification center_items">
+                    {this.state.message}
+                </div>
+               <NotificationSymbol symbolNumber={this.state.number}/>                 */}
+            </div>
+        )
+    }
+
+
+
+}
 
 function get_notifications(callback, client_id){
     //request all notifications for a business
