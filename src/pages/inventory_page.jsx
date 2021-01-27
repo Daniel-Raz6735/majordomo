@@ -12,11 +12,11 @@ class InventoryPage extends Component{
     render() {
         var temp =  Date.now()
         var now = new Date(temp)
-        let hour = now.getHours()
-        let minutes = now.getMinutes()
-        let Seconds = now.getSeconds()
+        let date = now.getDate()
+        let months = now.getMonth()+1
+        let year = now.getFullYear()
 
-               var str = hour +"."+minutes+"."+Seconds
+               var str = date +"."+months+"."+year
 
         return (
             <div id="test">

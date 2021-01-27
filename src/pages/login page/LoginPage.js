@@ -161,7 +161,7 @@ export class LoginComponent extends Component {
                 <Route path="/WomanPage/:id" component={props => <WomanPage {...props} Admin={this.state.permission} />} />
                 <Route path="/Category" component={() => <Category Admin={this.state.permission} />} /> */}
                 <Route exect path="/" component={() => <MainUserPage Admin={this.state.permission} />}/>
-                <Route path = "/inventory" component = {InventoryPage}/>
+                <Route path = "/inventory" component = { InventoryPage }/>
             </Router>, document.getElementById('root')
         );
     }
