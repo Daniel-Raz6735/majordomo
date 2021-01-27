@@ -1,5 +1,8 @@
 
- 
+ .notification_header{
+    height: 55px;
+    background-color: black; 
+ }
 
 .notification_container{
     height: 55px;

@@ -156,7 +156,7 @@ export class LoginComponent extends Component {
         ReactDOM.render(
             <Router>
                 <Route path = "/inventory" component = {InventoryPage}/>
-                <Route exect path="/HomePage"  component={MainUserPage} />
+                <Route exect path="/homePage"  component={MainUserPage} />
             </Router>, document.getElementById('root')
         );
     }
