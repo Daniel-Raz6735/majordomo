@@ -115,17 +115,17 @@ export class LoginComponent extends Component {
 
     }
 
-    // authListener() {
-    //     auth.onAuthStateChanged((user) => {
-    //         if (user) this.setState({ user });
-    //         else this.setState({ user: false });
-    //         console.log(user)
-    //     })
-    // }
+    authListener() {
+        auth.onAuthStateChanged((user) => {
+            if (user) this.setState({ user });
+            else this.setState({ user: false });
+            console.log(user)
+        })
+    }
 
-    // signOutFun() {
-    //     auth.signOut();
-    // }
+    signOutFun() {
+        auth.signOut();
+    }
     timeRefresh() {
         //reset page to main page if page is inactive for a half an hour
         var time = new Date().getTime();
@@ -147,37 +147,21 @@ export class LoginComponent extends Component {
                 this.renderAdminDiv(user)
             }
             else
-            this.setState({page:<LoginPage/>})
+                this.setState({page:<LoginPage/>})
         })
 
     }
 
     renderAdminDiv(user) {
-        
-       
         ReactDOM.render(
             <Router>
-                {/* <Route exact path="/" component={() => <AdminPage Admin={this.state.permission} />} />
-                <Route path="/WomanPage/:id" component={props => <WomanPage {...props} Admin={this.state.permission} />} />
-                <Route path="/Category" component={() => <Category Admin={this.state.permission} />} /> */}
-                <Route exect path="/" component={() => <MainUserPage Admin={this.state.permission} />}/>
                 <Route path = "/inventory" component = {InventoryPage}/>
+                <Route exect path="/HomePage"  component={MainUserPage} />
             </Router>, document.getElementById('root')
         );
     }
 
-    renderVisitorDiv(user) {
-        this.timeRefresh();
-        ReactDOM.render(
-            <Router>
-                <Route exact path="/" component={MainUserPage} />
-                <Route path = "/inventory" component = {<InventoryPage/>}/>
-                
-                {/* <Route path="/WomanPage/:id" component={props => <WomanPage {...props} />} />
-                <Route path="/Category" component={Category} /> */}
-            </Router>, document.getElementById('root')
-        );
-    }
+
 
     render() {
 
