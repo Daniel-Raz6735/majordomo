@@ -8,7 +8,6 @@ import React, { Component } from 'react';
 import { auth } from '../config/firebaseConfig'
 import { Dictionary , LangBtn} from '../Dictionary';
 import logo from '../images/icons/Majordomo logo.svg';
-import { CategoryDrawer } from "./drawer"
 import { Link } from "react-router-dom"
 
 

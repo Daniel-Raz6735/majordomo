@@ -24,6 +24,7 @@ export function get_notifications(callback, client_id){
         url: request, 
         success: function (res) {
             callback(res);
+            console.log(res)
         },
         error: function (err) {
             console.log(err)
@@ -121,10 +122,14 @@ export class Notification_list extends Component{
     componentDidMount(){
         
     }
-    handleToggle() {
-      this.setState({
-        show: !this.state.show
-      });
+    handleToggle(e) {
+        if ($(e.target).attr('class').includes('notification_toggler')){
+
+            console.log($(e.target).attr('class'))
+            this.setState({
+                show: !this.state.show
+            }); 
+        }
     }
 
     extract_items(data) {
@@ -230,7 +235,7 @@ const Panel = React.forwardRef(({ ...props }, ref) => (
     render(){
         
         return(
-            <div className="notification_header" onClick = {()=>this.state.on_click()} >
+            <div className="notification_header notification_toggler" onClick = {(e)=>this.state.on_click(e)} >
                 <CategoryDrawer data = {this.state.item_contents}/>
             </div>
           
@@ -262,20 +267,15 @@ export class Notification_block extends Component{
 
 
         return(
-            <div>
-                {/* <Dropdown  eventKey="3" title="Advanced" icon={<Icon icon="magic" />}>
-            <Dropdown.Item eventKey="3-1"><Notification number={0} item_name="red" total_weight={26} /></Dropdown.Item>
-            <Dropdown.Item eventKey="3-2">Devices</Dropdown.Item>
-            <Dropdown.Item eventKey="3-3">Loyalty</Dropdown.Item>
-            <Dropdown.Item eventKey="3-4">Visit Depth</Dropdown.Item>
-          </Dropdown> */}
+         
+              
           
             <div id ="first_notification" className="notification_block">
                 {/* <Notification number={0} item_name="red" total_weight={26} />
                 <Notification  number={1} item_name="yellow" total_weight={26}/>
             <Notification number={2} item_name="orange" total_weight={26}/> */}
                 </div>
-            </div>
+            
         )
     }
 

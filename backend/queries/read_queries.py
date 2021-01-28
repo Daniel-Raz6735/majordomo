@@ -23,17 +23,17 @@ class ReadQueries:
         if "business_id" in used_p:
             conditions.append(["AND", "rules.business_id", "=", int(used_p["business_id"])])
         else:
-            return 400, error_message(400, "Bad request", "no business id sent")
+            return error_message(400, "Bad request", "no business id sent"), 400
         if "active" in used_p:
             conditions.append(["AND", "rules.active", "=", used_p["business_id"]])
-        res_code, final_query = DbQueries.select_query(
+        final_query, res_code = DbQueries.select_query(
             ["rules"],
             [[["rule_id"], ["item_id"], ["content_minimum_per_day"], ["content_maximum_per_day"],
               ["content_total_minimum"], ["content_total_maximum"], ["active"]]],
             conditions)
         if res_code != 200:
-            return 400, error_message(res_code, final_query)
-        return 200, final_query
+            return error_message(res_code, final_query), 400
+        return final_query, 200
 
     @staticmethod
     def get_notifications(args):
@@ -47,20 +47,21 @@ class ReadQueries:
         if "business_id" in used_p:
             conditions.append(["AND", "notifications.business_id", "=", int(used_p["business_id"])])
         else:
-            return 400, error_message(400, "Bad request", "no business id sent")
+            return error_message(400, "Bad request", "no business id sent"), 400
         if "active" in used_p:
             conditions.append(["AND", "notifications.active", "=", used_p["active"]])
         if "notification_id" in used_p:
             conditions.append(["AND", "notifications.notification_id", "=", used_p["notification_id"]])
         conditions.append(["AND", "notifications.food_item_id", "=", "food.item_id"])
         conditions.append(["AND", "food.category_id", "=", "cat.category_id"])
-        res_code, sub_table = ReadQueries.get_current_weight({"business_id": used_p["business_id"]})
+        sub_table, res_code = ReadQueries.get_current_weight({"business_id": used_p["business_id"]})
         if res_code != 200:
-            return res_code, sub_table
+            return sub_table, res_code
         sub_table = sub_table[:-1]
+        print("sub_table", sub_table,"**********")
         conditions.append(["AND", "sub.item_id", "=", "food.item_id"])
 
-        res_code, final_query = DbQueries.select_query(
+        final_query, res_code = DbQueries.select_query(
             [["notifications"], ["food_items", "food"], ["categories", "cat"], ["("+sub_table+")", "sub"]],
             [[["code"], ["message"], ["food_item_id"], ["active"], ["closed_by_user"]],
              [["item_name"]],
@@ -69,9 +70,9 @@ class ReadQueries:
              ],
             conditions)
         if res_code != 200:
-            return 400, error_message(res_code, final_query)
+            return error_message(res_code, final_query), 400
 
-        return 200, final_query
+        return final_query, 200
 
     @staticmethod
     def get_current_weight(args, get_by_container=False):
@@ -81,7 +82,7 @@ class ReadQueries:
         if "business_id" in used_p:
             conditions.append(["AND", "containers.business_id", "=", int(used_p["business_id"])])
         else:
-            return 400, error_message(400, "Bad request", "no business id sent")
+            return error_message(400, "Bad request", "no business id sent"), 400
         if "container_id" in used_p:
             containers = used_p["container_id"]
             and_or = "AND"
@@ -98,25 +99,24 @@ class ReadQueries:
                 conditions.append([and_or, "containers.item_id", "=", int(item)])
                 and_or = "OR"
         conditions.append(["AND", "weights.container_id", "=", "containers.container_id"])
-        max_table = DbQueries.select_query(["containers", "weights"],
+        max_table, res_code = DbQueries.select_query(["containers", "weights"],
                                            [[["container_id"]], [["weighing_date", "date", "MAX"]]],
                                            conditions)
-        max_table = max_table[1][:-1]
+        max_table = max_table[:-1]
         conditions.append(["AND", "food_items.item_id", "=", "containers.item_id"])
         conditions.append(["AND", "t1.date", "=", "weights.weighing_date"])
         conditions.append(["AND", "t1.container_id", "=", "containers.container_id"])
         cols_to_bring = [[["container_id"]], [["weight_value", "weight"], ["weighing_date", "date"]], [["item_name"], ["item_name"]], []]
         if not get_by_container:
             cols_to_bring = [[[]], [["weight_value", "weight", "SUM"], ["weighing_date", "date", "MAX"]], [["item_name"], ["item_id"]], []]
-        res_code, final_query = DbQueries.select_query(
+
+        final_query, res_code = DbQueries.select_query(
             ["containers", "weights", "food_items", ["(" + max_table + ")", "t1"]],
             cols_to_bring,
             conditions)
         if res_code != 200:
-            return 400, error_message(res_code, final_query)
-        return 200, final_query
-
-
+            return error_message(res_code, final_query), 400
+        return final_query, 200
 
 
     @staticmethod
@@ -128,19 +128,19 @@ class ReadQueries:
         if "user_email" in used_p:
             email = used_p["user_email"].split("@")
             if len(email) != 2:
-                return 400, error_message(400, "Bad request", " invalid email")
+                return error_message(400, "Bad request", " invalid email"), 400
             conditions.append(["AND", "users.email_user_name", "=", "'" + email[0] + "'"])
             conditions.append(["AND", "users.email_domain_name", "=", "'" + email[1] + "'"])
             conditions.append(["AND", "users.user_id", "=", "user_preference.user_id"])
         else:
-            return 400, error_message(400, "Bad request", " user email not sent")
+            return error_message(400, "Bad request", " user email not sent"), 400
 
-        res_code, final_query = DbQueries.select_query(["user_preference", "users"],
-                                                        column_list,
-                                                        conditions)
+        final_query, res_code = DbQueries.select_query(["user_preference", "users"],
+                                                       column_list,
+                                                       conditions)
         if res_code != 200:
-            return 400, error_message(res_code, final_query)
-        return 200, final_query
+            return error_message(res_code, final_query), 400
+        return final_query, 200
 
     @staticmethod
     def select_connection(query, expecting_result=True):

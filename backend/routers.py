@@ -23,7 +23,7 @@ def get_containers():
          provided optional params: can get specific containers
         required parameters: business_id
         optional parameters: container_id """
-    res_code, query = readQ.get_current_weight(request.args, get_by_container=True)
+    query, res_code = readQ.get_current_weight(request.args, get_by_container=True)
     return process_read_query(query, res_code)
 
 
@@ -33,7 +33,7 @@ def get_current_weight():
      provided optional params: can get specific items by item id
     required parameters: business_id
     optional parameters: item_ids"""
-    res_code, query = readQ.get_current_weight(request.args)
+    query, res_code = readQ.get_current_weight(request.args)
     return process_read_query(query, res_code)
 
 
@@ -42,8 +42,8 @@ def get_user_preferences():
     """gets preferences for a specific user based on user_email
         required parameters: user_email
         optional parameters: none"""
-    res_code, query = readQ.get_user_preferences(request.args)
-    return process_read_query(query,res_code)
+    query, res_code = readQ.get_user_preferences(request.args)
+    return process_read_query(query, res_code)
 
 
 @app.route('/get/notifications', methods=['GET'])
@@ -53,20 +53,33 @@ def get_notifications():
             required parameters: business_id
             optional parameters: active ,notification_id
     """
-    res_code, query = readQ.get_notifications(request.args)
-    return process_read_query(query,res_code)
+    query, res_code = readQ.get_notifications(request.args)
+    return process_read_query(query, res_code)
 
 
 @app.route('/get/rules', methods=['GET'])
 def get_rules():
     """gets all rules based on business_id,
-   provided optional params: can get only active rules and a specific rule
+provided optional params: can get only active rules and a specific rule
            required parameters: business_id
            optional parameters: active ,rule_id
            """
+    query, res_code = readQ.get_rules(request.args)
+    return process_read_query(query, res_code)
 
-    res_code, query = readQ.get_rules(request.args)
-    return process_read_query(query,res_code)
+
+@app.route('/get/current_view', methods=['GET'])
+def get_current_view():
+    """gets all the info a user needs based on business_id,
+        required parameters: business_id
+        """
+
+    weight_query, res_code = readQ.get_current_weight(request.args)
+    if res_code != 200:
+        return weight_query, res_code
+    query, res_code = readQ.get_notifications(request.args)
+    return process_read_query(query, res_code)
+
 
 
 # @app.route('/get/create', methods=['GET'])

@@ -25,6 +25,7 @@ export class CategoryDrawer extends React.Component {
       });
     }
     toggleDrawer() {
+      
       this.setState({
           placement:'bottom',
         show: true
@@ -37,16 +38,9 @@ export class CategoryDrawer extends React.Component {
       const { size, placement, show } = this.state;
       
       return (
-        <div>
-          <ButtonToolbar>
-            <IconButton
-              icon={<Icon icon="angle-up" />}
-              onClick={() => this.toggleDrawer()}
-            >
-              Show items
-            </IconButton>
-          </ButtonToolbar>
-  
+        <div className="category_drawer_container">
+          <a className="inventory_clicker" onClick={() => this.toggleDrawer()}>see full inventory</a>
+        
           <Drawer
             size={size}
             placement={placement}

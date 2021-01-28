@@ -92,7 +92,9 @@ class DbQueries:
                                columns = [[table 1 column names[column name, column nick, min/max functions]...]...]
                                conditions [[string containing the condition and/not/or, var1, condition, var2]...]
                expected output: sql query if all parameters legal None if not"""
+
         select, from_q, where, group_by = DbQueries.break_select_parameters(tables, columns_per_table, conditions)
+        print("select",select)
         query = "SELECT "
         txt = DbQueries.parse_params_with_nick(select)
         query += txt + "\nFROM "
@@ -105,15 +107,15 @@ class DbQueries:
             for group in group_by:
                 query += group + ", "
             query = query[:-2]
-        return 200, query + ';'
+        return query + ';', 200
 
     @staticmethod
     def drop_table_query(table_name):
-        return 200, "DROP TABLE " + table_name + " CASCADE;"
+        return "DROP TABLE " + table_name + " CASCADE;", 200
 
     @staticmethod
     def add_table_code():
-        return 200, """
+        return """
        
     CREATE TABLE "users" (
         "user_id" int   NOT NULL,
@@ -351,4 +353,4 @@ class DbQueries:
     ALTER TABLE "order_content" ADD CONSTRAINT "fk_order_content_order_id" FOREIGN KEY("order_id")
     REFERENCES "orders" ("order_id");
     
-    """
+    """, 200

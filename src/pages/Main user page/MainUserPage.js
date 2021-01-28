@@ -36,7 +36,7 @@ class MainUserPage extends Component {
 
     render() {
         return (
-            <div id="main_user_page_container">
+            <div className="main_user_page_container">
                 <Nav_bar/>
                 
                 <div className="main_info_container" >
