@@ -4,6 +4,7 @@ import suggest_dish from '../images/icons/suggest_dish.svg'
 import yellow_warning from '../images/icons/triangle_warning.svg'
 import circle_warning from '../images/icons/circle red warning.svg'
 import overflow_sign from '../images/icons/overflow sign.svg'
+import { AddToOrder } from '../pages/inventory_page';
 var error_symbol = [circle_warning, yellow_warning, overflow_sign],
 
     styleArr=["rgba(235, 104, 104, 0.32)","rgba(247, 231, 185, 0.85)","rgba(255, 103, 14, 0.2)"],
@@ -29,7 +30,7 @@ export function action_btn(defult_val, code){
         case 0:
         case 1:
         default:
-            return cart_plus
+            return <AddToOrder defult_val = {defult_val} />
             
     }
     

@@ -33,7 +33,7 @@ class InventoryPage extends Component{
                <Nav_bar/>
                     <div className="page_title">{Dictionary["inventory"] + " | "+str}</div>
                     <div id="first_notification"></div>
-                    <AddToOrder />
+                    
                 <BottomBar />
             </div>
             
@@ -65,7 +65,7 @@ export class AddToOrder extends Component {
     }
     render() {
       return (
-        <div className="modal-container">
+        <div className="add_to_cart_modal_container">
           <ButtonToolbar>
             {/* <Button size="xs" onClick={() => this.open('xs')}>
               Xsmall

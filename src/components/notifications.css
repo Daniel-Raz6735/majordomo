@@ -79,6 +79,7 @@
 }
 .notification_item_name{
     width:15%;
+    overflow: hidden;
 }
 
 .left_notification_area{
@@ -87,6 +88,7 @@
     font-size: x-small;
     display: flex;
     justify-content: center;
+    overflow: hidden;
 }
 
 .notification_weight{
