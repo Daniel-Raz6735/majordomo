@@ -2,6 +2,7 @@ import { Drawer, ButtonToolbar, IconButton, Icon } from 'rsuite';
 import React, { Component } from 'react';
 
 import { Containers } from './containers';
+import { Dictionary } from '../Dictionary';
 export class CategoryDrawer extends React.Component {
     constructor(props) {
       super(props);
@@ -43,7 +44,7 @@ export class CategoryDrawer extends React.Component {
               icon={<Icon icon="angle-up" />}
               onClick={() => this.toggleDrawer()}
             >
-              Show items
+              {Dictionary["show_items"]}
             </IconButton>
           </ButtonToolbar>
   

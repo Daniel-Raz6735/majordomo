@@ -22,6 +22,14 @@ export const Dictionary = new LocalizedStrings({
     show_inventory : "show inventory",
     supplier:'Supplier',
     item_type:'Item Type',
+    show_items:"Show items",
+
+    //bottom bar
+    home:"Home",
+    inventory:"Inventory",
+    orders:"Orders",
+    profile:"Profile",
+
 
     
     
@@ -36,8 +44,8 @@ export const Dictionary = new LocalizedStrings({
     suggest_dish :"Suggest Dish",
     kg:" kg",
 
-    //inventory
-    inventory:"Inventory",
+    
+    
     
     
 
@@ -54,6 +62,7 @@ export const Dictionary = new LocalizedStrings({
     show_inventory : "הצגת מלאי",
     supplier:'ספק',
     item_type:'סוג מוצר',
+    show_items:"צפייה במוצרים",
 
 
     //containers
@@ -66,8 +75,11 @@ export const Dictionary = new LocalizedStrings({
      must_use:"צריך להשתמש בדחיפות",
      kg:" ק''ג",
 
-     //inventory
-     inventory:"מלאי",
+     //bottom bar
+    home:"בית",
+    inventory:"מלאי",
+    orders:"הזמנות",
+    profile:"פרופיל",
      
 
      

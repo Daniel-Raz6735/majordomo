@@ -8,25 +8,53 @@ import React, { Component } from 'react';
 import { auth } from '../config/firebaseConfig'
 import { Dictionary , LangBtn} from '../Dictionary';
 import logo from '../images/icons/Majordomo logo.svg';
-import { CategoryDrawer } from "./drawer"
 import { Link } from "react-router-dom"
 
 
 
-export const BottomBar = (props) =>{
+export class BottomBar extends Component{
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            home_btn:"bottom_bar active",
+            inventory_btn:"bottom_bar",
+            orders_btn:"bottom_bar",
+            profile_btn:"bottom_bar"
+        }
+
+    }
+
+    handleChange(e){
+        this.setState({"inventory_btn":"bottom_bar","orders_btn":"bottom_bar","profile_btn":"bottom_bar","home_btn":"bottom_bar"})
+        this.setState({e:"bottom_bar active"})
+    }
+
+    render(){
 
     return(
-        <footer id = "bottom-bar">
-            <Link to="/homePage"><img className="bottom-bar-btn" src={home} /></Link>
-            <Link to="/inventory"><img className="bottom-bar-btn" src={inventory} /></Link> 
-            <Link to="/inventory"><img className="bottom-bar-btn" src={cart}/></Link>
-            <Link to="/inventory"> <img className="bottom-bar-btn" src={profile}/></Link>
-
+        <footer id = "footer_bar">
+            <Link className="description" to="/homePage">
+                <img onClick={()=> this.handleChange("home_btn")} className="bottom-bar-btn" src={home} />
+                <div className={this.state.home_btn}><div className="tester">{Dictionary["home"]}</div></div>
+            </Link> 
+            <Link className="description" to="/inventory">
+                <img onClick={()=> this.handleChange("inventory_btn")} className="bottom-bar-btn" src={inventory} />
+                <div className={this.state.inventory_btn}><div  className="tester">{Dictionary["inventory"]}</div></div>
+            </Link> 
+            <Link className="description" to="/inventory">
+                <img onClick={()=> this.handleChange("orders_btn")} className="bottom-bar-btn" src={cart}/>
+                <div className={this.state.orders_btn} ><div  className="tester">{Dictionary["orders"]}</div></div>
+            </Link>
+            <Link className="description" to="/inventory">
+                 <img onClick={()=> this.handleChange("profile_btn")} className="bottom-bar-btn" src={profile}/>
+                 <div className={this.state.profile_btn} ><div  className="tester">{Dictionary["profile"]}</div></div>
+            </Link>
         </footer>
 
     )
 
-
+    }
 }
 
 export class Nav_bar extends Component {
@@ -41,6 +69,7 @@ export class Nav_bar extends Component {
 
 
     componentDidMount(){
+
     }
 
     render() {
