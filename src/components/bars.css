@@ -1,4 +1,4 @@
-#bottom-bar{
+#footer_bar{
     position: fixed;
     display:flex;
     flex-direction: row;
@@ -9,3 +9,34 @@
     height: 10%;
     align-items: center;
 }
+
+.description{
+    display: grid;
+    justify-items: center;
+    align-items: baseline;
+}
+
+.bottom_bar.active{
+    font-weight: bold;
+    border-bottom: 10px solid white;
+    
+}
+
+.bottom_bar{
+    /* width: 100%; */
+   color: white;
+   font-size: 80%;
+   width: 100px;
+   display: flex;
+   align-items: center;
+}
+
+.tester{
+    width:70%;
+    justify-content: center;
+    display: flex;
+    margin: auto;
+}
+
+
+

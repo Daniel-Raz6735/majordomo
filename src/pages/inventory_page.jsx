@@ -33,8 +33,7 @@ class InventoryPage extends Component{
                <Nav_bar/>
                     <div className="page_title">{Dictionary["inventory"] + " | "+str}</div>
                     <div id="first_notification"></div>
-                    
-                <BottomBar />
+                    <BottomBar />
             </div>
             
         );

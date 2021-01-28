@@ -2,6 +2,7 @@ import { Drawer, ButtonToolbar, IconButton, Icon } from 'rsuite';
 import React, { Component } from 'react';
 
 import { Containers } from './containers';
+import { Dictionary } from '../Dictionary';
 export class CategoryDrawer extends React.Component {
     constructor(props) {
       super(props);
