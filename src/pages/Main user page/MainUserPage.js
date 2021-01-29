@@ -38,14 +38,12 @@ class MainUserPage extends Component {
         return (
             <div className="main_user_page_container">
                 <div id="root_render">
-                <Nav_bar/>
+                
 
                 <div className="main_info_container" >
                 <Notification_block/>
                 </div>
-                </div>
-                <BottomBar />
-       
+                </div>       
             </div>
           
         );

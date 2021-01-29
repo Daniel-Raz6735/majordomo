@@ -17,12 +17,12 @@
 .env.development.local
 .env.test.local
 .env.production.local
-.eslintcache
+./eslintcache
 /idea
 /backend/__pycache__
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.idea/workspace.xml
+
 backend/old_firebase/smartcontainerdemo-a97e4-firebase-adminsdk-khgwn-f0206e819a.json

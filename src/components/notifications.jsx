@@ -36,17 +36,58 @@ export function get_notifications(callback, client_id){
     }
     
 }
+export function get_initial_data(callback, business_id){
+    //request all information for a business
+    var request = base_url+'/get/current_view';
+
+    if (business_id){
+        request += "?business_id="+ business_id + "&active=true"
+    console.log(request)
+    $.ajax({
+        url: request, 
+        success: function (res) {
+            callback(res);
+            console.log(res)
+        },
+        error: function (err) {
+            console.log(err)
+        }
+    });
+    }
+    else{
+        console.log("no user id enterd. nothing happend")
+    }
+    
+}
 
 
 export function process_notifications(data){
     var page = []   
     if(typeof(data)=="object"){
         console.log(data)
-        var dict = create_notification_dict(data);      
-        ReactDOM.render( <Notification_list dict = {dict} />,document.getElementById('first_notification'))
+        // var dict = create_notification_dict(data);      
+        // ReactDOM.render( <Notification_list dict = {dict} />,document.getElementById('first_notification'))
     }
 
 
+}
+export function process_initial_data(data){
+    var page = []   
+    if(typeof(data)=="object"){
+        var dict = create_initial_data_dict(data[0]);    
+        console.log(dict)   
+        ReactDOM.render( <Notification_list dict = {dict} />,document.getElementById('first_notification'))
+    }
+
+}
+
+function create_initial_data_dict(data){
+    var dict =  {
+        "weights":create_weights_dict(data["weights"]),
+        "notifications":create_notification_dict(data["notifications"])
+    }
+    console.log(dict)
+    return dict
 }
 
 
@@ -54,12 +95,12 @@ function create_notification_dict(data){
     var dict =  
     {"category":{},
     "supplier":{}}
-    data.forEach(element => {
+    Object.keys(data).forEach(key => {
+        var element = data[key]
         var item_name = element["item_name"],
             category = element["category_name"]
         if(!dict["category"][category])
             dict["category"][category] = {}
-            
         dict["category"][category][item_name] = {"number":element["code"],
                                                  "item_name":item_name,
                                                  "total_weight":element["weight"]
@@ -67,6 +108,28 @@ function create_notification_dict(data){
     });
     return dict
 }
+function create_weights_dict(data){
+    var dict =  
+    {"category":{},
+    "supplier":{}}
+    
+    Object.keys(data).forEach(key => {
+        var element = data[key]
+        var item_name = element["item_name"],
+            item_id = element["item_id"],
+            category = element["category_id"]
+        if(!dict["category"][category])
+            dict["category"][category] = {}
+            
+        dict["category"][category][item_id] = {
+                                                "date":element["date"],
+                                                 "item_name":item_name,
+                                                 "total_weight":element["weight"]
+    }
+    });
+    return dict
+}
+
 
 //1
 export class Notification_list extends Component{
@@ -83,9 +146,9 @@ export class Notification_list extends Component{
     }
     render_by_category(cat){
         var page = []
-        var selected_dict = this.state.dict[cat]
-        Object.keys(selected_dict).forEach(category =>{
-            page.push(<Notification_ctegory category_name = {category} data ={selected_dict[category]}/>)
+        var notifications_dict = this.state.dict["notifications"][cat]
+        Object.keys(notifications_dict).forEach(category =>{
+            page.push(<Notification_ctegory category_name = {category} notification_dict ={notifications_dict[category]}/>)
         })
         this.setState({page});
     }
@@ -116,7 +179,7 @@ export class Notification_list extends Component{
         page:'',
         show: true,
         category_name:props.category_name,
-        data:props.data
+        notifications_dict:props.notification_dict
       };
     }
     componentDidMount(){
@@ -134,6 +197,7 @@ export class Notification_list extends Component{
 
     extract_items(data) {
         var page =[]
+        console.log(data)
         Object.keys(data).forEach(item_name =>{
             var obj = data[item_name]
             page.push(<Notification number={obj["number"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]}  />)
@@ -150,7 +214,7 @@ export class Notification_list extends Component{
           <Notification_Header on_click = {this.handleToggle}item_contents = {fake_containers[this.state.category_name]} />
           {/* <Button onClick={this.handleToggle}>{this.state.category_name}</Button> */}
           <Collapse in={this.state.show}>{(props, ref) => 
-            <Panel {...props} ref={ref} notifications ={this.extract_items(this.state.data)} />}
+            <Panel {...props} ref={ref} notifications ={this.extract_items(this.state.notifications_dict)} />}
             
           </Collapse>
         </div>
@@ -261,7 +325,7 @@ export class Notification_block extends Component{
 
 
     componentWillMount(){
-        get_notifications(process_notifications,1)
+        get_initial_data(process_initial_data,1)
     }
     render(){
 

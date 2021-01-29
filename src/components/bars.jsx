@@ -14,62 +14,67 @@ import MainUserPage from "../pages/Main user page/MainUserPage"
 import InventoryPage from "../pages/inventory_page"
 import Settings_page from "../pages/settings_page"
 import Orders_page from "../pages/orders_page"
-
-function re_render_page(element){
-    ReactDOM.render(element, document.getElementById("root_render"))
-}
+import { Notification_block } from "./notifications"
 
 export class BottomBar extends Component{
     
     constructor(props) {
         super(props);
+        
         this.state = {
-            home_btn:"bottom_bar active",
-            inventory_btn:"bottom_bar",
-            orders_btn:"bottom_bar",
-            profile_btn:"bottom_bar"
+            buttons:["bottom_bar active","bottom_bar","bottom_bar","bottom_bar"],
+            page:<MainUserPage/>
+            
         }
-
+        this.handleChange = this.handleChange.bind(this);
+       
     }
 
-    handleChange(e){
-        this.setState({
-            "inventory_btn":"bottom_bar",
-            "orders_btn":"bottom_bar",
-            "profile_btn":"bottom_bar",
-            "home_btn":"bottom_bar"})
-        this.setState({e:"bottom_bar active"})
+    handleChange(i,page){
+        var buttons =  ["bottom_bar","bottom_bar","bottom_bar","bottom_bar"]
+        buttons[i] ="bottom_bar active"
+        this.setState({buttons:buttons,
+                       page:page
+        })
     }
 
     render(){
 
     return(
+
+        <div className="main_user_page_container">
+           
+            {this.state.page}
+
+
         <footer id = "footer_bar">
-            {/* <Link className="description" to="/homePage"> */}
-                <div className="description" onClick={()=> re_render_page(<MainUserPage/>)}>
-                <img onClick={()=> this.handleChange("home_btn")} className="bottom-bar-btn" src={home} />
-                <div className={this.state.home_btn}><div className="tester">{Dictionary["home"]}</div></div>
+            <div className="description" onClick={()=> this.handleChange(0,<Notification_block/>)}>
+                <img  className="bottom-bar-btn" src={home} />
+                <div className={this.state.buttons[0]}><div className="tester">{Dictionary["home"]}</div></div>
+            </div>
+
+            <div className="description" onClick={()=> this.handleChange(1,<InventoryPage/>)}>
+                <img className="bottom-bar-btn" src={inventory} />
+                <div className={this.state.buttons[1]}>
+                    <div  className="tester">{Dictionary["inventory"]}</div>
                 </div>
-            {/* </Link>  */}
-            {/* <Link className="description" to="/inventory"> */}
-                <div className="description" onClick={()=> re_render_page(<InventoryPage/>)}>
-                <img onClick={()=> this.handleChange("inventory_btn")} className="bottom-bar-btn" src={inventory} />
-                <div className={this.state.inventory_btn}><div  className="tester">{Dictionary["inventory"]}</div></div>
+            </div>
+
+            <div className="description" onClick={()=> this.handleChange(2,<Orders_page/>)}>
+                <img className="bottom-bar-btn" src={cart}/>
+                <div className={this.state.buttons[2]}>
+                    <div  className="tester">{Dictionary["orders"]}</div>
                 </div>
-            {/* </Link>  */}
-            {/* <Link className="description" to="/inventory"> */}
-                <div className="description" onClick={()=> re_render_page(<Orders_page/>)}>
-                <img onClick={()=> this.handleChange("orders_btn")} className="bottom-bar-btn" src={cart}/>
-                <div className={this.state.orders_btn} ><div  className="tester">{Dictionary["orders"]}</div></div>
-                </div>
-            {/* </Link>
-            <Link className="description" to="/inventory"> */}
-            <div className="description" onClick={()=> re_render_page(<Settings_page/>)}>
-                 <img onClick={()=> this.handleChange("profile_btn")} className="bottom-bar-btn" src={profile}/>
-                 <div className={this.state.profile_btn} ><div  className="tester">{Dictionary["profile"]}</div></div>
-            {/* </Link> */}
+            </div>
+        
+            <div className="description" onClick={()=> this.handleChange(3,<Settings_page/>)}>
+                 <img className="bottom-bar-btn" src={profile}/>
+                 <div className={this.state.buttons[3]} >
+                     <div  className="tester">{Dictionary["profile"]}</div>
+                 </div>
             </div>
         </footer>
+        </div>
 
     )
 

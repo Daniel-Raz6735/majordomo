@@ -8,6 +8,7 @@ import MainUserPage from '../Main user page/MainUserPage'
 import {Dictionary, LangBtn} from '../../Dictionary'
 import { validate } from 'jquery-validation';
 import InventoryPage from '../inventory_page';
+import { BottomBar } from '../../components/bars';
 // require('jquery-validation');
 
 
@@ -156,7 +157,7 @@ export class LoginComponent extends Component {
         ReactDOM.render(
             <Router>
                 {/* <Route path = "/inventory" component = {InventoryPage}/> */}
-                <Route path="/"  component={MainUserPage} />
+                <Route path="/"  component={BottomBar} />
             </Router>, document.getElementById('root')
         );
     }
