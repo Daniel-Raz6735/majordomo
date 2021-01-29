@@ -3,7 +3,7 @@ from backend.queries.create_queries import CreateQueries as createQ
 from backend.queries.update_queries import UpdateQueries as updateQ
 from backend.queries.delete_queries import DeleteQueries as deleteQ
 import flask
-from flask import request
+from flask import request, jsonify
 from flask_cors import CORS
 
 
@@ -74,11 +74,10 @@ def get_current_view():
         required parameters: business_id
         """
 
-    weight_query, res_code = readQ.get_current_weight(request.args)
-    if res_code != 200:
-        return weight_query, res_code
-    query, res_code = readQ.get_notifications(request.args)
-    return process_read_query(query, res_code)
+    weight_query, weight_code = readQ.get_current_weight(request.args)
+    notifications_query, notifications_code = readQ.get_notifications(request.args)
+
+    return process_read_query([[notifications_query, "notifications"], [weight_query, "weights"]], notifications_code)
 
 
 

@@ -58,7 +58,6 @@ class ReadQueries:
         if res_code != 200:
             return sub_table, res_code
         sub_table = sub_table[:-1]
-        print("sub_table", sub_table,"**********")
         conditions.append(["AND", "sub.item_id", "=", "food.item_id"])
 
         final_query, res_code = DbQueries.select_query(
@@ -106,18 +105,27 @@ class ReadQueries:
         conditions.append(["AND", "food_items.item_id", "=", "containers.item_id"])
         conditions.append(["AND", "t1.date", "=", "weights.weighing_date"])
         conditions.append(["AND", "t1.container_id", "=", "containers.container_id"])
-        cols_to_bring = [[["container_id"]], [["weight_value", "weight"], ["weighing_date", "date"]], [["item_name"], ["item_name"]], []]
+        conditions.append(["AND", "food_items.category_id", "=", "categories.category_id"])
+
+        cols_to_bring = [[["container_id"]],
+                         [["weight_value", "weight"], ["weighing_date", "date"]],
+                         [["item_name"], ["item_id"]],
+                         [["category_name"], ["category_id"]],
+                         []]
         if not get_by_container:
-            cols_to_bring = [[[]], [["weight_value", "weight", "SUM"], ["weighing_date", "date", "MAX"]], [["item_name"], ["item_id"]], []]
+            cols_to_bring = [[[]],
+                             [["weight_value", "weight", "SUM"], ["weighing_date", "date", "MAX"]],
+                             [["item_name"], ["item_id"]],
+                             [["category_name"], ["category_id"]],
+                             []]
 
         final_query, res_code = DbQueries.select_query(
-            ["containers", "weights", "food_items", ["(" + max_table + ")", "t1"]],
+            ["containers", "weights", "food_items", "categories", ["(" + max_table + ")", "t1"]],
             cols_to_bring,
             conditions)
         if res_code != 200:
             return error_message(res_code, final_query), 400
         return final_query, 200
-
 
     @staticmethod
     def get_user_preferences(args):
@@ -165,15 +173,23 @@ class ReadQueries:
             cur = conn.cursor()
             print("executing query: ")
             print(query, "\n")
-            cur.execute(query)
-            # conn.commit()
-            rows = cur.fetchall()
-            if type(rows) == list:
-                for row in rows:
-                    row_data = {}
-                    for info in list(row):
-                        row_data[info] = row[info]
-                    results.append(row_data)
+            if type(query) == list:
+                res = {}
+                for q in query:
+                    cur.execute(q[0])
+                    rows = dictionify_res(cur.fetchall())
+                    if rows:
+                        res[q[1]] = rows
+                results.append(res)
+            else:
+                cur.execute(query)
+                rows = cur.fetchall()
+                if type(rows) == list:
+                    for row in rows:
+                        row_data = {}
+                        for info in list(row):
+                            row_data[info] = row[info]
+                        results.append(row_data)
 
         except (Exception, psycopg2.DatabaseError) as error:
             print("error: ", error)
@@ -203,3 +219,12 @@ def error_message(code, message, info=None):
     return res, code
 
 
+def dictionify_res(rows):
+    res = []
+    if type(rows) == list:
+        for row in rows:
+            row_data = {}
+            for info in list(row):
+                row_data[info] = row[info]
+            res.append(row_data)
+    return res

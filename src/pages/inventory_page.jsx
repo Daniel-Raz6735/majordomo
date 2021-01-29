@@ -29,11 +29,10 @@ class InventoryPage extends Component{
                get_notifications(process_notifications,1)
         
         return (
-            <div id="inventory_page">
-               <Nav_bar/>
+            <div id="inventory_page_container">
                     <div className="page_title">{Dictionary["inventory"] + " | "+str}</div>
                     <div id="first_notification"></div>
-                    <BottomBar />
+                    
             </div>
             
         );

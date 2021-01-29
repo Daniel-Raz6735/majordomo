@@ -94,7 +94,6 @@ class DbQueries:
                expected output: sql query if all parameters legal None if not"""
 
         select, from_q, where, group_by = DbQueries.break_select_parameters(tables, columns_per_table, conditions)
-        print("select",select)
         query = "SELECT "
         txt = DbQueries.parse_params_with_nick(select)
         query += txt + "\nFROM "

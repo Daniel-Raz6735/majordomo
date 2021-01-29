@@ -155,8 +155,8 @@ export class LoginComponent extends Component {
     renderAdminDiv(user) {
         ReactDOM.render(
             <Router>
-                <Route path = "/inventory" component = {InventoryPage}/>
-                <Route exect path="/homePage"  component={MainUserPage} />
+                {/* <Route path = "/inventory" component = {InventoryPage}/> */}
+                <Route path="/"  component={MainUserPage} />
             </Router>, document.getElementById('root')
         );
     }
