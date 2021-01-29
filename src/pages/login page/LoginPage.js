@@ -8,7 +8,9 @@ import MainUserPage from '../Main user page/MainUserPage'
 import {Dictionary, LangBtn} from '../../Dictionary'
 import { validate } from 'jquery-validation';
 import InventoryPage from '../inventory_page';
-import { BottomBar } from '../../components/bars';
+import { BottomBar, Site_frame } from '../../components/bars';
+import logo from '../../images/icons/Majordomo logo.svg'
+
 // require('jquery-validation');
 
 
@@ -64,7 +66,7 @@ class LoginPage extends Component {
                 <div id="loginWrapper" className="wrapper">
                     <div className="loginContainer">
                         <div id="buttonWrapper123">
-                        <img src ='../images/icons/Majordomo logo.svg'></img>
+                        <img src ={logo} alt ="logo"></img>
                             <form dir="RTL" id="login_form" name="login_form_name" role="form">
                                 < input type="email"
                                     id="email"
@@ -100,12 +102,12 @@ class LoginPage extends Component {
         )
     }
 }
-export default LoginPage;
 
 
 
-export class LoginComponent extends Component {
 
+class LoginComponent extends Component {
+// this class contains the basic rendering for the site 
     constructor(props) {
         super(props);
         this.state = {
@@ -113,60 +115,38 @@ export class LoginComponent extends Component {
             page: [],
             permission: false,
         }
-
     }
-
+    
     authListener() {
         auth.onAuthStateChanged((user) => {
-            if (user) this.setState({ user });
-            else this.setState({ user: false });
-            console.log(user)
+            if (user) 
+                this.setState({ user });
+            else 
+                this.setState({ user: false });
         })
     }
 
     signOutFun() {
         auth.signOut();
     }
-    timeRefresh() {
-        //reset page to main page if page is inactive for a half an hour
-        var time = new Date().getTime();
-        $(document.body).bind("mousemove keypress touchmove ", function () {
-            time = new Date().getTime();
-        });
-
-        setInterval(function () {
-            if ((new Date().getTime() - time >= 180000)) {
-                window.location.href = "/";
-            }
-        }, 1000);
-    }
-
+    
     componentDidMount() {
         auth.onAuthStateChanged(user => {
-            console.log(user)
+            var comp=[]
             if (user){
-                this.renderAdminDiv(user)
+                comp = <Router>
+                     <Route path="/"  component={Site_frame} />
+                    </Router>
             }
-            else
-                this.setState({page:<LoginPage/>})
+            else{
+                comp = <LoginPage/>
+            }
+
+            this.setState({page:comp})
         })
-
     }
-
-    renderAdminDiv(user) {
-        ReactDOM.render(
-            <Router>
-                {/* <Route path = "/inventory" component = {InventoryPage}/> */}
-                <Route path="/"  component={BottomBar} />
-            </Router>, document.getElementById('root')
-        );
-    }
-
-
-
     render() {
-
         return <div id="renderDiv"> {this.state.page}</div>
-
     }
 }
+export default LoginComponent;

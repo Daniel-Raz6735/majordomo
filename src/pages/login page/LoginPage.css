@@ -12,10 +12,7 @@
 body {
     margin: 0;
     padding: 0;
-    font: Poppins;
-    /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif; */
+    font-family: Poppins;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     height: 100%;
@@ -114,6 +111,11 @@ input {
 }
 
 #renderDiv{
+    margin: auto;
+    height: 100%;
+    width: 100%;
+}
+#LPcover{
     margin: auto;
     background-image: url('../../images/icons/loginBacground.svg') ;
     background-size: cover;

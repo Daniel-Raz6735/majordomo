@@ -19,19 +19,10 @@
     align-items: center;
     background-color: #F9F9F9;
     border-radius: 12px;
-    
-    
 }
-#notification_collapse{
-    /* display: flex; */
-    /* flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    align-content: center;
-    background: #e91818; */
-    /* width: 100%; */
-    /* overflow: hidden; */
-}
+    
+
+
 .notification_cover{
 
     height: 100%;
@@ -39,11 +30,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* background-color: #9c9b9b;  */
-    border-radius: 12px; 
-    
-    
+    border-radius: 12px;
 }
+
 .notification_block{
     height:100%;
     width: 325px;
