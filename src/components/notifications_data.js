@@ -7,7 +7,7 @@ import overflow_sign from '../images/icons/overflow sign.svg'
 import { AddToOrder } from '../pages/inventory_page';
 var error_symbol = [circle_warning, yellow_warning, overflow_sign],
 
-    styleArr=["rgba(235, 104, 104, 0.32)","rgba(247, 231, 185, 0.85)","rgba(255, 103, 14, 0.2)"],
+    styleArr=["rgba(235, 104, 104, 0.32)","rgba(247, 231, 185, 0.85)","rgba(255, 103, 14, 0.2)"],//red, green, orange
 
     messages = [Dictionary["just_few"], Dictionary["running_low"], Dictionary["must_use"]],
 

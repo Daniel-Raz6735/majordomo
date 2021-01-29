@@ -74,22 +74,41 @@ export function process_notifications(data){
 
 }
 export function process_initial_data(data){
-    var page = []   
     if(typeof(data)=="object"){
-        var dict = create_initial_data_dict(data[0]);    
-        console.log(dict)   
+        var dict = create_initial_data_dict(data[0]);  
+        confirm_papulation(dict, "process_initial_data", "initial data not recived well" )  
         ReactDOM.render( <Notification_list dict = {dict} />,document.getElementById('first_notification'))
     }
 
 }
 
-function create_initial_data_dict(data){
-    var dict =  {
-        "weights":create_weights_dict(data["weights"]),
-        "notifications":create_notification_dict(data["notifications"])
+function confirm_papulation(dict, area_name, message="", dict_to_test=false){
+    message = message?"\nmessage: " +message:""
+    if(dict){
+        Object.keys(dict).forEach(key=>{
+            if(dict_to_test){
+                if(dict_to_test.includes(key))
+                    console.log("couldent find "+key+" in "+area_name + message)
+            }
+            else if(!dict[key])
+                console.log("couldent find "+key+" in "+area_name + message)
+        })
     }
-    console.log(dict)
-    return dict
+    else 
+    console.log("no dictionary recived" + area_name + message)
+
+}
+function create_initial_data_dict(data){
+    var dict =  {}
+    if(data){
+        dict["weights"] = create_weights_dict(data["weights"])
+        dict["notifications"] = create_notification_dict(data["notifications"])
+        confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
+        console.log(dict)
+        return dict
+    }
+    else
+        console.log("create_initial_data_dict no data recived")
 }
 
 
@@ -117,17 +136,29 @@ function create_weights_dict(data){
     
     Object.keys(data).forEach(key => {
         var element = data[key]
-        var item_name = element["item_name"],
-            item_id = element["item_id"],
-            category = element["category_id"]
-        if(!dict["category"][category])
-            dict["category"][category] = {}
-            
-        dict["category"][category][item_id] = {
-                                                "date":element["date"],
-                                                 "item_name":item_name,
-                                                 "total_weight":element["weight"]
-    }
+        if(element){
+            confirm_papulation(element,"create_weights_dict")
+            var item_name = element["item_name"],
+                item_id = element["item_id"],
+                category = element["category_id"]
+                if(item_name&&item_id&&category){
+
+                    if(!dict["category"][category])
+                        dict["category"][category] = {}
+                        
+                    dict["category"][category][item_id] = {
+                                                            "date":element["date"],
+                                                             "item_name":item_name,
+                                                             "total_weight":element["weight"]
+                }
+                }
+                else{
+                    console.log("missing objects for "+key+" create_weights_dict found: name: "+item_name+" ,id:"+item_id+" ,cat_id:"+category )
+                }
+        }
+        else{
+            console.log(key+ " contains nothing in create_weights_dict")
+        }
     });
     return dict
 }

@@ -27,7 +27,7 @@ class InventoryPage extends Component{
 
                var str = date +"."+months+"."+year
 
-               get_notifications(process_notifications,1)
+               get_notifications(process_notifications,1)//fuction currently under constroction
         
         return (
             <div id="inventory_page_container">

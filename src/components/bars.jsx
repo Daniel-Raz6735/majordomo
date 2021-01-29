@@ -16,14 +16,14 @@ import Settings_page from "../pages/settings_page"
 import Orders_page from "../pages/orders_page"
 import { Notification_block } from "./notifications"
 
-export class BottomBar extends Component{
+export class Site_frame extends Component{
     
     constructor(props) {
         super(props);
         
         this.state = {
             buttons:["bottom_bar active","bottom_bar","bottom_bar","bottom_bar"],
-            page:<MainUserPage/>
+            page:<Notification_block/>
             
         }
         this.handleChange = this.handleChange.bind(this);
