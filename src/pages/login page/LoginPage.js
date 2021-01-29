@@ -9,6 +9,7 @@ import {Dictionary, LangBtn} from '../../Dictionary'
 import { validate } from 'jquery-validation';
 import InventoryPage from '../inventory_page';
 import { BottomBar } from '../../components/bars';
+
 // require('jquery-validation');
 
 

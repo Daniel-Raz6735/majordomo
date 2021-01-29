@@ -8,6 +8,8 @@ import { Button, Animation, ButtonToolbar} from 'rsuite';
 import { action_btn, notification_dict } from './notifications_data';
 import { Dictionary } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
+import Nav from 'react-bootstrap/Nav';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 
@@ -161,6 +163,7 @@ export class Notification_list extends Component{
                 <ButtonToolbar>
                     <Button appearance="ghost">{Dictionary["item_type"]}</Button>                
                     <Button appearance="ghost">{Dictionary["supplier"]}</Button>
+                    {/* <Testing /> */}
                 </ButtonToolbar>
                 {this.state.page}
             </div>
@@ -358,4 +361,22 @@ export const NotificationSymbol= (props) =>{
                 <img src ={symbol} className="notification_symbol"></img>
         </div>
     )
+}
+
+
+export const Testing = (props) =>{
+
+    return(
+        <div>
+        <Nav  variant="pills" defaultActiveKey="/item">
+            <Nav.Item>
+                <Nav.Link eventKey="/item" >Active</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+                <Nav.Link eventKey="supplier">Option 2</Nav.Link>
+            </Nav.Item>
+        </Nav>
+        </div>
+    )
+
 }

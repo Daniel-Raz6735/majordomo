@@ -14,6 +14,7 @@
     display: grid;
     justify-items: center;
     align-items: baseline;
+    cursor: pointer;
 }
 
 .bottom_bar.active{
@@ -29,6 +30,7 @@
    width: 50px;
    display: flex;
    align-items: center;
+   border-bottom: 10px solid transparent;
 }
 
 .tester{

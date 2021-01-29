@@ -7,6 +7,11 @@
     align-content: space-between;
 }
 
+#inventory_page_container{
+    margin: auto;
+    margin-top: 0;
+}
+
 .page_title{
     margin: auto;
     margin-top: 0;

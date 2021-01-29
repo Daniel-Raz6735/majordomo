@@ -30,7 +30,7 @@ export function action_btn(defult_val, code){
         case 0:
         case 1:
         default:
-            return <AddToOrder defult_val = {defult_val} />
+            return <AddToOrder kind={0} defult_val = {defult_val} />
             
     }
     

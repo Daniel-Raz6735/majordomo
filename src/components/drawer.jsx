@@ -1,8 +1,10 @@
-import { Drawer, ButtonToolbar, IconButton, Icon } from 'rsuite';
+import { Drawer, ButtonToolbar, IconButton, Icon, InputGroup, Input } from 'rsuite';
 import React, { Component } from 'react';
 
 import { Containers } from './containers';
 import { Dictionary } from '../Dictionary';
+import './../components/drawer.css';
+
 export class CategoryDrawer extends React.Component {
     constructor(props) {
       super(props);
@@ -50,6 +52,7 @@ export class CategoryDrawer extends React.Component {
             backdrop = {true}
           >
             <Drawer.Body>
+            <SearchBar />
             <Containers data = {this.state.data}/>
             </Drawer.Body>
             
@@ -57,6 +60,35 @@ export class CategoryDrawer extends React.Component {
         </div>
       );
     }
+  }
+
+
+  export class SearchBar extends Component {
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+         
+        };
+    
+      }
+    
+    render(){
+
+    return(
+        <div className="search">
+        <InputGroup inside >
+            <Input placeHolder="what are you looking for?" />
+            <InputGroup.Button>
+            <Icon icon="search" />
+            </InputGroup.Button>
+        </InputGroup>
+    
+        </div>
+    )
+
+    }
+     
   }
   
   

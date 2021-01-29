@@ -2,7 +2,7 @@ import "./bars.css"
 import inventory from '../images/icons/inventory.svg'
 import home from '../images/icons/home.svg'
 import cart from '../images/icons/cart.svg'
-import profile from '../images/icons/profile.svg'
+import profile from '../images/profile.svg'
 import {base_url} from '../index'
 import React, { Component } from 'react';
 import { auth } from '../config/firebaseConfig'

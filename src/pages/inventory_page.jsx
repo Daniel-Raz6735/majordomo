@@ -10,6 +10,7 @@ import cart_plus from '../images/icons/cart_plus.svg'
 
 
 
+
 class InventoryPage extends Component{
     constructor(props) {
         super(props);
@@ -45,7 +46,8 @@ export class AddToOrder extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        show: false
+        show: false,
+        kind:props.kind
       };
       this.close = this.close.bind(this);
       this.open = this.open.bind(this);
@@ -62,13 +64,20 @@ export class AddToOrder extends Component {
       });
     }
     render() {
+        var type =""
+        if(this.state.kind == 0)
+            type = <img src={cart_plus} onClick={() => this.open('xs')} style={{"cursor":"pointer"}} />
+        else if(this.state.kind == 1)
+            type = <div className="add_to_order" onClick={() => this.open('xs')} >{Dictionary.add_to_order}</div>
+
       return (
         <div className="add_to_cart_modal_container">
           <ButtonToolbar>
             {/* <Button size="xs" onClick={() => this.open('xs')}>
               Xsmall
             </Button> */}
-            <img src={cart_plus} onClick={() => this.open('xs')} style={{"cursor":"pointer"}} />
+            {/* <img src={cart_plus} onClick={() => this.open('xs')} style={{"cursor":"pointer"}} /> */}
+            {type}
           </ButtonToolbar>
           <Modal  size={this.state.size} show={this.state.show} onHide={this.close}>
             <Modal.Header>

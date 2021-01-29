@@ -4,6 +4,7 @@ import "./containers.css"
 import {base_url} from '../index'
 import $ from 'jquery'
 import ReactDOM from 'react-dom'
+import { AddToOrder } from '../pages/inventory_page';
 
 
 export var fake_containers={
@@ -115,7 +116,8 @@ export class Item_block extends Component {
                <div >{this.state.weight} {this.state.unit}</div>
                <div>{this.state.weight_date} </div>
                 </div>
-            <div className="add_to_order">{Dictionary.add_to_order}</div>
+            {/* <div className="add_to_order">{Dictionary.add_to_order}</div> */}
+            <AddToOrder kind ={1} />
             </div>
         )
     }
