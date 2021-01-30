@@ -3,7 +3,6 @@ import "./notifications.css"
 import {base_url} from '../index'
 import $ from 'jquery'
 import ReactDOM from 'react-dom'
-import { fake_containers, Item_block, render_container } from './containers';
 import { Button, Animation, ButtonToolbar} from 'rsuite';
 import { action_btn, notification_dict } from './notifications_data';
 import { Dictionary } from '../Dictionary';
@@ -79,6 +78,9 @@ export function process_initial_data(data){
         confirm_papulation(dict, "process_initial_data", "initial data not recived well" )  
         ReactDOM.render( <Notification_list dict = {dict} />,document.getElementById('first_notification'))
     }
+    else{
+        console.log("intial data returnd with bad body")
+    }
 
 }
 
@@ -119,10 +121,11 @@ function create_notification_dict(data){
     Object.keys(data).forEach(key => {
         var element = data[key]
         var item_name = element["item_name"],
-            category = element["category_name"]
-        if(!dict["category"][category])
-            dict["category"][category] = {}
-        dict["category"][category][item_name] = {"number":element["code"],
+            category = element["category_name"],
+            category_id = element["category_id"]
+        if(!dict["category"][category_id])
+            dict["category"][category_id] = {}
+        dict["category"][category_id][item_name] = {"number":element["code"],
                                                  "item_name":item_name,
                                                  "total_weight":element["weight"]
     }
@@ -140,20 +143,22 @@ function create_weights_dict(data){
             confirm_papulation(element,"create_weights_dict")
             var item_name = element["item_name"],
                 item_id = element["item_id"],
-                category = element["category_id"]
-                if(item_name&&item_id&&category){
+                category = element["category_id"],
+                category_name = element["category_name"]
+                if(item_name&&item_id&&category&&category_name){
 
                     if(!dict["category"][category])
                         dict["category"][category] = {}
                         
                     dict["category"][category][item_id] = {
+                                                            "cat_name":category_name,
                                                             "date":element["date"],
-                                                             "item_name":item_name,
-                                                             "total_weight":element["weight"]
+                                                            "item_name":item_name,
+                                                            "total_weight":element["weight"]
                 }
                 }
                 else{
-                    console.log("missing objects for "+key+" create_weights_dict found: name: "+item_name+" ,id:"+item_id+" ,cat_id:"+category )
+                    console.log("missing objects for "+key+" create_weights_dict found: name: "+item_name+" ,id:"+item_id+" ,cat_id:"+category+ " , cat name"+ category_name )
                 }
         }
         else{
@@ -179,22 +184,28 @@ export class Notification_list extends Component{
     }
     render_by_category(cat){
         var page = []
-        var notifications_dict = this.state.dict["notifications"][cat]
-        Object.keys(notifications_dict).forEach(category =>{
-            page.push(<Notification_ctegory category_name = {category} notification_dict ={notifications_dict[category]}/>)
-        })
-        this.setState({page});
+        if(this.state.dict["notifications"] && this.state.dict["weights"]){
+            var notifications_dict = this.state.dict["notifications"][cat]
+            var weights_dict = this.state.dict["weights"][cat]
+            confirm_papulation(weights_dict,"Notification_list","render_by_category missing weight attribute")
+            confirm_papulation(notifications_dict,"Notification_list","render_by_category missing notification attribute")
+            Object.keys(weights_dict).forEach(category =>{
+                page.push(<Notification_ctegory category_id = {category} notification_dict ={notifications_dict[category]} weights_dict={weights_dict[category]}/>)
+            })
+            this.setState({page});
+        }
+        else{
+            console.log("no notifications sent to Notification_list")
+        }
     }
 
-    render(){
-        
 
+    render(){
         return(
             <div className = "notification_cover">
                 <ButtonToolbar>
                     <Button appearance="ghost">{Dictionary["item_type"]}</Button>                
                     <Button appearance="ghost">{Dictionary["supplier"]}</Button>
-                    {/* <Testing /> */}
                 </ButtonToolbar>
                 {this.state.page}
             </div>
@@ -212,41 +223,49 @@ export class Notification_list extends Component{
       this.state = {
         page:'',
         show: true,
-        category_name:props.category_name,
-        notifications_dict:props.notification_dict
+        category_id:props.category_id,
+        notifications_dict:props.notification_dict,
+        weights_dict:props.weights_dict
       };
     }
     componentDidMount(){
         
     }
     handleToggle(e) {
-        if ($(e.target).attr('class').includes('notification_toggler')){
-
-            console.log($(e.target).attr('class'))
-            this.setState({
-                show: !this.state.show
-            }); 
+        if(e){
+            if ( $(e.target).attr('class').includes('notification_toggler')){
+                this.setState({
+                    show: !this.state.show
+                }); 
+            }
+        }
+        else{
+            console.log("no e target enterd")
         }
     }
 
     extract_items(data) {
         var page =[]
         console.log(data)
-        Object.keys(data).forEach(item_name =>{
-            var obj = data[item_name]
-            page.push(<Notification number={obj["number"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]}  />)
-        })
-
-       return page;
-      }
+        if (data){
+            confirm_papulation(data,"extract items Notification_ctegory")
+            Object.keys(data).forEach(item_name =>{
+                var obj = data[item_name]
+                page.push(<Notification number={obj["number"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]}  />)
+            })
+           
+        } 
+        else{
+            page.push(<div>all is ok here</div>)
+        } 
+        return page;
+    }
 
     render() {
-        
       return (
         <div className="notification_category_container">
 
-          <Notification_Header on_click = {this.handleToggle}item_contents = {fake_containers[this.state.category_name]} />
-          {/* <Button onClick={this.handleToggle}>{this.state.category_name}</Button> */}
+          <Notification_Header on_click = {this.handleToggle} weights_dict = {this.state.weights_dict} cat_name={this.state.category_name} />
           <Collapse in={this.state.show}>{(props, ref) => 
             <Panel {...props} ref={ref} notifications ={this.extract_items(this.state.notifications_dict)} />}
             
@@ -273,12 +292,8 @@ export class Notification_list extends Component{
             color:notification_dict[number]["color"]
         }
     }
-    componentWillMount(){       
-    }
 
     render(){
-        
-
         return(
             <div className = "notification_container">
                 <div className="center_items left_notification_area">
@@ -308,7 +323,7 @@ const Panel = React.forwardRef(({ ...props }, ref) => (
     ref={ref}
     id = "notification_collapse"     
       style={{
-        background: '#000',
+      
         width: '100%',
         overflow: 'hidden'
       }}
@@ -321,20 +336,20 @@ const Panel = React.forwardRef(({ ...props }, ref) => (
   
   //Panels button
   export class Notification_Header extends Component{
-
     constructor(props) {
         super(props);
         this.state = {   
-            item_contents:props.item_contents,
-            on_click:props.on_click        
+            weights_dict:props.weights_dict,
+            on_click:props.on_click,
+            cat_name:props.weights_dict[Object.keys(props.weights_dict)[0]]["cat_name"]      
         }
     }
 
     render(){
-        
         return(
             <div className="notification_header notification_toggler" onClick = {(e)=>this.state.on_click(e)} >
-                <CategoryDrawer data = {this.state.item_contents}/>
+                {this.state.cat_name}
+                <CategoryDrawer weights_dict = {this.state.weights_dict}/>
             </div>
           
         )
@@ -364,14 +379,8 @@ export class Notification_block extends Component{
     render(){
 
 
-        return(
-         
-              
-          
+        return(        
             <div id ="first_notification" className="notification_block">
-                {/* <Notification number={0} item_name="red" total_weight={26} />
-                <Notification  number={1} item_name="yellow" total_weight={26}/>
-            <Notification number={2} item_name="orange" total_weight={26}/> */}
                 </div>
             
         )

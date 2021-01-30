@@ -47,18 +47,19 @@ export function req_weights(callback, user_id ,item_id=null){
 }
 
 
-export function render_container(data){
+export function render_container(weights_dict){
     //gets a list of weights and puts and renders the maximal  
     var res = [];
-    console.log(data)
-    if (data){
-        Object.keys(data).forEach(key => {
+    console.log("rendering")
+    console.log(weights_dict)
+    if (weights_dict){
+        
+        Object.keys(weights_dict).forEach(key => {
             console.log(key)
-            res.push(<Item_block name={data[key]["item_name"]} weight ={data[key]["weight"]} weight_date = {data[key]["date"]} />)
+            res.push(<Item_block name={weights_dict[key]["item_name"]} weight ={weights_dict[key]["total_weight"]} weight_date = {weights_dict[key]["date"]} />)
         });
     }
-    return res
-    // ReactDOM.render(res, document.getElementById('data_insert'));
+    return res;
 };
 
 
@@ -67,7 +68,7 @@ export class Containers extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: props.data,
+            weights_dict: props.weights_dict,
             page:[]
             
         }
@@ -80,7 +81,7 @@ export class Containers extends Component {
     render() {
         return (
             <div>
-            {render_container(this.state.data)}
+            {render_container(this.state.weights_dict)}
             </div>
         )
     }
@@ -108,7 +109,7 @@ export class Item_block extends Component {
     render() {
 
         return (
-            <div id={this.props.id} className="item_container">
+            <div className="item_container">
             <div className = "item_squere">
                 <div>
                     {this.state.name}

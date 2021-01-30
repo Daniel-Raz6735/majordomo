@@ -4,14 +4,14 @@ import { auth } from '../../config/firebaseConfig'
 import './MainUserPage.css'
 import $, { data } from 'jquery';
 import {Notification_block} from "../../components/notifications"
-import {Item_block, Container} from "../../components/containers"
+
 import {BottomBar, Nav_bar} from "../../components/bars"
 import ReactDOM from 'react-dom';
 
 import cart_plus from '../../images/icons/cart_plus.svg'
 import logo from '../../images/icons/Majordomo logo.svg'
 import {base_url} from '../../index'
-import { render_container, req_weights } from '../../components/containers';
+
 
 
 
@@ -38,8 +38,6 @@ class MainUserPage extends Component {
         return (
             <div className="main_user_page_container">
                 <div id="root_render">
-                
-
                 <div className="main_info_container" >
                 <Notification_block/>
                 </div>

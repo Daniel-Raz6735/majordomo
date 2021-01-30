@@ -12,7 +12,7 @@ export class CategoryDrawer extends React.Component {
         size: 'md',
         placemnt: 'bottom',
         show: false,
-        data:props.data
+        weights_dict:props.weights_dict
       };
       this.close = this.close.bind(this);
       this.toggleDrawer = this.toggleDrawer.bind(this);
@@ -53,7 +53,7 @@ export class CategoryDrawer extends React.Component {
           >
             <Drawer.Body>
             <SearchBar />
-            <Containers data = {this.state.data}/>
+            <Containers weights_dict = {this.state.weights_dict}/>
             </Drawer.Body>
             
           </Drawer>
@@ -78,7 +78,7 @@ export class CategoryDrawer extends React.Component {
     return(
         <div className="search">
         <InputGroup inside >
-            <Input placeHolder="what are you looking for?" />
+            <Input placeholder="what are you looking for?" />
             <InputGroup.Button>
             <Icon icon="search" />
             </InputGroup.Button>

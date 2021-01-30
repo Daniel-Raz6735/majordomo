@@ -3,4 +3,7 @@
     margin-bottom: 10;
     margin: auto;
 }
+.category_drawer_container{
+    width: fit-content;
+}
 

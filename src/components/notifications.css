@@ -1,7 +1,9 @@
 
  .notification_header{
     height: 55px;
-    background-color: black; 
+    background-color: #FFFFFF; 
+    box-shadow: 2px 2px 8px  #00000054  ;
+
  }
  
 .rs-btn-toolbar{
@@ -44,6 +46,11 @@
    
     
 }
+
+#notification_collapse{
+    background-color: transparent;
+}
+
 .notification_image{
     max-height: 50%;
     width: 50%;
