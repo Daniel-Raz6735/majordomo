@@ -43,6 +43,7 @@ export const Dictionary = new LocalizedStrings({
     add_to_order :"Add to order",
     suggest_dish :"Suggest Dish",
     kg:" kg",
+    looks_good:"Inventory looks good",
 
     
     
@@ -65,6 +66,12 @@ export const Dictionary = new LocalizedStrings({
     show_items:"צפייה במוצרים",
 
 
+    //bottom bar
+    home:"בית",
+    inventory:"מלאי",
+    orders:"הזמנות",
+    profile:"פרופיל",
+    
     //containers
     add_to_order :"הוסף להזמנה",
     unknown_date : "תאריך לא ידוע",
@@ -74,13 +81,7 @@ export const Dictionary = new LocalizedStrings({
      running_low:"אוזל",
      must_use:"צריך להשתמש בדחיפות",
      kg:" ק''ג",
-
-     //bottom bar
-    home:"בית",
-    inventory:"מלאי",
-    orders:"הזמנות",
-    profile:"פרופיל",
-     
+     looks_good:"המלאי נראה טוב",
 
      
     
