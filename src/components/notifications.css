@@ -118,3 +118,7 @@
     margin-top: 3px;
     width: 100%;
 }
+
+.filter_btn .active{
+    background: tomato;
+}

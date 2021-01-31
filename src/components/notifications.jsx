@@ -8,7 +8,7 @@ import { action_btn, notification_dict } from './notifications_data';
 import { Dictionary } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
 import Nav from 'react-bootstrap/Nav';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 
 
@@ -176,8 +176,11 @@ export class Notification_list extends Component{
         this.render_by_category = this.render_by_category.bind(this);
         this.state = {
             page:[],
+            appearance:["primary","ghost"],
+            temp:[{background:"#FD4141",color:"#FFFFFF","border-color":"#707070",width:"100px"},{background:"none",color:"#707070","border-color":"#707070",width:"100px"}],
             dict:props.dict
         }
+        this.hendleFilter = this.hendleFilter.bind(this);
     }
     componentWillMount(){
         this.render_by_category('category')
@@ -199,15 +202,26 @@ export class Notification_list extends Component{
         }
     }
 
+    hendleFilter(i){
+        var styles =  [{background:"none",color:"#707070","border-color":"#707070",width:"100px"},{background:"none",color:"#707070","border-color":"#707070",width:"100px"}]
+        styles[i] = {background:"#FD4141",color:"white","border-color":"#707070",width:"100px"}
+        var appearances = ["ghost","ghost"]
+        appearances[i] = "primary"
+        this.setState({temp:styles,appearance:appearances})
+    }
+
 
     render(){
+
+
         return(
             <div className = "notification_cover">
                 <ButtonToolbar>
-                    <Button appearance="ghost">{Dictionary["item_type"]}</Button>                
-                    <Button appearance="ghost">{Dictionary["supplier"]}</Button>
+                    <Button onClick={()=> this.hendleFilter(0)} style={this.state.temp[0]} appearance={this.state.appearance[0]}>{Dictionary["item_type"]}</Button>                
+                    <Button onClick={()=> this.hendleFilter(1)} style={this.state.temp[1]} appearance={this.state.appearance[1]}>{Dictionary["supplier"]}</Button>
                 </ButtonToolbar>
-                {this.state.page}
+                {/* <Testing /> */}
+                 {this.state.page}
             </div>
         )
     }
@@ -404,7 +418,14 @@ export const NotificationSymbol= (props) =>{
 }
 
 
-export const Testing = (props) =>{
+export class Testing extends Component {
+
+    constructor(props){
+        super(props);
+    }
+
+
+    render(){
 
     return(
         <div>
@@ -419,4 +440,5 @@ export const Testing = (props) =>{
         </div>
     )
 
+}
 }
