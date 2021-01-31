@@ -8,6 +8,7 @@ import { action_btn, notification_dict } from './notifications_data';
 import { Dictionary } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
 import Nav from 'react-bootstrap/Nav';
+import v_icon from '../images/icons/v icon.svg'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -256,7 +257,7 @@ export class Notification_list extends Component{
            
         } 
         else{
-            page.push(<div>all is ok here</div>)
+            page.push(<OK_Notification/>)
         } 
         return page;
     }
@@ -310,6 +311,21 @@ export class Notification_list extends Component{
                     {this.state.message}
                 </div>
                <NotificationSymbol color = {this.state.color} error_symbol = {this.state.error_symbol}/>                
+            </div>
+        )
+    }
+}
+export class OK_Notification extends Component{
+
+    constructor(props) {
+        super(props);
+        this.state = {}
+    }
+    render(){
+        return(
+            <div className = "notification_container">
+                <div className="">{Dictionary["looks_good"]}  </div>
+               <NotificationSymbol color = {"rgba(115, 213, 4, 0.21)"} error_symbol = {v_icon}/>                
             </div>
         )
     }

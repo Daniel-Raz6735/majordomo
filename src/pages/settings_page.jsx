@@ -14,7 +14,9 @@ class Settings_page extends Component{
         return (
             <div id="settings_page_container">
                 <Nav_bar/>
+                <div>
                   this is the settings area
+                </div>
             </div>
             
         );
