@@ -1,13 +1,9 @@
-from fastapi import FastAPI
-import uvicorn
+from flask import Flask
+application = Flask(__name__)
 
-# initialize API
-app = FastAPI()
+@application.route("/")
+def index():
+    return "Hello World!"
 
-@app.get('/')
-def get_func():
-    return {'text': 'hello world'}, 200
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='8080')
+if __name__ == "__main__":
+    application.run(host='0.0.0.0', port='8080')
