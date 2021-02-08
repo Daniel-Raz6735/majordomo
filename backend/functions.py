@@ -1,4 +1,4 @@
-from old_firebase.old_firebase import receive_old_container
+
 from flask import request, jsonify
 from config import config
 import db_queries
