@@ -1,5 +1,5 @@
-import sys,os
-sys.path.append(os.getcwd())
+# import sys,os
+# sys.path.append(os.getcwd())
 from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
 from queries.update_queries import UpdateQueries as updateQ
@@ -76,6 +76,7 @@ def get_current_view():
         required parameters: business_id
         """
 
+
     weight_query, weight_code = readQ.get_current_weight(request.args)
     notifications_query, notifications_code = readQ.get_notifications(request.args)
 
@@ -133,4 +134,4 @@ def process_read_query(query, res_code):
 #     return str(code)
 
 if __name__ == '__main__':
-    app.run(ssl_context='adhoc')
+    app.run()
