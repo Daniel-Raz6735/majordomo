@@ -1,7 +1,9 @@
-from backend.queries.read_queries import ReadQueries as readQ
-from backend.queries.create_queries import CreateQueries as createQ
-from backend.queries.update_queries import UpdateQueries as updateQ
-from backend.queries.delete_queries import DeleteQueries as deleteQ
+import sys,os
+sys.path.append(os.getcwd())
+from queries.read_queries import ReadQueries as readQ
+from queries.create_queries import CreateQueries as createQ
+from queries.update_queries import UpdateQueries as updateQ
+from queries.delete_queries import DeleteQueries as deleteQ
 import flask
 from flask import request, jsonify
 from flask_cors import CORS
@@ -131,4 +133,4 @@ def process_read_query(query, res_code):
 #     return str(code)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(ssl_context='adhoc')
