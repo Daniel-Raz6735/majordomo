@@ -1,4 +1,5 @@
-
+# import sys,os
+# sys.path.append(os.getcwd())
 from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
 from queries.update_queries import UpdateQueries as updateQ
@@ -130,7 +131,6 @@ def process_read_query(query, res_code):
 #     code, query = db_queries.add_table_code()
 #     result, code = select_connection(query, False)
 #     return str(code)
-
 
 if __name__ == '__main__':
     app.run()

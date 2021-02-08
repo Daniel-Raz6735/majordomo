@@ -11,6 +11,7 @@ import ReactDOM from 'react-dom';
 import cart_plus from '../../images/icons/cart_plus.svg'
 import logo from '../../images/icons/Majordomo logo.svg'
 import {base_url} from '../../index'
+import { render_container, req_weights } from '../../components/containers';
 
 
 
@@ -29,8 +30,8 @@ class MainUserPage extends Component {
 
     componentDidMount(){
      
-
-    // req_weights(render_container,1)
+    
+    //req_weights(render_container,1)
 
     }
 

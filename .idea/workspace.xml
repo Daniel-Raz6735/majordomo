@@ -19,23 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="select query fixed and updated">
-      <change afterPath="$PROJECT_DIR$/src/components/drawer.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/images/profile.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/bars.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/bars.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/bars.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/bars.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/containers.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/containers.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/drawer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/drawer.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/notifications.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/notifications.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/notifications_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/notifications_data.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/inventory_page.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/inventory_page.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/inventory_page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/inventory_page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/login page/LoginPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/login page/LoginPage.js" afterDir="false" />
-    </list>
+    <list default="true" id="87864e87-4142-4c78-bf71-c690cf7442a1" name="Default Changelist" comment="select query fixed and updated" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -55,7 +39,7 @@
   <component name="ProjectId" id="1mZo9UA1xi6xwIAIaX30KsnzwNV" />
   <component name="ProjectLevelVcsManager">
     <OptionsSetting value="false" id="Update" />
-    <ConfirmationsSetting value="2" id="Add" />
+    <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -68,7 +52,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Confirmation" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -447,11 +431,12 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="354" y="57" key="MultipleFileMergeDialog/0.0.1280.680/-1366.0.1366.728@0.0.1280.680" timestamp="1611693206701" />
-    <state x="142" y="0" key="SettingsEditor" timestamp="1611693224677">
-      <screen x="0" y="0" width="1280" height="680" />
+    <state x="-1707" y="0" key="SettingsEditor" timestamp="1612806007381">
+      <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
     <state x="142" y="0" key="SettingsEditor/0.0.1280.680/-1366.0.1366.728@0.0.1280.680" timestamp="1611693224677" />
     <state x="142" y="0" key="SettingsEditor/0.0.1280.680@0.0.1280.680" timestamp="1610480342071" />
+    <state x="-1707" y="0" key="SettingsEditor/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1612806007380" />
     <state x="-1117" y="79" key="Vcs.Push.Dialog.v2" timestamp="1610923172081">
       <screen x="-1366" y="0" width="1366" height="728" />
     </state>
