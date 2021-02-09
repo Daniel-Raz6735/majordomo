@@ -70,6 +70,17 @@ provided optional params: can get only active rules and a specific rule
     return process_read_query(query, res_code)
 
 
+@app.route('/get/suppliers', methods=['GET'])
+def get_suppliers():
+    """gets all suppliers based on business_id,
+        provided optional params: can get only specific suppliers by item_ids
+        required parameters: business_id
+        optional parameters: items_ids
+           """
+    query, res_code = readQ.get_suppliers(request.args)
+    return process_read_query(query, res_code)
+
+
 @app.route('/get/current_view', methods=['GET'])
 def get_current_view():
     """gets all the info a user needs based on business_id,
@@ -78,8 +89,9 @@ def get_current_view():
 
     weight_query, weight_code = readQ.get_current_weight(request.args)
     notifications_query, notifications_code = readQ.get_notifications(request.args)
+    suppliers_query, supplier_code = readQ.get_suppliers(request.args)
 
-    return process_read_query([[notifications_query, "notifications"], [weight_query, "weights"]], notifications_code)
+    return process_read_query([[notifications_query, "notifications"], [weight_query, "weights"], [suppliers_query, "suppliers"]], supplier_code)
 
 
 

@@ -141,7 +141,6 @@ class LoginComponent extends Component {
             else{
                 comp = <LoginPage/>
             }
-
             this.setState({page:comp})
         })
     }

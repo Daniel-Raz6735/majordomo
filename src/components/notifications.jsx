@@ -104,8 +104,9 @@ function confirm_papulation(dict, area_name, message="", dict_to_test=false){
 function create_initial_data_dict(data){
     var dict =  {}
     if(data){
-        dict["weights"] = create_weights_dict(data["weights"])
-        dict["notifications"] = create_notification_dict(data["notifications"])
+        dict["suppliers"] = create_suppliers_dict(data["suppliers"])
+        dict["weights"] = create_weights_dict(data["weights"],dict["suppliers"])
+        dict["notifications"] = create_notification_dict(data["notifications"],dict["suppliers"])
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
         console.log(dict)
         return dict
@@ -115,39 +116,87 @@ function create_initial_data_dict(data){
 }
 
 
-function create_notification_dict(data){
-    var dict =  
-    {"category":{},
-    "supplier":{}}
-    Object.keys(data).forEach(key => {
-        var element = data[key]
-        var item_name = element["item_name"],
-            category = element["category_name"],
-            category_id = element["category_id"]
-        if(!dict["category"][category_id])
-            dict["category"][category_id] = {}
-        dict["category"][category_id][item_name] = {"number":element["code"],
-                                                 "item_name":item_name,
-                                                 "total_weight":element["weight"]
-    }
-    });
-    return dict
-}
-function create_weights_dict(data){
+// function create_notification_dict(data,suppliers){
+//     var dict =  
+//     {"category":{},
+//     "supplier":{},
+// }
+//     Object.keys(data).forEach(key => {
+//         var element = data[key]
+//         var item_name = element["item_name"],
+//             category_name = element["category_name"],
+//             category_id = element["category_id"],
+//             notification_code = element["code"],
+//             item_weight = element["weight"],
+//             element_to_insert = {"number":notification_code,
+//                                 "item_name":item_name,
+//                                 "total_weight":item_weight
+//             }
+//         if(!dict["category"][category_id])
+//             dict["category"][category_id] = {}
+
+//             dict["category"][category_id][item_name] = element_to_insert;
+
+//         if(!dict["category"][category_id]["notification_codes"])
+//             dict["category"][category_id]["notification_codes"] = []
+//         dict["category"][category_id]["notification_codes"].push(notification_code)
+        
+//     });
+//     return dict
+// }
+
+function create_notification_dict(notification_data, suppliers_data){
     var dict =  
     {"category":{},
     "supplier":{}}
     
-    Object.keys(data).forEach(key => {
-        var element = data[key]
+    confirm_papulation(suppliers_data,"suppliers_data create_notification_dict")
+    Object.keys(notification_data).forEach(key => {
+        var element = notification_data[key]
+        if(element){
+            confirm_papulation(element,"create_notification_dict")
+            console.log(element)
+            var item_name = element["item_name"],
+                item_id = element["item_id"],
+                category_name = element["category_name"],
+                category_id = element["category_id"],
+                notification_code = element["code"],
+                item_weight = element["weight"],
+                element_to_insert = {"number":notification_code,
+                                    "item_name":item_name,
+                                    "item_id":item_id,
+                                    "total_weight":item_weight
+                                    }
+                if(item_name && item_id && category_name && category_id && notification_code && item_weight){
+                    if(!dict["category"][category_id])
+                        dict["category"][category_id] = {}
+                        dict["category"][category_id][item_name] = element_to_insert;
+                    if(!dict["category"][category_id]["notification_codes"])
+                        dict["category"][category_id]["notification_codes"] = []
+                    dict["category"][category_id]["notification_codes"].push(notification_code)
+                }
+               
+        }
+    });
+    return dict
+}
+
+
+function create_weights_dict(weight_data,suppliers_data){
+    var dict =  
+    {"category":{},
+    "supplier":{}}
+    
+    confirm_papulation(suppliers_data,"suppliers_data create_weights_dict")
+    Object.keys(weight_data).forEach(key => {
+        var element = weight_data[key]
         if(element){
             confirm_papulation(element,"create_weights_dict")
             var item_name = element["item_name"],
                 item_id = element["item_id"],
                 category = element["category_id"],
                 category_name = element["category_name"]
-                if(item_name&&item_id&&category&&category_name){
-
+                if(item_name && item_id && category && category_name){
                     if(!dict["category"][category])
                         dict["category"][category] = {}
                         
@@ -155,15 +204,70 @@ function create_weights_dict(data){
                                                             "cat_name":category_name,
                                                             "date":element["date"],
                                                             "item_name":item_name,
-                                                            "total_weight":element["weight"]
-                }
-                }
-                else{
-                    console.log("missing objects for "+key+" create_weights_dict found: name: "+item_name+" ,id:"+item_id+" ,cat_id:"+category+ " , cat name"+ category_name )
+                                                            "total_weight":element["weight"],
+                                                            "suppliers":{}
+                    }
+                    if(suppliers_data&&suppliers_data["items"]&&suppliers_data["items"][item_id]&&suppliers_data["items"][item_id]["suppliers"]){
+                        var suppliers = suppliers_data["items"][item_id]["suppliers"]
+                        suppliers.forEach(supplier_id => {
+                            if (suppliers_data["suppliers"] && suppliers_data["suppliers"][supplier_id]){
+                                dict["category"][category][item_id]["suppliers"][supplier_id] = suppliers_data["suppliers"][supplier_id]
+                            }
+                        });
+                    }
                 }
         }
-        else{
-            console.log(key+ " contains nothing in create_weights_dict")
+    });
+    return dict
+}
+function create_suppliers_dict(suppliers_data){
+    var dict = {"items":{},
+            "suppliers":{}
+        }
+    
+    Object.keys(suppliers_data).forEach(key => {
+        var element = suppliers_data[key]
+        if(element){
+            var supplier_info={},
+                temp ={
+                    "address" : element["address"],
+                    "email" : element["email_user_name"] + "@" + element["email_domain_name"],
+                    "first_name" : element["first_name"],
+                    "last_name" : element["last_name"],
+                    "phone_number" : element["phone_number"],
+                    "preferred_contact" : element["preferred_contact"],
+                },
+                supplier_id = element["supplier_id"],
+                item_id = element["item_id"],
+                item_info = {
+                    "supplier_id" : supplier_id,
+                    "providing_days" :element["days_to_provide"],
+                    "frequency" : element["frequency"]}
+                               
+                if (!element["email_user_name"] || !element["email_domain_name"])
+                    temp["email"] = null
+
+                
+                Object.keys(temp).forEach(key => {
+                    if (temp[key])
+                        supplier_info[key]=temp[key]
+                })
+                supplier_info["sells_items"]={}
+
+                if(item_id&&supplier_id&&element["frequency"]&&element["days_to_provide"]){
+                    if(!dict["items"][item_id])
+                        dict["items"][item_id] = {"suppliers":[]}
+                    if(!dict["items"][item_id]["suppliers"].includes(supplier_id))
+                        dict["items"][item_id]["suppliers"].push(supplier_id)
+
+                    if(!dict["suppliers"][supplier_id])
+                        dict["suppliers"][supplier_id] = supplier_info
+                    supplier_info["sells_items"][item_id] = item_info
+
+                }
+                else{
+                    console.log("missing objects for "+key+" create_suppliers_dict found: supplier_id:"+supplier_id+" ,item_id:"+item_id+ " , frequency: "+ element["frequency"]+ " , providing_days: "+ element["days_to_provide"] )
+                }
         }
     });
     return dict
@@ -297,36 +401,43 @@ export class Notification_list extends Component{
     constructor(props) {
         super(props);
         var number = props.number
-        this.state = {
-            number:number,            
-            item_name:props.item_name,
-            total_weight: props.total_weight, 
-            message:props.message?props.message:notification_dict[number]["message"],
-            action_btn: action_btn(props.defult_weight,number) ,
-            error_symbol:notification_dict[number]["error_symbol"],
-            color:notification_dict[number]["color"]
+        if (!notification_dict[number]){
+            console.log("no notification configerd for number " + number)
         }
+        else
+            this.state = {
+                number:number,            
+                item_name:props.item_name,
+                total_weight: props.total_weight, 
+                message:props.message?props.message:notification_dict[number]["message"],
+                action_btn: action_btn(props.defult_weight,number) ,
+                error_symbol:notification_dict[number]["error_symbol"],
+                color:notification_dict[number]["color"]
+            }
     }
 
     render(){
-        return(
-            <div className = "notification_container">
-                <div className="center_items left_notification_area">
-                {this.state.action_btn}
-                </div>
-                <div className="center_items notification_item_name">
-                {this.state.item_name}
-                </div>
-                <div className="center_items notification_weight">
-                <div>{this.state.total_weight}</div>
-                </div>
+        if(this.state)
+            return(
+                <div className = "notification_container">
+                    <div className="center_items left_notification_area">
+                    {this.state.action_btn}
+                    </div>
+                    <div className="center_items notification_item_name">
+                    {this.state.item_name}
+                    </div>
+                    <div className="center_items notification_weight">
+                    <div>{this.state.total_weight}</div>
+                    </div>
 
-                <div className = "notification_message center_items">
-                    {this.state.message}
+                    <div className = "notification_message center_items">
+                        {this.state.message}
+                    </div>
+                <NotificationSymbol color = {this.state.color} error_symbol = {this.state.error_symbol}/>                
                 </div>
-               <NotificationSymbol color = {this.state.color} error_symbol = {this.state.error_symbol}/>                
-            </div>
-        )
+            )
+        else
+            return <div></div>
     }
 }
 export class OK_Notification extends Component{

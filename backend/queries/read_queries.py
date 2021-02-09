@@ -40,7 +40,7 @@ class ReadQueries:
         """method for getting the active notifications by business id
             parameters received: required: business_id,
             optional: active, notification_id
-            output:[["code", "message", "food_item_id", "active", "closed_by_user"]]"""
+            output:[["code", "message", "item_id", "active", "closed_by_user"]]"""
         list_of_cols = ["business_id", "active", "notification_id"]
         used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
         conditions = []
@@ -62,7 +62,7 @@ class ReadQueries:
 
         final_query, res_code = DbQueries.select_query(
             [["notifications"], ["food_items", "food"], ["categories", "cat"], ["("+sub_table+")", "sub"]],
-            [[["code"], ["message"], ["food_item_id"], ["active"], ["closed_by_user"]],
+            [[["code"], ["message"], ["food_item_id", "item_id"], ["active"], ["closed_by_user"]],
              [["item_name"]],
              [["category_id"], ["category_name"]],
              [["date"], ["item_name"], ["weight"]]
@@ -70,7 +70,6 @@ class ReadQueries:
             conditions)
         if res_code != 200:
             return error_message(res_code, final_query), 400
-
         return final_query, 200
 
     @staticmethod
@@ -99,8 +98,8 @@ class ReadQueries:
                 and_or = "OR"
         conditions.append(["AND", "weights.container_id", "=", "containers.container_id"])
         max_table, res_code = DbQueries.select_query(["containers", "weights"],
-                                           [[["container_id"]], [["weighing_date", "date", "MAX"]]],
-                                           conditions)
+                                                     [[["container_id"]], [["weighing_date", "date", "MAX"]]],
+                                                     conditions)
         max_table = max_table[:-1]
         conditions.append(["AND", "food_items.item_id", "=", "containers.item_id"])
         conditions.append(["AND", "t1.date", "=", "weights.weighing_date"])
@@ -122,6 +121,33 @@ class ReadQueries:
         final_query, res_code = DbQueries.select_query(
             ["containers", "weights", "food_items", "categories", ["(" + max_table + ")", "t1"]],
             cols_to_bring,
+            conditions)
+        if res_code != 200:
+            return error_message(res_code, final_query), 400
+        return final_query, 200
+
+    @staticmethod
+    def get_suppliers(args):
+        list_of_cols = ["business_id", "items_ids"]
+        used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
+        conditions = []
+        if "business_id" in used_p:
+            conditions.append(["AND", "supplier.business_id", "=", int(used_p["business_id"])])
+        else:
+            return error_message(400, "Bad request", "no business id sent"), 400
+
+        if "item_ids" in used_p:
+            and_or = "AND"
+            items = used_p["item_ids"]
+            for item in items:
+                conditions.append([and_or, "supplier.item_id", "=", int(item)])
+                and_or = "OR"
+
+        conditions.append(["AND", "supplier.supplier_id", "=", "users.user_id"])
+
+        final_query, res_code = DbQueries.select_query(
+            ["supplier", "users"],
+            None,
             conditions)
         if res_code != 200:
             return error_message(res_code, final_query), 400
