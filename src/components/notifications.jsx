@@ -3,12 +3,13 @@ import "./notifications.css"
 import {base_url} from '../index'
 import $ from 'jquery'
 import ReactDOM from 'react-dom'
-import { Button, Animation, ButtonToolbar} from 'rsuite';
+import { Button, Animation, ButtonToolbar, Loader} from 'rsuite';
 import { action_btn, notification_dict } from './notifications_data';
 import { Dictionary } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
 import Nav from 'react-bootstrap/Nav';
 import v_icon from '../images/icons/v icon.svg'
+
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -411,6 +412,7 @@ export class Notification_block extends Component{
 
         return(        
             <div id ="first_notification" className="notification_block">
+                <Loader speed="fast" size="lg" center="true" content="Loading..." vertical/>
                 </div>
             
         )
