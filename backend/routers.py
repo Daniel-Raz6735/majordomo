@@ -76,7 +76,6 @@ def get_current_view():
         required parameters: business_id
         """
 
-
     weight_query, weight_code = readQ.get_current_weight(request.args)
     notifications_query, notifications_code = readQ.get_notifications(request.args)
 

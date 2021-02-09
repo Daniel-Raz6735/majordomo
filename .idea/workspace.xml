@@ -52,7 +52,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Confirmation" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -175,7 +175,7 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="false" />
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -321,17 +321,13 @@
         </entry>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
-    <option name="OPEN_GENERIC_TABS">
-      <map>
-        <entry key="1" value="TOOL_WINDOW" />
-      </map>
-    </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -363,10 +359,10 @@
     </state>
     <state x="-1141" y="0" key="CommitChangelistDialog2/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1610923186324" />
     <state x="211" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1610757555533" />
-    <state x="-906" y="122" key="FileChooserDialogImpl" timestamp="1611259072647">
+    <state x="-906" y="122" key="FileChooserDialogImpl" timestamp="1612867754875">
       <screen x="-1366" y="0" width="1366" height="728" />
     </state>
-    <state x="-906" y="122" key="FileChooserDialogImpl/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1611259072647" />
+    <state x="-906" y="122" key="FileChooserDialogImpl/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1612867754875" />
     <state width="1899" height="194" key="GridCell.Tab.0.bottom" timestamp="1611928166312">
       <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
@@ -431,9 +427,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="354" y="57" key="MultipleFileMergeDialog/0.0.1280.680/-1366.0.1366.728@0.0.1280.680" timestamp="1611693206701" />
-    <state x="-1707" y="0" key="SettingsEditor" timestamp="1612806007381">
-      <screen x="-1920" y="0" width="1920" height="1040" />
+    <state x="-1214" y="0" key="SettingsEditor" timestamp="1612867782264">
+      <screen x="-1366" y="0" width="1366" height="728" />
     </state>
+    <state x="-1214" y="0" key="SettingsEditor/0.0.1280.680/-1366.0.1366.728@-1366.0.1366.728" timestamp="1612867782264" />
     <state x="142" y="0" key="SettingsEditor/0.0.1280.680/-1366.0.1366.728@0.0.1280.680" timestamp="1611693224677" />
     <state x="142" y="0" key="SettingsEditor/0.0.1280.680@0.0.1280.680" timestamp="1610480342071" />
     <state x="-1707" y="0" key="SettingsEditor/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1612806007380" />
