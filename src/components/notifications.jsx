@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import "./notifications.css"
 import {base_url} from '../index'
+import fake_data from '../fake_data.json'
 import $ from 'jquery'
 import ReactDOM from 'react-dom'
 import { Button, Animation, ButtonToolbar, Loader} from 'rsuite';
@@ -9,9 +10,6 @@ import { Dictionary } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
 import Nav from 'react-bootstrap/Nav';
 import v_icon from '../images/icons/v icon.svg'
-
-// import 'bootstrap/dist/css/bootstrap.min.css';
-
 
 
 const { Fade, Collapse, Transition } = Animation;
@@ -49,11 +47,12 @@ export function get_initial_data(callback, business_id){
     $.ajax({
         url: request, 
         success: function (res) {
-            callback(res);
+            callback(res,true);
             console.log(res)
         },
         error: function (err) {
             console.log(err)
+            callback(fake_data,true);
         }
     });
     }
@@ -63,8 +62,7 @@ export function get_initial_data(callback, business_id){
     
 }
 
-
-export function process_notifications(data){
+export function process_notifications(data,success){
     var page = []   
     if(typeof(data)=="object"){
         console.log(data)
@@ -74,32 +72,45 @@ export function process_notifications(data){
 
 
 }
-export function process_initial_data(data){
-    if(typeof(data)=="object"){
-        var dict = create_initial_data_dict(data[0]);  
-        confirm_papulation(dict, "process_initial_data", "initial data not recived well" )  
-        ReactDOM.render( <Notification_list dict = {dict} />,document.getElementById('first_notification'))
+export function process_initial_data(data, success){
+    if(success){
+        // download(JSON.stringify(data) , 'json.txt', 'text/plain');
+        if(typeof(data)=="object"){
+            var dict = create_initial_data_dict(data[0]);  
+            confirm_papulation(dict, "process_initial_data", "initial data not recived well" )  
+            ReactDOM.render( <Notification_list dict = {dict} />,document.getElementById('first_notification'))
+        }
+        else{
+            console.log("intial data returnd with bad body")
+        }
     }
-    else{
-        console.log("intial data returnd with bad body")
-    }
-
+    else
+    ReactDOM.render( <div> we encounterd a problem in loading data</div>,document.getElementById('first_notification'))
 }
 
 function confirm_papulation(dict, area_name, message="", dict_to_test=false){
-    message = message?"\nmessage: " +message:""
+    message = message?"\nmessage: " +message:"";
+    var not_found_keys = [];
     if(dict){
         Object.keys(dict).forEach(key=>{
             if(dict_to_test){
                 if(dict_to_test.includes(key))
-                    console.log("couldent find "+key+" in "+area_name + message)
+                    not_found_keys.push(key)
+                }
+                else if(!dict[key])
+                    not_found_keys.push(key)
+            })
+            
+            if(not_found_keys){
+                var keys = ""
+                not_found_keys.forEach(key =>{keys+=key+", "})
+            // console.log("couldent find "+keys+" in "+area_name + message)
             }
-            else if(!dict[key])
-                console.log("couldent find "+key+" in "+area_name + message)
-        })
     }
-    else 
-    console.log("no dictionary recived" + area_name + message)
+    else {
+
+        // console.log("no dictionary recived" + area_name + message)
+    }
 
 }
 function create_initial_data_dict(data){
@@ -108,43 +119,14 @@ function create_initial_data_dict(data){
         dict["suppliers"] = create_suppliers_dict(data["suppliers"])
         dict["weights"] = create_weights_dict(data["weights"],dict["suppliers"])
         dict["notifications"] = create_notification_dict(data["notifications"],dict["suppliers"])
-        confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
         console.log(dict)
+        confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
         return dict
     }
     else
         console.log("create_initial_data_dict no data recived")
 }
 
-
-// function create_notification_dict(data,suppliers){
-//     var dict =  
-//     {"category":{},
-//     "supplier":{},
-// }
-//     Object.keys(data).forEach(key => {
-//         var element = data[key]
-//         var item_name = element["item_name"],
-//             category_name = element["category_name"],
-//             category_id = element["category_id"],
-//             notification_code = element["code"],
-//             item_weight = element["weight"],
-//             element_to_insert = {"number":notification_code,
-//                                 "item_name":item_name,
-//                                 "total_weight":item_weight
-//             }
-//         if(!dict["category"][category_id])
-//             dict["category"][category_id] = {}
-
-//             dict["category"][category_id][item_name] = element_to_insert;
-
-//         if(!dict["category"][category_id]["notification_codes"])
-//             dict["category"][category_id]["notification_codes"] = []
-//         dict["category"][category_id]["notification_codes"].push(notification_code)
-        
-//     });
-//     return dict
-// }
 
 function create_notification_dict(notification_data, suppliers_data){
     var dict =  
@@ -153,32 +135,48 @@ function create_notification_dict(notification_data, suppliers_data){
     
     confirm_papulation(suppliers_data,"suppliers_data create_notification_dict")
     Object.keys(notification_data).forEach(key => {
-        var element = notification_data[key]
-        if(element){
-            confirm_papulation(element,"create_notification_dict")
-            console.log(element)
-            var item_name = element["item_name"],
-                item_id = element["item_id"],
-                category_name = element["category_name"],
-                category_id = element["category_id"],
-                notification_code = element["code"],
-                item_weight = element["weight"],
-                element_to_insert = {"number":notification_code,
+        var notification = notification_data[key]
+        if(notification){
+            confirm_papulation(notification,"create_notification_dict")
+            var item_name = notification["item_name"],
+                item_id = notification["item_id"],
+                category_name = notification["category_name"],
+                category_id = notification["category_id"],
+                notification_code = notification["code"],
+                item_weight = notification["weight"],
+                notification_to_insert = {"number":notification_code,
                                     "item_name":item_name,
                                     "item_id":item_id,
                                     "total_weight":item_weight
-                                    }
+                                    },
+                suppliers_id = false;
+                
+                if(suppliers_data&&suppliers_data["items"]&&suppliers_data["items"][category_id])
+                     suppliers_id = suppliers_data["items"][category_id]["suppliers"]
+
+                if(suppliers_id&&suppliers_data["suppliers"]&&suppliers_data["suppliers"][item_id])
+                    notification_to_insert["suppliers"]=suppliers_data["suppliers"][item_id]
+                    
+
                 if(item_name && item_id && category_name && category_id && notification_code && item_weight){
                     if(!dict["category"][category_id])
                         dict["category"][category_id] = {}
-                        dict["category"][category_id][item_name] = element_to_insert;
-                    if(!dict["category"][category_id]["notification_codes"])
-                        dict["category"][category_id]["notification_codes"] = []
-                    dict["category"][category_id]["notification_codes"].push(notification_code)
+                    if(!dict["category"][category_id][notification_code])
+                        dict["category"][category_id][notification_code] = {}
+                    dict["category"][category_id][notification_code][item_name] = notification_to_insert;
+                    
+                    suppliers_id.forEach(supplier_id => {
+                        if(!dict["supplier"][supplier_id])
+                            dict["supplier"][supplier_id] = {}
+                        if(!dict["supplier"][supplier_id][notification_code])
+                            dict["supplier"][supplier_id][notification_code] = {}
+                        dict["supplier"][supplier_id][notification_code][item_name] = notification_to_insert;
+                    })
                 }
                
         }
     });
+    console.log(dict)
     return dict
 }
 
@@ -366,12 +364,16 @@ export class Notification_list extends Component{
 
     extract_items(data) {
         var page =[]
-        console.log(data)
         if (data){
             confirm_papulation(data,"extract items Notification_ctegory")
-            Object.keys(data).forEach(item_name =>{
-                var obj = data[item_name]
-                page.push(<Notification number={obj["number"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]}  />)
+            Object.keys(data).forEach(notification_level =>{
+                var items_in_level = data[notification_level]
+                if(items_in_level){
+                Object.keys(items_in_level).forEach(item_name =>{                    
+                    var obj = items_in_level[item_name]
+                    page.push(<Notification number={obj["number"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]}  />)
+                })
+                }
             })
            
         } 
@@ -570,4 +572,12 @@ export class Testing extends Component {
     )
 
 }
+}
+
+function download(content, fileName, contentType) {
+    var a = document.createElement("a");
+    var file = new Blob([content], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
 }

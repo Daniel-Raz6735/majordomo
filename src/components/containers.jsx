@@ -50,12 +50,8 @@ export function req_weights(callback, user_id ,item_id=null){
 export function render_container(weights_dict){
     //gets a list of weights and puts and renders the maximal  
     var res = [];
-    console.log("rendering")
-    console.log(weights_dict)
     if (weights_dict){
-        
         Object.keys(weights_dict).forEach(key => {
-            console.log(key)
             res.push(<Item_block name={weights_dict[key]["item_name"]} weight ={weights_dict[key]["total_weight"]} weight_date = {weights_dict[key]["date"]} />)
         });
     }

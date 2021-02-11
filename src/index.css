@@ -9,18 +9,19 @@ body {
   margin: auto;
   min-height: 100%;
   position: relative;
+  background-color: rgba(0, 0, 0, 0.445);
 }
 
 #root{
+  max-width: 450px;
   width: 100%;
   margin: auto;
   display: flex;
   height: 100%;
+  background-color: white;
 }
 
 code {
-  /* font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', */
-    /* monospace; */
     font-family: Poppins;
 }
 

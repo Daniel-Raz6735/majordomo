@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import './LoginPage.css';
 import $ from 'jquery';
 import { auth } from '../../config/firebaseConfig';
-import MainUserPage from '../Main user page/MainUserPage'
 import {Dictionary, LangBtn} from '../../Dictionary'
 import { validate } from 'jquery-validation';
 import InventoryPage from '../inventory_page';
