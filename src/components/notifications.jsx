@@ -117,8 +117,8 @@ function create_initial_data_dict(data){
     var dict =  {}
     if(data){
         dict["suppliers"] = create_suppliers_dict(data["suppliers"])
-        dict["weights"] = create_weights_dict(data["weights"],dict["suppliers"])
         dict["notifications"] = create_notification_dict(data["notifications"],dict["suppliers"])
+        dict["weights"] = create_weights_dict(data["weights"],dict["suppliers"],dict["notifications"])
         console.log(dict)
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
         return dict
@@ -144,7 +144,7 @@ function create_notification_dict(notification_data, suppliers_data){
                 category_id = notification["category_id"],
                 notification_code = notification["code"],
                 item_weight = notification["weight"],
-                notification_to_insert = {"number":notification_code,
+                notification_to_insert = {"notification_level":notification_code,
                                     "item_name":item_name,
                                     "item_id":item_id,
                                     "total_weight":item_weight
@@ -163,54 +163,74 @@ function create_notification_dict(notification_data, suppliers_data){
                         dict["category"][category_id] = {}
                     if(!dict["category"][category_id][notification_code])
                         dict["category"][category_id][notification_code] = {}
-                    dict["category"][category_id][notification_code][item_name] = notification_to_insert;
+                    dict["category"][category_id][notification_code][item_id] = notification_to_insert;
                     
                     suppliers_id.forEach(supplier_id => {
                         if(!dict["supplier"][supplier_id])
                             dict["supplier"][supplier_id] = {}
                         if(!dict["supplier"][supplier_id][notification_code])
                             dict["supplier"][supplier_id][notification_code] = {}
-                        dict["supplier"][supplier_id][notification_code][item_name] = notification_to_insert;
+                        dict["supplier"][supplier_id][notification_code][item_id] = notification_to_insert;
                     })
                 }
                
         }
     });
-    console.log(dict)
     return dict
 }
 
 
-function create_weights_dict(weight_data,suppliers_data){
+function create_weights_dict(weight_data,suppliers_data,notifications_data){
     var dict =  
     {"category":{},
-    "supplier":{}}
-    
+    "supplier":{}},
+    notification_levels_to_test = [3,2,1]
     confirm_papulation(suppliers_data,"suppliers_data create_weights_dict")
+    confirm_papulation(notifications_data,"notifications_data create_weights_dict")
     Object.keys(weight_data).forEach(key => {
         var element = weight_data[key]
         if(element){
             confirm_papulation(element,"create_weights_dict")
             var item_name = element["item_name"],
                 item_id = element["item_id"],
-                category = element["category_id"],
-                category_name = element["category_name"]
-                if(item_name && item_id && category && category_name){
-                    if(!dict["category"][category])
-                        dict["category"][category] = {}
-                        
-                    dict["category"][category][item_id] = {
-                                                            "cat_name":category_name,
-                                                            "date":element["date"],
-                                                            "item_name":item_name,
-                                                            "total_weight":element["weight"],
-                                                            "suppliers":{}
+                category_id = element["category_id"],
+                category_name = element["category_name"],
+                notification_level = -1
+                if(item_name && item_id && category_id && category_name){
+                    if(!dict["category"][category_id])
+                        dict["category"][category_id] = {}
+                if(notifications_data && notifications_data["category"]){
+                    var cat = notifications_data["category"][category_id]
+                    console.log(cat)
+                    if(cat)
+                        notification_levels_to_test.forEach(level=>{
+                                                            if(cat[level]&&cat[level][item_id])
+                                                                notification_level=level
+                                                            })
+                }
+                var weight_info = {
+                    "cat_name":category_name,
+                    "date":element["date"],
+                    "item_name":item_name,
+                    "total_weight":element["weight"],
+                    "notification_level":notification_level,
+                    "suppliers":[]
                     }
-                    if(suppliers_data&&suppliers_data["items"]&&suppliers_data["items"][item_id]&&suppliers_data["items"][item_id]["suppliers"]){
+                    dict["category"][category_id][item_id] = weight_info
+                    if(suppliers_data && suppliers_data["items"] && suppliers_data["items"][item_id] && suppliers_data["items"][item_id]["suppliers"]){
+                        console.log(dict)
                         var suppliers = suppliers_data["items"][item_id]["suppliers"]
                         suppliers.forEach(supplier_id => {
                             if (suppliers_data["suppliers"] && suppliers_data["suppliers"][supplier_id]){
-                                dict["category"][category][item_id]["suppliers"][supplier_id] = suppliers_data["suppliers"][supplier_id]
+                                dict["category"][category_id][item_id]["suppliers"].push(supplier_id)
+                                
+                                if(!dict["supplier"][supplier_id])
+                                    dict["supplier"][supplier_id]={}
+                                if(!dict["supplier"][supplier_id][category_id])
+                                    dict["supplier"][supplier_id][category_id]={}
+                                dict["supplier"][supplier_id][category_id][item_id]=weight_info
+                                
+                               
                             }
                         });
                     }
@@ -226,6 +246,7 @@ function create_suppliers_dict(suppliers_data){
     
     Object.keys(suppliers_data).forEach(key => {
         var element = suppliers_data[key]
+        console.log(suppliers_data)
         if(element){
             var supplier_info={},
                 temp ={
@@ -253,6 +274,7 @@ function create_suppliers_dict(suppliers_data){
                 })
                 supplier_info["sells_items"]={}
 
+                
                 if(item_id&&supplier_id&&element["frequency"]&&element["days_to_provide"]){
                     if(!dict["items"][item_id])
                         dict["items"][item_id] = {"suppliers":[]}
@@ -371,7 +393,7 @@ export class Notification_list extends Component{
                 if(items_in_level){
                 Object.keys(items_in_level).forEach(item_name =>{                    
                     var obj = items_in_level[item_name]
-                    page.push(<Notification number={obj["number"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]}  />)
+                    page.push(<Notification notification_level={obj["notification_level"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]}  />)
                 })
                 }
             })
@@ -403,19 +425,19 @@ export class Notification_list extends Component{
 
     constructor(props) {
         super(props);
-        var number = props.number
-        if (!notification_dict[number]){
-            console.log("no notification configerd for number " + number)
+        var notification_level = props.notification_level
+        if (!notification_dict[notification_level]){
+            console.log("no notification configerd for notification_level " + notification_level)
         }
         else
             this.state = {
-                number:number,            
+                notification_level:notification_level,            
                 item_name:props.item_name,
                 total_weight: props.total_weight, 
-                message:props.message?props.message:notification_dict[number]["message"],
-                action_btn: action_btn(props.defult_weight,number) ,
-                error_symbol:notification_dict[number]["error_symbol"],
-                color:notification_dict[number]["color"]
+                message:props.message?props.message:notification_dict[notification_level]["message"],
+                action_btn: action_btn(props.defult_weight,notification_level) ,
+                error_symbol:notification_dict[notification_level]["error_symbol"],
+                color:notification_dict[notification_level]["color"]
             }
     }
 
@@ -507,7 +529,7 @@ export class Notification_block extends Component{
         super(props);
         this.state = {
             status:props.status,
-            number:props.number,
+            notification_level:props.notification_level,
             page: [],
             action:props.action,
             open:true

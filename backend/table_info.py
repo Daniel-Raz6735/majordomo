@@ -27,13 +27,16 @@ tables = {
     "supplier": {
         "column": ["supplier_id", "business_id", 'item_id', 'days_to_provide', "preferred_contact", "frequency"],
         "data": [
-            [5, 1, 1, '1110000', "email", "daily"],
-            [5, 2, 1, '1110000', "email", "daily"],
-            [5, 2, 2, '1110110', "email", "daily"],
-            [6, 1, 2, '1000000', "email", "daily"],
-            [6, 2, 2, '1000000', "email", "daily"],
-            [7, 1, 6, '0001000', None, "monthly"],
-            [7, 2, 6, '0001000', None, "monthly"]
+            [5, 1, 1, '1110000', 'email', 'daily'],
+            [5, 1, 2, '1110000', 'email', 'daily'],
+            [6, 1, 2, '1000000', 'email', 'daily'],
+            [6, 1, 3, '1000000', 'email', 'daily'],
+            [6, 1, 4, '1000000', 'email', 'daily'],
+            [7, 1, 6, '0001000', None, 'monthly'],
+            [5, 2, 1, '1110000', 'email', 'daily'],
+            [5, 2, 2, '1110110', 'email', 'daily'],
+            [6, 2, 2, '1000000', 'email', 'daily'],
+            [7, 2, 6, '0001000', None, 'monthly']
         ]
     },
     "food_items": {
