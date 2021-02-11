@@ -27,3 +27,4 @@ yarn-error.log*
 
 backend/old_firebase/smartcontainerdemo-a97e4-firebase-adminsdk-khgwn-f0206e819a.json
 **/__pycache__
+**/.idea
