@@ -13,6 +13,7 @@ import v_icon from '../images/icons/v icon.svg'
 
 
 const { Fade, Collapse, Transition } = Animation;
+const notifications_levels = [3,2,1]
 
 export function get_notifications(callback, client_id){
     //request all notifications for a business
@@ -51,8 +52,8 @@ export function get_initial_data(callback, business_id){
             console.log(res)
         },
         error: function (err) {
-            console.log(err)
             callback(fake_data,true);
+            console.log(err)
         }
     });
     }
@@ -74,9 +75,10 @@ export function process_notifications(data,success){
 }
 export function process_initial_data(data, success){
     if(success){
-        // download(JSON.stringify(data) , 'json.txt', 'text/plain');
+        // download(JSON.stringify(data) , 'file.json', 'text/plain');
         if(typeof(data)=="object"){
             var dict = create_initial_data_dict(data[0]);  
+            
             confirm_papulation(dict, "process_initial_data", "initial data not recived well" )  
             ReactDOM.render( <Notification_list dict = {dict} />,document.getElementById('first_notification'))
         }
@@ -120,6 +122,7 @@ function create_initial_data_dict(data){
         dict["notifications"] = create_notification_dict(data["notifications"],dict["suppliers"])
         dict["weights"] = create_weights_dict(data["weights"],dict["suppliers"],dict["notifications"])
         console.log(dict)
+        // download(JSON.stringify(dict) , 'dict.json', 'text/plain');
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
         return dict
     }
@@ -142,35 +145,40 @@ function create_notification_dict(notification_data, suppliers_data){
                 item_id = notification["item_id"],
                 category_name = notification["category_name"],
                 category_id = notification["category_id"],
-                notification_code = notification["code"],
+                notification_level = notification["code"],
                 item_weight = notification["weight"],
-                notification_to_insert = {"notification_level":notification_code,
+                date = notification["date"],
+                active = notification["active"],
+                notification_to_insert = {"notification_level":notification_level,
                                     "item_name":item_name,
                                     "item_id":item_id,
-                                    "total_weight":item_weight
+                                    "total_weight":item_weight,
+                                    "date": date,
+                                    "active": active
                                     },
                 suppliers_id = false;
                 
-                if(suppliers_data&&suppliers_data["items"]&&suppliers_data["items"][category_id])
-                     suppliers_id = suppliers_data["items"][category_id]["suppliers"]
-
-                if(suppliers_id&&suppliers_data["suppliers"]&&suppliers_data["suppliers"][item_id])
-                    notification_to_insert["suppliers"]=suppliers_data["suppliers"][item_id]
+                if(suppliers_data && suppliers_data["items"] && suppliers_data["items"][item_id]){
+                     suppliers_id = suppliers_data["items"][item_id]["suppliers"]
+                     if(suppliers_id)
+                        notification_to_insert["suppliers"] = suppliers_data["suppliers"][suppliers_id]
+                }
+                
                     
 
-                if(item_name && item_id && category_name && category_id && notification_code && item_weight){
-                    if(!dict["category"][category_id])
-                        dict["category"][category_id] = {}
-                    if(!dict["category"][category_id][notification_code])
-                        dict["category"][category_id][notification_code] = {}
-                    dict["category"][category_id][notification_code][item_id] = notification_to_insert;
+                if(item_name && item_id && category_name && category_id && notification_level && item_weight){
+                    if(!dict["category"][notification_level])
+                        dict["category"][notification_level] = {}
+                    if(!dict["category"][notification_level][category_id])
+                        dict["category"][notification_level][category_id] = {}
+                    dict["category"][notification_level][category_id][item_id] = {...notification_to_insert};
                     
                     suppliers_id.forEach(supplier_id => {
-                        if(!dict["supplier"][supplier_id])
-                            dict["supplier"][supplier_id] = {}
-                        if(!dict["supplier"][supplier_id][notification_code])
-                            dict["supplier"][supplier_id][notification_code] = {}
-                        dict["supplier"][supplier_id][notification_code][item_id] = notification_to_insert;
+                        if(!dict["supplier"][notification_level])
+                            dict["supplier"][notification_level] = {}
+                        if(!dict["supplier"][notification_level][supplier_id])
+                            dict["supplier"][notification_level][supplier_id] = {}
+                        dict["supplier"][notification_level][supplier_id][item_id] = {...notification_to_insert};
                     })
                 }
                
@@ -179,12 +187,10 @@ function create_notification_dict(notification_data, suppliers_data){
     return dict
 }
 
-
 function create_weights_dict(weight_data,suppliers_data,notifications_data){
     var dict =  
     {"category":{},
-    "supplier":{}},
-    notification_levels_to_test = [3,2,1]
+    "supplier":{}}
     confirm_papulation(suppliers_data,"suppliers_data create_weights_dict")
     confirm_papulation(notifications_data,"notifications_data create_weights_dict")
     Object.keys(weight_data).forEach(key => {
@@ -200,11 +206,10 @@ function create_weights_dict(weight_data,suppliers_data,notifications_data){
                     if(!dict["category"][category_id])
                         dict["category"][category_id] = {}
                 if(notifications_data && notifications_data["category"]){
-                    var cat = notifications_data["category"][category_id]
-                    console.log(cat)
+                    var cat = notifications_data["category"]
                     if(cat)
-                        notification_levels_to_test.forEach(level=>{
-                                                            if(cat[level]&&cat[level][item_id])
+                        notifications_levels.forEach(level=>{
+                                                            if(cat[level]&&cat[level][category_id]&&cat[level][category_id][item_id])
                                                                 notification_level=level
                                                             })
                 }
@@ -216,19 +221,22 @@ function create_weights_dict(weight_data,suppliers_data,notifications_data){
                     "notification_level":notification_level,
                     "suppliers":[]
                     }
-                    dict["category"][category_id][item_id] = weight_info
+                    dict["category"][category_id][item_id] ={...weight_info} 
                     if(suppliers_data && suppliers_data["items"] && suppliers_data["items"][item_id] && suppliers_data["items"][item_id]["suppliers"]){
-                        console.log(dict)
                         var suppliers = suppliers_data["items"][item_id]["suppliers"]
                         suppliers.forEach(supplier_id => {
-                            if (suppliers_data["suppliers"] && suppliers_data["suppliers"][supplier_id]){
+                            if (suppliers_data["suppliers"] && suppliers_data["suppliers"][supplier_id] ){
                                 dict["category"][category_id][item_id]["suppliers"].push(supplier_id)
+                                var supplier_name = suppliers_data["suppliers"][supplier_id]["name"]
+                                
+                               
                                 
                                 if(!dict["supplier"][supplier_id])
                                     dict["supplier"][supplier_id]={}
-                                if(!dict["supplier"][supplier_id][category_id])
-                                    dict["supplier"][supplier_id][category_id]={}
-                                dict["supplier"][supplier_id][category_id][item_id]=weight_info
+                                if(supplier_name){
+                                    weight_info["cat_name"] = supplier_name
+                                    dict["supplier"][supplier_id][item_id]=weight_info
+                                }
                                 
                                
                             }
@@ -246,14 +254,12 @@ function create_suppliers_dict(suppliers_data){
     
     Object.keys(suppliers_data).forEach(key => {
         var element = suppliers_data[key]
-        console.log(suppliers_data)
         if(element){
             var supplier_info={},
                 temp ={
                     "address" : element["address"],
                     "email" : element["email_user_name"] + "@" + element["email_domain_name"],
-                    "first_name" : element["first_name"],
-                    "last_name" : element["last_name"],
+                    "name" : element["first_name"] +" "+ element["last_name"],
                     "phone_number" : element["phone_number"],
                     "preferred_contact" : element["preferred_contact"],
                 },
@@ -266,6 +272,8 @@ function create_suppliers_dict(suppliers_data){
                                
                 if (!element["email_user_name"] || !element["email_domain_name"])
                     temp["email"] = null
+                if (!element["first_name"] || !element["last_name"])
+                    temp["name"] = null
 
                 
                 Object.keys(temp).forEach(key => {
@@ -283,7 +291,7 @@ function create_suppliers_dict(suppliers_data){
 
                     if(!dict["suppliers"][supplier_id])
                         dict["suppliers"][supplier_id] = supplier_info
-                    supplier_info["sells_items"][item_id] = item_info
+                    dict["suppliers"][supplier_id]["sells_items"][item_id] = item_info
 
                 }
                 else{
@@ -295,33 +303,62 @@ function create_suppliers_dict(suppliers_data){
 }
 
 
+function get_notifications_by_level(notifications_dict, category_id){
+    var dict = {}
+    if (notifications_dict && category_id){
+        notifications_levels.forEach(level=>{
+            if(notifications_dict[level] && notifications_dict[level][category_id])
+                dict[level] = notifications_dict[level][category_id]
+        })
+    }
+    if(Object.keys(dict).length === 0)
+        return null
+    return dict
+}
+
+
 //1
 export class Notification_list extends Component{
     constructor(props) {
         super(props);
         this.render_by_category = this.render_by_category.bind(this);
+        this.hendleFilter = this.hendleFilter.bind(this);
         this.state = {
             page:[],
             appearance:["primary","ghost"],
             temp:[{background:"#FD4141",color:"#FFFFFF","border-color":"#707070",width:"100px"},{background:"none",color:"#707070","border-color":"#707070",width:"100px"}],
-            dict:props.dict
+            categories: ["category","supplier"],
+            dict:props.dict,
+            index:0
         }
-        this.hendleFilter = this.hendleFilter.bind(this);
+        
     }
-    componentWillMount(){
-        this.render_by_category('category')
+    componentDidMount(){
+        this.render_by_category(this.state.categories[this.state.index])
     }
+
     render_by_category(cat){
         var page = []
         if(this.state.dict["notifications"] && this.state.dict["weights"]){
             var notifications_dict = this.state.dict["notifications"][cat]
             var weights_dict = this.state.dict["weights"][cat]
-            confirm_papulation(weights_dict,"Notification_list","render_by_category missing weight attribute")
-            confirm_papulation(notifications_dict,"Notification_list","render_by_category missing notification attribute")
-            Object.keys(weights_dict).forEach(category =>{
-                page.push(<Notification_ctegory category_id = {category} notification_dict ={notifications_dict[category]} weights_dict={weights_dict[category]}/>)
+            // confirm_papulation(weights_dict,"Notification_list","render_by_category missing weight attribute")
+            // confirm_papulation(notifications_dict,"Notification_list","render_by_category missing notification attribute")
+
+            Object.keys(weights_dict).forEach(category_id =>{
+                var notifications = get_notifications_by_level(notifications_dict, category_id)
+                console.log(notifications)   
+                console.log("adding notification")
+                var addition = <Notification_ctegory category_id = {category_id} notification_dict ={notifications} weights_dict={weights_dict[category_id]}/>
+                console.log(addition)
+                page.push(addition)
+                console.log(page)
+
+               
             })
-            this.setState({page});
+            this.setState({page:page});
+            // this.forceUpdate()
+            
         }
         else{
             console.log("no notifications sent to Notification_list")
@@ -329,11 +366,16 @@ export class Notification_list extends Component{
     }
 
     hendleFilter(i){
-        var styles =  [{background:"none",color:"#707070","border-color":"#707070",width:"100px"},{background:"none",color:"#707070","border-color":"#707070",width:"100px"}]
-        styles[i] = {background:"#FD4141",color:"white","border-color":"#707070",width:"100px"}
-        var appearances = ["ghost","ghost"]
+        var defult_style = {background:"none",color:"#707070","border-color":"#707070",width:"100px"},
+            red_style = {background:"#FD4141",color:"white","border-color":"#707070",width:"100px"}
+        var styles =  [defult_style,defult_style],
+            appearances = ["ghost","ghost"]
+
         appearances[i] = "primary"
-        this.setState({temp:styles,appearance:appearances})
+        styles[i] = red_style
+        this.setState({temp:styles,appearance:appearances,index:i})
+        this.render_by_category(this.state.categories[i])
+
     }
 
 
@@ -346,7 +388,7 @@ export class Notification_list extends Component{
                     <Button onClick={()=> this.hendleFilter(0)} style={this.state.temp[0]} appearance={this.state.appearance[0]}>{Dictionary["item_type"]}</Button>                
                     <Button onClick={()=> this.hendleFilter(1)} style={this.state.temp[1]} appearance={this.state.appearance[1]}>{Dictionary["supplier"]}</Button>
                 </ButtonToolbar>
-                {/* <Testing /> */}
+                
                  {this.state.page}
             </div>
         )
@@ -361,38 +403,40 @@ export class Notification_list extends Component{
       this.handleToggle = this.handleToggle.bind(this);
       this.extract_items = this.extract_items.bind(this);
       this.state = {
-        page:'',
+        page:[],
         show: true,
         category_id:props.category_id,
-        notifications_dict:props.notification_dict,
+        notification_dict:props.notification_dict,
         weights_dict:props.weights_dict
       };
+
     }
     componentDidMount(){
+        console.log(this.state.notification_dict)
+        console.log("(**************************)")
+        this.setState({page:this.extract_items(this.state.notification_dict)});
         
     }
     handleToggle(e) {
         if(e){
             if ( $(e.target).attr('class').includes('notification_toggler')){
-                this.setState({
-                    show: !this.state.show
-                }); 
+                this.setState({show: !this.state.show}); 
             }
         }
-        else{
+        else
             console.log("no e target enterd")
-        }
     }
 
     extract_items(data) {
+        console.log(data)
         var page =[]
-        if (data){
+        if (data ){
             confirm_papulation(data,"extract items Notification_ctegory")
             Object.keys(data).forEach(notification_level =>{
                 var items_in_level = data[notification_level]
                 if(items_in_level){
-                Object.keys(items_in_level).forEach(item_name =>{                    
-                    var obj = items_in_level[item_name]
+                Object.keys(items_in_level).forEach(item_id =>{                    
+                    var obj = items_in_level[item_id]
                     page.push(<Notification notification_level={obj["notification_level"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]}  />)
                 })
                 }
@@ -406,12 +450,14 @@ export class Notification_list extends Component{
     }
 
     render() {
+        console.log("adding new 2")
+        console.log(this.state.notification_dict)
       return (
         <div className="notification_category_container">
 
           <Notification_Header on_click = {this.handleToggle} weights_dict = {this.state.weights_dict} cat_name={this.state.category_name} />
           <Collapse in={this.state.show}>{(props, ref) => 
-            <Panel {...props} ref={ref} notifications ={this.extract_items(this.state.notifications_dict)} />}
+            <Panel {...props} ref={ref} notifications ={this.state.page} />}
             
           </Collapse>
         </div>
@@ -548,7 +594,7 @@ export class Notification_block extends Component{
         return(        
             <div id ="first_notification" className="notification_block">
                 <Loader speed="fast" size="lg" center="true" content="Loading..." vertical/>
-                </div>
+            </div>
             
         )
     }
