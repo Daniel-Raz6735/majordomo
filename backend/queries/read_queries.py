@@ -232,7 +232,6 @@ class ReadQueries:
                 if expecting_result:
                     if results:
                         print("res:",results)
-                        # return jsonify(results), 200
                         return results, 200
                     else:
                         return "Result not found", 200

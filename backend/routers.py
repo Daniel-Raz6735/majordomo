@@ -3,9 +3,10 @@ from queries.create_queries import CreateQueries as createQ
 from queries.update_queries import UpdateQueries as updateQ
 from queries.delete_queries import DeleteQueries as deleteQ
 import flask
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 from typing import Optional
-from flask import request, jsonify
-from flask_cors import CORS
+from flask import request
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
@@ -15,6 +16,7 @@ origins = [
     "http://localhost:8080",
     "http://localhost:5000",
     "http://localhost:8000",
+    "http://localhost:3000",
 ]
 
 app.add_middleware(
@@ -97,7 +99,7 @@ def get_suppliers():
 
 
 @app.get('/get/current_view')
-async def get_current_view(business_id: int):
+async def get_current_view(business_id: int, active: Optional[bool] = False):
 # def get_current_view():
     """gets all the info a user needs based on business_id,
         required parameters: business_id
@@ -155,7 +157,9 @@ def process_read_query(query, res_code):
         return query
     result, res_code = readQ.select_connection(query)
     if res_code == 200:
-        return result
+        json_compatible_item_data = jsonable_encoder(result[0])
+        return JSONResponse(content=json_compatible_item_data)
+        # return result
     else:
         return error_message(res_code, result, "unable to process request")
 # @app.route('/get/restart', methods=['GET'])
