@@ -1,17 +1,32 @@
-
 from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
 from queries.update_queries import UpdateQueries as updateQ
 from queries.delete_queries import DeleteQueries as deleteQ
 import flask
+from typing import Optional
 from flask import request, jsonify
 from flask_cors import CORS
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 app = FastAPI()
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+    "http://localhost:5000",
+    "http://localhost:8000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # app = flask.Flask(__name__)
-CORS(app)
-app.config["DEBUG"] = True
+# CORS(app)
+# app.config["DEBUG"] = True
 indexes = {
     "container_id": 0,
     "user_id": 0,
@@ -81,19 +96,26 @@ def get_suppliers():
     return process_read_query(query, res_code)
 
 
-@app.route('/get/current_view', methods=['GET'])
-def get_current_view():
+@app.get('/get/current_view')
+async def get_current_view(business_id: int):
+# def get_current_view():
     """gets all the info a user needs based on business_id,
         required parameters: business_id
         """
-
-    weight_query, weight_code = readQ.get_current_weight(request.args)
-    notifications_query, notifications_code = readQ.get_notifications(request.args)
-    suppliers_query, supplier_code = readQ.get_suppliers(request.args)
+    # print(arg)
+    args = {"business_id" : business_id}
+    weight_query, weight_code = readQ.get_current_weight(args)
+    notifications_query, notifications_code = readQ.get_notifications(args)
+    suppliers_query, supplier_code = readQ.get_suppliers(args)
 
     return process_read_query([[notifications_query, "notifications"], [weight_query, "weights"], [suppliers_query, "suppliers"]], supplier_code)
 
 
+@app.get('/')
+async def read_item(item_id: str, q: Optional[str] = None):
+    if q:
+        return {"item_id": item_id, "q": q}
+    return {"item_id": item_id}
 
 # @app.route('/get/create', methods=['GET'])
 # def create():
@@ -110,9 +132,9 @@ def get_current_view():
 #     pass
 
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return "<h1>404</h1><p>The resource could not be found.</p><p>" + str(e) + "</p>", 404
+# @app.errorhandler(404)
+# def page_not_found(e):
+#     return "<h1>404</h1><p>The resource could not be found.</p><p>" + str(e) + "</p>", 404
 
 
 @app.route('/', methods=['GET'])
@@ -144,5 +166,5 @@ def process_read_query(query, res_code):
 #     result, code = select_connection(query, False)
 #     return str(code)
 
-if __name__ == '__main__':
-    app.run()
+# if __name__ == '__main__':
+#     app.run()

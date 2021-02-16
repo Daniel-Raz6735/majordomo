@@ -42,7 +42,8 @@ class ReadQueries:
             optional: active, notification_id
             output:[["code", "message", "item_id", "active", "closed_by_user"]]"""
         list_of_cols = ["business_id", "active", "notification_id"]
-        used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
+        # used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
+        used_p=args
         conditions = []
         if "business_id" in used_p:
             conditions.append(["AND", "notifications.business_id", "=", int(used_p["business_id"])])
@@ -75,7 +76,8 @@ class ReadQueries:
     @staticmethod
     def get_current_weight(args, get_by_container=False):
         list_of_cols = ["container_id", "business_id", "items_ids"]
-        used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
+        # used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
+        used_p = args
         conditions = []
         if "business_id" in used_p:
             conditions.append(["AND", "containers.business_id", "=", int(used_p["business_id"])])
@@ -129,7 +131,8 @@ class ReadQueries:
     @staticmethod
     def get_suppliers(args):
         list_of_cols = ["business_id", "items_ids"]
-        used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
+        # used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
+        used_p=args
         conditions = []
         if "business_id" in used_p:
             conditions.append(["AND", "supplier.business_id", "=", int(used_p["business_id"])])
@@ -229,7 +232,8 @@ class ReadQueries:
                 if expecting_result:
                     if results:
                         print("res:",results)
-                        return jsonify(results), 200
+                        # return jsonify(results), 200
+                        return results, 200
                     else:
                         return "Result not found", 200
                 else:
