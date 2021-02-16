@@ -1,5 +1,4 @@
-# import sys,os
-# sys.path.append(os.getcwd())
+
 from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
 from queries.update_queries import UpdateQueries as updateQ
@@ -7,9 +6,10 @@ from queries.delete_queries import DeleteQueries as deleteQ
 import flask
 from flask import request, jsonify
 from flask_cors import CORS
-
-
-app = flask.Flask(__name__)
+from fastapi import FastAPI
+import uvicorn
+app = FastAPI()
+# app = flask.Flask(__name__)
 CORS(app)
 app.config["DEBUG"] = True
 indexes = {

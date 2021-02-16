@@ -6,7 +6,8 @@ import 'rsuite/dist/styles/rsuite-default.css'
 import './index.css';
 import LoginComponent from './pages/login page/LoginPage';
 
-export const base_url = "http://127.0.0.1:5000"
+// export const base_url = "http://127.0.0.1:5000"
+export const base_url = "http://3.139.75.46:5000"
 
 ReactDOM.render(<LoginComponent/>,document.getElementById('root'));
 
