@@ -77,7 +77,7 @@ export function process_initial_data(data, success) {
     if (success) {
         // download(JSON.stringify(data) , 'file.json', 'text/plain');
         if (typeof (data) == "object") {
-            var dict = create_initial_data_dict(data[0]);
+            var dict = create_initial_data_dict(data);
 
             confirm_papulation(dict, "process_initial_data", "initial data not recived well")
             ReactDOM.render(<Notification_list dict={dict} />, document.getElementById('first_notification'))
