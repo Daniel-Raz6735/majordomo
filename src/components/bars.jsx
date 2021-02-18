@@ -3,16 +3,11 @@ import inventory from '../images/icons/inventory.svg'
 import home from '../images/icons/home.svg'
 import cart from '../images/icons/cart.svg'
 import profile from '../images/profile.svg'
-import {base_url} from '../index'
 import React, { Component } from 'react';
 import { auth } from '../config/firebaseConfig'
 import { Dictionary , LangBtn} from '../Dictionary';
 import logo from '../images/icons/Majordomo logo.svg';
-import { Link } from "react-router-dom"
-import ReactDOM from 'react-dom'
-import MainUserPage from "../pages/Main user page/MainUserPage"
 import InventoryPage from "../pages/inventory_page"
-import Settings_page from "../pages/settings_page"
 import Orders_page from "../pages/orders_page"
 import { Notification_block } from "./notifications"
 
@@ -49,26 +44,26 @@ export class Site_frame extends Component{
 
         <footer id = "footer_bar">
             <div className="description" onClick={()=> this.handleChange(0,<Notification_block/>)}>
-                <img  className="bottom-bar-btn" src={home} />
+                <img alt="Home" className="bottom-bar-btn" src={home} />
                 <div className={this.state.buttons[0]}><div className="tester">{Dictionary["home"]}</div></div>
             </div>
 
             <div className="description" onClick={()=> this.handleChange(1,<InventoryPage/>)}>
-                <img className="bottom-bar-btn" src={inventory} />
+                <img alt="Inventory" className="bottom-bar-btn" src={inventory} />
                 <div className={this.state.buttons[1]}>
                     <div  className="tester">{Dictionary["inventory"]}</div>
                 </div>
             </div>
 
             <div className="description" onClick={()=> this.handleChange(2,<Orders_page/>)}>
-                <img className="bottom-bar-btn" src={cart}/>
+                <img alt="Cart" className="bottom-bar-btn" src={cart}/>
                 <div className={this.state.buttons[2]}>
                     <div  className="tester">{Dictionary["orders"]}</div>
                 </div>
             </div>
         
-            <div className="description" onClick={()=> this.handleChange(3,<Settings_page/>)}>
-                 <img className="bottom-bar-btn" src={profile}/>
+            <div className="description" onClick={()=> this.handleChange(3,<SettingsPage/>)}>
+                 <img alt="Profile" className="bottom-bar-btn" src={profile}/>
                  <div className={this.state.buttons[3]} >
                      <div  className="tester">{Dictionary["profile"]}</div>
                  </div>

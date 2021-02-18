@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Security } from '@okta/okta-react';
 import { OktaAuth,useOktaAuth } from '@okta/okta-auth-js';
-import Settings_page from '../pages/settings_page';
+import SettingPage from '../pages/SettingPage';
 
 const config = {
         clientId: '0oa4mg79eLGUpoyUl5d6',
@@ -20,7 +20,7 @@ const App = () => {
     <Router>
       <Security oktaAuth={oktaAuth}>
       <Switch>
-      <Route  path="/login/callback"  component={Settings_page} />
+      <Route  path="/login/callback"  component={SettingPage} />
       <SecureRoute  path="/"  component={Site_frame} />
         </Switch>
       </Security>

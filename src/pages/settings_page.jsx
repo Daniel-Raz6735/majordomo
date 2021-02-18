@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import { Nav_bar } from "../components/bars";
-import './settings_page.css'
+import './SettingPage.css'
 
-class Settings_page extends Component{
+class SettingsPage extends Component{
     constructor(props) {
         super(props);
 
@@ -23,4 +23,4 @@ class Settings_page extends Component{
 
     }
 }
-export default Settings_page
+export default SettingPage

@@ -1,35 +1,33 @@
 import requests
-import datetime
 from pydantic import BaseModel
 from typing import List
+import time
 
 
+# object that represent weight for container.
 class Weighing(BaseModel):
-
     container_id: int
     weight: float
-    date: int
+    date: int = int(time.time())
 
 
+# object that represent list of weights
 class WeighingList(BaseModel):
     weights: List[Weighing]
 
 
-def add_weight(id, weight, date):
-    """This function get id, list of weight and date for container"""
-    sec = datetime.timedelta(seconds=24 * 60 * 60).total_seconds()
+def add_weight(container_id, weight):
+    """This function get container id, weight and send post request to the backend"""
 
-    w = Weighing(container_id=id, weight=weight, date=int(sec))
+    w = Weighing(container_id=container_id, weight=weight)
 
     data = WeighingList(weights=[w])
 
     # url = 'https://majordomo.cloudns.asia/add/weight'
-    url = 'http://127.0.0.1:8000/add/weight'
+    url = 'http://127.0.0.1:8000/add/weight'+'?client_time='+int(time.time())
 
-    res = requests.post(url, json = data.dict())
+    requests.post(url, json = data.dict())
 
-    print(res.text)
 
 if __name__ == '__main__':
-
-    add_weight(1, 20, 0)
+    add_weight(1, 20)

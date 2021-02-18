@@ -148,7 +148,7 @@ async def read_item(lis: WeighingList):
 
     if temp and temp["weights"]:
         for weight in temp["weights"]:
-            arr.append(weight["container_id"])
+            arr.append(weight["date"])
         return arr
         return await req.body()
 
