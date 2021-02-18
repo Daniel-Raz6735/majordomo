@@ -1,7 +1,6 @@
 // import { Button, Modal } from "antd";
 import React, { Component} from "react";
 import { ButtonToolbar,Button, Modal, InputGroup, InputNumber } from "rsuite";
-import { BottomBar, Nav_bar } from "../components/bars";
 import {get_notifications,process_notifications} from "../components/notifications";
 import { Dictionary } from "../Dictionary";
 import './inventory_page.css'
@@ -12,10 +11,10 @@ import cart_plus from '../images/icons/cart_plus.svg'
 
 
 class InventoryPage extends Component{
-    constructor(props) {
-        super(props);
+    // constructor(props) {
+    //     super(props);
 
-    }
+    // }
 
 
     render() {
@@ -65,9 +64,9 @@ export class AddToOrder extends Component {
     }
     render() {
         var type =""
-        if(this.state.kind == 0)
-            type = <img src={cart_plus} onClick={() => this.open('xs')} style={{"cursor":"pointer"}} />
-        else if(this.state.kind == 1)
+        if(this.state.kind === 0)
+            type = <img alt="add_to_order" src={cart_plus} onClick={() => this.open('xs')} style={{"cursor":"pointer"}} />
+        else if(this.state.kind === 1)
             type = <div className="add_to_order" onClick={() => this.open('xs')} >{Dictionary.add_to_order}</div>
 
       return (

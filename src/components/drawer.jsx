@@ -1,8 +1,8 @@
-import { Drawer, ButtonToolbar, IconButton, Icon, InputGroup, Input } from 'rsuite';
+import { Drawer, Icon, InputGroup, Input } from 'rsuite';
 import React, { Component } from 'react';
 
 import { Containers } from './containers';
-import { Dictionary } from '../Dictionary';
+// import { Dictionary } from '../Dictionary';
 import './../components/drawer.css';
 
 export class CategoryDrawer extends React.Component {
@@ -42,7 +42,7 @@ export class CategoryDrawer extends React.Component {
       
       return (
         <div className="category_drawer_container">
-          <a className="inventory_clicker" onClick={() => this.toggleDrawer()}>see full inventory</a>
+          <a  className="inventory_clicker" onClick={() => this.toggleDrawer()}>see full inventory</a>
         
           <Drawer
             size={size}

@@ -12,7 +12,7 @@ import Nav from 'react-bootstrap/Nav';
 import v_icon from '../images/icons/v icon.svg'
 
 
-const { Fade, Collapse, Transition } = Animation;
+const {  Collapse } = Animation;
 const notifications_levels = [3, 2, 1]
 
 export function get_notifications(callback, client_id) {
@@ -64,11 +64,11 @@ export function get_initial_data(callback, business_id) {
 }
 
 export function process_notifications(data, success) {
-    var page = []
+    // var page = []
     if (typeof (data) == "object") {
         console.log(data)
         // var dict = create_notification_dict(data);      
-        // ReactDOM.render( <Notification_list dict = {dict} />,document.getElementById('first_notification'))
+        // ReactDOM.render( <NotificationList dict = {dict} />,document.getElementById('first_notification'))
     }
 
 
@@ -83,7 +83,7 @@ export function process_initial_data(data, success) {
             else{
 
                 confirm_papulation(dict, "process_initial_data", "initial data not recived well")
-                ReactDOM.render(<Notification_list dict={dict} />, document.getElementById('first_notification'))
+                ReactDOM.render(<NotificationList dict={dict} />, document.getElementById('first_notification'))
             }
         }
         else {
@@ -110,7 +110,7 @@ function confirm_papulation(dict, area_name, message = "", dict_to_test = false)
         if (not_found_keys) {
             var keys = ""
             not_found_keys.forEach(key => { keys += key + ", " })
-            // console.log("couldent find "+keys+" in "+area_name + message)
+            console.log("couldent find "+keys+" in "+area_name + message)
         }
     }
     else {
@@ -338,7 +338,7 @@ function get_notifications_by_level(notifications_dict, category_id) {
 
 
 //1
-export class Notification_list extends Component {
+export class NotificationList extends Component {
     constructor(props) {
         super(props);
         this.render_by_category = this.render_by_category.bind(this);
@@ -363,14 +363,14 @@ export class Notification_list extends Component {
         if (this.state.dict["notifications"] && this.state.dict["weights"]) {
             var notifications_dict = this.state.dict["notifications"][cat]
             var weights_dict = this.state.dict["weights"][cat]
-            // confirm_papulation(weights_dict,"Notification_list","render_by_category missing weight attribute")
-            // confirm_papulation(notifications_dict,"Notification_list","render_by_category missing notification attribute")
+            // confirm_papulation(weights_dict,"NotificationList","render_by_category missing weight attribute")
+            // confirm_papulation(notifications_dict,"NotificationList","render_by_category missing notification attribute")
 
             Object.keys(weights_dict).forEach(category_id => {
                 var notifications = get_notifications_by_level(notifications_dict, category_id)
                 console.log(notifications)
                 console.log("adding notification")
-                var addition = <Notification_ctegory category_id={category_id} notification_dict={notifications} weights_dict={weights_dict[category_id]} />
+                var addition = <NotificationCategory category_id={category_id} notification_dict={notifications} weights_dict={weights_dict[category_id]} />
                 page.push(addition)
 
 
@@ -379,7 +379,7 @@ export class Notification_list extends Component {
 
         }
         else {
-            console.log("no notifications sent to Notification_list")
+            console.log("no notifications sent to NotificationList")
         }
     }
 
@@ -417,7 +417,7 @@ export class Notification_list extends Component {
 }
 
 //2
-class Notification_ctegory extends Component {
+class NotificationCategory extends Component {
     constructor(props) {
         super(props);
         this.handleToggle = this.handleToggle.bind(this);
@@ -446,7 +446,7 @@ class Notification_ctegory extends Component {
     extract_items(notification_data) {
         var page = []
         if (notification_data) {
-            confirm_papulation(notification_data, "extract items Notification_ctegory")
+            confirm_papulation(notification_data, "extract items NotificationCategory")
             Object.keys(notification_data).forEach(notification_level => {
                 var items_in_level = notification_data[notification_level]
                 
@@ -460,7 +460,7 @@ class Notification_ctegory extends Component {
             })
         }
         else 
-            page.push(<OK_Notification />)
+            page.push(<OKNotification />)
         return page;
     }
 
@@ -469,7 +469,7 @@ class Notification_ctegory extends Component {
         console.log(not)
         return (
             <div className="notification_category_container">
-                <Notification_Header on_click={this.handleToggle} weights_dict={this.props.weights_dict} cat_name={this.props.category_id} />
+                <NotificationHeader on_click={this.handleToggle} weights_dict={this.props.weights_dict} cat_name={this.props.category_id} />
                 <Collapse in={this.state.show}>
                     {(props, ref) =><Panel {...props} ref={ref} notifications={not} />}
                 </Collapse>
@@ -524,7 +524,7 @@ export class Notification extends Component {
             return <div></div>
     }
 }
-export class OK_Notification extends Component {
+export class OKNotification extends Component {
 
     constructor(props) {
         super(props);
@@ -560,7 +560,7 @@ const Panel = React.forwardRef(({ ...props }, ref) => (
 ));
 
 //Panels button
-export class Notification_Header extends Component {
+export class NotificationHeader extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -573,7 +573,7 @@ export class Notification_Header extends Component {
 
     render() {
         return (
-            <div className="notification_header notification_toggler" onClick={(e) => this.props.on_click(e)} >
+            <div className="notificationheader notification_toggler" onClick={(e) => this.props.on_click(e)} >
                 {this.props.cat_name}
                 <CategoryDrawer weights_dict={this.props.weights_dict} />
             </div>
@@ -583,7 +583,7 @@ export class Notification_Header extends Component {
 }
 
 //discontinued. will be deleted shortly
-export class Notification_block extends Component {
+export class NotificationBlock extends Component {
 
     constructor(props) {
         super(props);
@@ -606,7 +606,7 @@ export class Notification_block extends Component {
 
 
         return (
-            <div id="first_notification" className="notification_block">
+            <div id="first_notification" className="notificationblock">
                 <Loader speed="fast" size="lg" center="true" content="Loading..." vertical />
             </div>
 
@@ -625,7 +625,7 @@ export const NotificationSymbol = (props) => {
 
     return (
         <div className="notification_symbol_area center_items" style={color}>
-            <img src={symbol} className="notification_symbol"></img>
+            <img alt="symbols" src={symbol} className="notification_symbol"></img>
         </div>
     )
 }
@@ -633,9 +633,9 @@ export const NotificationSymbol = (props) => {
 
 export class Testing extends Component {
 
-    constructor(props) {
-        super(props);
-    }
+    // constructor(props) {
+    //     super(props);
+    // }
 
 
     render() {
@@ -656,10 +656,10 @@ export class Testing extends Component {
     }
 }
 
-function download(content, fileName, contentType) {
-    var a = document.createElement("a");
-    var file = new Blob([content], { type: contentType });
-    a.href = URL.createObjectURL(file);
-    a.download = fileName;
-    a.click();
-}
+// function download(content, fileName, contentType) {
+//     var a = document.createElement("a");
+//     var file = new Blob([content], { type: contentType });
+//     a.href = URL.createObjectURL(file);
+//     a.download = fileName;
+//     a.click();
+// }

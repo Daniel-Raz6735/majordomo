@@ -3,7 +3,6 @@ import { Dictionary } from '../Dictionary';
 import "./containers.css"
 import {base_url} from '../index'
 import $ from 'jquery'
-import ReactDOM from 'react-dom'
 import { AddToOrder } from '../pages/inventory_page';
 
 
@@ -52,7 +51,7 @@ export function render_container(weights_dict){
     var res = [];
     if (weights_dict){
         Object.keys(weights_dict).forEach(key => {
-            res.push(<Item_block name={weights_dict[key]["item_name"]} weight ={weights_dict[key]["total_weight"]} weight_date = {weights_dict[key]["date"]} />)
+            res.push(<ItemBlock name={weights_dict[key]["item_name"]} weight ={weights_dict[key]["total_weight"]} weight_date = {weights_dict[key]["date"]} />)
         });
     }
     return res;
@@ -83,7 +82,7 @@ export class Containers extends Component {
     }
 }
 
-export class Item_block extends Component {
+export class ItemBlock extends Component {
     /* creates a squere containing an item object
     input props:weight = the weight of the item
                 date weighd:
@@ -129,7 +128,7 @@ function getDate(elementDate){
     var dataTime = new Date(elementDate)
     var str
 
-            if((now.getMonth()+1 == dataTime.getMonth()+1) && (now.getDate() == dataTime.getDate()))
+            if((now.getMonth()+1 === dataTime.getMonth()+1) && (now.getDate() === dataTime.getDate()))
             {
                 let hour = dataTime.getHours()
                 let minutes = dataTime.getMinutes()

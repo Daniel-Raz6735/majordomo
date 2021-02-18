@@ -1,11 +1,11 @@
 import React, {Component} from "react";
-import './orders_page.css'
+import './settings_page.css'
 
-class Orders_page extends Component{
-    constructor(props) {
-        super(props);
+class OrdersPage extends Component{
+    // constructor(props) {
+    //     super(props);
 
-    }
+    // }
 
 
     render() {
@@ -19,5 +19,5 @@ class Orders_page extends Component{
 
     }
 }
-export default Orders_page
+export default OrdersPage
 

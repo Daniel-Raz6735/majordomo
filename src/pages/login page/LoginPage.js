@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import './LoginPage.css';
 import $ from 'jquery';
 import { auth } from '../../config/firebaseConfig';
-import {Dictionary, LangBtn} from '../../Dictionary'
-import { validate } from 'jquery-validation';
-import InventoryPage from '../inventory_page';
-import { BottomBar, Site_frame } from '../../components/bars';
+import {Dictionary, LangBtn} from '../../Dictionary';
+import { SiteFrame } from '../../components/bars';
 import logo from '../../images/icons/Majordomo logo.svg'
 
 // require('jquery-validation');
@@ -47,8 +44,6 @@ class LoginPage extends Component {
         auth.signInWithEmailAndPassword(this.state.email, this.state.password).then(() => {
             window.location.reload();
         }).catch(function (error) {
-            var errorCode = error.code;
-            var errorMessage = error.message;
             // alert(errorCode + " : " + errorMessage);
             $("#password").val("");
         });
@@ -66,7 +61,7 @@ class LoginPage extends Component {
                     <div className="loginContainer">
                         <div id="buttonWrapper123">
                         <img src ={logo} alt ="logo"></img>
-                            <form dir="RTL" id="login_form" name="login_form_name" role="form">
+                            <form dir="RTL" id="login_form" name="login_form_name" >
                                 < input type="email"
                                     id="email"
                                     name="email"
@@ -75,7 +70,7 @@ class LoginPage extends Component {
                                     defaultValue="" required
                                     onChange={this.handleChange}>
                                 </input>
-                                <a>‏ </a>
+                                {/* <a>‏ </a> */}
                                 < input type="password"
                                     id="password"
                                     name="password"
@@ -134,7 +129,7 @@ class LoginComponent extends Component {
             var comp=[]
             if (user){
                 comp = <Router>
-                     <Route path="/"  component={Site_frame} />
+                     <Route path="/"  component={SiteFrame} />
                     </Router>
             }
             else{

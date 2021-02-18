@@ -21,7 +21,7 @@ const App = () => {
       <Security oktaAuth={oktaAuth}>
       <Switch>
       <Route  path="/login/callback"  component={SettingPage} />
-      <SecureRoute  path="/"  component={Site_frame} />
+      <SecureRoute  path="/"  component={SiteFrame} />
         </Switch>
       </Security>
     </Router>

@@ -2,10 +2,9 @@ import React from 'react';
 import LocalizedStrings from 'react-localization';
 import Dropdown, { DropdownContent, DropdownTrigger } from 'react-simple-dropdown';
 import './Dictionary.css';
-import globe from './images/globe.png';
 import israelFlag from './images/icons/israel.svg';
 import usaFlag from './images/icons/USA.svg';
-import {base_url} from './index'
+
 
 
 /* LocalizedStrings is holding our Dictionary so that all of the pages wiil be able to be translated.
@@ -145,13 +144,13 @@ export const LangBtn = () => {
           <ul id="langlist">
             <li>
               <div className="flags">
-              <img src={israelFlag} id={HEId} className="langButtons" onClick={changeLanguage("HE")}></img>
+              <img alt="hebrew" src={israelFlag} id={HEId} className="langButtons" onClick={changeLanguage("HE")}></img>
               <div>עברית</div>
               </div>
             </li>
             <li>
             <div className="flags">
-              <img src ={usaFlag} id={ENId} className="langButtons " onClick={changeLanguage("EN")} ></img>
+              <img alt="usa" src ={usaFlag} id={ENId} className="langButtons " onClick={changeLanguage("EN")} ></img>
               <div>English</div>
             </div>
             </li>

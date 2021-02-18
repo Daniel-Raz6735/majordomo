@@ -8,17 +8,18 @@ import { auth } from '../config/firebaseConfig'
 import { Dictionary , LangBtn} from '../Dictionary';
 import logo from '../images/icons/Majordomo logo.svg';
 import InventoryPage from "../pages/inventory_page"
-import Orders_page from "../pages/orders_page"
-import { Notification_block } from "./notifications"
+import OrdersPage from "../pages/orders_page"
+import { NotificationBlock } from "./notifications"
+import SettingPage from "../pages/settings_page"
 
-export class Site_frame extends Component{
+export class SiteFrame extends Component{
     
     constructor(props) {
         super(props);
         
         this.state = {
             buttons:["bottom_bar active","bottom_bar","bottom_bar","bottom_bar"],
-            page:<Notification_block/>
+            page:<NotificationBlock/>
             
         }
         this.handleChange = this.handleChange.bind(this);
@@ -43,7 +44,7 @@ export class Site_frame extends Component{
 
 
         <footer id = "footer_bar">
-            <div className="description" onClick={()=> this.handleChange(0,<Notification_block/>)}>
+            <div className="description" onClick={()=> this.handleChange(0,<NotificationBlock/>)}>
                 <img alt="Home" className="bottom-bar-btn" src={home} />
                 <div className={this.state.buttons[0]}><div className="tester">{Dictionary["home"]}</div></div>
             </div>
@@ -55,14 +56,14 @@ export class Site_frame extends Component{
                 </div>
             </div>
 
-            <div className="description" onClick={()=> this.handleChange(2,<Orders_page/>)}>
+            <div className="description" onClick={()=> this.handleChange(2,<OrdersPage/>)}>
                 <img alt="Cart" className="bottom-bar-btn" src={cart}/>
                 <div className={this.state.buttons[2]}>
                     <div  className="tester">{Dictionary["orders"]}</div>
                 </div>
             </div>
         
-            <div className="description" onClick={()=> this.handleChange(3,<SettingsPage/>)}>
+            <div className="description" onClick={()=> this.handleChange(3,<SettingPage/>)}>
                  <img alt="Profile" className="bottom-bar-btn" src={profile}/>
                  <div className={this.state.buttons[3]} >
                      <div  className="tester">{Dictionary["profile"]}</div>
@@ -76,7 +77,7 @@ export class Site_frame extends Component{
     }
 }
 
-export class Nav_bar extends Component {
+export class NavBar extends Component {
 
     constructor(props) {
         super(props);

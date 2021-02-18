@@ -3,9 +3,9 @@ import { Dictionary, LangBtn } from '../../Dictionary'
 import { auth } from '../../config/firebaseConfig'
 import './MainUserPage.css'
 import $, { data } from 'jquery';
-import {Notification_block} from "../../components/notifications"
+import {NotificationBlock} from "../../components/notifications"
 
-import {BottomBar, Nav_bar} from "../../components/bars"
+import {BottomBar, NavBar} from "../../components/bars"
 import ReactDOM from 'react-dom';
 
 import cart_plus from '../../images/icons/cart_plus.svg'
@@ -40,7 +40,7 @@ class MainUserPage extends Component {
             <div className="main_user_page_container">
                 <div id="root_render">
                 <div className="main_info_container" >
-                <Notification_block/>
+                <NotificationBlock/>
                 </div>
                 </div>       
             </div>

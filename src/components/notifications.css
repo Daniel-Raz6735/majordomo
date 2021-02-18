@@ -1,5 +1,5 @@
 
- .notification_header{
+ .notificationheader{
     height: 55px;
     background-color: #FFFFFF; 
     box-shadow: 2px 2px 8px  #00000054  ;
@@ -35,7 +35,7 @@
     border-radius: 12px;
 }
 
-.notification_block{
+.notificationblock{
     height:100%;
     width: 325px;
     margin: auto;

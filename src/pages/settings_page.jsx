@@ -1,19 +1,19 @@
 import React, {Component} from "react";
-import { Nav_bar } from "../components/bars";
-import './SettingPage.css'
+import { NavBar } from "../components/bars";
+import './settings_page.css'
 
 class SettingsPage extends Component{
-    constructor(props) {
-        super(props);
+    // constructor(props) {
+    //     super(props);
 
-    }
+    // }
 
 
     render() {
             
         return (
             <div id="settings_page_container">
-                <Nav_bar/>
+                <NavBar/>
                 <div>
                   this is the settings area
                 </div>
@@ -23,4 +23,4 @@ class SettingsPage extends Component{
 
     }
 }
-export default SettingPage
+export default SettingsPage
