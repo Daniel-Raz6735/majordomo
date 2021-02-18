@@ -159,7 +159,7 @@ async def read_item():
 
 @app.route('/', methods=['GET'])
 def home():
-    return '''<h1>Majordomo back end</h1>'''
+    return {'<h1>Majordomo back end</h1>'}
 
 
 def error_message(code, message, info=None):
