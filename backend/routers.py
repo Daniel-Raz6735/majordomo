@@ -11,6 +11,8 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
+import datetime
+from typing import List
 app = FastAPI()
 origins = [
     "http://localhost",
@@ -123,7 +125,8 @@ async def get_current_view(business_id: int, active: Optional[bool] = False):
 
 @app.get('/')
 async def home():
-    return {'<h1>Majordomo back end</h1>'}
+    return '<h1>Majordomo back end</h1>'
+
 
 class Weighing(BaseModel):
     container_id: int
@@ -132,21 +135,21 @@ class Weighing(BaseModel):
 
 
 class WeighingList(BaseModel):
-    weighings: List[Weighing]
+    weights: List[Weighing]
 
 
-def process_weights_list(weight: WeighingList):
-    pass
 
-
+ # q: Optional[str] = None
 @app.post('/add/weight')
 # async def read_item(weight_id: int, weight: float, date: float):
-async def read_item(lis: Weighing):
+async def read_item(lis: WeighingList):
     arr = []
     temp = lis.dict()
-    for weight in lis:
-        arr.append(weight[1])
-    return arr
+    if temp and temp["weights"]:
+        for weight in temp["weights"]:
+            arr.append(weight["container_id"])
+        return arr
+        # return await req.body()
 
 # @app.get('/')
 # async def read_item(item_id: str, q: Optional[str] = None):
