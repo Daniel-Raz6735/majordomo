@@ -9,6 +9,7 @@ from typing import Optional
 from flask import request
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 import uvicorn
 app = FastAPI()
 origins = [
@@ -125,11 +126,19 @@ async def home():
     return {'<h1>Majordomo back end</h1>'}
 
 
+class Item(BaseModel):
+    id: list
+    weight: float
+
+
  # q: Optional[str] = None
 @app.post('/add/weight')
 # async def read_item(weight_id: int, weight: float, date: float):
-async def read_item(req: Request):
-    return await req.body()
+async def read_item(item: Item):
+    temp = item.dict()
+    print(temp)
+    return temp
+        # return await req.body()
 
 # @app.get('/')
 # async def read_item(item_id: str, q: Optional[str] = None):

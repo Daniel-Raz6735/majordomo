@@ -13,11 +13,10 @@ def add_weight(id, weight, date):
              'weight': weight}
             }
 
-
-    res = requests.post(url, data= data)
+    res = requests.post(url, json= data)
 
     print(res.text)
 
 
 if __name__ == '__main__':
-    add_weight(1, 20, "")
+    add_weight(1, 20, "date")
