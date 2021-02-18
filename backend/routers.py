@@ -5,7 +5,7 @@ from queries.delete_queries import DeleteQueries as deleteQ
 import flask
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-from typing import Optional
+from typing import Optional,List
 from flask import request
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -125,20 +125,28 @@ async def get_current_view(business_id: int, active: Optional[bool] = False):
 async def home():
     return {'<h1>Majordomo back end</h1>'}
 
-
-class Item(BaseModel):
-    id: list
+class Weighing(BaseModel):
+    container_id: int
     weight: float
+    date: int
 
 
- # q: Optional[str] = None
+class WeighingList(BaseModel):
+    weighings: List[Weighing]
+
+
+def process_weights_list(weight: WeighingList):
+    pass
+
+
 @app.post('/add/weight')
 # async def read_item(weight_id: int, weight: float, date: float):
-async def read_item(item: Item):
-    temp = item.dict()
-    print(temp)
-    return temp
-        # return await req.body()
+async def read_item(lis: Weighing):
+    arr = []
+    temp = lis.dict()
+    for weight in lis:
+        arr.append(weight[1])
+    return arr
 
 # @app.get('/')
 # async def read_item(item_id: str, q: Optional[str] = None):
