@@ -145,11 +145,12 @@ class WeighingList(BaseModel):
 async def read_item(lis: WeighingList):
     arr = []
     temp = lis.dict()
+
     if temp and temp["weights"]:
         for weight in temp["weights"]:
             arr.append(weight["container_id"])
         return arr
-        # return await req.body()
+        return await req.body()
 
 # @app.get('/')
 # async def read_item(item_id: str, q: Optional[str] = None):
