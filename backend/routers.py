@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from typing import Optional
 from flask import request
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 app = FastAPI()
@@ -128,8 +128,8 @@ async def home():
  # q: Optional[str] = None
 @app.post('/add/weight')
 # async def read_item(weight_id: int, weight: float, date: float):
-async def read_item():
-    return {"Hey Danny!"}
+async def read_item(req: Request):
+    return await req.body()
 
 # @app.get('/')
 # async def read_item(item_id: str, q: Optional[str] = None):
