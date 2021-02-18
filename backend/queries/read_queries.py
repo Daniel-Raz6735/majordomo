@@ -1,5 +1,5 @@
-from psycopg2.extras import RealDictCursor
 from flask import request, jsonify
+from psycopg2.extras import RealDictCursor
 from config import config
 from functions import Functions
 from db_queries import DbQueries
