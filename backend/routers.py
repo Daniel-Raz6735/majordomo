@@ -122,13 +122,14 @@ async def get_current_view(business_id: int, active: Optional[bool] = False):
 
 @app.get('/')
 async def home():
-    return '''<h1>Majordomo back end</h1>'''
+    return {'<h1>Majordomo back end</h1>'}
+
 
  # q: Optional[str] = None
 @app.post('/add/weight')
 # async def read_item(weight_id: int, weight: float, date: float):
 async def read_item():
-    return "Hey Danny!"
+    return {"Hey Danny!"}
 
 # @app.get('/')
 # async def read_item(item_id: str, q: Optional[str] = None):
@@ -157,9 +158,9 @@ async def read_item():
 #     return "<h1>404</h1><p>The resource could not be found.</p><p>" + str(e) + "</p>", 404
 
 
-@app.route('/', methods=['GET'])
-def home():
-    return {'<h1>Majordomo back end</h1>'}
+# @app.route('/', methods=['GET'])
+# def home():
+#     return {'<h1>Majordomo back end</h1>'}
 
 
 def error_message(code, message, info=None):
