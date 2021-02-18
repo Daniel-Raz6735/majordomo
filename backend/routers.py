@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from typing import Optional
 from flask import request
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 app = FastAPI()
@@ -114,11 +114,29 @@ async def get_current_view(business_id: int, active: Optional[bool] = False):
     return process_read_query([[notifications_query, "notifications"], [weight_query, "weights"], [suppliers_query, "suppliers"]], supplier_code)
 
 
+# @app.get('/')
+# async def read_item(item_id: str, q: Optional[str] = None):
+#     if q:
+#         return {"item_id": item_id, "q": q}
+#     return {"item_id": item_id}
+
 @app.get('/')
-async def read_item(item_id: str, q: Optional[str] = None):
-    if q:
-        return {"item_id": item_id, "q": q}
-    return {"item_id": item_id}
+async def home():
+    return {'<h1>Majordomo back end</h1>'}
+
+
+ # q: Optional[str] = None
+@app.post('/add/weight')
+# async def read_item(weight_id: int, weight: float, date: float):
+async def read_item(req: Request):
+    return await req.body()
+
+# @app.get('/')
+# async def read_item(item_id: str, q: Optional[str] = None):
+#     if q:
+#         return {"item_id": item_id, "q": q}
+#     return {"item_id": item_id}
+
 
 # @app.route('/get/create', methods=['GET'])
 # def create():
@@ -140,9 +158,9 @@ async def read_item(item_id: str, q: Optional[str] = None):
 #     return "<h1>404</h1><p>The resource could not be found.</p><p>" + str(e) + "</p>", 404
 
 
-@app.route('/', methods=['GET'])
-def home():
-    return '''<h1>Majordomo back end</h1>'''
+# @app.route('/', methods=['GET'])
+# def home():
+#     return {'<h1>Majordomo back end</h1>'}
 
 
 def error_message(code, message, info=None):

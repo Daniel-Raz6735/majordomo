@@ -78,9 +78,13 @@ export function process_initial_data(data, success) {
         // download(JSON.stringify(data) , 'file.json', 'text/plain');
         if (typeof (data) == "object") {
             var dict = create_initial_data_dict(data);
+            if(!dict)
+                ReactDOM.render(<div> we encounterd a problem in loading data</div>, document.getElementById('first_notification'))
+            else{
 
-            confirm_papulation(dict, "process_initial_data", "initial data not recived well")
-            ReactDOM.render(<Notification_list dict={dict} />, document.getElementById('first_notification'))
+                confirm_papulation(dict, "process_initial_data", "initial data not recived well")
+                ReactDOM.render(<Notification_list dict={dict} />, document.getElementById('first_notification'))
+            }
         }
         else {
             console.log("intial data returnd with bad body")
@@ -124,6 +128,10 @@ function create_initial_data_dict(data) {
         console.log(dict)
         // download(JSON.stringify(dict) , 'dict.json', 'text/plain');
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
+        if(!dict["weights"]){
+            console.log("no weights for user")
+            return null
+        }
         return dict
     }
     else
@@ -139,6 +147,8 @@ function create_notification_dict(notification_data, suppliers_data) {
     }
 
     confirm_papulation(suppliers_data, "suppliers_data create_notification_dict")
+    if(!notification_data)
+        return null
     Object.keys(notification_data).forEach(key => {
         var notification = notification_data[key]
         if (notification) {
@@ -198,6 +208,8 @@ function create_weights_dict(weight_data, suppliers_data, notifications_data) {
     }
     confirm_papulation(suppliers_data, "suppliers_data create_weights_dict")
     confirm_papulation(notifications_data, "notifications_data create_weights_dict")
+    if(!weight_data)
+        return null
     Object.keys(weight_data).forEach(key => {
         var element = weight_data[key]
         if (element) {
@@ -257,7 +269,8 @@ function create_suppliers_dict(suppliers_data) {
         "items": {},
         "suppliers": {}
     }
-
+    if(!suppliers_data)
+        return null
     Object.keys(suppliers_data).forEach(key => {
         var element = suppliers_data[key]
         if (element) {
