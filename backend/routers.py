@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
 import datetime
+import time
 from typing import List
 app = FastAPI()
 origins = [
@@ -91,30 +92,34 @@ provided optional params: can get only active rules and a specific rule
     return process_read_query(query, res_code)
 
 
-@app.route('/get/suppliers', methods=['GET'])
-def get_suppliers():
+@app.get('/get/suppliers')
+async def get_suppliers(business_id: int, item_id: Optional[int] = -1, item_ids: Optional[List] = None):
     """gets all suppliers based on business_id,
-        provided optional params: can get only specific suppliers by item_ids
-        required parameters: business_id
-        optional parameters: items_ids
-           """
-    query, res_code = readQ.get_suppliers(request.args)
+        provided optional params: can get only specific suppliers by item_ids"""
+    args = {"business_id": business_id}
+    ids = None
+    if item_id > 0:
+        ids = [item_id]
+    elif item_ids:
+        ids = item_ids
+    if ids:
+        args["items_ids"] = ids
+    query, res_code = readQ.get_suppliers(args)
     return process_read_query(query, res_code)
 
 
 @app.get('/get/current_view')
-async def get_current_view(business_id: int, active: Optional[bool] = False):
-# def get_current_view():
-    """gets all the info a user needs based on business_id,
-        required parameters: business_id
-        """
-    # print(arg)
-    args = {"business_id" : business_id}
+async def get_current_view(business_id: int):
+    """gets all the info a user needs based on business_id"""
+    args = {"business_id": business_id, "active": True}
     weight_query, weight_code = readQ.get_current_weight(args)
     notifications_query, notifications_code = readQ.get_notifications(args)
     suppliers_query, supplier_code = readQ.get_suppliers(args)
 
-    return process_read_query([[notifications_query, "notifications"], [weight_query, "weights"], [suppliers_query, "suppliers"]], supplier_code)
+    return process_read_query([[notifications_query, "notifications"],
+                               [weight_query, "weights"],
+                               [suppliers_query, "suppliers"]],
+                              supplier_code)
 
 
 # @app.get('/')
@@ -130,27 +135,28 @@ async def home():
 
 class Weighing(BaseModel):
     container_id: int
-    weight: float
-    date: int
+    weight_value: float
+    weighing_date: int
+    last_user: int = None
 
 
 class WeighingList(BaseModel):
     weights: List[Weighing]
 
 
-
- # q: Optional[str] = None
 @app.post('/add/weight')
-# async def read_item(weight_id: int, weight: float, date: float):
-async def read_item(lis: WeighingList):
+async def add_weights(lis: WeighingList, client_time: int):
     arr = []
-    temp = lis.dict()
-
-    if temp and temp["weights"]:
-        for weight in temp["weights"]:
-            arr.append(weight["date"])
-        return arr
-        return await req.body()
+    server_time = int(time.time())
+    weight_list = lis.dict()
+    for weight in weight_list["weights"]:
+        time_gap = client_time-weight["weighing_date"]
+        weight_time = "to_timestamp("+str(server_time-time_gap)+")"
+        arr.insert(0, [weight_time, weight["container_id"], weight["weight_value"], weight["last_user"]])
+    query, res_code = createQ.insert_to_table_query("weights",
+                                                    ["weighing_date", "container_id", "weight_value", "last_user"],
+                                                    arr)
+    return process_create_query([[query, "add weights"]], res_code)
 
 # @app.get('/')
 # async def read_item(item_id: str, q: Optional[str] = None):
@@ -197,9 +203,17 @@ def process_read_query(query, res_code):
         return query
     result, res_code = readQ.select_connection(query)
     if res_code == 200:
-        json_compatible_item_data = jsonable_encoder(result[0])
-        return JSONResponse(content=json_compatible_item_data)
-        # return result
+        return JSONResponse(content=jsonable_encoder(result))
+    else:
+        return error_message(res_code, result, "unable to process request")
+
+
+def process_create_query(query, res_code):
+    if res_code != 200:
+        return query
+    result, res_code = createQ.insert_connection(query)
+    if res_code == 200:
+        return JSONResponse(content=jsonable_encoder(result[0]))
     else:
         return error_message(res_code, result, "unable to process request")
 # @app.route('/get/restart', methods=['GET'])
