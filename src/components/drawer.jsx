@@ -53,7 +53,7 @@ export class CategoryDrawer extends React.Component {
             backdrop = {true}
           >
              <Drawer.Header>
-              <Drawer.Title style={{color:"#6FB91C", textAlign:"center"}}>Vegtables</Drawer.Title>
+              <Drawer.Title >Vegtables</Drawer.Title>
               <div id="drawer_title_border"></div>
             </Drawer.Header>
             <Drawer.Body>

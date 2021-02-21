@@ -108,7 +108,9 @@ export class ItemBlock extends Component {
                     {this.state.name}
                 </div>
                <div >{this.state.weight} {this.state.unit}</div>
-               <div>{this.state.weight_date} </div>
+               <div id="last_registred">last registred at
+               <div id ="weight_date">{this.state.weight_date} </div>
+               </div>
             </div>
             {/* <div className="add_to_order">{Dictionary.add_to_order}</div> */}
             <AddToOrder  kind ={1} />

@@ -12,6 +12,22 @@
     justify-content: space-around;
     flex-direction: column;
     align-content: space-between;
+    color: #3B3939;
+    font-family: "Poppins semibold";
+}
+
+.rs-drawer-content{
+    border-radius: 15px 15px 0 0;
+}
+
+#weight_date{
+    display: flex;
+    justify-content: center;
+    color: #3B3939;
+}
+
+#last_registred{
+    color: #707070;
 }
 
 .item_container{
@@ -32,7 +48,7 @@
 }
 
 .add_to_order{
-    margin-top: 10px;
+    margin-top: 15px;
     color: #060606;
 }
 
