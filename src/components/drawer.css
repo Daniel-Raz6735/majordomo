@@ -7,3 +7,15 @@
     width: fit-content;
 }
 
+.url_like {
+    color: #0a5dc2; 
+  }
+  
+  .url_like:hover {
+    text-decoration: underline;
+  }
+  
+  .url_like:active {
+    color: black;
+  }
+  

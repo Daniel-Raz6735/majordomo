@@ -7,7 +7,7 @@ import {Dictionary, LangBtn} from '../../Dictionary';
 import { SiteFrame } from '../../components/bars';
 import logo from '../../images/icons/Majordomo logo.svg'
 
-// require('jquery-validation');
+require('jquery-validation');
 
 
 
@@ -37,7 +37,7 @@ class LoginPage extends Component {
                     minlength: 1,
                 },
             },
-            messages: {}
+            messages:{ }
         });
 
         if (!$("#login_form").valid()) return;
@@ -56,7 +56,6 @@ class LoginPage extends Component {
     render() {
         return (
             <div id="LPcover" className="cover">
-                <LangBtn/>
                 <div id="loginWrapper" className="wrapper">
                     <div className="loginContainer">
                         <div id="buttonWrapper123">
@@ -70,7 +69,6 @@ class LoginPage extends Component {
                                     defaultValue="" required
                                     onChange={this.handleChange}>
                                 </input>
-                                {/* <a>‏ </a> */}
                                 < input type="password"
                                     id="password"
                                     name="password"

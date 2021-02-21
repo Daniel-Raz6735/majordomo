@@ -70,9 +70,7 @@ export class Containers extends Component {
     }
 
   
-    componentWillMount() {
-       
-    }
+    
     render() {
         return (
             <div>
