@@ -3,7 +3,6 @@ import "./notifications.css"
 import { base_url } from '../index'
 import fake_data from '../fake_data.json'
 import $ from 'jquery'
-import ReactDOM from 'react-dom'
 import { Button, Animation, ButtonToolbar, Loader } from 'rsuite';
 import { action_btn, notification_dict } from './notifications_data';
 import { Dictionary } from '../Dictionary';
@@ -38,30 +37,7 @@ export function get_notifications(callback, client_id) {
     }
 
 }
-export function get_initial_data(callback, business_id) {
-    //request all information for a business
-    var request = base_url + '/get/current_view';
 
-    if (business_id) {
-        request += "?business_id=" + business_id + "&active=true"
-        console.log(request)
-        $.ajax({
-            url: request,
-            success: function (res) {
-                callback(res, true);
-                console.log(res)
-            },
-            error: function (err) {
-                callback(fake_data, true);
-                console.log(err)
-            }
-        });
-    }
-    else {
-        console.log("no user id enterd. nothing happend")
-    }
-
-}
 
 export function process_notifications(data, success) {
     // var page = []
@@ -73,26 +49,7 @@ export function process_notifications(data, success) {
 
 
 }
-export function process_initial_data(data, success) {
-    if (success) {
-        // download(JSON.stringify(data) , 'file.json', 'text/plain');
-        if (typeof (data) == "object") {
-            var dict = create_initial_data_dict(data);
-            if(!dict)
-                ReactDOM.render(<div> we encounterd a problem in loading data</div>, document.getElementById('first_notification'))
-            else{
 
-                confirm_papulation(dict, "process_initial_data", "initial data not recived well")
-                ReactDOM.render(<NotificationList dict={dict} />, document.getElementById('first_notification'))
-            }
-        }
-        else {
-            console.log("intial data returnd with bad body")
-        }
-    }
-    else
-        ReactDOM.render(<div> we encounterd a problem in loading data</div>, document.getElementById('first_notification'))
-}
 
 function confirm_papulation(dict, area_name, message = "", dict_to_test = false) {
     message = message ? "\nmessage: " + message : "";
@@ -346,7 +303,7 @@ export class NotificationList extends Component {
         this.state = {
             page: [],
             appearance: ["primary", "ghost"],
-            temp: [{ background: "#FD4141", color: "#FFFFFF", "border-color": "#707070", width: "100px" }, { background: "none", color: "#707070", "border-color": "#707070", width: "100px" }],
+            temp: [{ background: "#FD4141", color: "#FFFFFF", "borderColor": "#707070", width: "100px" }, { background: "none", color: "#707070", "borderColor": "#707070", width: "100px" }],
             categories: ["category", "supplier"],
             dict: props.dict,
             index: 0
@@ -384,8 +341,8 @@ export class NotificationList extends Component {
     }
 
     hendleFilter(i) {
-        var defult_style = { background: "none", color: "#707070", "border-color": "#707070", width: "100px" },
-            red_style = { background: "#FD4141", color: "white", "border-color": "#707070", width: "100px" }
+        var defult_style = { background: "none", color: "#707070", "borderColor": "#707070", width: "100px" },
+            red_style = { background: "#FD4141", color: "white", "borderColor": "#707070", width: "100px" }
         var styles = [defult_style, defult_style],
             appearances = ["ghost", "ghost"]
         appearances[i] = "primary"
@@ -582,32 +539,78 @@ export class NotificationHeader extends Component {
     }
 }
 
-//discontinued. will be deleted shortly
+
 export class NotificationBlock extends Component {
 
     constructor(props) {
         super(props);
+        this.get_initial_data = this.get_initial_data.bind(this);
+        this.process_initial_data = this.process_initial_data.bind(this);
         this.state = {
             status: props.status,
             notification_level: props.notification_level,
-            page: [],
+            page: <Loader speed="fast" size="lg" content="Loading..." center vertical />,
             action: props.action,
             open: true
 
         }
     }
 
+    get_initial_data(callback, business_id) {
+        //request all information for a business
+        var request = base_url + '/get/current_view';
+    
+        if (business_id) {
+            request += "?business_id=" + business_id + "&active=true"
+            console.log(request)
+            $.ajax({
+                url: request,
+                success: function (res) {
+                    callback(res, true);
+                    console.log(res)
+                },
+                error: function (err) {
+                    callback(fake_data, true);
+                    console.log(err)
+                }
+            });
+        }
+        else {
+            console.log("no user id enterd. nothing happend")
+        }
+    
+    }
 
+    process_initial_data(data, success) {
+        if (success) {
+            // download(JSON.stringify(data) , 'file.json', 'text/plain');
+            if (typeof (data) == "object") {
+                var dict = create_initial_data_dict(data);
+                if(!dict)
+                    this.setState({page:<div> we encounterd a problem in loading data</div>})
+                    
+                else{
+                    confirm_papulation(dict, "process_initial_data", "initial data not recived well")
+                    this.setState({page:<NotificationList dict={dict} />})
+                }
+                }
+                else {
+                    console.log("intial data returnd with bad body")
+                }
+            }
+            else
+            this.setState({page:<div> we encounterd a problem in loading data</div>})
+        }
 
-    componentWillMount() {
-        get_initial_data(process_initial_data, 1)
+    componentDidMount() {
+        this.get_initial_data(this.process_initial_data, 1)
     }
     render() {
 
 
         return (
             <div id="first_notification" className="notificationblock">
-                <Loader speed="fast" size="lg" center="true" content="Loading..." vertical />
+                {this.state.page}
             </div>
 
         )
