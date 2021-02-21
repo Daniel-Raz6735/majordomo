@@ -231,8 +231,8 @@ class ReadQueries:
                 print('Database connection closed.')
                 if expecting_result:
                     if results:
-                        print("res:",results)
-                        return results, 200
+                        print("res:", results)
+                        return results[0], 200
                     else:
                         return "Result not found", 200
                 else:
