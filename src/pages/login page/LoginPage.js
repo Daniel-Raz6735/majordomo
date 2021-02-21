@@ -3,10 +3,9 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import './LoginPage.css';
 import $ from 'jquery';
 import { auth } from '../../config/firebaseConfig';
-import {Dictionary, LangBtn} from '../../Dictionary';
+import {Dictionary} from '../../Dictionary';
 import { SiteFrame } from '../../components/bars';
 import logo from '../../images/icons/Majordomo logo.svg'
-
 require('jquery-validation');
 
 
