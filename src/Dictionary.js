@@ -38,15 +38,24 @@ export const Dictionary = new LocalizedStrings({
 
     //notifications
     just_few:"Just a few left",
+    
     running_low:"Running low",
     must_use:"Must use ASAP",
     add_to_order :"Add to order",
     suggest_dish :"Suggest Dish",
     kg:" kg",
     looks_good:"Inventory looks good",
-    serach_placeholder:"what are you looking for?"
+    serach_placeholder:"what are you looking for?",
 
-    
+    //category names
+    fish:"Fish",
+    meat:"Meat",
+    vegtables:"Vegtables",
+    fruit:"fruit",
+    dairy:"Dairy",
+    dry_foods:"Dry foods",
+    other:"other",
+
     
     
     
@@ -77,16 +86,23 @@ export const Dictionary = new LocalizedStrings({
     add_to_order :"הוסף להזמנה",
     unknown_date : "תאריך לא ידוע",
     
-     //notifications
-     just_few:"נותרו רק כמה",
-     running_low:"אוזל",
-     must_use:"צריך להשתמש בדחיפות",
-     kg:" ק''ג",
-     looks_good:"המלאי נראה טוב",
-     suggest_dish :"הצע מנה",
-     serach_placeholder:"?מה אתה מחפש"
+    //notifications
+    just_few:"נותרו רק כמה",
+    running_low:"אוזל",
+    must_use:"צריך להשתמש בדחיפות",
+    kg:" ק''ג",
+    looks_good:"המלאי נראה טוב",
+    suggest_dish :"הצע מנה",
+    serach_placeholder:"?מה אתה מחפש",
 
-     
+    //category names
+    fish:"דגים",
+    meat:"בשר",
+    vegtables:"ירקות",
+    fruit:"פירות",
+    dairy:"חלבי",
+    dry_foods:"מאכלים יבשים יבש",
+    other:"אחר",
     
   }});
 
