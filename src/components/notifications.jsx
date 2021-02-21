@@ -67,7 +67,8 @@ function confirm_papulation(dict, area_name, message = "", dict_to_test = false)
         if (not_found_keys) {
             var keys = ""
             not_found_keys.forEach(key => { keys += key + ", " })
-            console.log("couldent find "+keys+" in "+area_name + message)
+            // console.log("couldent find "+keys+" in "+area_name + message)
+            return keys
         }
     }
     else {
@@ -82,7 +83,7 @@ function create_initial_data_dict(data) {
         dict["suppliers"] = create_suppliers_dict(data["suppliers"])
         dict["notifications"] = create_notification_dict(data["notifications"], dict["suppliers"])
         dict["weights"] = create_weights_dict(data["weights"], dict["suppliers"], dict["notifications"])
-        console.log(dict)
+        // console.log(dict)
         // download(JSON.stringify(dict) , 'dict.json', 'text/plain');
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
         if(!dict["weights"]){
@@ -325,9 +326,7 @@ export class NotificationList extends Component {
 
             Object.keys(weights_dict).forEach(category_id => {
                 var notifications = get_notifications_by_level(notifications_dict, category_id)
-                console.log(notifications)
-                console.log("adding notification")
-                var addition = <NotificationCategory category_id={category_id} notification_dict={notifications} weights_dict={weights_dict[category_id]} />
+                var addition = <NotificationCategory key = {cat+category_id} category_id={category_id} notification_dict={notifications} weights_dict={weights_dict[category_id]} />
                 page.push(addition)
 
 
@@ -411,24 +410,22 @@ class NotificationCategory extends Component {
                     Object.keys(items_in_level).forEach(item_id => {
                         var obj = items_in_level[item_id]
                         
-                        page.push(<Notification notification_level={obj["notification_level"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]} />)
+                        page.push(<Notification  key = {item_id+"n"+notification_level} notification_level={obj["notification_level"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]} />)
                     })
                 }
             })
         }
         else 
-            page.push(<OKNotification />)
+            page.push(<OKNotification key = {"ok"} />)
         return page;
     }
 
     render() {
-        var not = this.extract_items(this.props.notification_dict)
-        console.log(not)
         return (
             <div className="notification_category_container">
                 <NotificationHeader on_click={this.handleToggle} weights_dict={this.props.weights_dict} cat_name={this.props.category_id} />
                 <Collapse in={this.state.show}>
-                    {(props, ref) =><Panel {...props} ref={ref} notifications={not} />}
+                    {(props, ref) =><Panel {...props} ref={ref} notifications={this.extract_items(this.props.notification_dict)} />}
                 </Collapse>
             </div>
         );
@@ -458,7 +455,7 @@ export class Notification extends Component {
     }
 
     render() {
-        if (this.state)
+        if (this.state){
             return (
                 <div className="notification_container">
                     <div className="center_items left_notification_area">
@@ -477,6 +474,7 @@ export class Notification extends Component {
                     <NotificationSymbol color={this.state.color} error_symbol={this.state.error_symbol} />
                 </div>
             )
+        }
         else
             return <div></div>
     }
@@ -567,7 +565,7 @@ export class NotificationBlock extends Component {
                 url: request,
                 success: function (res) {
                     callback(res, true);
-                    console.log(res)
+                    // console.log(res)
                 },
                 error: function (err) {
                     callback(fake_data, true);

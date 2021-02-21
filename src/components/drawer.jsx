@@ -43,7 +43,7 @@ export class CategoryDrawer extends React.Component {
       
       return (
         <div className="category_drawer_container">
-          <a  className="inventory_clicker" onClick={() => this.toggleDrawer()}>see full inventory</a>
+          <div className="inventory_clicker url_like" onClick={() => this.toggleDrawer()}>see full inventory</div>
         
           <Drawer
             size={size}

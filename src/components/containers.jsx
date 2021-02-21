@@ -51,7 +51,7 @@ export function render_container(weights_dict){
     var res = [];
     if (weights_dict){
         Object.keys(weights_dict).forEach(key => {
-            res.push(<ItemBlock name={weights_dict[key]["item_name"]} weight ={weights_dict[key]["total_weight"]} weight_date = {weights_dict[key]["date"]} />)
+            res.push(<ItemBlock key = {key+""+weights_dict[key]["item_name"]} name={weights_dict[key]["item_name"]} weight ={weights_dict[key]["total_weight"]} weight_date = {weights_dict[key]["date"]} />)
         });
     }
     return res;
@@ -70,9 +70,7 @@ export class Containers extends Component {
     }
 
   
-    componentWillMount() {
-       
-    }
+    
     render() {
         return (
             <div className="items_div">
