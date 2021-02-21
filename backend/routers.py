@@ -203,7 +203,7 @@ def process_read_query(query, res_code):
         return query
     result, res_code = readQ.select_connection(query)
     if res_code == 200:
-        return JSONResponse(content=jsonable_encoder(result))
+        return JSONResponse(content=jsonable_encoder(result[0]))
     else:
         return error_message(res_code, result, "unable to process request")
 

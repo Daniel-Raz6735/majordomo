@@ -81,6 +81,7 @@ export const Dictionary = new LocalizedStrings({
      must_use:"צריך להשתמש בדחיפות",
      kg:" ק''ג",
      looks_good:"המלאי נראה טוב",
+     suggest_dish :"הצע מנה",
 
      
     
