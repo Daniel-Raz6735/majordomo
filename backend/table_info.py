@@ -49,8 +49,8 @@ tables = {
             [5, "Beef", 3],
             [6, "Turkey meat", 3],
             [7, "chicken", 3],
-            [8, "Fish", 4],
-            [9, "Milk", 6]
+            [8, "Salmon fish", 3],
+            [9, "Milk", 4]
         ]
     },
     "business": {
@@ -113,10 +113,10 @@ tables = {
         "data": [
             [1, "Vegetables"],
             [2, "Fruit"],
-            [3, "Meat & Chicken"],
-            [4, "Fish"],
+            [3, "Meat & Fish"],
+            [4, "Dairy"],
             [5, "Dry foods"],
-            [6, "Milk products"]
+            [6, "Other"]
         ]
     },
     "indexes": {

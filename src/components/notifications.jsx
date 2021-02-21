@@ -50,7 +50,6 @@ export function process_notifications(data, success) {
 
 }
 
-
 function confirm_papulation(dict, area_name, message = "", dict_to_test = false) {
     message = message ? "\nmessage: " + message : "";
     var not_found_keys = [];
@@ -77,6 +76,7 @@ function confirm_papulation(dict, area_name, message = "", dict_to_test = false)
     }
 
 }
+
 function create_initial_data_dict(data) {
     var dict = {}
     if (data) {
