@@ -4,21 +4,40 @@
     width: 100px;
     background-color: white;
     cursor: pointer;
-    
-    box-shadow:  0 4px 8px 0 #00000054;
+    box-shadow:  0 4px 8px 0 #00000029;
+    border:1px solid  #00000029;
+    border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: space-around;
     flex-direction: column;
     align-content: space-between;
 }
+
 .item_container{
     display: flex;
     cursor: pointer;
     flex-direction: column;
     align-items: center;
     margin: 10px;
-    height: 110px;
+    height: 130px;
     overflow: hidden;
+   
+}
+
+.items_div{
+    display: flex;
+    /* justify-content: space-around; */
+    flex-wrap: wrap;
+}
+
+.add_to_order{
+    margin-top: 10px;
+    color: #060606;
+}
+
+.add_to_cart_modal_container{
+    width: 100%;
+    max-height: 100%;
 }
 

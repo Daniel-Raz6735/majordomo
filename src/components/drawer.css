@@ -1,9 +1,21 @@
 .search{
-    width: 20%;
+    width: 100%;
     margin-bottom: 10;
     margin: auto;
+    margin-bottom: 15px;
 }
 .category_drawer_container{
     width: fit-content;
+}
+
+.rs-drawer-header .rs-drawer-header-close::before{
+    position: unset;
+    float: left;
+    color: #FF4141;
+}
+
+#drawer_title_border{
+    border-bottom: 5px solid #6FB91C;
+    margin-top: 10px;
 }
 

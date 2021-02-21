@@ -22,6 +22,7 @@ export const Dictionary = new LocalizedStrings({
     supplier:'Supplier',
     item_type:'Item Type',
     show_items:"Show items",
+    
 
     //bottom bar
     home:"Home",
@@ -43,6 +44,7 @@ export const Dictionary = new LocalizedStrings({
     suggest_dish :"Suggest Dish",
     kg:" kg",
     looks_good:"Inventory looks good",
+    serach_placeholder:"what are you looking for?"
 
     
     
@@ -82,6 +84,7 @@ export const Dictionary = new LocalizedStrings({
      kg:" ק''ג",
      looks_good:"המלאי נראה טוב",
      suggest_dish :"הצע מנה",
+     serach_placeholder:"?מה אתה מחפש"
 
      
     

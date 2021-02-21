@@ -75,8 +75,8 @@ export class Containers extends Component {
     }
     render() {
         return (
-            <div>
-            {render_container(this.state.weights_dict)}
+            <div className="items_div">
+                {render_container(this.state.weights_dict)}
             </div>
         )
     }
@@ -106,14 +106,14 @@ export class ItemBlock extends Component {
         return (
             <div className="item_container">
             <div className = "item_squere">
-                <div>
+                <div >
                     {this.state.name}
                 </div>
                <div >{this.state.weight} {this.state.unit}</div>
                <div>{this.state.weight_date} </div>
-                </div>
+            </div>
             {/* <div className="add_to_order">{Dictionary.add_to_order}</div> */}
-            <AddToOrder kind ={1} />
+            <AddToOrder  kind ={1} />
             </div>
         )
     }

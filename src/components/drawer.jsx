@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Containers } from './containers';
 // import { Dictionary } from '../Dictionary';
 import './../components/drawer.css';
+import { Dictionary } from '../Dictionary';
 
 export class CategoryDrawer extends React.Component {
     constructor(props) {
@@ -51,6 +52,10 @@ export class CategoryDrawer extends React.Component {
             onHide={this.close}
             backdrop = {true}
           >
+             <Drawer.Header>
+              <Drawer.Title style={{color:"#6FB91C", textAlign:"center"}}>Vegtables</Drawer.Title>
+              <div id="drawer_title_border"></div>
+            </Drawer.Header>
             <Drawer.Body>
             <SearchBar />
             <Containers weights_dict = {this.state.weights_dict}/>
@@ -75,10 +80,17 @@ export class CategoryDrawer extends React.Component {
     
     render(){
 
+      let lang = Dictionary.getLanguage()
+      let dir
+      if(lang === "HE")
+        dir = "right"
+      else
+        dir = "left"
+
     return(
         <div className="search">
         <InputGroup inside >
-            <Input placeholder="what are you looking for?" />
+            <Input style={{textAlign:dir}} placeholder={Dictionary["serach_placeholder"]} />
             <InputGroup.Button>
             <Icon icon="search" />
             </InputGroup.Button>
