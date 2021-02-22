@@ -28,13 +28,13 @@
 
 }
 
-#weight_date{
+.weight_date{
     display: flex;
     justify-content: center;
     color: #3B3939;
 }
 
-#last_registred{
+.last_registred{
     color: #707070;
 }
 

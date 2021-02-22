@@ -37,7 +37,7 @@ export const notification_dict = {
     3:{"color":styleArr[2],"error_symbol":error_symbol[2],message:messages[2],"action_symbol":action_symbol[2],"action_desc":text_descp[2]}
 }
 
-export function action_btn(defult_val, code){
+export function action_btn(defult_val, code, title){
     switch (code) {
         case 2:
             return <img src ={suggest_dish} alt={Dictionary["suggest_dish"]}/>
@@ -45,7 +45,7 @@ export function action_btn(defult_val, code){
         case 0:
         case 1:
         default:
-            return <AddToOrder kind={0} defult_val = {defult_val} />
+            return <AddToOrder kind={0} title={title} defult_val = {defult_val} />
             
     }
     
