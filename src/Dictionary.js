@@ -55,6 +55,7 @@ export const Dictionary = new LocalizedStrings({
     dairy:"Dairy",
     dry_foods:"Dry foods",
     other:"other",
+    and:" &",
 
     
     
@@ -101,8 +102,9 @@ export const Dictionary = new LocalizedStrings({
     vegtables:"ירקות",
     fruit:"פירות",
     dairy:"חלבי",
-    dry_foods:"מאכלים יבשים יבש",
+    dry_foods:"מאכלים יבשים",
     other:"אחר",
+    and:"ו",
     
   }});
 

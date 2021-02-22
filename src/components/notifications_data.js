@@ -17,14 +17,14 @@ var error_symbol = [circle_warning, yellow_warning, overflow_sign],
 
     text_descp = [Dictionary["add_to_order"],Dictionary["add_to_order"],Dictionary["suggest_dish"]],
 
-    action_symbol = [cart_plus,cart_plus,suggest_dish],
+    action_symbol = [cart_plus,cart_plus,suggest_dish]
 
-    category_symbols = [vegetables,fruit,dairy],
+    export const category_symbols = [vegetables,fruit,dairy],
     
     category_colors = ["#509700","#FF7978","#EADAC0","#C21D1D","#AE7A48","#00000054"],
 
     category_names = [  Dictionary["vegtables"], Dictionary["fruit"],
-                        Dictionary["fish"+" & "+"meat"], Dictionary["dairy"],
+                        Dictionary["fish"] + " " + Dictionary["and"] + Dictionary["meat"], Dictionary["dairy"],
                         Dictionary["dry_foods"], Dictionary["other"]]
 
     
@@ -40,7 +40,7 @@ export const notification_dict = {
 export function action_btn(defult_val, code){
     switch (code) {
         case 2:
-            return suggest_dish
+            return <img src ={suggest_dish} alt={Dictionary["suggest_dish"]}/>
             
         case 0:
         case 1:

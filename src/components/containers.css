@@ -15,9 +15,17 @@
     color: #3B3939;
     font-family: "Poppins semibold";
 }
-
+/* .rs-drawer-dialog{
+    position: relative;
+    max-width: 450px;
+    max-height: 70%;
+    margin: auto;
+    margin-bottom: 0;
+} */
 .rs-drawer-content{
     border-radius: 15px 15px 0 0;
+    
+
 }
 
 #weight_date{

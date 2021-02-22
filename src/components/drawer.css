@@ -1,62 +1,87 @@
-.search{
-    width: 100%;
-    margin-bottom: 10;
-    margin: auto;
-    margin-bottom: 15px;
-}
-.category_drawer_container{
+
+
+.category_drawer_container {
     width: fit-content;
 }
 
-.rs-drawer-header{
-  /* position: relative; */
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  padding-right: unset ;
-  margin: unset ;
-  height: 60px;
-  align-items: center;
-  justify-content: center;
+.rs-drawer-header {
+    width: 100%;
+    padding-right: unset;
+    margin: unset;
+    height: 60px;
 
-  /* margin: 20px 0px 0 0; */
+    
+}
+.drawer_header {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+.sub_drawer_header {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.rs-drawer-header .rs-drawer-header-close{
+    
+
+
+.close_btn_div{
     float: left;
+    font-size: 100%;
     color: #FF4141;
     position: relative;
+    width: 19px;
+    height: 19px;
+    margin: auto 0 auto 0;
 }
+/* .rs-drawer-header .rs-drawer-header-close {
+    
+    
+} */
 
-.rs-drawer-header .rs-drawer-title{
-    color:#6FB91C;
-    text-align:center;
+.drawer_title {
+    text-align: center;
+    font: normal normal normal 20px/30px Poppins;
+    letter-spacing: 0px;
+    opacity: 1;
+    text-align: center;
     font-size: 20px;
     max-width: 70%;
     width: fit-content;
 }
 
-#drawer_title_border{
-    border-bottom: 5px solid #6FB91C;
-    margin-top: 10px;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-   
+.h4{
+    display: block;
+    margin-top: 1.33em;
+    margin-bottom: 1.33em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
 }
 
+.drawer_title_border {
+    width: 100%;
+    bottom: 0;
+}
 
-
+.search {
+    width: 100%;
+    margin-bottom: 10;
+    margin: auto;
+    margin-bottom: 15px;
+}
 .url_like {
-    color: #0a5dc2; 
-  }
-  
-  .url_like:hover {
-    text-decoration: underline;
-  }
-  
-  .url_like:active {
-    color: black;
-  }
+    color: #0a5dc2;
+}
 
-  
+.url_like:hover {
+    text-decoration: underline;
+}
+
+.url_like:active {
+    color: black;
+}

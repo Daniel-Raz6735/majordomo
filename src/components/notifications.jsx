@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
+import Nav from 'react-bootstrap/Nav';
 import "./notifications.css"
 import { base_url } from '../index'
 import fake_data from '../fake_data.json'
 import $ from 'jquery'
 import { Button, Animation, ButtonToolbar, Loader } from 'rsuite';
-import { action_btn, notification_dict } from './notifications_data';
+import { action_btn, notification_dict,category_names } from './notifications_data';
 import { Dictionary } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
-import Nav from 'react-bootstrap/Nav';
+
 import v_icon from '../images/icons/v icon.svg'
 
 
@@ -423,7 +424,7 @@ class NotificationCategory extends Component {
     render() {
         return (
             <div className="notification_category_container">
-                <NotificationHeader on_click={this.handleToggle} weights_dict={this.props.weights_dict} cat_name={this.props.category_id} />
+                <NotificationHeader on_click={this.handleToggle} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
                 <Collapse in={this.state.show}>
                     {(props, ref) =><Panel {...props} ref={ref} notifications={this.extract_items(this.props.notification_dict)} />}
                 </Collapse>
@@ -502,15 +503,8 @@ const Panel = React.forwardRef(({ ...props }, ref) => (
         {...props}
         ref={ref}
         id="notification_collapse"
-        style={{
-
-            width: '100%',
-            overflow: 'hidden'
-        }}
-    >
+        style={{width: '100%',overflow: 'hidden'}}>
         {props.notifications}
-
-
     </div>
 ));
 
@@ -527,10 +521,11 @@ export class NotificationHeader extends Component {
     }
 
     render() {
+        var cat_id = this.props.cat_id-1
         return (
             <div className="notificationheader notification_toggler" onClick={(e) => this.props.on_click(e)} >
-                {this.props.cat_name}
-                <CategoryDrawer weights_dict={this.props.weights_dict} />
+                {category_names[cat_id]}
+                <CategoryDrawer weights_dict={this.props.weights_dict} cat_id={cat_id} />
             </div>
 
         )
