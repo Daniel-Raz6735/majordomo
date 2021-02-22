@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Nav from 'react-bootstrap/Nav';
 import "./notifications.css"
 import { base_url } from '../index'
 import fake_data from '../fake_data.json'
@@ -379,7 +378,7 @@ export class NotificationList extends Component {
 class NotificationCategory extends Component {
     constructor(props) {
         super(props);
-        this.handleToggle = this.handleToggle.bind(this);
+        this.remove_onClick = this.remove_onClick.bind(this);
         this.extract_items = this.extract_items.bind(this);
         this.state = {
             page: [],
@@ -391,7 +390,7 @@ class NotificationCategory extends Component {
 
     }
 
-    handleToggle(e) {
+    remove_onClick(e) {
         if (e && $(e.target).attr('class')) {
            
             if ($(e.target).attr('class').includes('notification_toggler')  ) {
@@ -427,7 +426,7 @@ class NotificationCategory extends Component {
     render() {
         return (
             <div className="notification_category_container">
-                <NotificationHeader on_click={this.handleToggle} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
+                <NotificationHeader on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
                 <Collapse in={this.state.show}>
                     {(props, ref) =><Panel {...props} ref={ref} notifications={this.extract_items(this.props.notification_dict)} />}
                 </Collapse>
@@ -518,9 +517,7 @@ export class NotificationHeader extends Component {
         this.state = {
             weights_dict:props.weights_dict,
             page:[]
-            // on_click:props.on_click,
-            // cat_name:props.cat_name
-            // props.weights_dict[Object.keys(props.weights_dict)[0]]["cat_name"]      
+    
         }
     }
 
@@ -535,7 +532,7 @@ export class NotificationHeader extends Component {
             if(notification_num !== -1 && temp !== notification_num )
             {
                 temp = notification_num
-                page.push(<img className="header_symbols" src={notification_dict[notification_num]["error_symbol"]}   alt="category symbol" />)
+                page.push(<img className="header_symbols notification_toggler" src={notification_dict[notification_num]["error_symbol"]}   alt="category symbol" />)
             }
             })
             this.setState({page})
@@ -550,7 +547,7 @@ export class NotificationHeader extends Component {
             <div className="notificationheader notification_toggler" onClick={(e) => this.props.on_click(e)} >
                     <CategoryDrawer weights_dict={this.props.weights_dict} cat_id={cat_id} />
                 <div className="notification_header_middle notification_toggler">
-                    <img src={category_symbols[cat_id] } alt="category symbol" />
+                    <img className="notification_toggler" src={category_symbols[cat_id] } alt="category symbol" />
                 </div>
                 <div className="notification_header_symbols notification_toggler">
                     {this.state.page}
@@ -656,30 +653,6 @@ export const NotificationSymbol = (props) => {
 }
 
 
-export class Testing extends Component {
-
-    // constructor(props) {
-    //     super(props);
-    // }
-
-
-    render() {
-
-        return (
-            <div>
-                <Nav variant="pills" defaultActiveKey="/item">
-                    <Nav.Item>
-                        <Nav.Link eventKey="/item" >Active</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="supplier">Option 2</Nav.Link>
-                    </Nav.Item>
-                </Nav>
-            </div>
-        )
-
-    }
-}
 
 // function download(content, fileName, contentType) {
 //     var a = document.createElement("a");
