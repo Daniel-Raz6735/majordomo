@@ -19,13 +19,6 @@
     font-size: 30px;
     color: black;
 }
-.add_to_order_btn{
-    color: white;
-    height: 30px;
-    border-radius: 5%;
-    width: 80%;
-    margin: auto;
-}
 
 
 .rs-modal-wrapper{
@@ -62,12 +55,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-around;
     
 }
 
 .model_item_name{
-    width: 80%;
     text-align: center;
+    height: 25%;
+    font: normal normal 600 24px/28px Poppins;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
 }
 
 .model_x_xs{
@@ -83,18 +82,21 @@
 }
 
 .model_title_xs{
-    float: center;
-    width: 30%;
     text-align: center;
+    font-size: 20px;
+    font: normal normal normal 20px/30px Poppins;
 }
 
 
-.model_item_name{
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;  
-    overflow: hidden;
+
+.add_to_order_btn{
+    color: white;
+    height: 30px;
+    border-radius: 5px;
+    width: 80%;
+    
 }
+
 .model_footer_xs{
     text-align: center;
 }
