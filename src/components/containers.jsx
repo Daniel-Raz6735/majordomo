@@ -4,6 +4,10 @@ import "./containers.css"
 import {base_url} from '../index'
 import $ from 'jquery'
 import { AddToOrder } from '../pages/inventory_page';
+import red_circle from '../images/circle red warning.png'
+import triangle_warning from '../images/icons/triangle_warning.svg'
+import overflow_sign from '../images/icons/overflow sign.svg'
+
 
 
 export var fake_containers={
@@ -49,9 +53,12 @@ export function req_weights(callback, user_id ,item_id=null){
 export function render_container(weights_dict){
     //gets a list of weights and puts and renders the maximal  
     var res = [];
+    console.log(weights_dict)
     if (weights_dict){
         Object.keys(weights_dict).forEach(key => {
-            res.push(<ItemBlock key = {key+""+weights_dict[key]["item_name"]} name={weights_dict[key]["item_name"]} weight ={weights_dict[key]["total_weight"]} weight_date = {weights_dict[key]["date"]} />)
+            res.push(
+            <ItemBlock key = {key+""+weights_dict[key]["item_name"]} name={weights_dict[key]["item_name"]} 
+            weight ={weights_dict[key]["total_weight"]} weight_date = {weights_dict[key]["date"]} symbol = {weights_dict[key]["notification_level"]} />)
         });
     }
     return res;
@@ -101,9 +108,22 @@ export class ItemBlock extends Component {
     }
     render() {
 
+        let sym
+        
+        if(this.props.symbol === 3)
+            sym = <img src ={overflow_sign} alt="few left" height="20px" />
+
+        else if(this.props.symbol === 2)
+            sym = <img src ={triangle_warning} alt="few left" height="20px" />
+
+        else if(this.props.symbol === 1)
+        sym = <img src ={red_circle} alt="few left" height="20px" />
+        
+
         return (
             <div className="item_container">
             <div className = "item_squere">
+                {sym}
                 <div >
                     {this.state.name}
                 </div>

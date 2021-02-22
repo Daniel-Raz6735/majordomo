@@ -51,10 +51,10 @@ export const Dictionary = new LocalizedStrings({
     fish:"Fish",
     meat:"Meat",
     vegtables:"Vegtables",
-    fruit:"fruit",
+    fruit:"Fruit",
     dairy:"Dairy",
     dry_foods:"Dry foods",
-    other:"other",
+    other:"Other",
     and:" &",
 
     

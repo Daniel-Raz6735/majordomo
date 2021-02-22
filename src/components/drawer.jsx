@@ -1,11 +1,11 @@
-import { Drawer, Icon, InputGroup, Input, Whisper } from 'rsuite';
-import React, { Component } from 'react';
+import { Drawer, Icon, InputGroup, Input } from 'rsuite';
+import React from 'react';
 import x_icon from '../images/x_icon.svg'
 import { Containers } from './containers';
 import './../components/drawer.css';
 import { Dictionary,getRTL , getLeftRight } from '../Dictionary';
 import { category_names, category_symbols, category_colors } from './notifications_data';
-import { event } from 'jquery';
+
 
 export class CategoryDrawer extends React.Component {
   constructor(props) {
@@ -15,6 +15,7 @@ export class CategoryDrawer extends React.Component {
       placemnt: 'bottom',
       show: false,
       weights_dict: props.weights_dict,
+      cat_id:props.cat_id,
       page:<Containers weights_dict={this.props.weights_dict} />
     };
     this.close = this.close.bind(this);
@@ -64,7 +65,8 @@ export class CategoryDrawer extends React.Component {
 
       let lang = getRTL()
       let text_align = getLeftRight()
-      // console.log(this.props.weights_dict)
+      
+      
       
     return (
       <div className="category_drawer_container">
@@ -88,59 +90,20 @@ export class CategoryDrawer extends React.Component {
             <div className="drawer_title_border" style={{ borderBottom: st }} />
           </div>
           <Drawer.Body>
-            {/* <SearchBar /> */}
             <div className="search">
                 <InputGroup inside >
-                  <Input onChange={e => this.handleChange(e, this.props.weights_dict)} style={{ direction: lang, textAlign:text_align }} placeholder={Dictionary["serach_placeholder"]+"?"} />
+                  <Input onChange={e => this.handleChange(e, this.props.weights_dict)} style={{ direction: lang, textAlign:text_align ,boxShadow:"0 0 6px"+category_colors[cat_id]}} placeholder={Dictionary["serach_placeholder"]+"?"} />
                   <InputGroup.Button>
                     <Icon icon="search" />
                   </InputGroup.Button>
                 </InputGroup>
             </div>
             {this.state.page}
-            {/* <Containers weights_dict={this.state.weights_dict} /> */}
           </Drawer.Body>
 
         </Drawer>
       </div>
     );
   }
-}
-
-
-export class SearchBar extends Component {
-
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.state = {
-        category: props.category
-    };
-
-  }
-
-  handleChange(e){
-      alert(e)
-  }
-
-  render() {
-
-    let lang = getRTL()
-    let text_align = getLeftRight()
-
-    return (
-      <div className="search">
-        <InputGroup inside >
-          <Input onChange={this.handleChange} style={{ direction: lang, textAlign:text_align }} placeholder={Dictionary["serach_placeholder"]+"?"} />
-          <InputGroup.Button>
-            <Icon icon="search" />
-          </InputGroup.Button>
-        </InputGroup>
-
-      </div>
-    )
-
-  }
-
 }
 

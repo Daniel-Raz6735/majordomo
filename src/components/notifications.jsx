@@ -5,9 +5,10 @@ import { base_url } from '../index'
 import fake_data from '../fake_data.json'
 import $ from 'jquery'
 import { Button, Animation, ButtonToolbar, Loader } from 'rsuite';
-import { action_btn, notification_dict,category_names } from './notifications_data';
+import { action_btn, notification_dict,category_names, category_colors ,category_symbols} from './notifications_data';
 import { Dictionary } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
+
 
 import v_icon from '../images/icons/v icon.svg'
 
@@ -390,7 +391,8 @@ class NotificationCategory extends Component {
     }
 
     handleToggle(e) {
-        if (e) {
+        if (e && $(e.target).attr('class')) {
+           
             if ($(e.target).attr('class').includes('notification_toggler')) {
                 this.setState({ show: !this.state.show });
             }
@@ -522,9 +524,13 @@ export class NotificationHeader extends Component {
 
     render() {
         var cat_id = this.props.cat_id-1
+        let title = <div style={{color:category_colors[cat_id]}} >{category_names[cat_id]}</div>
+        
         return (
             <div className="notificationheader notification_toggler" onClick={(e) => this.props.on_click(e)} >
-                {category_names[cat_id]}
+                {title}
+                {/* {category_names[cat_id]} */}
+                <img src={category_symbols[cat_id] } alt="category symbol" />
                 <CategoryDrawer weights_dict={this.props.weights_dict} cat_id={cat_id} />
             </div>
 
