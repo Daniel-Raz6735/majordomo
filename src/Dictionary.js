@@ -36,6 +36,8 @@ export const Dictionary = new LocalizedStrings({
     //containers
     unknown_date : "unknown date",
     last_registred : "last registred in",
+    see_full:"See full inventory",
+    go_to_orders:"Go to orders",
 
     //notifications
     just_few:"Just a few left",
@@ -86,6 +88,8 @@ export const Dictionary = new LocalizedStrings({
     //containers
     unknown_date : "תאריך לא ידוע",
     last_registred : "נרשם לאחרונה ב",
+    see_full:"לצפייה בכל המלאי",
+    go_to_orders:"מעבר להזמנות",
     
     //notifications
     just_few:"נותרו רק כמה",

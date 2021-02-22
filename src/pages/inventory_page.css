@@ -19,14 +19,15 @@
     font-size: 30px;
     color: black;
 }
-
-.rs-modal-content{
-    background-color: whitesmoke;
-    display: flex;
+.add_to_order_btn{
+    color: white;
+    height: 30px;
+    border-radius: 5%;
+    width: 80%;
     margin: auto;
-    flex-direction: column;
-    width: 50%;
 }
+
+
 .rs-modal-wrapper{
     display: flex;
     align-items: center;
@@ -34,4 +35,66 @@
 .rs-input-number-btn-group-vertical{
     display: none;
 }
+.rs-modal-xs {
+    display: block;
+    margin-top: -30%;
+}
+.rs-modal-body{
+    width: 100%;
+    margin: auto;
+    padding: 10px;
+}
 
+.rs-modal-content{
+    background-color: whitesmoke;
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    border: 2px solid greenyellow;
+    border-radius: 5%;
+    width: 50%;
+    height: 230px;
+    padding: 0;
+}
+
+.model_content_xs{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.model_item_name{
+    width: 80%;
+    text-align: center;
+}
+
+.model_x_xs{
+    position: absolute;
+    top: 3%;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 2%;
+    height: 19px;
+    width: 19px;
+    float: right;
+
+}
+
+.model_title_xs{
+    float: center;
+    width: 30%;
+    text-align: center;
+}
+
+
+.model_item_name{
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+}
+.model_footer_xs{
+    text-align: center;
+}
