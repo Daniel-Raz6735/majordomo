@@ -75,7 +75,7 @@ export class AddToOrder extends Component {
         <ButtonToolbar>{type}</ButtonToolbar>
         <Modal size={this.state.size} show={this.state.show} onHide={this.close}>
 
-          <img src={x_icon} className="model_x_xs" onClick={this.close} />
+          <img src={x_icon} alt="X" className="model_x_xs" onClick={this.close} />
           <div className="model_content_xs">
 
             <div className="model_title_xs">

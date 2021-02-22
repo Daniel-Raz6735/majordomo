@@ -5,9 +5,10 @@ import { base_url } from '../index'
 import fake_data from '../fake_data.json'
 import $ from 'jquery'
 import { Button, Animation, ButtonToolbar, Loader } from 'rsuite';
-import { action_btn, notification_dict,category_names, category_colors ,category_symbols} from './notifications_data';
+import { action_btn, notification_dict,  category_symbols} from './notifications_data';
 import { Dictionary } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
+
 
 
 import v_icon from '../images/icons/v icon.svg'
@@ -393,7 +394,7 @@ class NotificationCategory extends Component {
     handleToggle(e) {
         if (e && $(e.target).attr('class')) {
            
-            if ($(e.target).attr('class').includes('notification_toggler')) {
+            if ($(e.target).attr('class').includes('notification_toggler')  ) {
                 this.setState({ show: !this.state.show });
             }
         }
@@ -471,7 +472,7 @@ export class Notification extends Component {
                         <div>{this.state.total_weight}</div>
                     </div>
 
-                    <div className="notification_message center_items">
+                    <div className="notification_message center_items ">
                         {this.state.message}
                     </div>
                     <NotificationSymbol color={this.state.color} error_symbol={this.state.error_symbol} />
@@ -515,23 +516,45 @@ export class NotificationHeader extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // weights_dict:props.weights_dict,
+            weights_dict:props.weights_dict,
+            page:[]
             // on_click:props.on_click,
             // cat_name:props.cat_name
             // props.weights_dict[Object.keys(props.weights_dict)[0]]["cat_name"]      
         }
     }
 
+     componentDidMount(){
+
+        let dict = this.props.weights_dict
+        let temp = -999
+        let page = []
+
+        Object.keys(dict).forEach(key=>{
+            let notification_num = dict[key]["notification_level"]
+            if(notification_num !== -1 && temp !== notification_num )
+            {
+                temp = notification_num
+                page.push(<img className="header_symbols" src={notification_dict[notification_num]["error_symbol"]}   alt="category symbol" />)
+            }
+            })
+            this.setState({page})
+        }
+
+
     render() {
         var cat_id = this.props.cat_id-1
-        let title = <div style={{color:category_colors[cat_id]}} >{category_names[cat_id]}</div>
         
+
         return (
             <div className="notificationheader notification_toggler" onClick={(e) => this.props.on_click(e)} >
-                {title}
-                {/* {category_names[cat_id]} */}
-                <img src={category_symbols[cat_id] } alt="category symbol" />
-                <CategoryDrawer weights_dict={this.props.weights_dict} cat_id={cat_id} />
+                    <CategoryDrawer weights_dict={this.props.weights_dict} cat_id={cat_id} />
+                <div className="notification_header_middle notification_toggler">
+                    <img src={category_symbols[cat_id] } alt="category symbol" />
+                </div>
+                <div className="notification_header_symbols notification_toggler">
+                    {this.state.page}
+                </div>
             </div>
 
         )

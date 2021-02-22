@@ -62,6 +62,7 @@ export class CategoryDrawer extends React.Component {
     const { size, placement, show } = this.state,
       cat_id = this.props.cat_id,
       st = "5px solid " + String(category_colors[cat_id]);
+      let title = <div style={{color:category_colors[cat_id]}} >{category_names[cat_id]}</div>
 
       let lang = getRTL()
       let text_align = getLeftRight()
@@ -70,7 +71,9 @@ export class CategoryDrawer extends React.Component {
       
     return (
       <div className="category_drawer_container">
-        <div className="inventory_clicker url_like" onClick={() => this.toggleDrawer()}>{Dictionary["see_full"]}</div>
+          {title}
+          <div className="inventory_clicker url_like" onClick={() => this.toggleDrawer()}>{Dictionary["see_full"]}</div>
+        
 
         <Drawer
           size={size}
