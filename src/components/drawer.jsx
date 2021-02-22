@@ -13,7 +13,8 @@ export class CategoryDrawer extends React.Component {
       size: 'md',
       placemnt: 'bottom',
       show: false,
-      weights_dict: props.weights_dict
+      weights_dict: props.weights_dict,
+      page: <Containers weights_dict={this.props.weights_dict} />
     };
     this.close = this.close.bind(this);
     this.toggleDrawer = this.toggleDrawer.bind(this);
@@ -66,7 +67,7 @@ export class CategoryDrawer extends React.Component {
           </div>
           <Drawer.Body>
             <SearchBar />
-            <Containers weights_dict={this.state.weights_dict} />
+            {this.state.page}
           </Drawer.Body>
 
         </Drawer>

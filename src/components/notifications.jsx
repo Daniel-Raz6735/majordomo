@@ -449,7 +449,7 @@ export class Notification extends Component {
                 item_name: props.item_name,
                 total_weight: props.total_weight,
                 message: props.message ? props.message : notification_dict[notification_level]["message"],
-                action_btn: action_btn(props.defult_weight, notification_level),
+                action_btn: action_btn(props.defult_weight, notification_level, props.item_name),
                 error_symbol: notification_dict[notification_level]["error_symbol"],
                 color: notification_dict[notification_level]["color"]
             }

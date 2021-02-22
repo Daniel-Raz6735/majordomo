@@ -22,10 +22,15 @@
 
 .rs-modal-content{
     background-color: whitesmoke;
-
-    display: table;
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    width: 50%;
 }
-
+.rs-modal-wrapper{
+    display: flex;
+    align-items: center;
+}
 .rs-input-number-btn-group-vertical{
     display: none;
 }

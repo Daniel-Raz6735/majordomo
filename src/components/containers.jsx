@@ -104,16 +104,14 @@ export class ItemBlock extends Component {
         return (
             <div className="item_container">
             <div className = "item_squere">
-                <div >
-                    {this.state.name}
-                </div>
+                <div >{this.state.name}</div>
                <div >{this.state.weight} {this.state.unit}</div>
-               <div id="last_registred">last registred at
-               <div id ="weight_date">{this.state.weight_date} </div>
+               <div className="last_registred">{Dictionary["last_registred"]+":"}
+               <div className ="weight_date">{this.state.weight_date} </div>
                </div>
             </div>
-            {/* <div className="add_to_order">{Dictionary.add_to_order}</div> */}
-            <AddToOrder  kind ={1} />
+            
+            <AddToOrder  kind ={1} title={this.state.name} />
             </div>
         )
     }

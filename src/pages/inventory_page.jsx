@@ -46,15 +46,14 @@ export class AddToOrder extends Component {
       super(props);
       this.state = {
         show: false,
-        kind:props.kind
+        kind:props.kind,
+        title: props.title
       };
       this.close = this.close.bind(this);
       this.open = this.open.bind(this);
     }
     close() {
-      this.setState({
-        show: false
-      });
+      this.setState({show: false});
     }
     open(size) {
       this.setState({
@@ -65,22 +64,16 @@ export class AddToOrder extends Component {
     render() {
         var type =""
         if(this.state.kind === 0)
-            type = <img alt="add_to_order" src={cart_plus} onClick={() => this.open('xs')} style={{"cursor":"pointer"}} />
+            type = <img  src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{"cursor":"pointer"}} />
         else if(this.state.kind === 1)
             type = <div className="add_to_order" onClick={() => this.open('xs')} >{Dictionary.add_to_order}</div>
 
       return (
         <div className="add_to_cart_modal_container">
-          <ButtonToolbar>
-            {/* <Button size="xs" onClick={() => this.open('xs')}>
-              Xsmall
-            </Button> */}
-            {/* <img src={cart_plus} onClick={() => this.open('xs')} style={{"cursor":"pointer"}} /> */}
-            {type}
-          </ButtonToolbar>
-          <Modal  size={this.state.size} show={this.state.show} onHide={this.close}>
+          <ButtonToolbar>{type}</ButtonToolbar>
+          <Modal size={this.state.size} show={this.state.show} onHide={this.close}>
             <Modal.Header>
-              <Modal.Title>Modal Title</Modal.Title>
+              <Modal.Title>{this.state.title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Quantity />
