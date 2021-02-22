@@ -45,7 +45,7 @@ export const Dictionary = new LocalizedStrings({
     suggest_dish :"Suggest Dish",
     kg:" kg",
     looks_good:"Inventory looks good",
-    serach_placeholder:"what are you looking for?",
+    serach_placeholder:"what are you looking for",
 
     //category names
     fish:"Fish",
@@ -94,7 +94,7 @@ export const Dictionary = new LocalizedStrings({
     kg:" ק''ג",
     looks_good:"המלאי נראה טוב",
     suggest_dish :"הצע מנה",
-    serach_placeholder:"?מה אתה מחפש",
+    serach_placeholder:"מה אתה מחפש",
 
     //category names
     fish:"דגים",
@@ -137,9 +137,21 @@ export function getRTL(lang) {
     default:
       return "rtl";
   }
-
-
 }
+
+export function getLeftRight(lang){
+  let targetLang = lang ? lang : Dictionary.getLanguage();
+
+  switch (targetLang) {
+    case "EN":
+      return "left";
+    case "HE":
+    default:
+      return "right";
+  }
+}
+
+
 //sets a globe image with three language buttons 
 export const LangBtn = () => {
   var currentLng = Dictionary.getLanguage();

@@ -74,7 +74,7 @@ export class Containers extends Component {
     render() {
         return (
             <div className="items_div">
-                {render_container(this.state.weights_dict)}
+                {render_container(this.props.weights_dict)}
             </div>
         )
     }
