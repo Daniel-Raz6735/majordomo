@@ -139,7 +139,7 @@ function create_notification_dict(notification_data, suppliers_data) {
 
 
 
-            if (item_name && item_id && category_name && category_id && notification_level && item_weight) {
+            if (item_name && item_id && category_name && category_id && notification_level!==undefined && notification_level!==null && item_weight!==undefined && item_weight!==null) {
                 if (!dict["category"][notification_level])
                     dict["category"][notification_level] = {}
                 if (!dict["category"][notification_level][category_id])
@@ -540,7 +540,7 @@ export class NotificationHeader extends Component {
 
 
         return (
-            <div className="notificationheader notification_toggler" onClick={(e) => this.props.on_click(e)} style={{borderBottomColor:category_colors[cat_id]}}>
+            <div className="notificationHeader notification_toggler" onClick={(e) => this.props.on_click(e)} style={{borderBottomColor:category_colors[cat_id]}}>
                 <CategoryDrawer key={this.props.cat_type + "drawer" + cat_id} weights_dict={this.props.weights_dict}  cat_id={cat_id} />
                 <div className="notification_header_middle notification_toggler">
                     <img className="notification_toggler" src={category_symbols[cat_id]} alt="category symbol" />

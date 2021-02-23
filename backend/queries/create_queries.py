@@ -137,7 +137,7 @@ class CreateQueries:
                 if type(val) == str and "to_timestamp" not in val:
                     query += "'" + val + "', "
                 else:
-                    if not val:
+                    if not val and val != 0:
                         query += "null, "
                     else:
                         query += str(val) + ", "

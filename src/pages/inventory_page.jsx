@@ -1,6 +1,5 @@
-// import { Button, Modal } from "antd";
 import React, { Component } from "react";
-import { ButtonToolbar, Modal, InputGroup, InputNumber } from "rsuite";
+import { ButtonToolbar, Modal } from "rsuite";
 import {  NotificationBlock } from "../components/notifications";
 import { Dictionary } from "../Dictionary";
 import './inventory_page.css'
@@ -82,7 +81,7 @@ export class AddToOrder extends Component {
             <div className="model_title_xs">
               {this.state.title}
             </div>
-            <div className="model_item_name">
+            <div className="model_item_name clamp_line">
               {this.state.title}
             </div>
             <Quantity />
@@ -100,31 +99,42 @@ export class AddToOrder extends Component {
 }
 
 
-export const Quantity = () => {
-  const inputRef = React.createRef();
-  const handleMinus = () => {
-    inputRef.current.handleMinus();
-  };
-  const handlePlus = () => {
-    inputRef.current.handlePlus();
-  };
+export class Quantity extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      quantity: props.defaultValue?props.defaultValue:10,
+      incraments: props.incraments?props.incraments:1,
+      unit: props.unit?props.unit:Dictionary["kg"],
+      min:1,
+      max:99,
+    };
+    this.handleMinus = this.handleMinus.bind(this);
+    this.handlePlus = this.handlePlus.bind(this);
+  }
+  handleMinus() {
+    var new_val =this.state.quantity - this.state.incraments;
+    if(new_val >= this.state.min)
+      this.setState({ quantity: new_val });
+    else
+      alert("enterd to little")
+  }
+  handlePlus() {
+    var new_val =this.state.quantity + this.state.incraments;
+    if(new_val <= this.state.max)
+      this.setState({ quantity: new_val });
+    else
+      alert("enterd to much")
+  }
 
-  return (
-    <div style={{ width: "100%" }}>
-
-      <InputGroup>
-        <InputGroup.Button onClick={handleMinus}>-</InputGroup.Button>
-        <InputNumber
-          className={'custom-input-number'}
-          ref={inputRef}
-          max={99}
-          min={1}
-          defaultValue={10}
-        />
-        <InputGroup.Button onClick={handlePlus}>+</InputGroup.Button>
-      </InputGroup>
-    </div>
-  )
+  render() {
+    return(
+    <div className="quantity_container">
+      <div  className="quantity_select minus_symbol" onClick={this.handleMinus} >-</div>
+    
+      <input type="text" className="quantity_window" name="quantity window" value={this.state.quantity + " "+ this.state.unit} disabled/>
+     
+      <div className="quantity_select plus_symbol" onClick={this.handlePlus}>+</div>
+      </div>)
+      }
 }
-
-
