@@ -85,7 +85,7 @@ function create_initial_data_dict(data) {
         dict["suppliers"] = create_suppliers_dict(data["suppliers"])
         dict["notifications"] = create_notification_dict(data["notifications"], dict["suppliers"])
         dict["weights"] = create_weights_dict(data["weights"], dict["suppliers"], dict["notifications"])
-        // console.log(dict)
+        console.log(dict)
         // download(JSON.stringify(dict) , 'dict.json', 'text/plain');
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
         if (!dict["weights"]) {
@@ -315,6 +315,7 @@ export class NotificationList extends Component {
     componentDidMount() {
         // this.hendleFilter(this.state.index)
         this.hendleFilter(0);
+        
     }
 
     render_by_category(cat) {
@@ -322,6 +323,7 @@ export class NotificationList extends Component {
         if (this.state.dict["notifications"] && this.state.dict["weights"]) {
             var notifications_dict = this.state.dict["notifications"][cat]
             var weights_dict = this.state.dict["weights"][cat]
+            
             // confirm_papulation(weights_dict,"NotificationList","render_by_category missing weight attribute")
             // confirm_papulation(notifications_dict,"NotificationList","render_by_category missing notification attribute")
 
@@ -420,7 +422,7 @@ class NotificationCategory extends Component {
     }
 
     render() {
-        console.log(this.props.category_id + "header" + this.props.cat_type)
+        
         return (
             <div className="notification_category_container">
                 <NotificationHeader key={this.props.category_id + "header" + this.props.cat_type} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
@@ -465,7 +467,7 @@ export class Notification extends Component {
                         {this.state.item_name}
                     </div>
                     <div className="center_items notification_weight">
-                        <div>{this.state.total_weight}</div>
+                        <div>{this.state.total_weight.toFixed(1)}</div>
                     </div>
 
                     <div className="notification_message center_items clamp_line ">
