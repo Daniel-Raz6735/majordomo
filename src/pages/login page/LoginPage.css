@@ -121,4 +121,9 @@ input {
     background-size: cover;
     height: 100%;
     width: 100%;
+    overflow: hidden;
+}
+
+.logo{
+    width: 300px;
 }
