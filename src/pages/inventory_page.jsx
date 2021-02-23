@@ -1,7 +1,7 @@
 // import { Button, Modal } from "antd";
 import React, { Component } from "react";
 import { ButtonToolbar, Modal, InputGroup, InputNumber } from "rsuite";
-import { get_notifications, process_notifications } from "../components/notifications";
+import {  NotificationBlock } from "../components/notifications";
 import { Dictionary } from "../Dictionary";
 import './inventory_page.css'
 import cart_plus from '../images/icons/cart_plus.svg'
@@ -28,12 +28,12 @@ class InventoryPage extends Component {
 
     var str = date + "." + months + "." + year
 
-    get_notifications(process_notifications, 1)//fuction currently under constroction
+    // get_notifications(process_notifications, 1)//fuction currently under constroction
 
     return (
       <div id="inventory_page_container">
         <div className="page_title">{Dictionary["inventory"] + " | " + str}</div>
-        <div id="first_notification"></div>
+        <NotificationBlock />
 
       </div>
 

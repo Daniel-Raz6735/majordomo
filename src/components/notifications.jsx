@@ -4,7 +4,7 @@ import { base_url } from '../index'
 import fake_data from '../fake_data.json'
 import $ from 'jquery'
 import { Animation, Loader } from 'rsuite';
-import { action_btn, notification_dict, category_symbols } from './notifications_data';
+import { action_btn, notification_dict,  category_symbols, category_colors} from './notifications_data';
 import { Dictionary } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
 
@@ -540,8 +540,8 @@ export class NotificationHeader extends Component {
 
 
         return (
-            <div className="notificationheader notification_toggler" onClick={(e) => this.props.on_click(e)} >
-                <CategoryDrawer key={this.props.cat_type + "drawer" + cat_id} weights_dict={this.props.weights_dict} cat_id={cat_id} />
+            <div className="notificationheader notification_toggler" onClick={(e) => this.props.on_click(e)} style={{borderBottomColor:category_colors[cat_id]}}>
+                <CategoryDrawer key={this.props.cat_type + "drawer" + cat_id} weights_dict={this.props.weights_dict}  cat_id={cat_id} />
                 <div className="notification_header_middle notification_toggler">
                     <img className="notification_toggler" src={category_symbols[cat_id]} alt="category symbol" />
                 </div>

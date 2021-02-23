@@ -13,11 +13,10 @@
 }
 
 .page_title {
-    margin: auto;
-    margin-top: 0;
-    font-family: poppins;
-    font-size: 30px;
-    color: black;
+    text-align: center;
+    font: normal normal normal 20px/30px Poppins;
+    letter-spacing: 0px;
+    color: #211F1F;
 }
 
 .rs-modal-wrapper {
@@ -69,7 +68,6 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
-
 
 .model_x_xs {
     position: absolute;
