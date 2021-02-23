@@ -111,13 +111,13 @@ export class ItemBlock extends Component {
         let sym
 
         if (this.props.symbol === 3)
-            sym = <img src={overflow_sign} alt="few left" height="20px" />
+            sym = <img className="full_inventory_alert_symbol" src={overflow_sign} alt="few left" />
 
         else if (this.props.symbol === 2)
-            sym = <img src={triangle_warning} alt="few left" height="20px" />
+            sym = <img className="full_inventory_alert_symbol" src={triangle_warning} alt="few left" />
 
         else if (this.props.symbol === 1)
-            sym = <img src={red_circle} alt="few left" height="20px" />
+            sym = <img className="full_inventory_alert_symbol" src={red_circle} alt="few left" />
 
 
         return (
@@ -127,7 +127,7 @@ export class ItemBlock extends Component {
                     <div >
                         {this.state.name}
                     </div>
-                    <div >{this.state.weight} {this.state.unit}</div>
+                    <div >{this.state.weight.toFixed(1)} {this.state.unit}</div>
                     <div className="last_registred" style={{ direction: getRTL() }}>{Dictionary["last_registred"] + ":"}
                         <div className="weight_date">{this.state.weight_date} </div>
                     </div>
@@ -151,7 +151,7 @@ function getDate(elementDate) {
     if ((now.getMonth() + 1 === dataTime.getMonth() + 1) && (now.getDate() === dataTime.getDate())) {
         let hour = dataTime.getHours()
         let minutes = dataTime.getMinutes()
-        let Seconds = dataTime.getSeconds()
+        let Seconds = ('0' + dataTime.getSeconds()).slice(-2)
 
         str = hour + ":" + minutes + ":" + Seconds
     }
