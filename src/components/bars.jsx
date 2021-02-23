@@ -31,7 +31,6 @@ export class SiteFrame extends Component{
     componentDidMount(){
         //establishing a way for chield components to switch tabs across the app
         $("#reset_frame").change(()=>{ console.log(this.change_tab($("#reset_frame").val()))})
-
         this.change_tab(this.props.page)
     }
     change_tab(component_name){
@@ -49,12 +48,12 @@ export class SiteFrame extends Component{
                 break;
         
             case "InventoryPage":
+            default:
                 i=1;
                 page = <InventoryPage />
                 break;
         
             case "NotificationBlock":
-            default:
                 i=0;
                 page = <NotificationBlock />
                 break;

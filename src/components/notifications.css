@@ -1,5 +1,5 @@
 
- .notificationheader{
+ .notificationHeader{
     height: 55px;
     background-color: #FFFFFF; 
     box-shadow: 2px 2px 8px  #00000054;
@@ -7,7 +7,9 @@
     display: flex;
     align-items: center;
     padding: 5%;
-
+    border-radius: 5px;
+    box-shadow: 0px 0px 6px #00000054;
+    border-bottom: black 5px solid;
  }
  
 .rs-btn-toolbar{
