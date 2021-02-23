@@ -138,6 +138,7 @@ class Weighing(BaseModel):
     weight_value: float
     weighing_date: int
     last_user: int = None
+    unit: str = "kg"
 
 
 class WeighingList(BaseModel):

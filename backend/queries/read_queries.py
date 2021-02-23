@@ -43,7 +43,7 @@ class ReadQueries:
             output:[["code", "message", "item_id", "active", "closed_by_user"]]"""
         list_of_cols = ["business_id", "active", "notification_id"]
         # used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
-        used_p=args
+        used_p = args
         conditions = []
         if "business_id" in used_p:
             conditions.append(["AND", "notifications.business_id", "=", int(used_p["business_id"])])
@@ -64,7 +64,7 @@ class ReadQueries:
         final_query, res_code = DbQueries.select_query(
             [["notifications"], ["food_items", "food"], ["categories", "cat"], ["("+sub_table+")", "sub"]],
             [[["code"], ["message"], ["food_item_id", "item_id"], ["active"], ["closed_by_user"]],
-             [["item_name"]],
+             [["item_name"], ["unit"]],
              [["category_id"], ["category_name"]],
              [["date"], ["item_name"], ["weight"]]
              ],
@@ -110,13 +110,13 @@ class ReadQueries:
 
         cols_to_bring = [[["container_id"]],
                          [["weight_value", "weight"], ["weighing_date", "date"]],
-                         [["item_name"], ["item_id"]],
+                         [["item_name"], ["item_id"], ["unit"]],
                          [["category_name"], ["category_id"]],
                          []]
         if not get_by_container:
             cols_to_bring = [[[]],
                              [["weight_value", "weight", "SUM"], ["weighing_date", "date", "MAX"]],
-                             [["item_name"], ["item_id"]],
+                             [["item_name"], ["item_id"], ["unit"]],
                              [["category_name"], ["category_id"]],
                              []]
 

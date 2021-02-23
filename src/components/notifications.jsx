@@ -139,7 +139,7 @@ function create_notification_dict(notification_data, suppliers_data) {
 
 
 
-            if (item_name && item_id && category_name && category_id && notification_level && item_weight) {
+            if (item_name && item_id && category_name && category_id && notification_level!==undefined && notification_level!==null && item_weight!==undefined && item_weight!==null) {
                 if (!dict["category"][notification_level])
                     dict["category"][notification_level] = {}
                 if (!dict["category"][notification_level][category_id])
