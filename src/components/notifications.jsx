@@ -4,7 +4,7 @@ import { base_url } from '../index'
 import fake_data from '../fake_data.json'
 import $ from 'jquery'
 import { Animation, Loader } from 'rsuite';
-import { action_btn, notification_dict,  category_symbols} from './notifications_data';
+import { action_btn, notification_dict, category_symbols } from './notifications_data';
 import { Dictionary } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
 
@@ -13,7 +13,7 @@ import { CategoryDrawer } from './drawer';
 import v_icon from '../images/icons/v icon.svg'
 
 
-const {  Collapse } = Animation;
+const { Collapse } = Animation;
 const notifications_levels = [3, 2, 1]
 
 export function get_notifications(callback, client_id) {
@@ -88,7 +88,7 @@ function create_initial_data_dict(data) {
         // console.log(dict)
         // download(JSON.stringify(dict) , 'dict.json', 'text/plain');
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
-        if(!dict["weights"]){
+        if (!dict["weights"]) {
             console.log("no weights for user")
             return null
         }
@@ -107,7 +107,7 @@ function create_notification_dict(notification_data, suppliers_data) {
     }
 
     confirm_papulation(suppliers_data, "suppliers_data create_notification_dict")
-    if(!notification_data)
+    if (!notification_data)
         return null
     Object.keys(notification_data).forEach(key => {
         var notification = notification_data[key]
@@ -168,7 +168,7 @@ function create_weights_dict(weight_data, suppliers_data, notifications_data) {
     }
     confirm_papulation(suppliers_data, "suppliers_data create_weights_dict")
     confirm_papulation(notifications_data, "notifications_data create_weights_dict")
-    if(!weight_data)
+    if (!weight_data)
         return null
     Object.keys(weight_data).forEach(key => {
         var element = weight_data[key]
@@ -229,7 +229,7 @@ function create_suppliers_dict(suppliers_data) {
         "items": {},
         "suppliers": {}
     }
-    if(!suppliers_data)
+    if (!suppliers_data)
         return null
     Object.keys(suppliers_data).forEach(key => {
         var element = suppliers_data[key]
@@ -305,7 +305,7 @@ export class NotificationList extends Component {
         this.hendleFilter = this.hendleFilter.bind(this);
         this.state = {
             page: [],
-            temp: [{},{}],
+            temp: [{}, {}],
             categories: ["category", "supplier"],
             dict: props.dict,
             index: 0
@@ -327,7 +327,7 @@ export class NotificationList extends Component {
 
             Object.keys(weights_dict).forEach(category_id => {
                 var notifications = get_notifications_by_level(notifications_dict, category_id)
-                var addition = <NotificationCategory key = {cat+category_id} category_id={category_id} notification_dict={notifications} weights_dict={weights_dict[category_id]} />
+                var addition = <NotificationCategory key={cat + category_id} cat_type={cat} category_id={category_id} notification_dict={notifications} weights_dict={weights_dict[category_id]} />
                 page.push(addition)
 
 
@@ -341,8 +341,8 @@ export class NotificationList extends Component {
     }
 
     hendleFilter(i) {
-        var red_style = { background: "#FD4141", color: "#FFFFFF",border: "0px"}, 
-        defult_style ={ background: "none", color: "#707070",border: "1px solid #707070"}
+        var red_style = { background: "#FD4141", color: "#FFFFFF", border: "0px" },
+            defult_style = { background: "none", color: "#707070", border: "1px solid #707070" }
         var styles = [defult_style, defult_style]
         styles[i] = red_style
         this.setState({
@@ -361,7 +361,7 @@ export class NotificationList extends Component {
             <div className="notification_cover">
                 <div className="notification_toolbar">
                     <button className="toolbar_btn" onClick={() => this.hendleFilter(0)} style={this.state.temp[0]} >{Dictionary["item_type"]}</button>
-                   <button className="toolbar_btn" onClick={() => this.hendleFilter(1)} style={this.state.temp[1]} >{Dictionary["supplier"]}</button>
+                    <button className="toolbar_btn" onClick={() => this.hendleFilter(1)} style={this.state.temp[1]} >{Dictionary["supplier"]}</button>
                 </div>
                 {this.state.page}
             </div>
@@ -388,8 +388,8 @@ class NotificationCategory extends Component {
 
     remove_onClick(e) {
         if (e && $(e.target).attr('class')) {
-           
-            if ($(e.target).attr('class').includes('notification_toggler')  ) {
+
+            if ($(e.target).attr('class').includes('notification_toggler')) {
                 this.setState({ show: !this.state.show });
             }
         }
@@ -404,27 +404,28 @@ class NotificationCategory extends Component {
             confirm_papulation(notification_data, "extract items NotificationCategory")
             Object.keys(notification_data).forEach(notification_level => {
                 var items_in_level = notification_data[notification_level]
-                
+
                 if (items_in_level) {
                     Object.keys(items_in_level).forEach(item_id => {
                         var obj = items_in_level[item_id]
-                        
-                        page.push(<Notification  key = {item_id+"n"+notification_level} notification_level={obj["notification_level"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]} />)
+
+                        page.push(<Notification key={item_id + "n" + notification_level} notification_level={obj["notification_level"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]} />)
                     })
                 }
             })
         }
-        else 
-            page.push(<OKNotification key = {"ok"} />)
+        else
+            page.push(<OKNotification key={"ok"} />)
         return page;
     }
 
     render() {
+        console.log(this.props.category_id + "header" + this.props.cat_type)
         return (
             <div className="notification_category_container">
-                <NotificationHeader on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
+                <NotificationHeader key={this.props.category_id + "header" + this.props.cat_type} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
                 <Collapse in={this.state.show}>
-                    {(props, ref) =><Panel {...props} ref={ref} notifications={this.extract_items(this.props.notification_dict)} />}
+                    {(props, ref) => <Panel {...props} ref={ref} notifications={this.extract_items(this.props.notification_dict)} />}
                 </Collapse>
             </div>
         );
@@ -454,7 +455,7 @@ export class Notification extends Component {
     }
 
     render() {
-        if (this.state){
+        if (this.state) {
             return (
                 <div className="notification_container">
                     <div className="center_items left_notification_area">
@@ -501,7 +502,7 @@ const Panel = React.forwardRef(({ ...props }, ref) => (
         {...props}
         ref={ref}
         id="notification_collapse"
-        style={{width: '100%',overflow: 'hidden'}}>
+        style={{ width: '100%', overflow: 'hidden' }}>
         {props.notifications}
     </div>
 ));
@@ -511,39 +512,38 @@ export class NotificationHeader extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            weights_dict:props.weights_dict,
-            page:[]
-    
+            weights_dict: props.weights_dict,
+            page: []
+
         }
     }
 
-     componentDidMount(){
+    componentDidMount() {
 
         let dict = this.props.weights_dict
         let temp = -999
         let page = []
 
-        Object.keys(dict).forEach(key=>{
+        Object.keys(dict).forEach(key => {
             let notification_num = dict[key]["notification_level"]
-            if(notification_num !== -1 && temp !== notification_num )
-            {
+            if (notification_num !== -1 && temp !== notification_num) {
                 temp = notification_num
-                page.push(<img className="header_symbols notification_toggler" src={notification_dict[notification_num]["error_symbol"]}   alt="category symbol" />)
+                page.push(<img className="header_symbols notification_toggler" src={notification_dict[notification_num]["error_symbol"]} alt="category symbol" />)
             }
-            })
-            this.setState({page})
-        }
+        })
+        this.setState({ page })
+    }
 
 
     render() {
-        var cat_id = this.props.cat_id-1
-        
+        var cat_id = this.props.cat_id - 1
+
 
         return (
             <div className="notificationheader notification_toggler" onClick={(e) => this.props.on_click(e)} >
-                    <CategoryDrawer weights_dict={this.props.weights_dict} cat_id={cat_id} />
+                <CategoryDrawer key={this.props.cat_type + "drawer" + cat_id} weights_dict={this.props.weights_dict} cat_id={cat_id} />
                 <div className="notification_header_middle notification_toggler">
-                    <img className="notification_toggler" src={category_symbols[cat_id] } alt="category symbol" />
+                    <img className="notification_toggler" src={category_symbols[cat_id]} alt="category symbol" />
                 </div>
                 <div className="notification_header_symbols notification_toggler">
                     {this.state.page}
@@ -574,7 +574,7 @@ export class NotificationBlock extends Component {
     get_initial_data(callback, business_id) {
         //request all information for a business
         var request = base_url + '/get/current_view';
-    
+
         if (business_id) {
             request += "?business_id=" + business_id + "&active=true"
             console.log(request)
@@ -593,7 +593,7 @@ export class NotificationBlock extends Component {
         else {
             console.log("no user id enterd. nothing happend")
         }
-    
+
     }
 
     process_initial_data(data, success) {
@@ -601,21 +601,21 @@ export class NotificationBlock extends Component {
             // download(JSON.stringify(data) , 'file.json', 'text/plain');
             if (typeof (data) == "object") {
                 var dict = create_initial_data_dict(data);
-                if(!dict)
-                    this.setState({page:<div> we encounterd a problem in loading data</div>})
-                    
-                else{
-                    confirm_papulation(dict, "process_initial_data", "initial data not recived well")
-                    this.setState({page:<NotificationList dict={dict} />})
-                }
-                }
+                if (!dict)
+                    this.setState({ page: <div> we encounterd a problem in loading data</div> })
+
                 else {
-                    console.log("intial data returnd with bad body")
+                    confirm_papulation(dict, "process_initial_data", "initial data not recived well")
+                    this.setState({ page: <NotificationList dict={dict} /> })
                 }
             }
-            else
-            this.setState({page:<div> we encounterd a problem in loading data</div>})
+            else {
+                console.log("intial data returnd with bad body")
+            }
         }
+        else
+            this.setState({ page: <div> we encounterd a problem in loading data</div> })
+    }
 
     componentDidMount() {
         this.get_initial_data(this.process_initial_data, 1)

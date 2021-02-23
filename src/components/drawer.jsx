@@ -3,7 +3,7 @@ import React from 'react';
 import x_icon from '../images/x_icon.svg'
 import { Containers } from './containers';
 import './../components/drawer.css';
-import { Dictionary,getRTL , getLeftRight } from '../Dictionary';
+import { Dictionary, getRTL, getLeftRight } from '../Dictionary';
 import { category_names, category_symbols, category_colors } from './notifications_data';
 
 
@@ -15,8 +15,8 @@ export class CategoryDrawer extends React.Component {
       placemnt: 'bottom',
       show: false,
       weights_dict: props.weights_dict,
-      cat_id:props.cat_id,
-      page:<Containers weights_dict={this.props.weights_dict} />
+      cat_id: props.cat_id,
+      page: <Containers weights_dict={this.props.weights_dict} />
     };
     this.close = this.close.bind(this);
     this.toggleDrawer = this.toggleDrawer.bind(this);
@@ -42,38 +42,38 @@ export class CategoryDrawer extends React.Component {
     this.setState({ size });
   }
 
-  handleChange(e, dict){
+  handleChange(e, dict) {
     let newDict = {}
     e = (e).toLowerCase();
-     
 
-    Object.keys(dict).forEach(key=>{
-        let item_name = (dict[key]["item_name"]).toLowerCase(); 
-        if(item_name.startsWith(e)){
-            newDict[key] = dict[key]       
+
+    Object.keys(dict).forEach(key => {
+      let item_name = (dict[key]["item_name"]).toLowerCase();
+      if (item_name.startsWith(e)) {
+        newDict[key] = dict[key]
       }
     })
-  
-    this.setState({page: <Containers weights_dict={newDict} />});
 
-}
+    this.setState({ page: <Containers weights_dict={newDict} /> });
+
+  }
 
   render() {
     const { size, placement, show } = this.state,
       cat_id = this.props.cat_id,
       st = "5px solid " + String(category_colors[cat_id]);
-      let title = <div className="notification_toggler" style={{color:category_colors[cat_id]}} >{category_names[cat_id]}</div>
+    let title = <div className="notification_toggler" style={{ color: category_colors[cat_id] }} >{category_names[cat_id]}</div>
 
-      let lang = getRTL()
-      let text_align = getLeftRight()
-      
-      
-      
+    let lang = getRTL()
+    let text_align = getLeftRight()
+
+
+
     return (
       <div className="category_drawer_container">
-          {title}
-          <div className="inventory_clicker url_like" onClick={() => this.toggleDrawer()}>{Dictionary["see_full"]}</div>
-        
+        {title}
+        <div className="inventory_clicker url_like" onClick={() => this.toggleDrawer()}>{Dictionary["see_full"]}</div>
+
 
         <Drawer
           size={size}
@@ -94,12 +94,13 @@ export class CategoryDrawer extends React.Component {
           </div>
           <Drawer.Body>
             <div className="search">
-                <InputGroup inside >
-                  <Input onChange={e => this.handleChange(e, this.props.weights_dict)} style={{ direction: lang, textAlign:text_align ,boxShadow:"0 0 6px"+category_colors[cat_id]}} placeholder={Dictionary["serach_placeholder"]+"?"} />
-                  <InputGroup.Button>
-                    <Icon icon="search" />
-                  </InputGroup.Button>
-                </InputGroup>
+              <InputGroup inside >
+                <Input onChange={e => this.handleChange(e, this.props.weights_dict)}
+                  style={{ direction: lang, textAlign: text_align, boxShadow: "0 0 6px" + category_colors[cat_id], borderRadius: "5px" }} placeholder={Dictionary["serach_placeholder"] + "?"} />
+                <InputGroup.Button>
+                  <Icon icon="search" />
+                </InputGroup.Button>
+              </InputGroup>
             </div>
             {this.state.page}
           </Drawer.Body>

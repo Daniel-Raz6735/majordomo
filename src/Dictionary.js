@@ -35,7 +35,7 @@ export const Dictionary = new LocalizedStrings({
     
     //containers
     unknown_date : "unknown date",
-    last_registred : "last registred in",
+    last_registred : "last registred at",
     see_full:"See full inventory",
     go_to_orders:"Go to orders",
 
