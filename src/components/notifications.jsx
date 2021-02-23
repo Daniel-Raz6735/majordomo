@@ -3,7 +3,7 @@ import "./notifications.css"
 import { base_url } from '../index'
 import fake_data from '../fake_data.json'
 import $ from 'jquery'
-import { Button, Animation, ButtonToolbar, Loader } from 'rsuite';
+import { Animation, Loader } from 'rsuite';
 import { action_btn, notification_dict,  category_symbols} from './notifications_data';
 import { Dictionary } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
@@ -305,8 +305,7 @@ export class NotificationList extends Component {
         this.hendleFilter = this.hendleFilter.bind(this);
         this.state = {
             page: [],
-            appearance: ["primary", "ghost"],
-            temp: [{ background: "#FD4141", color: "#FFFFFF", "borderColor": "#707070", width: "100px" }, { background: "none", color: "#707070", "borderColor": "#707070", width: "100px" }],
+            temp: [{},{}],
             categories: ["category", "supplier"],
             dict: props.dict,
             index: 0
@@ -315,7 +314,7 @@ export class NotificationList extends Component {
     }
     componentDidMount() {
         // this.hendleFilter(this.state.index)
-        this.render_by_category(this.state.categories[0]);
+        this.hendleFilter(0);
     }
 
     render_by_category(cat) {
@@ -342,15 +341,12 @@ export class NotificationList extends Component {
     }
 
     hendleFilter(i) {
-        var defult_style = { background: "none", color: "#707070", "borderColor": "#707070", width: "100px" },
-            red_style = { background: "#FD4141", color: "white", "borderColor": "#707070", width: "100px" }
-        var styles = [defult_style, defult_style],
-            appearances = ["ghost", "ghost"]
-        appearances[i] = "primary"
+        var red_style = { background: "#FD4141", color: "#FFFFFF",border: "0px"}, 
+        defult_style ={ background: "none", color: "#707070",border: "1px solid #707070"}
+        var styles = [defult_style, defult_style]
         styles[i] = red_style
         this.setState({
             temp: styles,
-            appearance: appearances,
             index: i
         })
         this.render_by_category(this.state.categories[i])
@@ -363,10 +359,10 @@ export class NotificationList extends Component {
 
         return (
             <div className="notification_cover">
-                <ButtonToolbar>
-                    <Button onClick={() => this.hendleFilter(0)} style={this.state.temp[0]} appearance={this.state.appearance[0]}>{Dictionary["item_type"]}</Button>
-                    <Button onClick={() => this.hendleFilter(1)} style={this.state.temp[1]} appearance={this.state.appearance[1]}>{Dictionary["supplier"]}</Button>
-                </ButtonToolbar>
+                <div className="notification_toolbar">
+                    <button className="toolbar_btn" onClick={() => this.hendleFilter(0)} style={this.state.temp[0]} >{Dictionary["item_type"]}</button>
+                   <button className="toolbar_btn" onClick={() => this.hendleFilter(1)} style={this.state.temp[1]} >{Dictionary["supplier"]}</button>
+                </div>
                 {this.state.page}
             </div>
         )
@@ -464,14 +460,14 @@ export class Notification extends Component {
                     <div className="center_items left_notification_area">
                         {this.state.action_btn}
                     </div>
-                    <div className="center_items notification_item_name">
+                    <div className="center_items notification_item_name clamp_line">
                         {this.state.item_name}
                     </div>
                     <div className="center_items notification_weight">
                         <div>{this.state.total_weight}</div>
                     </div>
 
-                    <div className="notification_message center_items ">
+                    <div className="notification_message center_items clamp_line ">
                         {this.state.message}
                     </div>
                     <NotificationSymbol color={this.state.color} error_symbol={this.state.error_symbol} />

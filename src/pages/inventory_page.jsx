@@ -6,6 +6,7 @@ import { Dictionary } from "../Dictionary";
 import './inventory_page.css'
 import cart_plus from '../images/icons/cart_plus.svg'
 import x_icon from '../images/x_icon.svg'
+import $ from 'jquery'
 
 
 
@@ -89,7 +90,7 @@ export class AddToOrder extends Component {
             <button className="add_to_order_btn" onClick={this.close} style={{ backgroundColor: btn_color }} >
               {Dictionary["add_to_order"]}
             </button>
-            <div className="model_footer_xs">{Dictionary["go_to_orders"]}</div>
+            <div className="model_footer_xs" onClick={()=>{$("#reset_frame").val("OrdersPage").change()}}>{Dictionary["go_to_orders"]}</div>
 
           </div>
         </Modal>

@@ -6,6 +6,7 @@ import 'rsuite/dist/styles/rsuite-default.css'
 import './index.css';
 import LoginComponent from './pages/login page/LoginPage';
 
+
 // export const base_url = "http://127.0.0.1:8000"
 export const base_url = "https://majordomo.cloudns.asia:443"
 
