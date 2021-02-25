@@ -21,7 +21,7 @@ var error_symbol = [circle_warning, yellow_warning, overflow_sign],
 
     export const category_symbols = [vegetables,fruit,dairy,vegetables,fruit,dairy],
     
-    category_colors = ["#6FB91C","#FF7978","#EADAC0","#C21D1D","#AE7A48","#00000054"],
+    category_colors = ["#509700","#FF7978","#EADAC0","#C21D1D","#AE7A48","#00000054"],
 
     category_names = [  Dictionary["vegtables"], Dictionary["fruit"],
                         Dictionary["fish"] + " " + Dictionary["and"] + Dictionary["meat"], Dictionary["dairy"],

@@ -86,3 +86,10 @@
 .url_like:active {
     color: black;
 }
+
+.inventory_clicker{
+    width: fit-content;
+}
+/* .notification_toggler{
+    width: fit-content;
+} */

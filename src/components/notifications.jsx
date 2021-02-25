@@ -345,7 +345,7 @@ export class NotificationList extends Component {
     hendleFilter(i) {
         var red_style = { background: "#FD4141", color: "#FFFFFF", border: "0px" },
             defult_style = { background: "none", color: "#707070", border: "1px solid #707070" }
-        var styles = [defult_style, defult_style]
+        var styles = [defult_style, defult_style, defult_style]
         styles[i] = red_style
         this.setState({
             temp: styles,
@@ -364,6 +364,7 @@ export class NotificationList extends Component {
                 <div className="notification_toolbar">
                     <button className="toolbar_btn" onClick={() => this.hendleFilter(0)} style={this.state.temp[0]} >{Dictionary["item_type"]}</button>
                     <button className="toolbar_btn" onClick={() => this.hendleFilter(1)} style={this.state.temp[1]} >{Dictionary["supplier"]}</button>
+                    <button className="toolbar_btn" onClick={() => this.hendleFilter(2)} style={this.state.temp[2]} >{Dictionary["alerts"]}</button>
                 </div>
                 {this.state.page}
             </div>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ButtonToolbar, Modal } from "rsuite";
+import { Badge, ButtonToolbar, Modal } from "rsuite";
 import {  NotificationBlock } from "../components/notifications";
 import { Dictionary } from "../Dictionary";
 import './inventory_page.css'
@@ -66,7 +66,7 @@ export class AddToOrder extends Component {
     var type = "",
       btn_color = "#73D504"
     if (this.state.kind === 0)
-      type = <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />
+      type =<Badge content={77}> <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} /></Badge>
     else if (this.state.kind === 1)
       type = <div className="add_to_order" onClick={() => this.open('xs')} >{Dictionary.add_to_order}</div>
 

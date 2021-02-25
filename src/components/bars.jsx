@@ -12,7 +12,7 @@ import OrdersPage from "../pages/orders_page"
 import { NotificationBlock } from "./notifications"
 import SettingPage from "../pages/settings_page"
 import $ from 'jquery'
-
+var socket_client = require('websocket').w3cwebsocket;
 
 
 export class SiteFrame extends Component{
@@ -26,12 +26,38 @@ export class SiteFrame extends Component{
             
         }
         this.change_tab = this.change_tab.bind(this);
+        this.send_msg = this.send_msg.bind(this);
        
     }
     componentDidMount(){
+        
+        // const ws = new socket_client('ws://127.0.0.1:8000/1/1');
+        // var ws = new socket_client('ws://127.0.0.1:8000/ws/1/1', 'foo', 'http://127.0.0.1:8000');
+        var ws = new socket_client('ws://127.0.0.1:8000/ws/1/1');
+
+
+        ws.onopen = function() { console.log('ws open'); };
+        ws.onmessage = (message) => {
+            // const dataFromServer = JSON.parse(message.data);
+            console.log('got reply! '+ message.data);
+            // this.change_tab(this.state.component_name);
+            window.location.reload()
+        }
+        console.log(ws)
+        this.setState({socket:ws});
+
+
+     
         //establishing a way for chield components to switch tabs across the app
         $("#reset_frame").change(()=>{ console.log(this.change_tab($("#reset_frame").val()))})
         this.change_tab(this.props.page)
+    }
+    send_msg(){
+        this.state.socket.send(JSON.stringify({
+            type: "message",
+            msg: 1
+            }));
+
     }
     change_tab(component_name){
         //changes the tab on this component by name
@@ -61,7 +87,8 @@ export class SiteFrame extends Component{
         var buttons =  ["bottom_bar","bottom_bar","bottom_bar","bottom_bar"]
         buttons[i] ="bottom_bar active"
         this.setState({buttons:buttons,
-                       page:page
+                       page:page,
+                       component_name:component_name
         })
     }
 
@@ -75,7 +102,7 @@ export class SiteFrame extends Component{
 
 
         <footer id = "footer_bar">
-            <div className="description" onClick={()=> this.change_tab("NotificationBlock")}>
+            <div className="description" onClick={()=> {this.change_tab("NotificationBlock")} }>
                 <img alt="Home" className="bottom-bar-btn" src={home} />
                 <div className={this.state.buttons[0]}><div className="tester">{Dictionary["home"]}</div></div>
             </div>
@@ -87,7 +114,7 @@ export class SiteFrame extends Component{
                 </div>
             </div>
 
-            <div className="description" onClick={()=> this.change_tab("OrdersPage")}>
+            <div className="description" onClick={()=> {this.change_tab("OrdersPage")}}>
                 <img alt="Cart" className="bottom-bar-btn" src={cart}/>
                 <div className={this.state.buttons[2]}>
                     <div  className="tester">{Dictionary["orders"]}</div>

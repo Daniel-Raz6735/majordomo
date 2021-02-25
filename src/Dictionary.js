@@ -21,6 +21,7 @@ export const Dictionary = new LocalizedStrings({
     show_inventory : "show inventory",
     supplier:'Supplier',
     item_type:'Item Type',
+    alerts:'Alerts',
     show_items:"Show items",
     
 
@@ -45,7 +46,8 @@ export const Dictionary = new LocalizedStrings({
     must_use:"Must use ASAP",
     add_to_order :"Add to order",
     suggest_dish :"Suggest Dish",
-    kg:" kg",
+    kg:"kg",
+    lb:"lbs",
     looks_good:"Inventory looks good",
     serach_placeholder:"what are you looking for",
 
@@ -75,6 +77,7 @@ export const Dictionary = new LocalizedStrings({
     signOut: `התנתק`,
     show_inventory : "הצגת מלאי",
     supplier:'ספק',
+    alerts:'התראות',
     item_type:'סוג מוצר',
     show_items:"צפייה במוצרים",
 
@@ -96,7 +99,8 @@ export const Dictionary = new LocalizedStrings({
     running_low:"אוזל",
     must_use:"צריך להשתמש בדחיפות",
     add_to_order :"הוסף להזמנה",
-    kg:" ק''ג",
+    kg:"ק''ג",
+    lb:"פאונד",
     looks_good:"המלאי נראה טוב",
     suggest_dish :"הצע מנה",
     serach_placeholder:"מה אתה מחפש",
