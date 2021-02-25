@@ -2,10 +2,11 @@ from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
 from queries.update_queries import UpdateQueries as updateQ
 from queries.delete_queries import DeleteQueries as deleteQ
-import flask
+
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-from typing import Optional,List
+from typing import Optional,List,Dict
 from flask import request
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -157,6 +158,7 @@ async def add_weights(lis: WeighingList, client_time: int):
     query, res_code = createQ.insert_to_table_query("weights",
                                                     ["weighing_date", "container_id", "weight_value", "last_user"],
                                                     arr)
+    await manager.broadcast(f"weights updated on #{client_time}",1)
     return process_create_query([[query, "add weights"]], res_code)
 
 # @app.get('/')
@@ -217,6 +219,57 @@ def process_create_query(query, res_code):
         return JSONResponse(content=jsonable_encoder(result[0]))
     else:
         return error_message(res_code, result, "unable to process request")
+
+
+
+
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections = {}
+
+    async def connect(self, websocket: WebSocket, business_id: int):
+        await websocket.accept()
+        if business_id not in self.active_connections:
+            self.active_connections[business_id] = []
+        self.active_connections[business_id].append(websocket)
+        # await self.broadcast(str(business_id)+" joined the room ", business_id, websocket)
+
+    def disconnect(self, websocket: WebSocket, business_id: int):
+        self.active_connections[business_id].remove(websocket)
+
+    async def send_personal_message(self, message: str, websocket: WebSocket):
+        await websocket.send_text(message)
+
+    async def broadcast(self, message: str, business_id: int, websocket: WebSocket =None):
+        if business_id in self.active_connections:
+            for connection in self.active_connections[business_id]:
+                if websocket != connection:
+                    await connection.send_text(message)
+        else:
+            print("no client connected")
+
+
+manager = ConnectionManager()
+
+
+
+
+
+
+@app.websocket("/ws/{business_id}/{user_id}")
+async def websocket_endpoint(websocket: WebSocket, business_id: int, user_id: int):
+    await manager.connect(websocket,business_id)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            # await manager.send_personal_message(f"You wrote: {data}", websocket)
+            await manager.broadcast(f"Client {user_id} from {business_id} says: {data}", business_id, websocket)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket,business_id)
+        # await manager.broadcast(f"Client #{user_id} left the chat")
+
+
+
 # @app.route('/get/restart', methods=['GET'])
 # def restart_tables():
 #     drop_tables()
