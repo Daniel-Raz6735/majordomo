@@ -158,7 +158,7 @@ async def add_weights(lis: WeighingList, client_time: int):
     query, res_code = createQ.insert_to_table_query("weights",
                                                     ["weighing_date", "container_id", "weight_value", "last_user"],
                                                     arr)
-    await manager.broadcast(f"weights updated on #{client_time}",1)
+    await manager.broadcast(f"weights updated on #{client_time}", 1)
     return process_create_query([[query, "add weights"]], res_code)
 
 # @app.get('/')
@@ -240,7 +240,7 @@ class ConnectionManager:
     async def send_personal_message(self, message: str, websocket: WebSocket):
         await websocket.send_text(message)
 
-    async def broadcast(self, message: str, business_id: int, websocket: WebSocket =None):
+    async def broadcast(self, message: str, business_id: int, websocket: WebSocket = None):
         if business_id in self.active_connections:
             for connection in self.active_connections[business_id]:
                 if websocket != connection:
