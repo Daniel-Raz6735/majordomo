@@ -131,19 +131,42 @@ class ReadQueries:
     @staticmethod
     def get_suppliers(args):
         list_of_cols = ["business_id", "items_ids"]
-        # used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
-        used_p=args
         conditions = []
-        if "business_id" in used_p:
-            conditions.append(["AND", "supplier.business_id", "=", int(used_p["business_id"])])
+        if "business_id" in args:
+            conditions.append(["AND", "supplier.business_id", "=", int(args["business_id"])])
         else:
             return error_message(400, "Bad request", "no business id sent"), 400
 
-        if "item_ids" in used_p:
+        if "item_ids" in args:
             and_or = "AND"
-            items = used_p["item_ids"]
+            items = args["item_ids"]
             for item in items:
                 conditions.append([and_or, "supplier.item_id", "=", int(item)])
+                and_or = "OR"
+
+        conditions.append(["AND", "supplier.supplier_id", "=", "users.user_id"])
+
+        final_query, res_code = DbQueries.select_query(
+            ["supplier", "users"],
+            None,
+            conditions)
+        if res_code != 200:
+            return error_message(res_code, final_query), 400
+        return final_query, 200
+
+    @staticmethod
+    def get_orders(args):
+        conditions = []
+        if "business_id" in args:
+            conditions.append(["AND", "orders.business_id", "=", int(args["business_id"])])
+        else:
+            return error_message(400, "Bad request", "no business id sent"), 400
+
+        if "order_ids" in args:
+            and_or = "AND"
+            orders = args["order_ids"]
+            for order in orders:
+                conditions.append([and_or, "orders.order_id", "=", int(order)])
                 and_or = "OR"
 
         conditions.append(["AND", "supplier.supplier_id", "=", "users.user_id"])

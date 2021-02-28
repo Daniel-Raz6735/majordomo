@@ -1,0 +1,15 @@
+.order_symbol{
+    height: 20px;
+    width: 20px;
+}
+.centerPhotos{
+    /* margin: auto; */
+    width: 90px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.add_item_container{
+    background-color:#73D504;
+    border-radius: 12px;
+}

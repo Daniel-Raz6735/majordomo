@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Badge, ButtonToolbar, Modal } from "rsuite";
 import {  NotificationBlock } from "../components/notifications";
 import { Dictionary } from "../Dictionary";
+import { TitleComponent } from "../components/bars";
 import './inventory_page.css'
 import cart_plus from '../images/icons/cart_plus.svg'
 import x_icon from '../images/x_icon.svg'
@@ -19,20 +20,18 @@ class InventoryPage extends Component {
 
 
   render() {
-    var temp = Date.now()
-    var now = new Date(temp)
+    let temp = Date.now()
+    let now = new Date(temp)
     let date = now.getDate()
     let months = now.getMonth() + 1
     let year = now.getFullYear()
 
-    var str = date + "." + months + "." + year
-
-    // get_notifications(process_notifications, 1)//fuction currently under constroction
+    let str = date + "." + months + "." + year
 
     return (
       <div id="inventory_page_container">
-        <div className="page_title">{Dictionary["inventory"] + " | " + str}</div>
-        <NotificationBlock />
+        <TitleComponent title_name="inventory" />
+        <NotificationBlock  />
 
       </div>
 
@@ -41,6 +40,8 @@ class InventoryPage extends Component {
   }
 }
 export default InventoryPage
+
+
 
 export class AddToOrder extends Component {
   constructor(props) {

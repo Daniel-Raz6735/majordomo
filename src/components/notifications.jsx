@@ -11,6 +11,7 @@ import { CategoryDrawer } from './drawer';
 
 
 import v_icon from '../images/icons/v icon.svg'
+import { ButtonsComponent } from './bars';
 
 
 const { Collapse } = Animation;
@@ -302,7 +303,6 @@ export class NotificationList extends Component {
     constructor(props) {
         super(props);
         this.render_by_category = this.render_by_category.bind(this);
-        this.hendleFilter = this.hendleFilter.bind(this);
         this.state = {
             page: [],
             temp: [{}, {}],
@@ -313,12 +313,10 @@ export class NotificationList extends Component {
 
     }
     componentDidMount() {
-        // this.hendleFilter(this.state.index)
-        this.hendleFilter(0);
-        
     }
 
-    render_by_category(cat) {
+    render_by_category(i) {
+        var cat = this.state.categories[i]
         var page = []
         if (this.state.dict["notifications"] && this.state.dict["weights"]) {
             var notifications_dict = this.state.dict["notifications"][cat]
@@ -329,10 +327,8 @@ export class NotificationList extends Component {
 
             Object.keys(weights_dict).forEach(category_id => {
                 var notifications = get_notifications_by_level(notifications_dict, category_id)
-                var addition = <NotificationCategory key={cat + category_id} cat_type={cat} category_id={category_id} notification_dict={notifications} weights_dict={weights_dict[category_id]} />
+                var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_dict={notifications} weights_dict={weights_dict[category_id]} />
                 page.push(addition)
-
-
             })
             this.setState({ page });
 
@@ -342,30 +338,10 @@ export class NotificationList extends Component {
         }
     }
 
-    hendleFilter(i) {
-        var red_style = { background: "#FD4141", color: "#FFFFFF", border: "0px" },
-            defult_style = { background: "none", color: "#707070", border: "1px solid #707070" }
-        var styles = [defult_style, defult_style, defult_style]
-        styles[i] = red_style
-        this.setState({
-            temp: styles,
-            index: i
-        })
-        this.render_by_category(this.state.categories[i])
-
-    }
-
-
     render() {
-
-
         return (
             <div className="notification_cover">
-                <div className="notification_toolbar">
-                    <button className="toolbar_btn" onClick={() => this.hendleFilter(0)} style={this.state.temp[0]} >{Dictionary["item_type"]}</button>
-                    <button className="toolbar_btn" onClick={() => this.hendleFilter(1)} style={this.state.temp[1]} >{Dictionary["supplier"]}</button>
-                    <button className="toolbar_btn" onClick={() => this.hendleFilter(2)} style={this.state.temp[2]} >{Dictionary["alerts"]}</button>
-                </div>
+               <ButtonsComponent key="Order_btns" btn_names = {["item_type","supplier","alerts"]} callback={this.render_by_category}/>
                 {this.state.page}
             </div>
         )
@@ -412,23 +388,22 @@ class NotificationCategory extends Component {
                     Object.keys(items_in_level).forEach(item_id => {
                         var obj = items_in_level[item_id]
 
-                        page.push(<Notification key={item_id + "n" + notification_level} notification_level={obj["notification_level"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]} />)
+                        page.push(<Notification key={item_id + notification_level + "notification" } notification_level={obj["notification_level"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]} item_id={item_id} />)
                     })
                 }
             })
         }
         else
-            page.push(<OKNotification key={"ok"} />)
+            page.push(<OKNotification key={"ok"+this.state.category_id} />)
         return page;
     }
 
     render() {
-        
         return (
             <div className="notification_category_container">
-                <NotificationHeader key={this.props.category_id + "header" + this.props.cat_type} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
-                <Collapse in={this.state.show}>
-                    {(props, ref) => <Panel {...props} ref={ref} notifications={this.extract_items(this.props.notification_dict)} />}
+                <NotificationHeader key={ "header" + this.props.cat_type + this.props.category_id} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
+                <Collapse in={this.state.show} key={this.props.category_id + "collapse" + this.props.cat_type} >
+                    {(props, ref) => <Panel {...props} ref={ref} key={this.props.category_id + " panel " + this.props.cat_type} notifications={this.extract_items(this.props.notification_dict)} />}
                 </Collapse>
             </div>
         );
@@ -474,7 +449,7 @@ export class Notification extends Component {
                     <div className="notification_message center_items clamp_line ">
                         {this.state.message}
                     </div>
-                    <NotificationSymbol color={this.state.color} error_symbol={this.state.error_symbol} />
+                    <NotificationSymbol key={this.props.item_id+ "symbol"} color={this.state.color} error_symbol={this.state.error_symbol} />
                 </div>
             )
         }
@@ -543,7 +518,7 @@ export class NotificationHeader extends Component {
 
 
         return (
-            <div className="notificationHeader notification_toggler" onClick={(e) => this.props.on_click(e)} style={{borderBottomColor:category_colors[cat_id]}}>
+            <div className="notificationHeader notification_toggler" onClick={(e) => this.props.on_click(e)} style={{borderBottomColor:category_colors[cat_id]}} >
                 <CategoryDrawer key={this.props.cat_type + "drawer" + cat_id} weights_dict={this.props.weights_dict}  cat_id={cat_id} />
                 <div className="notification_header_middle notification_toggler">
                     <img className="notification_toggler" src={category_symbols[cat_id]} alt="category symbol" />
@@ -609,7 +584,7 @@ export class NotificationBlock extends Component {
 
                 else {
                     confirm_papulation(dict, "process_initial_data", "initial data not recived well")
-                    this.setState({ page: <NotificationList dict={dict} /> })
+                    this.setState({ page: <NotificationList key={"notification_list"} dict={dict} /> })
                 }
             }
             else {

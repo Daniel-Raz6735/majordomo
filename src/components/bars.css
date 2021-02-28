@@ -41,5 +41,23 @@
     margin: auto;
 }
 
+.toolbar_buttons {
+    margin: 10px auto 10px auto;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.toolbar_btn {
+    width: 100px;
+    height: 25px;
+    text-align: center;
+    border-radius: 8px;
+    letter-spacing: 0px;
+    letter-spacing: 0px;
+    font: normal normal normal 14px/21px Poppins;
+    transition: color 0.2s linear, background-color 0.3s linear;
+    -webkit-transition: color 0.2s linear, background-color 0.3s linear;
+}
+
 
 
