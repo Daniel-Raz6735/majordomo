@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Badge, ButtonToolbar, Modal } from "rsuite";
-import { NotificationBlock } from "../components/notifications";
+import { NotificationList } from "../components/notifications";
 import { Dictionary, getRTL } from "../Dictionary";
 import { TitleComponent } from "../components/bars";
 import './inventory_page.css'
@@ -31,7 +31,7 @@ class InventoryPage extends Component {
     return (
       <div id="inventory_page_container">
         <TitleComponent title_name="inventory" />
-        <NotificationBlock />
+        <NotificationList dict={this.props.dict} />
 
       </div>
 

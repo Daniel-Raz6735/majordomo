@@ -259,7 +259,7 @@ function create_orders_dict(orders_data) {
 }
 
 
-function confirm_papulation(dict, area_name, message = "", dict_to_test = false) {
+export function confirm_papulation(dict, area_name, message = "", dict_to_test = false) {
     message = message ? "\nmessage: " + message : "";
     var not_found_keys = [];
     if (dict) {
