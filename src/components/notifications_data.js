@@ -63,7 +63,7 @@ export function action_btn(defult_val, code, title, order_details) {
         case 0:
         case 1:
         default:
-            return <AddToOrder kind={0} title={title} defult_val={val} is_in_order={is_in_order}/>
+            return <AddToOrder kind={0} title={title} defult_val={val} unit ={unit} is_in_order={is_in_order}/>
 
     }
 

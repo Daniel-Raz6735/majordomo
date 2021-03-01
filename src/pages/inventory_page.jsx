@@ -20,19 +20,10 @@ class InventoryPage extends Component {
 
 
   render() {
-    let temp = Date.now()
-    let now = new Date(temp)
-    let date = now.getDate()
-    let months = now.getMonth() + 1
-    let year = now.getFullYear()
-
-    let str = date + "." + months + "." + year
-
-    return (
-      <div id="inventory_page_container">
+     return (
+      <div className="inventory_page_container">
         <TitleComponent title_name="inventory" />
         <NotificationList dict={this.props.dict} />
-
       </div>
 
     );

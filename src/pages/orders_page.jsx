@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import { ButtonsComponent, TitleComponent } from "../components/bars";
-import { Animation, Dropdown, Icon, Loader } from 'rsuite';
+import { Animation } from 'rsuite';
 import whatsapp_icon from '../images/icons/contact/whatsapp.svg';
 import phone_icon from '../images/icons/contact/phone.svg';
 import envelope_icon from '../images/icons/contact/envelope.svg';
-import up_arrow from '../images/icons/arrows/up_arrow.svg';
+// import up_arrow from '../images/icons/arrows/up_arrow.svg';
 import down_arrow from '../images/icons/arrows/down_arrow.svg';
 import $ from 'jquery'
 import './orders_page.css'
+import { Dictionary } from "../Dictionary";
 
-const { Collapse, Transition } = Animation;
+const { Collapse } = Animation;
 
 class OrdersPage extends Component {
     constructor(props) {
@@ -90,23 +91,19 @@ export class OrderList extends Component {
     }
     componentDidMount() {
 
-        var fake_suplier = {
-            "supplier_id":
-            {
-                "business_id": {
-                    "item_id": {
-                        days_to_provide: "1011010", // 7 numbers. for seven days. 1 for sending 0 if not
-                        frequency: "daily",
-                        preferred_contact: "email"
-                    }
+        // var fake_suplier = {
+        //     "supplier_id":
+        //     {
+        //         "business_id": {
+        //             "item_id": {
+        //                 days_to_provide: "1011010", // 7 numbers. for seven days. 1 for sending 0 if not
+        //                 frequency: "daily",
+        //                 preferred_contact: "email"
+        //             }
 
-
-
-
-
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
 
 
 
@@ -270,7 +267,7 @@ export class OrderHeader extends Component {
         this.state = {
             weights_dict: props.weights_dict,
             page: [],
-            arrow: <img src={down_arrow} className="order_symbol" />
+            arrow: <img src={down_arrow} alt= {"arrow up"} className="order_symbol" />
 
         }
     }
@@ -280,9 +277,9 @@ export class OrderHeader extends Component {
             <div className="notificationHeader notification_toggler" onClick={(e) => this.props.on_click(e)}  >
                 {this.props.cat_name}
                 <div className="centerPhotos">
-                    <img src={whatsapp_icon} className="order_symbol" />
-                    <img src={phone_icon} className="order_symbol" />
-                    <img src={envelope_icon} className="order_symbol" />
+                    <img src={whatsapp_icon} alt={Dictionary["whatsapp"]}className="order_symbol" />
+                    <img src={phone_icon} alt={Dictionary["phone"]} className="order_symbol" />
+                    <img src={envelope_icon}alt={Dictionary["email"]} className="order_symbol" />
 
 
                 </div>

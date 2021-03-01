@@ -9,7 +9,7 @@ import { Dictionary, LangBtn } from '../Dictionary';
 import logo from '../images/icons/Majordomo logo.svg';
 import InventoryPage from "../pages/inventory_page"
 import OrdersPage from "../pages/orders_page"
-import { NotificationBlock } from "./notifications"
+import { NotificationList } from "./notifications"
 import { Loader } from 'rsuite';
 import { create_initial_data_dict, confirm_papulation } from './data_dictionary';
 import SettingPage from "../pages/settings_page"
@@ -26,7 +26,7 @@ export class SiteFrame extends Component {
 
         this.state = {
             buttons: ["bottom_bar active", "bottom_bar", "bottom_bar", "bottom_bar"],
-            page:<Loader speed="fast" size="lg" content="Loading..." center vertical />,
+            page: <Loader speed="fast" size="lg" content="Loading..." center vertical />,
 
         }
         this.change_tab = this.change_tab.bind(this);
@@ -54,7 +54,7 @@ export class SiteFrame extends Component {
 
         //establishing a way for chield components to switch tabs across the app
         $("#reset_frame").change(() => { console.log(this.change_tab($("#reset_frame").val())) })
-        
+
 
     }
     send_msg() {
@@ -64,7 +64,7 @@ export class SiteFrame extends Component {
         }));
 
     }
-    process_initial_data(data, success,tab_name) {
+    process_initial_data(data, success, tab_name) {
         if (success) {
             // download(JSON.stringify(data) , 'file.json', 'text/plain');
             if (typeof (data) == "object") {
@@ -74,8 +74,8 @@ export class SiteFrame extends Component {
 
                 else {
                     confirm_papulation(dict, "process_initial_data", "initial data not recived well")
-                    this.change_tab(tab_name , dict)
-                    this.setState({dict})
+                    this.change_tab(tab_name, dict)
+                    this.setState({ dict })
                 }
             }
             else {
@@ -89,7 +89,7 @@ export class SiteFrame extends Component {
     get_initial_data(callback, business_id, tab_name) {
         //request all information for a business
         var request = base_url + '/get/current_view';
-    
+
         if (business_id) {
             request += "?business_id=" + business_id + "&active=true"
             console.log(request)
@@ -108,12 +108,12 @@ export class SiteFrame extends Component {
         else {
             console.log("no user id enterd. nothing happend")
         }
-    
+
     }
-    change_tab(tab_name ,dict) {
+    change_tab(tab_name, dict) {
         //changes the tab on this component by name
         var page = [], i = 0
-        if(!dict)
+        if (!dict)
             dict = this.state.dict
         switch (tab_name) {
             case "SettingPage":
@@ -122,20 +122,20 @@ export class SiteFrame extends Component {
                 break;
 
             case "OrdersPage":
-            
+
                 i = 2;
                 page = <OrdersPage dict={dict} />
                 break;
 
             case "InventoryPage":
-                default:
+            default:
                 i = 1;
-                page = <InventoryPage  dict={dict} />
+                page = <InventoryPage dict={dict} />
                 break;
 
             case "NotificationBlock":
                 i = 0;
-                page = <NotificationBlock dict = {dict}/>
+                page = <NotificationList dict={dict} />
                 break;
         }
         var buttons = ["bottom_bar", "bottom_bar", "bottom_bar", "bottom_bar"]
@@ -152,8 +152,9 @@ export class SiteFrame extends Component {
         return (
 
             <div className="main_user_page_container">
-
-                {this.state.page}
+                <div className="site_data_cover">
+                    {this.state.page}
+                </div>
 
 
                 <footer id="footer_bar">
@@ -257,7 +258,7 @@ export class ButtonsComponent extends Component {
             defult_style = { background: "none", color: "#707070", border: "1px solid #707070" }
         var btn_styles = [defult_style, defult_style, defult_style]
         btn_styles[i] = red_style
-        this.setState({btn_styles});
+        this.setState({ btn_styles });
         this.props.callback(i);
     }
 

@@ -7,9 +7,11 @@
     align-content: space-between;
 }
 
-#inventory_page_container {
-    margin: auto;
-    margin-top: 0;
+.inventory_page_container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
 }
 
 .page_title {
