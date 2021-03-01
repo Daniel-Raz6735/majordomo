@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import "./notifications.css"
 import { base_url } from '../index'
-import fake_data from '../fake_data.json'
+// import fake_data from '../fake_data.json'
 import $ from 'jquery'
-import { Animation, Loader } from 'rsuite';
-import { action_btn, notification_dict, category_symbols, category_colors, notification_colors } from './notifications_data';
+import { Animation } from 'rsuite';
+import { action_btn, notification_dict, category_symbols, category_colors,notification_colors } from './notifications_data';
 import { Dictionary, getRTL } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
 import v_icon from '../images/icons/v icon.svg'
@@ -68,33 +68,33 @@ function get_notifications_by_level(notifications_dict, category_id) {
 
 
 
-export class NotificationBlock extends Component {
+// export class NotificationBlock extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            status: props.status,
-            notification_level: props.notification_level,
-            page: [],
-            action: props.action,
-            open: true
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             status: props.status,
+//             notification_level: props.notification_level,
+//             page: [],
+//             action: props.action,
+//             open: true
 
-        }
-    }
+//         }
+//     }
 
-    componentDidMount() {
-        this.setState({ page: <NotificationList key={"notification_list"} dict={this.props.dict} /> })
-    }
-    render() {
+//     componentDidMount() {
+//         this.setState({ page: <NotificationList key={"notification_list"} dict={this.props.dict} /> })
+//     }
+//     render() {
 
-        return (
-            <div id="first_notification" className="notificationblock">
-                {this.state.page}
-            </div>
+//         return (
+//             <div id="first_notification" className="notificationblock">
+//                 {this.state.page}
+//             </div>
 
-        )
-    }
-}
+//         )
+//     }
+// }
 
 
 

@@ -48,7 +48,8 @@
 
 .notification_cover {
     height: 100%;
-    width: 100%;
+    width: 95%;
+    margin: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -114,9 +115,7 @@
     justify-content: center;
 }
 
-#first_notification {
-    height: 100%;
-}
+
 
 .notification_message {
     width: 30%;

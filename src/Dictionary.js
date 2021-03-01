@@ -16,58 +16,61 @@ export const Dictionary = new LocalizedStrings({
     //login page
     enterMail: `Please enter email`,
     enterPass: `Password`,
-    login: `Log in`, 
+    login: `Log in`,
     signOut: `Sign out`,
-    show_inventory : "show inventory",
-    supplier:'Supplier',
-    item_type:'Item Type',
-    alerts:'Alerts',
-    show_items:"Show items",
-    
+    show_inventory: "show inventory",
+    supplier: 'Supplier',
+    item_type: 'Item Type',
+    alerts: 'Alerts',
+    show_items: "Show items",
+
 
     //bottom bar
-    home:"Home",
-    inventory:"Inventory",
-    orders:"Orders",
-    profile:"Profile",
+    home: "Home",
+    inventory: "Inventory",
+    orders: "Orders",
+    profile: "Profile",
 
 
-    
-    
+
+
     //containers
-    unknown_date : "unknown date",
-    last_registred : "last registred at",
-    see_full:"See full inventory",
-    go_to_orders:"Go to orders",
+    unknown_date: "unknown date",
+    last_registred: "last registred at",
+    see_full: "See full inventory",
+    go_to_orders: "Go to orders",
 
     //notifications
-    just_few:"Just a few left",
-    running_low:"Running low",
-    must_use:"Must use ASAP",
-    add_to_order :"Add to order",
-    suggest_dish :"Suggest Dish",
-    kg:"kg",
-    lb:"lbs",
-    looks_good:"Inventory looks good",
-    serach_placeholder:"what are you looking for",
+    just_few: "Just a few left",
+    running_low: "Running low",
+    must_use: "Must use ASAP",
+    add_to_order: "Add to order",
+    suggest_dish: "Suggest Dish",
+    kg: "kg",
+    lb: "lbs",
+    looks_good: "Inventory looks good",
+    serach_placeholder: "what are you looking for",
 
     //category names
-    fish:"Fish",
-    meat:"Meat",
-    vegtables:"Vegtables",
-    fruit:"Fruit",
-    dairy:"Dairy",
-    dry_foods:"Dry foods",
-    other:"Other",
-    and:" &",
+    fish: "Fish",
+    meat: "Meat",
+    vegtables: "Vegtables",
+    fruit: "Fruit",
+    dairy: "Dairy",
+    dry_foods: "Dry foods",
+    other: "Other",
+    and: " &",
 
-    
-    
-    
+    //order page
+    email: "Email",
+    phone: "Phone",
+    whatsapp: "WhatsApp",
 
 
-    
-    
+
+
+
+
   },
   HE: {
     //login page
@@ -75,49 +78,55 @@ export const Dictionary = new LocalizedStrings({
     enterPass: `אנא הכנס סיסמא`,
     login: `התחבר`,
     signOut: `התנתק`,
-    show_inventory : "הצגת מלאי",
-    supplier:'ספק',
-    alerts:'התראות',
-    item_type:'סוג מוצר',
-    show_items:"צפייה במוצרים",
+    show_inventory: "הצגת מלאי",
+    supplier: 'ספק',
+    alerts: 'התראות',
+    item_type: 'סוג מוצר',
+    show_items: "צפייה במוצרים",
 
 
     //bottom bar
-    home:"בית",
-    inventory:"מלאי",
-    orders:"הזמנות",
-    profile:"פרופיל",
-    
+    home: "בית",
+    inventory: "מלאי",
+    orders: "הזמנות",
+    profile: "פרופיל",
+
     //containers
-    unknown_date : "תאריך לא ידוע",
-    last_registred : "נרשם לאחרונה ב",
-    see_full:"לצפייה בכל המלאי",
-    go_to_orders:"מעבר להזמנות",
-    
+    unknown_date: "תאריך לא ידוע",
+    last_registred: "נרשם לאחרונה ב",
+    see_full: "לצפייה בכל המלאי",
+    go_to_orders: "מעבר להזמנות",
+
     //notifications
-    just_few:"נותרו רק כמה",
-    running_low:"אוזל",
-    must_use:"צריך להשתמש בדחיפות",
-    add_to_order :"הוסף להזמנה",
-    kg:"ק''ג",
-    lb:"פאונד",
-    looks_good:"המלאי נראה טוב",
-    suggest_dish :"הצע מנה",
-    serach_placeholder:"מה אתה מחפש",
+    just_few: "נותרו רק כמה",
+    running_low: "אוזל",
+    must_use: "צריך להשתמש בדחיפות",
+    add_to_order: "הוסף להזמנה",
+    kg: "ק''ג",
+    lb: "פאונד",
+    looks_good: "המלאי נראה טוב",
+    suggest_dish: "הצע מנה",
+    serach_placeholder: "מה אתה מחפש",
 
     //category names
-    fish:"דגים",
-    meat:"בשר",
-    vegtables:"ירקות",
-    fruit:"פירות",
-    dairy:"חלבי",
-    dry_foods:"מאכלים יבשים",
-    other:"אחר",
-    and:"ו",
-    
-  }});
+    fish: "דגים",
+    meat: "בשר",
+    vegtables: "ירקות",
+    fruit: "פירות",
+    dairy: "חלבי",
+    dry_foods: "מאכלים יבשים",
+    other: "אחר",
+    and: "ו",
 
-  
+    //order page
+    email: "דואר אלקטרוני",
+    phone: "טלפון",
+    whatsapp: "ווטסטאפ",
+
+  }
+});
+
+
 //language array
 export const langs = ["HE", "EN"];
 
@@ -148,7 +157,7 @@ export function getRTL(lang) {
   }
 }
 
-export function getLeftRight(lang){
+export function getLeftRight(lang) {
   let targetLang = lang ? lang : Dictionary.getLanguage();
 
   switch (targetLang) {
@@ -169,7 +178,7 @@ export const LangBtn = () => {
 
   if (currentLng === "EN") ENId = "chosen";
   else HEId = "chosen";
-  var lang_arr = {"EN":usaFlag,"HE":israelFlag} 
+  var lang_arr = { "EN": usaFlag, "HE": israelFlag }
   return (
     <div id="languages">
       <Dropdown >
@@ -187,15 +196,15 @@ export const LangBtn = () => {
           <ul id="langlist">
             <li>
               <div className="flags">
-              <img alt="hebrew" src={israelFlag} id={HEId} className="langButtons" onClick={changeLanguage("HE")}></img>
-              <div>עברית</div>
+                <img alt="hebrew" src={israelFlag} id={HEId} className="langButtons" onClick={changeLanguage("HE")}></img>
+                <div>עברית</div>
               </div>
             </li>
             <li>
-            <div className="flags">
-              <img alt="usa" src ={usaFlag} id={ENId} className="langButtons " onClick={changeLanguage("EN")} ></img>
-              <div>English</div>
-            </div>
+              <div className="flags">
+                <img alt="usa" src={usaFlag} id={ENId} className="langButtons " onClick={changeLanguage("EN")} ></img>
+                <div>English</div>
+              </div>
             </li>
           </ul>
         </DropdownContent>

@@ -17,15 +17,15 @@ class ReadQueries:
             output:[["rule_id", "item_id", "content_minimum_per_day", "content_maximum_per_day",
                 "content_total_minimum", "content_total_maximum", "active"]....]"""
 
-        list_of_cols = ["business_id", "active", "rule_id"]
-        used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
+        # list_of_cols = ["business_id", "active", "rule_id"]
+        # used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
         conditions = []
-        if "business_id" in used_p:
-            conditions.append(["AND", "rules.business_id", "=", int(used_p["business_id"])])
+        if "business_id" in args:
+            conditions.append(["AND", "rules.business_id", "=", int(args["business_id"])])
         else:
             return error_message(400, "Bad request", "no business id sent"), 400
-        if "active" in used_p:
-            conditions.append(["AND", "rules.active", "=", used_p["business_id"]])
+        if "active" in args:
+            conditions.append(["AND", "rules.active", "=", args["business_id"]])
         final_query, res_code = DbQueries.select_query(
             ["rules"],
             [[["rule_id"], ["item_id"], ["content_minimum_per_day"], ["content_maximum_per_day"],
@@ -41,7 +41,7 @@ class ReadQueries:
             parameters received: required: business_id,
             optional: active, notification_id
             output:[["code", "message", "item_id", "active", "closed_by_user"]]"""
-        list_of_cols = ["business_id", "active", "notification_id"]
+        # list_of_cols = ["business_id", "active", "notification_id"]
         # used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
         used_p = args
         conditions = []
@@ -75,16 +75,16 @@ class ReadQueries:
 
     @staticmethod
     def get_current_weight(args, get_by_container=False):
-        list_of_cols = ["container_id", "business_id", "items_ids"]
+        # list_of_cols = ["container_id", "business_id", "items_ids"]
         # used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
-        used_p = args
+        # used_p = args
         conditions = []
-        if "business_id" in used_p:
-            conditions.append(["AND", "containers.business_id", "=", int(used_p["business_id"])])
+        if "business_id" in args:
+            conditions.append(["AND", "containers.business_id", "=", int(args["business_id"])])
         else:
             return error_message(400, "Bad request", "no business id sent"), 400
-        if "container_id" in used_p:
-            containers = used_p["container_id"]
+        if "container_id" in args:
+            containers = args["container_id"]
             and_or = "AND"
             if type(containers) == list:
                 for container in containers:
@@ -92,9 +92,9 @@ class ReadQueries:
                     and_or = "OR"
             else:
                 conditions.append(["AND", "containers.container_id", "=", int(containers)])
-        if "item_ids" in used_p:
+        if "item_ids" in args:
             and_or = "AND"
-            items = used_p["item_ids"]
+            items = args["item_ids"]
             for item in items:
                 conditions.append([and_or, "containers.item_id", "=", int(item)])
                 and_or = "OR"
@@ -130,7 +130,7 @@ class ReadQueries:
 
     @staticmethod
     def get_suppliers(args):
-        list_of_cols = ["business_id", "items_ids"]
+        # list_of_cols = ["business_id", "items_ids"]
         conditions = []
         if "business_id" in args:
             conditions.append(["AND", "supplier.business_id", "=", int(args["business_id"])])
@@ -182,12 +182,12 @@ class ReadQueries:
 
     @staticmethod
     def get_user_preferences(args):
-        list_of_params = ["user_email"]
-        used_p, non_used_p = Functions.phrase_parameters(args, list_of_params)
+        # list_of_params = ["user_email"]
+        # used_p, non_used_p = Functions.phrase_parameters(args, list_of_params)
         column_list = [[["lang"]], [["user_id"]]]
         conditions = []
-        if "user_email" in used_p:
-            email = used_p["user_email"].split("@")
+        if "user_email" in args:
+            email = args["user_email"].split("@")
             if len(email) != 2:
                 return error_message(400, "Bad request", " invalid email"), 400
             conditions.append(["AND", "users.email_user_name", "=", "'" + email[0] + "'"])
