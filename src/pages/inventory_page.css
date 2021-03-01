@@ -109,6 +109,7 @@
     letter-spacing: 0px;
     color: #3B3939;
     font-weight: bolder;
+    cursor: pointer;
     
 }
 .quantity_select{

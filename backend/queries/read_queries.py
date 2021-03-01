@@ -155,7 +155,7 @@ class ReadQueries:
         return final_query, 200
 
     @staticmethod
-    def get_orders(args):
+    def get_open_orders(args):
         conditions = []
         if "business_id" in args:
             conditions.append(["AND", "orders.business_id", "=", int(args["business_id"])])
@@ -169,10 +169,11 @@ class ReadQueries:
                 conditions.append([and_or, "orders.order_id", "=", int(order)])
                 and_or = "OR"
 
-        conditions.append(["AND", "supplier.supplier_id", "=", "users.user_id"])
+        conditions.append(["AND", "orders.order_id", "=", "content.order_id"])
+        # conditions.append(["AND", "orders.order_date", "=", "null"])
 
         final_query, res_code = DbQueries.select_query(
-            ["supplier", "users"],
+            ["orders", ["order_content", "content"]],
             None,
             conditions)
         if res_code != 200:

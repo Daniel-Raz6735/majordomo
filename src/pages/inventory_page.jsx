@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Badge, ButtonToolbar, Modal } from "rsuite";
-import {  NotificationBlock } from "../components/notifications";
-import { Dictionary } from "../Dictionary";
+import { NotificationBlock } from "../components/notifications";
+import { Dictionary, getRTL } from "../Dictionary";
 import { TitleComponent } from "../components/bars";
 import './inventory_page.css'
 import cart_plus from '../images/icons/cart_plus.svg'
@@ -31,7 +31,7 @@ class InventoryPage extends Component {
     return (
       <div id="inventory_page_container">
         <TitleComponent title_name="inventory" />
-        <NotificationBlock  />
+        <NotificationBlock />
 
       </div>
 
@@ -49,7 +49,10 @@ export class AddToOrder extends Component {
     this.state = {
       show: false,
       kind: props.kind,
-      title: props.title
+      title: props.title,
+      is_in_order: props.is_in_order,
+      defult_val: props.defult_val,
+      unit: props.unit
     };
     this.close = this.close.bind(this);
     this.open = this.open.bind(this);
@@ -67,7 +70,10 @@ export class AddToOrder extends Component {
     var type = "",
       btn_color = "#73D504"
     if (this.state.kind === 0)
-      type =<Badge content={77}> <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} /></Badge>
+      if (this.state.is_in_order)
+        type = <Badge content={this.state.defult_val}><img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} /></Badge>
+      else
+        type = <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />
     else if (this.state.kind === 1)
       type = <div className="add_to_order" onClick={() => this.open('xs')} >{Dictionary.add_to_order}</div>
 
@@ -85,12 +91,12 @@ export class AddToOrder extends Component {
             <div className="model_item_name clamp_line">
               {this.state.title}
             </div>
-            <Quantity />
+            <Quantity defult_val={this.state.defult_val} unit={this.state.unit} />
 
             <button className="add_to_order_btn" onClick={this.close} style={{ backgroundColor: btn_color }} >
               {Dictionary["add_to_order"]}
             </button>
-            <div className="model_footer_xs" onClick={()=>{$("#reset_frame").val("OrdersPage").change()}}>{Dictionary["go_to_orders"]}</div>
+            <div className="model_footer_xs" onClick={() => { $("#reset_frame").val("OrdersPage").change() }}>{Dictionary["go_to_orders"]}</div>
 
           </div>
         </Modal>
@@ -104,38 +110,36 @@ export class Quantity extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      quantity: props.defaultValue?props.defaultValue:10,
-      incraments: props.incraments?props.incraments:1,
-      unit: props.unit?props.unit:Dictionary["kg"],
-      min:1,
-      max:99,
+      quantity: props.defult_val ? props.defult_val : 10,
+      incraments: props.incraments ? props.incraments : 1,
+      unit: props.unit ? props.unit : Dictionary["kg"],
+      min: 1,
+      max: 99,
     };
     this.handleMinus = this.handleMinus.bind(this);
     this.handlePlus = this.handlePlus.bind(this);
   }
   handleMinus() {
-    var new_val =this.state.quantity - this.state.incraments;
-    if(new_val >= this.state.min)
+    var new_val = this.state.quantity - this.state.incraments;
+    if (new_val >= this.state.min)
       this.setState({ quantity: new_val });
     else
       alert("enterd to little")
   }
   handlePlus() {
-    var new_val =this.state.quantity + this.state.incraments;
-    if(new_val <= this.state.max)
+    var new_val = this.state.quantity + this.state.incraments;
+    if (new_val <= this.state.max)
       this.setState({ quantity: new_val });
     else
       alert("enterd to much")
   }
 
   render() {
-    return(
-    <div className="quantity_container">
-      <div  className="quantity_select minus_symbol" onClick={this.handleMinus} >-</div>
-    
-      <input type="text" className="quantity_window" name="quantity window" value={this.state.quantity + " "+ this.state.unit} disabled/>
-     
-      <div className="quantity_select plus_symbol" onClick={this.handlePlus}>+</div>
+    return (
+      <div className="quantity_container">
+        <div className="quantity_select minus_symbol" onClick={this.handleMinus} >-</div>
+        <input type="text" className="quantity_window" name="quantity window" dir={getRTL()} value={this.state.quantity + " " + this.state.unit} disabled />
+        <div className="quantity_select plus_symbol" onClick={this.handlePlus}>+</div>
       </div>)
-      }
+  }
 }

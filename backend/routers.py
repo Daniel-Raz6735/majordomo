@@ -116,11 +116,13 @@ async def get_current_view(business_id: int):
     weight_query, weight_code = readQ.get_current_weight(args)
     notifications_query, notifications_code = readQ.get_notifications(args)
     suppliers_query, supplier_code = readQ.get_suppliers(args)
+    orders_query, orders_code = readQ.get_open_orders(args)
 
     return process_read_query([[notifications_query, "notifications"],
                                [weight_query, "weights"],
-                               [suppliers_query, "suppliers"]],
-                              supplier_code)
+                               [suppliers_query, "suppliers"],
+                               [orders_query, "orders"]],
+                              orders_code)
 
 
 # @app.get('/')

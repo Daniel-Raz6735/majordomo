@@ -30,9 +30,6 @@ export class SiteFrame extends Component {
 
     }
     componentDidMount() {
-
-        // const ws = new socket_client('ws://127.0.0.1:8000/1/1');
-        // var ws = new socket_client('ws://127.0.0.1:8000/ws/1/1', 'foo', 'http://127.0.0.1:8000');
         var ws = new socket_client('wss://majordomo.cloudns.asia/ws/1/1');
         // var ws = new socket_client('ws://127.0.0.1:8000/ws/1/1');
 
@@ -70,13 +67,13 @@ export class SiteFrame extends Component {
                 break;
 
             case "OrdersPage":
-            default:
+            
                 i = 2;
                 page = <OrdersPage />
                 break;
 
             case "InventoryPage":
-
+                default:
                 i = 1;
                 page = <InventoryPage />
                 break;

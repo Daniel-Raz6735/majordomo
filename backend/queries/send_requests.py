@@ -27,6 +27,7 @@ def add_weight(container_id, weight):
     res = requests.post(url, json=data.dict())
     print(res.text)
 
+
 if __name__ == '__main__':
-    add_weight(2, 8)
+    add_weight(2, 4.5553)
 

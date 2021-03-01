@@ -54,12 +54,15 @@ export function render_container(weights_dict) {
     //gets a list of weights and puts and renders the maximal  
     var res = [];
     var sorted = sortWeightDict(weights_dict)
-
     if (weights_dict) {
         sorted.forEach(key => {
+        let weight =  weights_dict[key],
+        order_details= weight["order_details"]
+        if(!order_details)
+            order_details={}
             res.push(
-                <ItemBlock key={key + "" + weights_dict[key]["item_name"]} name={weights_dict[key]["item_name"]}
-                    weight={weights_dict[key]["total_weight"]} weight_date={weights_dict[key]["date"]} symbol={weights_dict[key]["notification_level"]} />)
+                <ItemBlock key={key + "" +weight["item_name"]} name={weight["item_name"]}
+                    weight={weight["total_weight"]} weight_date={weight["date"]} symbol={weight["notification_level"]} unit={order_details["unit"]} defult_val={order_details["amount"]}   />)
         });
     }
     return res;
@@ -102,7 +105,11 @@ export class ItemBlock extends Component {
             unit: props.unit ? props.unit : "kg",
             weight_date: date,
             color: props.color,
-            symbol: props.symbol
+            symbol: props.symbol,
+            defult_val:props.defult_val,
+            is_in_order:props.defult_val?true:false
+            
+
 
         }
     }
@@ -119,7 +126,6 @@ export class ItemBlock extends Component {
         else if (this.props.symbol === 1)
             sym = <img className="full_inventory_alert_symbol" src={red_circle} alt="few left" />
 
-
         return (
             <div className="item_container">
                 <div className="item_squere">
@@ -127,13 +133,12 @@ export class ItemBlock extends Component {
                     <div >
                         {this.state.name}
                     </div>
-                    <div >{this.state.weight.toFixed(1)} {this.state.unit}</div>
+                    <div >{this.state.weight.toFixed(1).replace(/\.0+$/,'')} {" "} {this.state.unit}</div>
                     <div className="last_registred" style={{ direction: getRTL() }}>{Dictionary["last_registred"] + ":"}
                         <div className="weight_date">{this.state.weight_date} </div>
                     </div>
                 </div>
-
-                <AddToOrder kind={1} title={this.state.name} />
+                <AddToOrder kind={1} title={this.state.name} defult_val={this.state.defult_val} is_in_order={this.state.is_in_order}/>
             </div>
         )
     }

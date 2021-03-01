@@ -9,7 +9,7 @@ import down_arrow from '../images/icons/arrows/down_arrow.svg';
 import $ from 'jquery'
 import './orders_page.css'
 
-const { Collapse } = Animation;
+const { Collapse, Transition } = Animation;
 
 class OrdersPage extends Component {
     constructor(props) {
@@ -35,53 +35,33 @@ class OrdersPage extends Component {
     render() {
         var fake_orders = {
             "supplier_id": {
-                "order_id": {
-                    "order_date": "",
-                    "order_creator_id": "",
-                    "business_id": "",
-                    "price": "",
-                    "categories": {
-                        "1": {
+                        "items": {
                             "1": {
-                                "item_name": "tometo",
                                 "unit": "kg",
-                                "price_per_unit": null,
                                 "amount": 20
                             },
                             "2": {
-                                "item_name": "cucumber",
                                 "unit": "kg",
-                                "price_per_unit": null,
                                 "amount": 30
                             }
                         }
-                    }
-                }
-            },
+                    },
             "1": {
-                "order_id": {
-                    "order_date": "",
-                    "order_creator_id": "",
-                    "business_id": "",
-                    "price": "",
-                    "categories": {
-                        "1": {
+                        "items": {
                             "1": {
-                                "item_name": "tometo",
                                 "unit": "kg",
                                 "price_per_unit": null,
                                 "amount": 20
                             },
                             "2": {
-                                "item_name": "cucumber",
                                 "unit": "kg",
                                 "price_per_unit": null,
                                 "amount": 30
                             }
                         }
                     }
-                }
-            }
+                
+            
         }
 
         return (
@@ -135,7 +115,6 @@ export class OrderList extends Component {
         var page = []
         var dict = this.props.dict
         Object.keys(dict).forEach(element => {
-            console.log(dict)
             page.push(<OrderCategory order_dict={dict[element]} />)
             page.push(<AddItem />)
         });
