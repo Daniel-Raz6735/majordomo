@@ -28,7 +28,7 @@ function create_notification_dict(notification_data, suppliers_data, orders_dict
     {
         "category": {},
         "supplier": {},
-        "notifications": {}
+        "alerts": {}
     }
 
     confirm_papulation(suppliers_data, "suppliers_data create_notification_dict")
@@ -75,9 +75,9 @@ function create_notification_dict(notification_data, suppliers_data, orders_dict
                     dict["category"][notification_level][category_id] = {}
                 dict["category"][notification_level][category_id][item_id] = { ...notification_to_insert };
 
-                if (!dict["notifications"][notification_level])
-                    dict["notifications"][notification_level] = {}
-                dict["notifications"][notification_level][item_id] = { ...notification_to_insert };
+                if (!dict["alerts"][notification_level])
+                    dict["alerts"][notification_level] = {}
+                dict["alerts"][notification_level][item_id] = { ...notification_to_insert };
 
                 suppliers_id.forEach(supplier_id => {
                     if (!dict["supplier"][notification_level])

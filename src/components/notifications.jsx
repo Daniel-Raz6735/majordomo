@@ -10,7 +10,7 @@ import { CategoryDrawer } from './drawer';
 import v_icon from '../images/icons/v icon.svg'
 import { ButtonsComponent } from './bars';
 import { create_initial_data_dict } from './data_dictionary';
-import {notifications_levels} from './notifications_data'
+import { notifications_levels } from './notifications_data'
 
 
 const { Collapse } = Animation;
@@ -103,7 +103,7 @@ export class NotificationList extends Component {
         this.state = {
             page: [],
             temp: [{}, {}],
-            categories: ["category", "supplier"],
+            categories: ["category", "supplier", "alerts"],
             dict: props.dict,
             index: 0
         }
@@ -122,11 +122,20 @@ export class NotificationList extends Component {
             // confirm_papulation(weights_dict,"NotificationList","render_by_category missing weight attribute")
             // confirm_papulation(notifications_dict,"NotificationList","render_by_category missing notification attribute")
 
-            Object.keys(weights_dict).forEach(category_id => {
-                var notifications = get_notifications_by_level(notifications_dict, category_id)
-                var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_dict={notifications} weights_dict={weights_dict[category_id]} />
-                page.push(addition)
-            })
+            if (cat === "alerts") {
+                
+                console.log(notifications_dict)
+                Object.values(notifications_dict[2]).forEach(not =>{
+                    console.log(not)
+                })
+            }
+            else {
+                Object.keys(weights_dict).forEach(category_id => {
+                    var notifications = get_notifications_by_level(notifications_dict, category_id)
+                    var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_dict={notifications} weights_dict={weights_dict[category_id]} />
+                    page.push(addition)
+                })
+            }
             this.setState({ page });
 
         }
@@ -222,10 +231,10 @@ export class Notification extends Component {
                 item_name: props.item_name,
                 total_weight: props.total_weight,
                 message: props.message ? props.message : notification_dict[notification_level]["message"],
-                action_btn: action_btn(props.defult_weight, notification_level, props.item_name, props.order_details ),
+                action_btn: action_btn(props.defult_weight, notification_level, props.item_name, props.order_details),
                 error_symbol: notification_dict[notification_level]["error_symbol"],
                 color: notification_dict[notification_level]["color"],
-                unit:props.unit?props.unit:"kg"
+                unit: props.unit ? props.unit : "kg"
             }
     }
 
@@ -240,7 +249,7 @@ export class Notification extends Component {
                         {this.state.item_name}
                     </div>
                     <div className="center_items notification_weight" >
-                        <div dir={getRTL()}> {this.state.total_weight.toFixed(1).replace(/\.0+$/,'')} {" "} {Dictionary[this.state.unit]}</div>
+                        <div dir={getRTL()}> {this.state.total_weight.toFixed(1).replace(/\.0+$/, '')} {" "} {Dictionary[this.state.unit]}</div>
                     </div>
 
                     <div className="notification_message center_items clamp_line ">

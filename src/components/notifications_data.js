@@ -10,7 +10,7 @@ import dairy from '../images/icons/category_symbols/dairy.svg'
 import vegetables from '../images/icons/category_symbols/vegetables.svg'
 import fruit from '../images/icons/category_symbols/fruit.svg'
 
-export const notifications_levels = [3, 2, 1]
+export const notifications_levels = [3, 2, 1], notification_colors = ["#FD5E53", "#F1C033", "#F78745"]
 
 var error_symbol = [circle_warning, yellow_warning, overflow_sign],
 
