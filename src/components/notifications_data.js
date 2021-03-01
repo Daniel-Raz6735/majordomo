@@ -9,6 +9,9 @@ import { AddToOrder } from '../pages/inventory_page';
 import dairy from '../images/icons/category_symbols/dairy.svg'
 import vegetables from '../images/icons/category_symbols/vegetables.svg'
 import fruit from '../images/icons/category_symbols/fruit.svg'
+
+export const notifications_levels = [3, 2, 1]
+
 var error_symbol = [circle_warning, yellow_warning, overflow_sign],
 
     styleArr = ["rgba(235, 104, 104, 0.32)", "rgba(247, 231, 185, 0.85)", "rgba(255, 103, 14, 0.2)"],//red, green, orange
