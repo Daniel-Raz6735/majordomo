@@ -7,6 +7,7 @@ import { Dictionary, getRTL, getLeftRight } from '../Dictionary';
 import { category_names, category_symbols, category_colors } from './notifications_data';
 
 
+
 export class CategoryDrawer extends React.Component {
   constructor(props) {
     super(props);
@@ -62,11 +63,7 @@ export class CategoryDrawer extends React.Component {
     const { size, placement, show } = this.state,
       cat_id = this.props.cat_id,
       st = "5px solid " + String(category_colors[cat_id]);
-    let title = <div className="notification_toggler" style={{ color: category_colors[cat_id], width:'fit-content' }} >{category_names[cat_id]}</div>
-
-    let lang = getRTL()
-    let text_align = getLeftRight()
-
+    let title = <div className="notification_toggler" style={{ color: category_colors[cat_id], width: 'fit-content' }} >{category_names[cat_id]}</div>
 
 
     return (
@@ -93,15 +90,7 @@ export class CategoryDrawer extends React.Component {
             <div className="drawer_title_border" style={{ borderBottom: st }} />
           </div>
           <Drawer.Body>
-            <div className="search">
-              <InputGroup inside >
-                <Input onChange={e => this.handleChange(e, this.props.weights_dict)}
-                  style={{ direction: lang, textAlign: text_align, boxShadow: "0 0 6px" + category_colors[cat_id], borderRadius: "5px" }} placeholder={Dictionary["serach_placeholder"] + "?"} />
-                <InputGroup.Button>
-                  <Icon icon="search" />
-                </InputGroup.Button>
-              </InputGroup>
-            </div>
+            <SearchBar handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />
             {this.state.page}
           </Drawer.Body>
 
@@ -111,3 +100,37 @@ export class CategoryDrawer extends React.Component {
   }
 }
 
+
+
+export class SearchBar extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      handleChange: props.handleChange,
+      cat_id: props.cat_id,
+      weights_dict: props.weights_dict
+    };
+
+
+  }
+
+
+  render() {
+    let lang = getRTL()
+    let text_align = getLeftRight()
+
+    return (
+
+      <div className="search">
+        <InputGroup inside >
+          <Input onChange={e => this.props.handleChange(e, this.props.weights_dict)}
+            style={{ direction: lang, textAlign: text_align, boxShadow: "0 0 6px" + category_colors[this.props.cat_id], borderRadius: "5px" }} placeholder={Dictionary["serach_placeholder"] + "?"} />
+          <InputGroup.Button>
+            <Icon icon="search" />
+          </InputGroup.Button>
+        </InputGroup>
+      </div>
+    );
+  }
+}
