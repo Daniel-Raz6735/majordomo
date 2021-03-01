@@ -117,6 +117,14 @@ async def get_current_view(business_id: int):
     notifications_query, notifications_code = readQ.get_notifications(args)
     suppliers_query, supplier_code = readQ.get_suppliers(args)
     orders_query, orders_code = readQ.get_open_orders(args)
+    if weight_code != 200:
+        return process_read_query([[weight_query, "weights"]], weight_code)
+    if notifications_code != 200:
+        return process_read_query([[notifications_query, "notifications"]], notifications_code)
+    if supplier_code != 200:
+        return process_read_query([[suppliers_query, "suppliers"]], supplier_code)
+    if orders_code != 200:
+        return process_read_query([[orders_query, "orders"]], orders_code)
 
     return process_read_query([[notifications_query, "notifications"],
                                [weight_query, "weights"],
