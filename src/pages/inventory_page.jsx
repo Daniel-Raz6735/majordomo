@@ -138,7 +138,7 @@ export class Quantity extends Component {
     return (
       <div className="quantity_container">
         <div className="quantity_select minus_symbol" onClick={this.handleMinus} >-</div>
-        <input type="text" className="quantity_window" name="quantity window" dir={getRTL()} value={this.state.quantity + " " + this.state.unit} disabled />
+        <input type="text" className="quantity_window" name="quantity window" style={{cursor:"default"}} dir={getRTL()} value={this.state.quantity + " " + this.state.unit} disabled />
         <div className="quantity_select plus_symbol" onClick={this.handlePlus}>+</div>
       </div>)
   }
