@@ -68,19 +68,22 @@ export class AddToOrder extends Component {
   }
   render() {
     var type = "",
-      btn_color = "#73D504"
+      btn_color = "#73D504",
+      btn = <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />,
+      div_content=""
     if (this.state.kind === 0)
       if (this.state.is_in_order)
-        type = <Badge content={this.state.defult_val}><img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} /></Badge>
+        div_content = <Badge content={this.state.defult_val}>{btn}</Badge>
       else
-        type = <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />
+        div_content = btn
     else if (this.state.kind === 1)
-      type = <div className="add_to_order" onClick={() => this.open('xs')} >{Dictionary.add_to_order}</div>
+      div_content = Dictionary.add_to_order
 
     return (
       <div className="add_to_cart_modal_container">
-        <ButtonToolbar>{type}</ButtonToolbar>
+        <ButtonToolbar><div className="add_to_order" onClick={() => this.open('xs')} >{div_content}</div> </ButtonToolbar>
         <Modal size={this.state.size} show={this.state.show} onHide={this.close}>
+
 
           <img src={x_icon} alt="X" className="model_x_xs" onClick={this.close} />
           <div className="model_content_xs">

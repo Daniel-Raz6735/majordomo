@@ -4,13 +4,13 @@ import { base_url } from '../index'
 import fake_data from '../fake_data.json'
 import $ from 'jquery'
 import { Animation, Loader } from 'rsuite';
-import { action_btn, notification_dict, category_symbols, category_colors } from './notifications_data';
+import { action_btn, notification_dict, category_symbols, category_colors, notification_colors } from './notifications_data';
 import { Dictionary, getRTL } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
 import v_icon from '../images/icons/v icon.svg'
 import { ButtonsComponent } from './bars';
 import { confirm_papulation } from './data_dictionary';
-import {notifications_levels} from './notifications_data'
+import { notifications_levels, action_symbol } from './notifications_data'
 
 
 const { Collapse } = Animation;
@@ -112,7 +112,7 @@ export class NotificationList extends Component {
         }
 
     }
- 
+
     render_by_category(i) {
         var cat = this.state.categories[i]
         var page = []
@@ -124,11 +124,9 @@ export class NotificationList extends Component {
             // confirm_papulation(notifications_dict,"NotificationList","render_by_category missing notification attribute")
 
             if (cat === "alerts") {
-                
-                console.log(notifications_dict)
-                Object.values(notifications_dict[2]).forEach(not =>{
-                    console.log(not)
-                })
+
+                var addition = <NotificationAlerts notification_dict={notifications_dict} />
+                page.push(addition)
             }
             else {
                 Object.keys(weights_dict).forEach(category_id => {
@@ -264,6 +262,88 @@ export class Notification extends Component {
             return <div></div>
     }
 }
+
+
+class NotificationAlerts extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            show: true
+        }
+
+        this.getPage = this.getPage.bind(this);
+    }
+
+    getPage(i) {
+        let page = [], notification_dict = this.props.notification_dict
+
+        if (notification_dict && notification_dict[i]) {
+            page.push(<AlertNotifications  i={i} notification_info={notification_dict[i]} />)
+            // Object.values(this.props.notification_dict[i]).forEach(notification_info => {
+            //     console.log(notification_info)
+            //     page.push(<SimpleNotification notification_info={notification_info} action={action_btn(null, i, notification_info["item_name"], notification_info["order_details"])} item_name={notification_info["item_name"]} total_weight={notification_info["total_weight"].toFixed(1)} />)
+            // })
+
+        }
+        else {
+            console.log("failed to get notification")
+        }
+        return page
+    }
+
+    render() {
+        console.log(this.props.notification_dict)
+
+        var page = []
+        for (let i = 0; i < notification_colors.length; i++) {
+            page.push( this.getPage(i + 1))
+        }
+
+
+        return (
+            <div className="alert_container" >
+                {page}
+            </div>
+        )
+    }
+
+}
+
+class AlertNotifications extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            show: true
+        }
+    }
+    render() {
+
+        let page = []
+        let i = this.props.i
+        Object.values(this.props.notification_info).forEach(notification => {
+            console.log(notification)
+            // page.push(<SimpleNotification notification_info={notification_info} action={action_btn(null, i, notification_info["item_name"], notification_info["order_details"])} 
+            // item_name={notification_info["item_name"]} total_weight={notification_info["total_weight"].toFixed(1)} />)
+            page.push(<div className="simple_notification"><div>{action_btn(null, i, notification["item_name"], notification["order_details"])}</div>
+                {notification["item_name"]} <div class="center_items notification_weight"> {notification["total_weight"].toFixed(1)}</div>
+            </div>)
+        })
+
+        return (
+            <div className="alert_notifications" style={{ backgroundColor: notification_colors[i-1] }}>
+                <div className="simple_notification_header" onClick={() => this.setState({ show: !this.state.show })}>
+                   <img className="header_symbols" src={notification_dict[i]["error_symbol"]} /> {notification_dict[i]["message"]}</div>
+                    <Collapse in={this.state.show} key={"notification_collapse" + i} >
+                    {(props, ref) => <Panel {...props} ref={ref} key={"notification_panel" + i} notifications={page} />}
+                </Collapse>
+
+
+            </div>
+        )
+    }
+
+}
+
 export class OKNotification extends Component {
 
     constructor(props) {

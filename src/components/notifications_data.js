@@ -10,7 +10,8 @@ import dairy from '../images/icons/category_symbols/dairy.svg'
 import vegetables from '../images/icons/category_symbols/vegetables.svg'
 import fruit from '../images/icons/category_symbols/fruit.svg'
 
-export const notifications_levels = [3, 2, 1], notification_colors = ["#FD5E53", "#F1C033", "#F78745"]
+export const notifications_levels = [3, 2, 1], notification_colors = ["#FD5E53", "#F1C033", "#F78745"],
+    action_symbol = [cart_plus, cart_plus, suggest_dish]
 
 var error_symbol = [circle_warning, yellow_warning, overflow_sign],
 
@@ -18,9 +19,8 @@ var error_symbol = [circle_warning, yellow_warning, overflow_sign],
 
     messages = [Dictionary["just_few"], Dictionary["running_low"], Dictionary["must_use"]],
 
-    text_descp = [Dictionary["add_to_order"], Dictionary["add_to_order"], Dictionary["suggest_dish"]],
+    text_descp = [Dictionary["add_to_order"], Dictionary["add_to_order"], Dictionary["suggest_dish"]]
 
-    action_symbol = [cart_plus, cart_plus, suggest_dish]
 
 export const category_symbols = [vegetables, fruit, dairy, vegetables, fruit, dairy],
 
@@ -40,7 +40,7 @@ export const notification_dict = {
     3: { "color": styleArr[2], "error_symbol": error_symbol[2], message: messages[2], "action_symbol": action_symbol[2], "action_desc": text_descp[2] }
 }
 
-export function action_btn(defult_val, code, title, order_details) {
+export function action_btn(defult_val, level, title, order_details) {
     var val = 10,
         unit = "kg",
         is_in_order = false
@@ -49,21 +49,21 @@ export function action_btn(defult_val, code, title, order_details) {
         val = order_details["amount"]
         if (order_details["unit"])
             unit = order_details["unit"]
-        
+
 
     }
     else if (defult_val)
         val = defult_val
 
-    
-    switch (code) {
+
+    switch (level) {
         case 2:
             return <img src={suggest_dish} alt={Dictionary["suggest_dish"]} />
 
         case 0:
         case 1:
         default:
-            return <AddToOrder kind={0} title={title} defult_val={val} is_in_order={is_in_order}/>
+            return <AddToOrder kind={0} title={title} defult_val={val} is_in_order={is_in_order} />
 
     }
 
