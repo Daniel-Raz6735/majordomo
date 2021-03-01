@@ -10,7 +10,11 @@ import logo from '../images/icons/Majordomo logo.svg';
 import InventoryPage from "../pages/inventory_page"
 import OrdersPage from "../pages/orders_page"
 import { NotificationBlock } from "./notifications"
+import { Loader } from 'rsuite';
+import { create_initial_data_dict, confirm_papulation } from './data_dictionary';
 import SettingPage from "../pages/settings_page"
+import fake_data from '../fake_data.json'
+import { base_url } from '../index'
 import $ from 'jquery'
 var socket_client = require('websocket').w3cwebsocket;
 
@@ -22,11 +26,13 @@ export class SiteFrame extends Component {
 
         this.state = {
             buttons: ["bottom_bar active", "bottom_bar", "bottom_bar", "bottom_bar"],
-            page: []
+            page:<Loader speed="fast" size="lg" content="Loading..." center vertical />,
 
         }
         this.change_tab = this.change_tab.bind(this);
         this.send_msg = this.send_msg.bind(this);
+        this.process_initial_data = this.process_initial_data.bind(this);
+        this.get_initial_data = this.get_initial_data.bind(this);
 
     }
     componentDidMount() {
@@ -38,17 +44,18 @@ export class SiteFrame extends Component {
         ws.onmessage = (message) => {
             // const dataFromServer = JSON.parse(message.data);
             console.log('got reply! ' + message.data);
-            // this.change_tab(this.state.component_name);
+            // this.change_tab(this.state.tab_name);
             window.location.reload()
         }
         console.log(ws)
         this.setState({ socket: ws });
 
-
+        this.get_initial_data(this.process_initial_data, 1, this.state.tab_name)
 
         //establishing a way for chield components to switch tabs across the app
         $("#reset_frame").change(() => { console.log(this.change_tab($("#reset_frame").val())) })
-        this.change_tab(this.props.page)
+        
+
     }
     send_msg() {
         this.state.socket.send(JSON.stringify({
@@ -57,30 +64,78 @@ export class SiteFrame extends Component {
         }));
 
     }
-    change_tab(component_name) {
+    process_initial_data(data, success,tab_name) {
+        if (success) {
+            // download(JSON.stringify(data) , 'file.json', 'text/plain');
+            if (typeof (data) == "object") {
+                var dict = create_initial_data_dict(data);
+                if (!dict)
+                    this.setState({ page: <div> we encounterd a problem in loading data</div> })
+
+                else {
+                    confirm_papulation(dict, "process_initial_data", "initial data not recived well")
+                    this.change_tab(tab_name , dict)
+                    this.setState({dict})
+                }
+            }
+            else {
+                console.log("intial data returnd with bad body")
+            }
+        }
+        else
+            this.setState({ page: <div> we encounterd a problem in loading data</div> })
+    }
+
+    get_initial_data(callback, business_id, tab_name) {
+        //request all information for a business
+        var request = base_url + '/get/current_view';
+    
+        if (business_id) {
+            request += "?business_id=" + business_id + "&active=true"
+            console.log(request)
+            $.ajax({
+                url: request,
+                success: function (res) {
+                    callback(res, true, tab_name);
+                    // console.log(res)
+                },
+                error: function (err) {
+                    callback(fake_data, true);
+                    console.log(err)
+                }
+            });
+        }
+        else {
+            console.log("no user id enterd. nothing happend")
+        }
+    
+    }
+    change_tab(tab_name ,dict) {
         //changes the tab on this component by name
         var page = [], i = 0
-        switch (component_name) {
+        if(!dict)
+            dict = this.state.dict
+        switch (tab_name) {
             case "SettingPage":
                 i = 3;
-                page = <SettingPage />
+                page = <SettingPage dict={dict} />
                 break;
 
             case "OrdersPage":
             
                 i = 2;
-                page = <OrdersPage />
+                page = <OrdersPage dict={dict} />
                 break;
 
             case "InventoryPage":
                 default:
                 i = 1;
-                page = <InventoryPage />
+                page = <InventoryPage  dict={dict} />
                 break;
 
             case "NotificationBlock":
                 i = 0;
-                page = <NotificationBlock />
+                page = <NotificationBlock dict = {dict}/>
                 break;
         }
         var buttons = ["bottom_bar", "bottom_bar", "bottom_bar", "bottom_bar"]
@@ -88,7 +143,7 @@ export class SiteFrame extends Component {
         this.setState({
             buttons: buttons,
             page: page,
-            component_name: component_name
+            tab_name: tab_name
         })
     }
 

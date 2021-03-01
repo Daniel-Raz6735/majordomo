@@ -9,8 +9,8 @@ import { Dictionary, getRTL } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
 import v_icon from '../images/icons/v icon.svg'
 import { ButtonsComponent } from './bars';
-import { create_initial_data_dict } from './data_dictionary';
-import { notifications_levels } from './notifications_data'
+import { confirm_papulation } from './data_dictionary';
+import {notifications_levels} from './notifications_data'
 
 
 const { Collapse } = Animation;
@@ -52,34 +52,6 @@ export function process_notifications(data, success) {
 
 }
 
-function confirm_papulation(dict, area_name, message = "", dict_to_test = false) {
-    message = message ? "\nmessage: " + message : "";
-    var not_found_keys = [];
-    if (dict) {
-        Object.keys(dict).forEach(key => {
-            if (dict_to_test) {
-                if (dict_to_test.includes(key))
-                    not_found_keys.push(key)
-            }
-            else if (!dict[key])
-                not_found_keys.push(key)
-        })
-
-        if (not_found_keys) {
-            var keys = ""
-            not_found_keys.forEach(key => { keys += key + ", " })
-            // console.log("couldent find "+keys+" in "+area_name + message)
-            return keys
-        }
-    }
-    else {
-
-        // console.log("no dictionary recived" + area_name + message)
-    }
-
-}
-
-
 
 function get_notifications_by_level(notifications_dict, category_id) {
     var dict = {}
@@ -93,6 +65,37 @@ function get_notifications_by_level(notifications_dict, category_id) {
         return null
     return dict
 }
+
+
+
+export class NotificationBlock extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            status: props.status,
+            notification_level: props.notification_level,
+            page: [],
+            action: props.action,
+            open: true
+
+        }
+    }
+
+    componentDidMount() {
+        this.setState({ page: <NotificationList key={"notification_list"} dict={this.props.dict} /> })
+    }
+    render() {
+
+        return (
+            <div id="first_notification" className="notificationblock">
+                {this.state.page}
+            </div>
+
+        )
+    }
+}
+
 
 
 //1
@@ -109,9 +112,7 @@ export class NotificationList extends Component {
         }
 
     }
-    componentDidMount() {
-    }
-
+ 
     render_by_category(i) {
         var cat = this.state.categories[i]
         var page = []
@@ -336,87 +337,6 @@ export class NotificationHeader extends Component {
 
         )
     }
-}
-
-
-export class NotificationBlock extends Component {
-
-    constructor(props) {
-        super(props);
-        this.get_initial_data = this.get_initial_data.bind(this);
-        this.process_initial_data = this.process_initial_data.bind(this);
-        this.state = {
-            status: props.status,
-            notification_level: props.notification_level,
-            page: <Loader speed="fast" size="lg" content="Loading..." center vertical />,
-            action: props.action,
-            open: true
-
-        }
-    }
-
-    get_initial_data(callback, business_id) {
-        //request all information for a business
-        var request = base_url + '/get/current_view';
-
-        if (business_id) {
-            request += "?business_id=" + business_id + "&active=true"
-            console.log(request)
-            $.ajax({
-                url: request,
-                success: function (res) {
-                    callback(res, true);
-                    // console.log(res)
-                },
-                error: function (err) {
-                    callback(fake_data, true);
-                    console.log(err)
-                }
-            });
-        }
-        else {
-            console.log("no user id enterd. nothing happend")
-        }
-
-    }
-
-    process_initial_data(data, success) {
-        if (success) {
-            // download(JSON.stringify(data) , 'file.json', 'text/plain');
-            if (typeof (data) == "object") {
-                var dict = create_initial_data_dict(data);
-                if (!dict)
-                    this.setState({ page: <div> we encounterd a problem in loading data</div> })
-
-                else {
-                    confirm_papulation(dict, "process_initial_data", "initial data not recived well")
-                    this.setState({ page: <NotificationList key={"notification_list"} dict={dict} /> })
-                }
-            }
-            else {
-                console.log("intial data returnd with bad body")
-            }
-        }
-        else
-            this.setState({ page: <div> we encounterd a problem in loading data</div> })
-    }
-
-    componentDidMount() {
-        this.get_initial_data(this.process_initial_data, 1)
-    }
-    render() {
-
-
-        return (
-            <div id="first_notification" className="notificationblock">
-                {this.state.page}
-            </div>
-
-        )
-    }
-
-
-
 }
 
 
