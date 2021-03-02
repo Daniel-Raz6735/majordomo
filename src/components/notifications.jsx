@@ -4,7 +4,7 @@ import { base_url } from '../index'
 // import fake_data from '../fake_data.json'
 import $ from 'jquery'
 import { Animation } from 'rsuite';
-import { action_btn, notification_dict, category_symbols, category_colors,notification_colors } from './notifications_data';
+import { action_btn, notification_dict, category_symbols, category_colors, notification_colors } from './notifications_data';
 import { Dictionary, getRTL } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
 import v_icon from '../images/icons/v icon.svg'
@@ -117,21 +117,25 @@ export class NotificationList extends Component {
         var cat = this.state.categories[i]
         var page = []
         if (this.state.dict["notifications"] && this.state.dict["weights"]) {
-            var notifications_dict = this.state.dict["notifications"][cat]
+            var notifications_data = this.state.dict["notifications"][cat]
             var weights_dict = this.state.dict["weights"][cat]
 
             // confirm_papulation(weights_dict,"NotificationList","render_by_category missing weight attribute")
             // confirm_papulation(notifications_dict,"NotificationList","render_by_category missing notification attribute")
 
             if (cat === "alerts") {
-
-                var addition = <NotificationAlerts notification_dict={notifications_dict} />
-                page.push(addition)
+                for (let i = 1; i <= notification_colors.length; i++) {
+                    if (notifications_data && notifications_data[i]) {
+                        page.push(<AlertNotifications notifications_level={i} notification_info={notifications_data[i]} />)
+                    }
+                }
+                // var addition = <NotificationAlerts notification_dict={notifications_dict} />
+                // page.push(addition)
             }
             else {
                 Object.keys(weights_dict).forEach(category_id => {
-                    var notifications = get_notifications_by_level(notifications_dict, category_id)
-                    var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_dict={notifications} weights_dict={weights_dict[category_id]} />
+                    var notifications = get_notifications_by_level(notifications_data, category_id)
+                    var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_data={notifications} weights_dict={weights_dict[category_id]} />
                     page.push(addition)
                 })
             }
@@ -164,7 +168,7 @@ class NotificationCategory extends Component {
             page: [],
             show: true,
             category_id: props.category_id,
-            notification_dict: props.notification_dict,
+            notification_data: props.notification_data,
             weights_dict: props.weights_dict
         };
 
@@ -207,7 +211,7 @@ class NotificationCategory extends Component {
             <div className="notification_category_container">
                 <NotificationHeader key={"header" + this.props.cat_type + this.props.category_id} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
                 <Collapse in={this.state.show} key={this.props.category_id + "collapse" + this.props.cat_type} >
-                    {(props, ref) => <Panel {...props} ref={ref} key={this.props.category_id + " panel " + this.props.cat_type} notifications={this.extract_items(this.props.notification_dict)} />}
+                    {(props, ref) => <Panel {...props} ref={ref} key={this.props.category_id + " panel " + this.props.cat_type} notifications={this.extract_items(this.props.notification_data)} />}
                 </Collapse>
             </div>
         );
@@ -278,7 +282,7 @@ class NotificationAlerts extends Component {
         let page = [], notification_dict = this.props.notification_dict
 
         if (notification_dict && notification_dict[i]) {
-            page.push(<AlertNotifications  i={i} notification_info={notification_dict[i]} />)
+            page.push(<AlertNotifications i={i} notification_info={notification_dict[i]} />)
             // Object.values(this.props.notification_dict[i]).forEach(notification_info => {
             //     console.log(notification_info)
             //     page.push(<SimpleNotification notification_info={notification_info} action={action_btn(null, i, notification_info["item_name"], notification_info["order_details"])} item_name={notification_info["item_name"]} total_weight={notification_info["total_weight"].toFixed(1)} />)
@@ -296,9 +300,14 @@ class NotificationAlerts extends Component {
 
         var page = []
         for (let i = 0; i < notification_colors.length; i++) {
-            page.push( this.getPage(i + 1))
-        }
+            page.push(this.getPage(i + 1))
+            let page = [], notification_dict = this.props.notification_dict
 
+            if (notification_dict && notification_dict[i]) {
+
+                page.push(<AlertNotifications i={i + 1} notification_info={notification_dict[i]} />)
+            }
+        }
 
         return (
             <div className="alert_container" >
@@ -317,23 +326,27 @@ class AlertNotifications extends Component {
         }
     }
     render() {
-
-        let page = []
-        let i = this.props.i
-        Object.values(this.props.notification_info).forEach(notification => {
-            console.log(notification)
-            page.push(<div className="simple_notification"><div>{action_btn(null, i, notification["item_name"], notification["order_details"])}</div>
-                {notification["item_name"]} <div class="center_items notification_weight"> {notification["total_weight"].toFixed(1)} {notification["unit"]}</div>
-            </div>)
-        })
+        let page = [],
+        level = this.props.notifications_level,
+        i = level-1,
+        notifications = this.props.notification_info
+        if (notifications&&level) {
+            Object.keys(notifications).forEach(key => {
+                var notification =  notifications[key]
+                console.log(notification)
+                page.push(<div className="simple_notification"><div className="cart_container">{action_btn(null, level-1, notification["item_name"], notification["order_details"])}</div>
+                    {notification["item_name"]} <div class="center_items notification_weight"> {notification["total_weight"].toFixed(1).replace(/\.0+$/, '')} {notification["unit"]}</div>
+                </div>)
+            })
+        }
 
         return (
-            <div className="alert_notifications" style={{ backgroundColor: notification_colors[i-1] }}>
+            <div className="alert_notifications" style={{ backgroundColor: notification_colors[i] }}>
                 <div className="simple_notification_header" onClick={() => this.setState({ show: !this.state.show })}>
-                   <div><img className="header_symbols" src={notification_dict[i]["error_symbol"]} /></div> 
-                   <div>{notification_dict[i]["message"]}</div></div>
-                    <Collapse in={this.state.show} key={"notification_collapse" + i} >
-                    {(props, ref) => <Panel {...props} ref={ref} key={"notification_panel" + i} notifications={page} />}
+                    <div><img className="header_symbols" src={notification_dict[level]["error_symbol"]} /></div>
+                    <div>{notification_dict[level]["message"]}</div></div>
+                <Collapse in={this.state.show} key={"notification_collapse" + level} >
+                    {(props, ref) => <Panel {...props} ref={ref} key={"notification_panel" + level} notifications={page} />}
                 </Collapse>
 
 

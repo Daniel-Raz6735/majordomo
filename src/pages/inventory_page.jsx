@@ -20,7 +20,7 @@ class InventoryPage extends Component {
 
 
   render() {
-     return (
+    return (
       <div className="inventory_page_container">
         <TitleComponent title_name="inventory" />
         <NotificationList dict={this.props.dict} />
@@ -59,14 +59,20 @@ export class AddToOrder extends Component {
   }
   render() {
     var type = "",
+      button_text = (this.state.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"],
       btn_color = "#73D504",
       btn = <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />,
-      div_content=""
-    if (this.state.kind === 0)
+      div_content = ""
+    if (this.state.kind === 0) {
       if (this.state.is_in_order)
         div_content = <Badge content={this.state.defult_val}>{btn}</Badge>
       else
         div_content = btn
+      div_content = <div className="cart_container">
+        <div className="cart_photo_container">{div_content}</div>
+        <div className="cart_text_container">{button_text}</div>
+      </div>
+    }
     else if (this.state.kind === 1)
       div_content = Dictionary.add_to_order
 
@@ -132,7 +138,7 @@ export class Quantity extends Component {
     return (
       <div className="quantity_container">
         <div className="quantity_select minus_symbol" onClick={this.handleMinus} >-</div>
-        <input type="text" className="quantity_window" name="quantity window" style={{cursor:"default"}} dir={getRTL()} value={this.state.quantity + " " + this.state.unit} disabled />
+        <input type="text" className="quantity_window" name="quantity window" style={{ cursor: "default" }} dir={getRTL()} value={this.state.quantity + " " + this.state.unit} disabled />
         <div className="quantity_select plus_symbol" onClick={this.handlePlus}>+</div>
       </div>)
   }

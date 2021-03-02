@@ -122,3 +122,10 @@
     font-weight: bolder;
     
 }
+.cart_photo_container{
+    margin: auto;
+}
+.cart_text_container{
+    margin: auto;
+    margin-top: 10px;
+}

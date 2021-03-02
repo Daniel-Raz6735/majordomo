@@ -112,6 +112,7 @@ input {
 
 #renderDiv{
     margin: auto;
+    margin-top: 0;
     height: 100%;
     width: 100%;
 }
