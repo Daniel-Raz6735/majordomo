@@ -77,7 +77,7 @@ export class OrdersPage extends Component {
         this.sort_dict = this.sort_dict.bind(this);
         this.call_back = this.call_back.bind(this);
         this.sort_by_supplier = this.sort_by_supplier.bind(this);
-      
+
 
     }
     componentDidMount() {
@@ -128,6 +128,7 @@ export class OrdersPage extends Component {
         if (dict && dict["suppliers"] && dict["suppliers"]["suppliers"]) {
             suppliers_dict = dict["suppliers"]["suppliers"]
             var sellers = {}
+            console.log(dict)
             if (suppliers_dict) {
 
                 Object.keys(suppliers_dict).forEach(key => {
@@ -138,10 +139,10 @@ export class OrdersPage extends Component {
                         sellers[key] = 0
                 })
                 var sorted_sellers = sort_by_key_val(sellers, false, true)
+                let temp = dict["weights"]["supplier"]
                 console.log(sorted_sellers)
                 sorted_sellers.forEach(obj => {
-                    page.push(<OrderCategory supplier={suppliers_dict[obj[1]]} />)
-                    // this.render_supplier(suppliers_dict[obj[1]])
+                    page.push(<OrderCategory weights_dict={temp[obj[1]]} supplier={suppliers_dict[obj[1]]} />)
                 })
 
 
@@ -189,7 +190,7 @@ class OrderCategory extends Component {
     constructor(props) {
         super(props);
         this.remove_onClick = this.remove_onClick.bind(this);
-        
+
         this.render_supplier = this.render_supplier.bind(this);
         this.state = {
             page: [],
@@ -213,13 +214,18 @@ class OrderCategory extends Component {
         var page = []
         if (supplier) {
             var sells_items = supplier["sells_items"]
+
             if (sells_items) {
+                console.log(sells_items)
                 Object.keys(sells_items).forEach(key => {
+                    let temp = this.props.weights_dict[key], item_name
+                    item_name = temp && temp["item_name"] ? temp["item_name"] : key
+
                     if (sells_items[key]["order_details"])
-                        page.push(<Order order={sells_items[key]["order_details"]} item_id = {key} />)
+                        page.push(<Order order={sells_items[key]["order_details"]} item_id={item_name} />)
                 })
             }
-            page.push(<AddItem/>)
+            page.push(<AddItem />)
             console.log(supplier["sells_items"])
 
         }
@@ -228,9 +234,13 @@ class OrderCategory extends Component {
 
 
     render() {
+        // console.log(this.props.supplier)
+        console.log(this.props.weights_dict)
+        let supplier = this.props.supplier
+        console.log(supplier)
         return (
             <div className="notification_category_container">
-                <OrderHeader key={"header" + this.props.cat_type + this.props.category_id} cat_name={"category name"} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
+                <OrderHeader key={"header" + this.props.cat_type + this.props.category_id} cat_name={supplier["name"]} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
                 <Collapse in={this.state.show} key={this.props.category_id + "collapse" + this.props.cat_type} >
                     {(props, ref) => <Panel {...props} ref={ref} key={this.props.category_id + " panel " + this.props.cat_type} orders={this.render_supplier(this.props.supplier)} />}
                 </Collapse>
@@ -245,21 +255,23 @@ export class Order extends Component {
     constructor(props) {
         super(props);
         this.state = {
-       
+
         }
     }
 
     render() {
         console.log(this.props.order)
         let quantity = this.props.order["amount"],
-         unit = this.props.order["unit"]
-         unit = Dictionary[unit]?Dictionary[unit]:Dictionary["unknown"]
+            unit = this.props.order["unit"]
+        unit = Dictionary[unit] ? Dictionary[unit] : Dictionary["unknown"]
         if (this.state) {
             return (
                 <div className="order_container">
-                    <Quantity defult_val={quantity} unit={unit} />
-                    {this.props.item_id}
+                    <div className="order_item_name">
+                        {this.props.item_id}
                     </div>
+                    <Quantity defult_val={quantity} unit={unit} />
+                </div>
             )
         }
         else

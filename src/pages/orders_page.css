@@ -37,3 +37,8 @@
     box-shadow: 0px 0px 6px #00000054;
     border-bottom: black 5px solid;
 }
+
+.order_item_name{
+    width: 40%;
+    text-align: center;
+}
