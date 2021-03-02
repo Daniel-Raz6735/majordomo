@@ -5,6 +5,7 @@ import { Containers } from './containers';
 import './../components/drawer.css';
 import { Dictionary, getRTL, getLeftRight } from '../Dictionary';
 import { category_names, category_symbols, category_colors } from './notifications_data';
+import { AddItem } from '../pages/orders_page';
 
 
 
@@ -59,17 +60,31 @@ export class CategoryDrawer extends React.Component {
 
   }
 
+
+
   render() {
     const { size, placement, show } = this.state,
       cat_id = this.props.cat_id,
       st = "5px solid " + String(category_colors[cat_id]);
     let title = <div className="notification_toggler" style={{ color: category_colors[cat_id], width: 'fit-content' }} >{category_names[cat_id]}</div>
+    let clas = this.props.order_drawer ? "add_item_container" : "category_drawer_container"
+
+    let see_full_inventory
+    if (!this.props.order_drawer)
+      see_full_inventory = <div className="inventory_clicker url_like" onClick={() => this.toggleDrawer()}>{Dictionary["see_full"]}</div>
+    else
+      see_full_inventory = <AddItem func={this.toggleDrawer} />
+
+
+
+
 
 
     return (
-      <div className="category_drawer_container notification_toggler">
+      <div className={clas + " notification_toggler"}>
         {title}
-        <div className="inventory_clicker url_like" onClick={() => this.toggleDrawer()}>{Dictionary["see_full"]}</div>
+        {/* <div className="inventory_clicker url_like" onClick={() => this.toggleDrawer()}>{Dictionary["see_full"]}</div> */}
+        {see_full_inventory}
 
 
         <Drawer
