@@ -141,3 +141,30 @@
 .filter_btn .active {
     background: tomato;
 }
+
+.alert_container{
+    width: 95%;
+    margin: auto;
+}
+
+.alert_notifications{
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+}
+
+.simple_notification_header{
+    height: 40px;
+}
+
+.simple_notification{
+    display: flex;
+    justify-content: space-around;
+    background-color: white;
+    margin: auto;
+    width: 80%;
+    border-radius: 5px;
+    height: 50px;
+    align-items: center;
+
+}
