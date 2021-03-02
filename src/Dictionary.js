@@ -65,7 +65,9 @@ export const Dictionary = new LocalizedStrings({
     email: "Email",
     phone: "Phone",
     whatsapp: "WhatsApp",
-
+    add_item:"Add item",
+    new_item:"New item",
+    unknown:"Unknown",
 
 
 
@@ -122,6 +124,10 @@ export const Dictionary = new LocalizedStrings({
     email: "דואר אלקטרוני",
     phone: "טלפון",
     whatsapp: "ווטסטאפ",
+    add_item:"הוסף מוצר",
+    new_item:"מוצר חדש",
+    unknown:"לא ידוע",
+   
 
   }
 });

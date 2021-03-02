@@ -2,7 +2,7 @@
     height: 80px;
     background-color: #FFFFFF;
     box-shadow: 2px 2px 8px #00000054;
-    justify-content: space-evenly;
+    justify-content: space-between;
     display: flex;
     align-items: center;
     padding: 5%;

@@ -225,7 +225,6 @@ function create_orders_dict(orders_data) {
     }
     if (!orders_data)
         return null
-    console.log(orders_data)
     var suppliers = dict["suppliers"],
         items = dict["items"]
     Object.keys(orders_data).forEach(key => {

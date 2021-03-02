@@ -99,9 +99,10 @@
 }
 
 .quantity_container{
-    width:65%;
+    width:150px;
     display: flex;
     justify-content: space-around;
+
 }
 .quantity_window{
     width: 71px;

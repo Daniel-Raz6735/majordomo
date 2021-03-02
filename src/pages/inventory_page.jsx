@@ -103,7 +103,7 @@ export class Quantity extends Component {
     this.state = {
       quantity: props.defult_val ? props.defult_val : 10,
       incraments: props.incraments ? props.incraments : 1,
-      unit: props.unit ? props.unit : Dictionary["kg"],
+      unit: props.unit ? props.unit : Dictionary["unknown"],
       min: 1,
       max: 99,
     };

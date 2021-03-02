@@ -5,7 +5,7 @@ import cart from '../images/icons/cart.svg'
 import profile from '../images/profile.svg'
 import React, { Component } from 'react';
 import { auth } from '../config/firebaseConfig'
-import { Dictionary, LangBtn } from '../Dictionary';
+import { Dictionary, getRTL, LangBtn } from '../Dictionary';
 import logo from '../images/icons/Majordomo logo.svg';
 import InventoryPage from "../pages/inventory_page"
 import OrdersPage from "../pages/orders_page"
@@ -122,7 +122,7 @@ export class SiteFrame extends Component {
                 break;
 
             case "OrdersPage":
-
+            
                 i = 2;
                 page = <OrdersPage dict={dict} />
                 break;
@@ -151,7 +151,7 @@ export class SiteFrame extends Component {
 
         return (
 
-            <div className="main_user_page_container">
+            <div className="main_user_page_container" dir={getRTL()}>
                 <div className="site_data_cover">
                     {this.state.page}
                 </div>
@@ -225,7 +225,7 @@ export class NavBar extends Component {
         return (
             <header className="header">
                 <LangBtn />
-                <img alt="Majordomo logo" id="majordomoLogo" src={logo} onClick={() => { window.location = '/'; }}></img>
+                <img alt="Majordomo logo" className="majordomoLogo" src={logo} onClick={() => { window.location = '/'; }}></img>
                 <button id="logoutBtn" onClick={() => {
                     auth.signOut()
                     window.location.reload()
@@ -249,7 +249,8 @@ export class ButtonsComponent extends Component {
     }
 
     componentDidMount() {
-        this.btn_handler(0)
+        var def_btn = this.props.def_btn?this.props.def_btn:0
+        this.btn_handler(def_btn)
     }
 
     btn_handler(i) {
