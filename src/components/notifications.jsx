@@ -10,7 +10,7 @@ import { CategoryDrawer } from './drawer';
 import v_icon from '../images/icons/v icon.svg'
 import { ButtonsComponent } from './bars';
 import { confirm_papulation } from './data_dictionary';
-import { notifications_levels, action_symbol } from './notifications_data'
+import { notifications_levels } from './notifications_data'
 
 
 const { Collapse } = Animation;
@@ -333,7 +333,6 @@ class AlertNotifications extends Component {
         if (notifications&&level) {
             Object.keys(notifications).forEach(key => {
                 var notification =  notifications[key]
-                console.log(notification)
                 page.push(<div className="simple_notification"><div className="cart_container">{action_btn(null, level-1, notification["item_name"], notification["order_details"])}</div>
                     {notification["item_name"]} <div class="center_items notification_weight"> {notification["total_weight"].toFixed(1).replace(/\.0+$/, '')} {notification["unit"]}</div>
                 </div>)

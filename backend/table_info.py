@@ -9,7 +9,10 @@ tables = {
             [4, 'Jon', 'Doe', "jondoe", "gmail.com", "jhons place, JLM", "0502002121", 3, 3],
             [5, 'vegetable', 'seller', "vegetables", "gmail.com", "vegetables place, JLM", "0502001231", None, None],
             [6, 'fruit', 'seller', "fruit", "gmail.com", "fruits place, JLM", "0502465661", None, None],
-            [7, 'meet', 'seller', "meet", "gmail.com", "meets place, JLM", "0522465661", None, None]
+            [7, 'meet', 'seller', "meet", "gmail.com", "meets place, JLM", "0522465661", None, None],
+            [10, 'fish', 'seller', "fish", "gmail.com", "fishs place, JLM", "0522465661", None, None],
+            [8, 'milk', 'seller', "milk", "gmail.com", "milks place, JLM", "0522434551", None, None],
+            [9, 'pasta', 'seller', "pasta", "gmail.com", "pasta place, JLM", "0542147576", None, None]
         ]
     },
     "user_preference": {
@@ -32,7 +35,14 @@ tables = {
             [6, 1, 2, '1000000', 'email', 'daily'],
             [6, 1, 3, '1000000', 'email', 'daily'],
             [6, 1, 4, '1000000', 'email', 'daily'],
+            [7, 1, 5, '0001000', None, 'monthly'],
             [7, 1, 6, '0001000', None, 'monthly'],
+            [7, 1, 7, '0001000', None, 'monthly'],
+            [10, 1,8, '0001000', None, 'monthly'],
+            [8, 1,9, '0001000', None, 'monthly'],
+
+
+
             [5, 2, 1, '1110000', 'email', 'daily'],
             [5, 2, 2, '1110110', 'email', 'daily'],
             [6, 2, 2, '1000000', 'email', 'daily'],
@@ -104,7 +114,11 @@ tables = {
             [1, None, 1, 2, True, None, 1],
             [3, None, 1, 2, True, None, 1],
             [2, None, 1, 1, True, None, 1],
-            [3, None, 2, 2, True, None, 1]
+            [3, None, 2, 2, True, None, 1],
+
+            [3, None, 1, 9, True, None, 1],
+            [2, None, 1, 6, True, None, 1],
+            [1, None, 1, 7, True, None, 1],
 
         ]
     },
@@ -164,6 +178,13 @@ tables = {
             [2, 1, 2, '2014-10-19 18:49:25', 25],
             [3, 1, 3, '2014-10-19 19:22:54', 12],
             [4, 1, 4, '2014-10-19 19:39:54', 15],
+            [7, 1, 5, '2014-10-19 19:39:54', 15],
+            [8, 1, 6, '2014-10-19 19:39:54', 15],
+            [9, 1, 7, '2014-10-19 19:39:54', 15],
+            [10, 1, 8, '2014-10-19 19:39:54', 15],
+            [11, 1, 9, '2014-10-19 19:39:54', 15],
+
+
             [5, 2, 1, '2014-10-19 15:29:54', 17],
             [6, 2, 2, '2014-10-19 15:34:54', 18],
 
@@ -195,7 +216,13 @@ tables = {
             [5, '2014-10-20 08:37:21', 6.5, None],
             [5, '2014-10-20 12:42:02', 3, None],
 
-            [6, '2014-10-19 15:35:54', 18, None]
+            [6, '2014-10-19 15:35:54', 18, None],
+
+            [7,  '2014-10-19 19:39:54', 0, None],
+            [8, '2014-10-19 19:39:54', 0, None],
+            [9, '2014-10-19 19:39:54', 0, None],
+            [10,  '2014-10-19 19:39:54', 0, None],
+            [11,  '2014-10-19 19:39:54', 0, None],
 
         ]
     },
@@ -219,3 +246,10 @@ table_list = [
     "weights",
     "rules"
 ]
+
+# add users
+# INSERT INTO  users(user_id, first_name, last_name,email_user_name,email_domain_name, address,phone_number,business_id,department_id )
+# VALUES (10, 'fish', 'seller', 'fish', 'gmail.com', 'fishs place, JLM', '0522465661', null, null),
+#             (8, 'milk', 'seller', 'milk', 'gmail.com', 'milks place, JLM', '0522434551', null, null),
+#             (9, 'pasta', 'seller', 'pasta', 'gmail.com', 'pasta place, JLM', '0542147576', null, null);
+# select * from users;

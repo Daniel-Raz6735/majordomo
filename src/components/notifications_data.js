@@ -1,11 +1,14 @@
 import { Dictionary } from '../Dictionary';
-import cart_plus from '../images/icons/cart_plus.svg'
+import cart_plus from '../images/icons/orders/cart_plus.svg'
 import suggest_dish from '../images/icons/suggest_dish.svg'
 import yellow_warning from '../images/icons/triangle_warning.svg'
 import circle_warning from '../images/icons/circle red warning.svg'
 import overflow_sign from '../images/icons/overflow sign.svg'
 import { AddToOrder } from '../pages/inventory_page';
 
+import meet_and_fish from '../images/icons/category_symbols/meet_and_fish.svg'
+import dry_food from '../images/icons/category_symbols/dry_food.svg'
+import others from '../images/icons/category_symbols/others.svg'
 import dairy from '../images/icons/category_symbols/dairy.svg'
 import vegetables from '../images/icons/category_symbols/vegetables.svg'
 import fruit from '../images/icons/category_symbols/fruit.svg'
@@ -22,9 +25,9 @@ var error_symbol = [circle_warning, yellow_warning, overflow_sign],
     text_descp = [Dictionary["add_to_order"], Dictionary["add_to_order"], Dictionary["suggest_dish"]]
 
 
-export const category_symbols = [vegetables, fruit, dairy, vegetables, fruit, dairy],
+export const category_symbols = [vegetables, fruit, meet_and_fish, dairy, dry_food, others],
 
-    category_colors = ["#509700", "#FF7978", "#EADAC0", "#C21D1D", "#AE7A48", "#00000054"],
+    category_colors = ["#509700", "#FF7978", "#C21D1D", "#EADAC0", "#AE7A48", "#00000054"],
 
     category_names = [Dictionary["vegtables"], Dictionary["fruit"],
     Dictionary["fish"] + " " + Dictionary["and"] + Dictionary["meat"], Dictionary["dairy"],

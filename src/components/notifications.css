@@ -41,7 +41,7 @@
 }
 
 .header_symbols {
-    /* margin-left: 10px; */
+    margin-left: 10px;
     height: 20px;
     width: 20px;
 }
@@ -112,7 +112,7 @@
 
 .notification_weight {
     height: 30px;
-    width: 15%;
+    width: 75px;
     border-radius: 7px;
     border: black 1px groove;
     display: flex;
@@ -122,7 +122,7 @@
 
 
 .notification_message {
-    width: 30%;
+    width: 23%;
     text-align: center;
     justify-content: center;
 }

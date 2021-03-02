@@ -4,7 +4,7 @@ import { NotificationList } from "../components/notifications";
 import { Dictionary, getRTL } from "../Dictionary";
 import { TitleComponent } from "../components/bars";
 import './inventory_page.css'
-import cart_plus from '../images/icons/cart_plus.svg'
+import cart_plus from '../images/icons/orders/cart_plus.svg'
 import x_icon from '../images/x_icon.svg'
 import $ from 'jquery'
 
@@ -58,8 +58,7 @@ export class AddToOrder extends Component {
     });
   }
   render() {
-    var type = "",
-      button_text = (this.state.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"],
+    var button_text = (this.state.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"],
       btn_color = "#73D504",
       btn = <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />,
       div_content = ""

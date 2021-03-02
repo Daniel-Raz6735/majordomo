@@ -49,6 +49,7 @@ export const Dictionary = new LocalizedStrings({
     suggest_dish: "Suggest Dish",
     kg: "kg",
     lb: "lbs",
+    un:"units",
     looks_good: "Inventory looks good",
     serach_placeholder: "what are you looking for",
 
@@ -108,6 +109,7 @@ export const Dictionary = new LocalizedStrings({
     edit_order:"ערוך הזמנה",
     kg: "ק''ג",
     lb: "פאונד",
+    un:"יח'",
     looks_good: "המלאי נראה טוב",
     suggest_dish: "הצע מנה",
     serach_placeholder: "מה אתה מחפש",

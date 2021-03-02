@@ -8,7 +8,7 @@ import {NotificationBlock} from "../../components/notifications"
 import {BottomBar, NavBar} from "../../components/bars"
 import ReactDOM from 'react-dom';
 
-import cart_plus from '../../images/icons/cart_plus.svg'
+import cart_plus from '../../images/icons/orders/cart_plus.svg'
 import logo from '../../images/icons/Majordomo logo.svg'
 import {base_url} from '../../index'
 import { render_container, req_weights } from '../../components/containers';

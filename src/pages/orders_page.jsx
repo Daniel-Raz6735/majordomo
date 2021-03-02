@@ -6,7 +6,7 @@ import phone_icon from '../images/icons/contact/phone.svg';
 import envelope_icon from '../images/icons/contact/envelope.svg';
 // import up_arrow from '../images/icons/arrows/up_arrow.svg';
 import down_arrow from '../images/icons/arrows/down_arrow.svg';
-import $, { data } from 'jquery'
+import $ from 'jquery'
 import './orders_page.css'
 import { Dictionary, getRTL } from "../Dictionary";
 import { SearchBar } from "../components/drawer";
@@ -202,7 +202,7 @@ class OrderCategory extends Component {
     remove_onClick(e) {
         if (e && $(e.target).attr('class')) {
 
-            if ($(e.target).attr('class').includes('notification_toggler')) {
+            if ($(e.target).attr('class').includes('order_toggler')) {
                 this.setState({ show: !this.state.show });
             }
         }
