@@ -41,9 +41,13 @@
 }
 
 .header_symbols {
-    margin-left: 10px;
+    /* margin-left: 10px; */
     height: 20px;
     width: 20px;
+}
+.header_items{
+    margin-left: 8px;
+    margin-right: 8px;
 }
 
 .notification_cover {
@@ -155,6 +159,8 @@
 .simple_notification_header{
     height: 40px;
     color: white;
+    display: flex;
+    align-items: center;
 }
 
 .simple_notification{
