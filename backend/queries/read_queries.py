@@ -170,7 +170,7 @@ class ReadQueries:
                 and_or = "OR"
 
         conditions.append(["AND", "orders.order_id", "=", "content.order_id"])
-        # conditions.append(["AND", "orders.order_date", "=", "null"])
+        conditions.append(["AND", "orders.order_date", "=", "null"])
 
         final_query, res_code = DbQueries.select_query(
             ["orders", ["order_content", "content"]],
