@@ -322,17 +322,16 @@ class AlertNotifications extends Component {
         let i = this.props.i
         Object.values(this.props.notification_info).forEach(notification => {
             console.log(notification)
-            // page.push(<SimpleNotification notification_info={notification_info} action={action_btn(null, i, notification_info["item_name"], notification_info["order_details"])} 
-            // item_name={notification_info["item_name"]} total_weight={notification_info["total_weight"].toFixed(1)} />)
             page.push(<div className="simple_notification"><div>{action_btn(null, i, notification["item_name"], notification["order_details"])}</div>
-                {notification["item_name"]} <div class="center_items notification_weight"> {notification["total_weight"].toFixed(1)}</div>
+                {notification["item_name"]} <div class="center_items notification_weight"> {notification["total_weight"].toFixed(1)} {notification["unit"]}</div>
             </div>)
         })
 
         return (
             <div className="alert_notifications" style={{ backgroundColor: notification_colors[i-1] }}>
                 <div className="simple_notification_header" onClick={() => this.setState({ show: !this.state.show })}>
-                   <img className="header_symbols" src={notification_dict[i]["error_symbol"]} /> {notification_dict[i]["message"]}</div>
+                   <div><img className="header_symbols" src={notification_dict[i]["error_symbol"]} /></div> 
+                   <div>{notification_dict[i]["message"]}</div></div>
                     <Collapse in={this.state.show} key={"notification_collapse" + i} >
                     {(props, ref) => <Panel {...props} ref={ref} key={"notification_panel" + i} notifications={page} />}
                 </Collapse>
