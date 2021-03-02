@@ -9,7 +9,7 @@ import down_arrow from '../images/icons/arrows/down_arrow.svg';
 import $ from 'jquery'
 import './orders_page.css'
 import { Dictionary, getRTL } from "../Dictionary";
-import { SearchBar } from "../components/drawer";
+import { CategoryDrawer, SearchBar } from "../components/drawer";
 import { Quantity } from "./inventory_page";
 
 const { Collapse } = Animation;
@@ -214,6 +214,7 @@ class OrderCategory extends Component {
         var page = []
         if (supplier) {
             var sells_items = supplier["sells_items"]
+            console.log(supplier)
 
             if (sells_items) {
                 console.log(sells_items)
@@ -225,7 +226,8 @@ class OrderCategory extends Component {
                         page.push(<Order order={sells_items[key]["order_details"]} item_id={item_name} />)
                 })
             }
-            page.push(<AddItem />)
+            page.push(<CategoryDrawer weights_dict={this.props.weights_dict} order_drawer={true} />)
+            // page.push(<AddItem weights_dict={this.props.weights_dict}/>)
             console.log(supplier["sells_items"])
 
         }
@@ -282,11 +284,14 @@ export class AddItem extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            page:[]
+        }
     }
     render() {
+
         return (
-            <div className="add_item_container" dir={getRTL()}>
+            <div className="add_item_container" dir={getRTL()} onClick={this.props.func} >
                 {"+ "} {Dictionary["new_item"]}
             </div>
         )
@@ -322,7 +327,9 @@ export class OrderHeader extends Component {
     render() {
         return (
             <div className="order_header order_toggler" onClick={(e) => this.props.on_click(e)}  >
-                {this.props.cat_name}
+                <div className="order_item_name order_toggler">
+                    {this.props.cat_name}
+                </div>
                 <div className="centerPhotos">
                     <img src={phone_icon} alt={Dictionary["phone"]} className="order_symbol" />
                     <img src={whatsapp_icon} alt={Dictionary["whatsapp"]} className="order_symbol" />
