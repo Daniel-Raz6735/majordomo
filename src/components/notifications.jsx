@@ -268,56 +268,6 @@ export class Notification extends Component {
 }
 
 
-class NotificationAlerts extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            show: true
-        }
-
-        this.getPage = this.getPage.bind(this);
-    }
-
-    getPage(i) {
-        let page = [], notification_dict = this.props.notification_dict
-
-        if (notification_dict && notification_dict[i]) {
-            page.push(<AlertNotifications i={i} notification_info={notification_dict[i]} />)
-            // Object.values(this.props.notification_dict[i]).forEach(notification_info => {
-            //     console.log(notification_info)
-            //     page.push(<SimpleNotification notification_info={notification_info} action={action_btn(null, i, notification_info["item_name"], notification_info["order_details"])} item_name={notification_info["item_name"]} total_weight={notification_info["total_weight"].toFixed(1)} />)
-            // })
-
-        }
-        else {
-            console.log("failed to get notification")
-        }
-        return page
-    }
-
-    render() {
-        console.log(this.props.notification_dict)
-
-        var page = []
-        for (let i = 0; i < notification_colors.length; i++) {
-            page.push(this.getPage(i + 1))
-            let page = [], notification_dict = this.props.notification_dict
-
-            if (notification_dict && notification_dict[i]) {
-
-                page.push(<AlertNotifications i={i + 1} notification_info={notification_dict[i]} />)
-            }
-        }
-
-        return (
-            <div className="alert_container" >
-                {page}
-            </div>
-        )
-    }
-
-}
-
 class AlertNotifications extends Component {
     constructor(props) {
         super(props);
