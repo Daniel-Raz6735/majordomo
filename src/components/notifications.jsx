@@ -129,13 +129,11 @@ export class NotificationList extends Component {
                         page.push(<AlertNotifications notifications_level={i} notification_info={notifications_data[i]} />)
                     }
                 }
-                // var addition = <NotificationAlerts notification_dict={notifications_dict} />
-                // page.push(addition)
             }
             else {
                 Object.keys(weights_dict).forEach(category_id => {
                     var notifications = get_notifications_by_level(notifications_data, category_id)
-                    var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_data={notifications} weights_dict={weights_dict[category_id]} />
+                    var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_data={notifications} weights_dict={weights_dict[category_id]} supplier_dict ={this.props.dict["suppliers"]}/>
                     page.push(addition)
                 })
             }
@@ -169,7 +167,8 @@ class NotificationCategory extends Component {
             show: true,
             category_id: props.category_id,
             notification_data: props.notification_data,
-            weights_dict: props.weights_dict
+            weights_dict: props.weights_dict,
+            supplier_dict:props.supplier_dict,
         };
 
     }
@@ -358,16 +357,17 @@ export class NotificationHeader extends Component {
             }
         })
         this.setState({ page })
+        console.log(this.props.weights_dict)
     }
 
 
     render() {
         var cat_id = this.props.cat_id - 1
-
+        var cat_name = (this.props.cat_type==="supplier")? false:false
 
         return (
             <div className="notificationHeader notification_toggler" onClick={(e) => this.props.on_click(e)} style={{ borderBottomColor: category_colors[cat_id] }} >
-                <CategoryDrawer key={this.props.cat_type + "drawer" + cat_id} weights_dict={this.props.weights_dict} cat_id={cat_id} />
+                <CategoryDrawer key={this.props.cat_type + "drawer" + cat_id} weights_dict={this.props.weights_dict} cat_id={cat_id} cat_name={cat_name} />
                 <div className="notification_header_middle notification_toggler">
                     <img className="notification_toggler" src={category_symbols[cat_id]} alt="category symbol" />
                 </div>

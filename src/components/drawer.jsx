@@ -18,6 +18,7 @@ export class CategoryDrawer extends React.Component {
       show: false,
       weights_dict: props.weights_dict,
       cat_id: props.cat_id,
+      cat_name: this.props.cat_name?this.props.cat_name:category_names[props.cat_id],
       page: <Containers weights_dict={this.props.weights_dict} />
     };
     this.close = this.close.bind(this);
@@ -66,7 +67,7 @@ export class CategoryDrawer extends React.Component {
     const { size, placement, show } = this.state,
       cat_id = this.props.cat_id,
       st = "5px solid " + String(category_colors[cat_id]);
-    let title = <div className="notification_toggler" style={{ color: category_colors[cat_id], width: 'fit-content' }} >{category_names[cat_id]}</div>
+    let title = <div className="notification_toggler" style={{ color: category_colors[cat_id], width: 'fit-content' }} >{this.state.cat_name}</div>
     let clas = this.props.order_drawer ? "add_item_container" : "category_drawer_container"
 
     let see_full_inventory
@@ -97,7 +98,7 @@ export class CategoryDrawer extends React.Component {
           <div className="drawer_header">
             <div className="sub_drawer_header">
               <img className="close_btn_div" src={x_icon} onClick={this.close} alt="X" />
-              <div className="drawer_title h4" style={{ color: category_colors[cat_id] }} >{category_names[cat_id]}</div>
+              <div className="drawer_title h4" style={{ color: category_colors[cat_id] }} >{this.state.cat_name}</div>
               <div className="cat_drawer_symbol">
                 <img src={category_symbols[cat_id]} alt={category_names[cat_id]} />
               </div>

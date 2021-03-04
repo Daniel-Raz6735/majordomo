@@ -9,13 +9,13 @@ import { Dictionary, getRTL, LangBtn } from '../Dictionary';
 import logo from '../images/icons/Majordomo logo.svg';
 import InventoryPage from "../pages/inventory_page"
 import OrdersPage from "../pages/orders_page"
-import { NotificationList } from "./notifications"
 import { Loader } from 'rsuite';
 import { create_initial_data_dict, confirm_papulation } from './data_dictionary';
 import SettingPage from "../pages/settings_page"
 import fake_data from '../fake_data.json'
 import { base_url } from '../index'
 import $ from 'jquery'
+import HomePage from "../pages/home page/home_page"
 var socket_client = require('websocket').w3cwebsocket;
 
 
@@ -128,14 +128,15 @@ export class SiteFrame extends Component {
                 break;
 
             case "InventoryPage":
-            default:
+           
                 i = 1;
                 page = <InventoryPage dict={dict} />
                 break;
 
-            case "NotificationBlock":
+            case "HomePage": 
+            default:
                 i = 0;
-                page = <NotificationList dict={dict} />
+                page = <HomePage dict={dict} />
                 break;
         }
         var buttons = ["bottom_bar", "bottom_bar", "bottom_bar", "bottom_bar"]
@@ -158,7 +159,7 @@ export class SiteFrame extends Component {
 
 
                 <footer id="footer_bar">
-                    <div className="description" onClick={() => { this.change_tab("NotificationBlock") }}>
+                    <div className="description" onClick={() => { this.change_tab("HomePage") }}>
                         <img alt="Home" className="bottom-bar-btn" src={home} />
                         <div className={this.state.buttons[0]}><div className="tester">{Dictionary["home"]}</div></div>
                     </div>
