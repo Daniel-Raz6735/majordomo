@@ -171,6 +171,28 @@ async def add_weights(lis: WeighingList, client_time: int):
     await manager.broadcast(f"weights updated on #{client_time}", 1)
     return process_create_query([[query, "add weights"]], res_code)
 
+
+class OrderItem(BaseModel):
+    order_id: int
+    business_id: int
+    supplier_id: int
+    item_id: int
+    amount: float
+    unit: str
+
+
+@app.post('/order/add/item')
+async def add_order_item(item: OrderItem):
+    if item.amount < 0:
+        return "Bad request - illegal amount", 400
+
+
+    # query, res_code = createQ.insert_to_table_query("weights",
+    #                                                 ["weighing_date", "container_id", "weight_value", "last_user"],
+    #                                                 arr)
+    # await manager.broadcast(f"weights updated on #{client_time}", 1)
+    # return process_create_query([[query, "add weights"]], res_code)
+
 # @app.get('/')
 # async def read_item(item_id: str, q: Optional[str] = None):
 #     if q:
