@@ -292,7 +292,7 @@ class AlertNotifications extends Component {
         return (
             <div className="alert_notifications" style={{ backgroundColor: notification_colors[i] }}>
                 <div className="simple_notification_header" onClick={() => this.setState({ show: !this.state.show })}>
-                    <div className="header_items" ><img className="header_symbols" src={notification_dict[level]["error_symbol"]} /></div>
+                    <div className="header_items" ><img className="header_symbols" alt="header symbol" src={notification_dict[level]["error_symbol"]} /></div>
                     <div className="header_items">{notification_dict[level]["message"]}</div></div>
                 <Collapse in={this.state.show} key={"notification_collapse" + level} >
                     {(props, ref) => <Panel {...props} ref={ref} key={"notification_panel" + level} notifications={page} />}

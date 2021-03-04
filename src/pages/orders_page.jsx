@@ -292,7 +292,7 @@ export class AddItem extends Component {
 
         return (
             <div className="add_item_container" dir={getRTL()} onClick={this.props.func} >
-                {"+ "} {Dictionary["new_item"]}
+               <div className="order_page_plus_symbol" >+</div>  {Dictionary["new_item"]}
             </div>
         )
     }
