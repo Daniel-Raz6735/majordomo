@@ -133,6 +133,7 @@ export class NotificationList extends Component {
             else {
                 Object.keys(weights_dict).forEach(category_id => {
                     var notifications = get_notifications_by_level(notifications_data, category_id)
+                    
                     var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_data={notifications} weights_dict={weights_dict[category_id]} supplier_dict ={this.props.dict["suppliers"]}/>
                     page.push(addition)
                 })
@@ -157,7 +158,7 @@ export class NotificationList extends Component {
 }
 
 //2
-class NotificationCategory extends Component {
+export class NotificationCategory extends Component {
     constructor(props) {
         super(props);
         this.remove_onClick = this.remove_onClick.bind(this);
@@ -186,6 +187,7 @@ class NotificationCategory extends Component {
 
     //extract the items in to Notification components if there are no notifications 
     extract_items(notification_data) {
+        console.log(notification_data)
         var page = []
         if (notification_data) {
             confirm_papulation(notification_data, "extract items NotificationCategory")
@@ -195,6 +197,7 @@ class NotificationCategory extends Component {
                 if (items_in_level) {
                     Object.keys(items_in_level).forEach(item_id => {
                         var obj = items_in_level[item_id]
+                        console.log(obj)
                         page.push(<Notification key={item_id + notification_level + "notification"} notification_level={obj["notification_level"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]} item_id={item_id} unit={obj["unit"]} order_details={obj["order_details"]} />)
                     })
                 }
@@ -206,6 +209,7 @@ class NotificationCategory extends Component {
     }
 
     render() {
+        
         return (
             <div className="notification_category_container">
                 <NotificationHeader key={"header" + this.props.cat_type + this.props.category_id} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
@@ -241,6 +245,8 @@ export class Notification extends Component {
     }
 
     render() {
+        
+
         if (this.state) {
             return (
                 <div className="notification_container">
