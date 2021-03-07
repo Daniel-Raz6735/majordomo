@@ -3,6 +3,15 @@
 .category_drawer_container {
     width: fit-content;
     flex-grow: 2;
+    /* display: flex;
+    justify-content: center; */
+}
+
+ .home_page_drawer {
+    width: fit-content;
+    flex-grow: 2;
+    display: flex;
+    justify-content: center;
 }
 
 .rs-drawer-header {

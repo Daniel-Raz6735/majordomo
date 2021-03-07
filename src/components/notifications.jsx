@@ -187,7 +187,7 @@ export class NotificationCategory extends Component {
 
     //extract the items in to Notification components if there are no notifications 
     extract_items(notification_data) {
-        console.log(notification_data)
+        // console.log(notification_data)
         var page = []
         if (notification_data) {
             confirm_papulation(notification_data, "extract items NotificationCategory")
@@ -197,7 +197,7 @@ export class NotificationCategory extends Component {
                 if (items_in_level) {
                     Object.keys(items_in_level).forEach(item_id => {
                         var obj = items_in_level[item_id]
-                        console.log(obj)
+                        // console.log(obj)
                         page.push(<Notification key={item_id + notification_level + "notification"} notification_level={obj["notification_level"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]} item_id={item_id} unit={obj["unit"]} order_details={obj["order_details"]} />)
                     })
                 }
@@ -363,13 +363,15 @@ export class NotificationHeader extends Component {
             }
         })
         this.setState({ page })
-        console.log(this.props.weights_dict)
+        // console.log(this.props.weights_dict)
     }
 
 
     render() {
         var cat_id = this.props.cat_id - 1
         var cat_name = (this.props.cat_type==="supplier")? false:false
+
+        // console.log(this.props.weights_dict)
 
         return (
             <div className="notificationHeader notification_toggler" onClick={(e) => this.props.on_click(e)} style={{ borderBottomColor: category_colors[cat_id] }} >

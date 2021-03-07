@@ -22,9 +22,19 @@
     display: flex;
     width: 100px;
     height: 100px;
-    background-color: black;
-    color: white;
     margin: 5px 5px 5px 5px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 2px 2px 2px 2px #00000054;
+    
+}
+
+.home_page_cat_alerts{
+    align-self: flex-end;
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-top: 5px;
 }
 
 .home_titles{
@@ -33,4 +43,9 @@
     font-size: 16pt;
     margin-bottom: 10px;
     margin-top: 30px;
+}
+
+.category_home_img{
+    height: 50px;
+    width: 50px;
 }
