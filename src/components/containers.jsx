@@ -7,6 +7,7 @@ import { AddToOrder } from '../pages/inventory_page';
 import red_circle from '../images/circle red warning.png'
 import triangle_warning from '../images/icons/triangle_warning.svg'
 import overflow_sign from '../images/icons/overflow sign.svg'
+import empty_symbol from '../images/icons/empty_symbol.svg'
 
 
 
@@ -50,23 +51,6 @@ export function req_weights(callback, user_id, item_id = null) {
 }
 
 
-export function render_container(weights_dict) {
-    //gets a list of weights and puts and renders the maximal  
-    var res = [];
-    var sorted = sortWeightDict(weights_dict)
-    if (weights_dict) {
-        sorted.forEach(key => {
-        let weight =  weights_dict[key],
-        order_details= weight["order_details"]
-        if(!order_details)
-            order_details={}
-            res.push(
-                <ItemBlock key={key + "" +weight["item_name"]} name={weight["item_name"]}
-                    weight={weight["total_weight"]} weight_date={weight["date"]} symbol={weight["notification_level"]} unit={order_details["unit"]} defult_val={order_details["amount"]}   />)
-        });
-    }
-    return res;
-};
 
 
 export class Containers extends Component {
@@ -77,14 +61,32 @@ export class Containers extends Component {
             page: []
 
         }
+        this.render_container = this.render_container.bind(this);
     }
 
-
+    render_container(weights_dict ) {
+        //gets a list of weights and puts and renders the maximal  
+        var res = [];
+        var sorted = sortWeightDict(weights_dict)
+        if (weights_dict) {
+            sorted.forEach(key => {
+                let weight = weights_dict[key],
+                    order_details = weight["order_details"]
+                if (!order_details)
+                    order_details = {}
+                res.push(
+                    <ItemBlock {...this.props} item_id={key} key={key + "" + weight["item_name"]} name={weight["item_name"]}
+                        weight={weight["total_weight"]} weight_date={weight["date"]} symbol={weight["notification_level"]} 
+                        unit={order_details["unit"]} defult_val={order_details["amount"]}  />)
+            });
+        }
+        return res;
+    }
 
     render() {
         return (
             <div className="items_div">
-                {render_container(this.props.weights_dict)}
+                {this.render_container(this.props.weights_dict)}
             </div>
         )
     }
@@ -105,10 +107,10 @@ export class ItemBlock extends Component {
             unit: props.unit ? props.unit : "kg",
             weight_date: date,
             color: props.color,
-            symbol: props.symbol,
-            defult_val:props.defult_val,
-            is_in_order:props.defult_val?true:false
-            
+            symbol: props.symbol ? props.symbol : empty_symbol,
+            defult_val: props.defult_val,
+            is_in_order: props.defult_val ? true : false
+
 
 
         }
@@ -116,29 +118,35 @@ export class ItemBlock extends Component {
     render() {
 
         let sym
+        switch (this.props.symbol) {
+            case 3:
+                sym = <img className="full_inventory_alert_symbol" src={overflow_sign} alt="few left" />
+                break;
+            case 2:
+                sym = <img className="full_inventory_alert_symbol" src={triangle_warning} alt="few left" />
+                break;
+            case 1:
+                sym = <img className="full_inventory_alert_symbol" src={red_circle} alt="few left" />
+                break;
+            default:
+                sym = <img className="full_inventory_alert_symbol" src={empty_symbol} alt="" />
+                break;
+        }
 
-        if (this.props.symbol === 3)
-            sym = <img className="full_inventory_alert_symbol" src={overflow_sign} alt="few left" />
-
-        else if (this.props.symbol === 2)
-            sym = <img className="full_inventory_alert_symbol" src={triangle_warning} alt="few left" />
-
-        else if (this.props.symbol === 1)
-            sym = <img className="full_inventory_alert_symbol" src={red_circle} alt="few left" />
 
         return (
             <div className="item_container">
-                <div className="item_squere">
+                <div className="item_squere" onClick={()=>this.props.openItem(this.props.item_id)}>
                     {sym}
                     <div >
                         {this.state.name}
                     </div>
-                    <div >{this.state.weight.toFixed(1).replace(/\.0+$/,'')} {" "} {this.state.unit}</div>
+                    <div >{this.state.weight.toFixed(1).replace(/\.0+$/, '')} {" "} {this.state.unit}</div>
                     <div className="last_registred" style={{ direction: getRTL() }}>{Dictionary["last_registred"] + ":"}
                         <div className="weight_date">{this.state.weight_date} </div>
                     </div>
                 </div>
-                <AddToOrder kind={1} title={this.state.name} defult_val={this.state.defult_val} is_in_order={this.state.is_in_order}/>
+                <AddToOrder kind={1} title={this.state.name} defult_val={this.state.defult_val} is_in_order={this.state.is_in_order} />
             </div>
         )
     }

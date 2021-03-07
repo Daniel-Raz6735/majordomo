@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Dropdown, Nav, Sidenav } from "rsuite";
 import { NavBar } from "../components/bars";
 import { Dictionary } from "../Dictionary";
+import profilePic from "../images/profile_pic.png";
 import './settings_page.css'
 
 
@@ -20,6 +21,7 @@ class SettingsPage extends Component {
     return (
       <div id="settings_page_container">
         <NavBar />
+        <img className="profile_pic" alt="Profile" src = {profilePic}/>
         <div className={"side_nav_container"}>
           <Sidenav appearance="subtle" >
             {/* <Sidenav.Body> */}

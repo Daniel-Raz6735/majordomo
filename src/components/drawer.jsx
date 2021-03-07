@@ -13,19 +13,25 @@ export class CategoryDrawer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      size: 'md',
+      size: 'lg',
       placemnt: 'bottom',
       show: false,
       weights_dict: props.weights_dict,
       cat_id: props.cat_id,
       cat_name: this.props.cat_name?this.props.cat_name:category_names[props.cat_id],
-      page: <Containers weights_dict={this.props.weights_dict} />
+      page: [],
+      cat_image:[]
     };
     this.close = this.close.bind(this);
     this.toggleDrawer = this.toggleDrawer.bind(this);
     this.handleChangeSize = this.handleChangeSize.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.switchContent = this.switchContent.bind(this);
 
+  }
+
+  componentDidMount(){
+    this.switchContent(this.props.item_id)
   }
 
   close() {
@@ -57,7 +63,24 @@ export class CategoryDrawer extends React.Component {
       }
     })
 
-    this.setState({ page: <Containers weights_dict={newDict} /> });
+    this.setState({ page: <Containers weights_dict={newDict} openItem ={this.switchContent}/> });
+
+  }
+  switchContent(item_id){
+    let page = [],
+    cat_image = [],
+    cat_id = this.props.cat_id
+     if(item_id){
+        cat_image=<div onClick ={()=>this.switchContent()}>this is a back arrow</div>
+        page = <div>here are fruit statistics</div>
+     }
+     else{
+      page.push(<SearchBar handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />)
+      page.push(<Containers weights_dict={this.props.weights_dict} openItem ={this.switchContent}/>)
+      cat_image = <img src={category_symbols[cat_id]} alt={category_names[cat_id]} />
+     }
+     this.setState({page,cat_image})
+
 
   }
 
@@ -84,7 +107,6 @@ export class CategoryDrawer extends React.Component {
     return (
       <div className={clas + " notification_toggler"}>
         {title}
-        {/* <div className="inventory_clicker url_like" onClick={() => this.toggleDrawer()}>{Dictionary["see_full"]}</div> */}
         {see_full_inventory}
 
 
@@ -100,13 +122,12 @@ export class CategoryDrawer extends React.Component {
               <img className="close_btn_div" src={x_icon} onClick={this.close} alt="X" />
               <div className="drawer_title h4" style={{ color: category_colors[cat_id] }} >{this.state.cat_name}</div>
               <div className="cat_drawer_symbol">
-                <img src={category_symbols[cat_id]} alt={category_names[cat_id]} />
+                {this.state.cat_image}
               </div>
             </div>
             <div className="drawer_title_border" style={{ borderBottom: st }} />
           </div>
           <Drawer.Body>
-            <SearchBar handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />
             {this.state.page}
           </Drawer.Body>
 
