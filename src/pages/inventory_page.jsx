@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Badge, ButtonToolbar, Modal } from "rsuite";
+import { Badge, ButtonToolbar, Modal, Notification as note } from "rsuite";
 import { NotificationList } from "../components/notifications";
 import { Dictionary, getRTL } from "../Dictionary";
 import { TitleComponent } from "../components/bars";
@@ -92,7 +92,7 @@ export class AddToOrder extends Component {
             </div>
             <Quantity defult_val={this.state.defult_val} unit={this.state.unit} />
 
-            <button className="add_to_order_btn" onClick={this.close} style={{ backgroundColor: btn_color }} >
+            <button className="add_to_order_btn" onClick={()=>{open('success');this.close()}} style={{ backgroundColor: btn_color }} >
               {Dictionary["add_to_order"]}
             </button>
             <div className="model_footer_xs" onClick={() => { $("#reset_frame").val("OrdersPage").change() }}>{Dictionary["go_to_orders"]}</div>
@@ -104,6 +104,13 @@ export class AddToOrder extends Component {
   }
 }
 
+function open(funcName) {
+ 
+  note[funcName]({ 
+    title: "Item added successfully",
+    description: <div >10 kg tomato</div>
+  });
+}
 
 export class Quantity extends Component {
   constructor(props) {

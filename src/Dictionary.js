@@ -71,6 +71,8 @@ export const Dictionary = new LocalizedStrings({
     new_item:"New item",
     unknown:"Unknown",
 
+    //settings page
+    language:"Language",
 
 
 
@@ -131,14 +133,16 @@ export const Dictionary = new LocalizedStrings({
     add_item:"הוסף מוצר",
     new_item:"מוצר חדש",
     unknown:"לא ידוע",
-   
+
+    //settings page
+    language:"שפה",
 
   }
 });
 
 
 //language array
-export const langs = ["HE", "EN"];
+export const langs = ["EN", "HE"];
 
 //set language that is in the session Storage
 var language = sessionStorage.getItem("current_language");

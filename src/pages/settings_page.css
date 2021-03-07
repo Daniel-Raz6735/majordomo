@@ -1,4 +1,39 @@
-.majordomoLogo{
+.majordomoLogo {
     width: 30%;
     margin: auto;
+}
+
+.rs-btn .rs-btn-subtle .rs-dropdown-toggle {
+    width: 100%;
+}
+
+.dropdown_title {
+    background-color: #F9F9F9 !important;
+    color: black;
+}
+
+.title_container {
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+}
+.side_nav_container{
+        width: 90%;
+        display: flex;
+        margin: auto;     
+}
+.setting_name {
+    font-weight: bold;
+}
+
+.setting_value {
+    margin-right: 50px;
+}
+.settings_container{
+    font-size: 14px;
+}
+
+.chosen_option {
+    font-weight: "bolder";
+    color: "green"
 }
