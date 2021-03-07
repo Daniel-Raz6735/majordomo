@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Dropdown, Nav, Sidenav, Icon } from "rsuite";
+import { Dropdown, Nav, Sidenav } from "rsuite";
 import { NavBar } from "../components/bars";
 import { Dictionary } from "../Dictionary";
 import './settings_page.css'
