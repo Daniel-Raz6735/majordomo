@@ -228,7 +228,7 @@ class OrderCategory extends Component {
             }
             page.push(<CategoryDrawer weights_dict={this.props.weights_dict} order_drawer={true} />)
             // page.push(<AddItem weights_dict={this.props.weights_dict}/>)
-            console.log(supplier["sells_items"])
+            // console.log(supplier["sells_items"])
 
         }
         return page
@@ -239,7 +239,7 @@ class OrderCategory extends Component {
         // console.log(this.props.supplier)
         console.log(this.props.weights_dict)
         let supplier = this.props.supplier
-        console.log(supplier)
+        // console.log(supplier)
         return (
             <div className="notification_category_container">
                 <OrderHeader key={"header" + this.props.cat_type + this.props.category_id} cat_name={supplier["name"]} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />

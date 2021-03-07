@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import logo from '../../images/icons/Majordomo logo.svg';
 import './home_page.css'
 import { Notification } from '../../components/notifications'
+import { category_names, category_symbols, notification_dict } from '../../components/notifications_data';
+import { CategoryDrawer } from '../../components/drawer';
 
 
 
@@ -25,12 +27,14 @@ export class HomePage extends Component {
 
     render() {
         var notfication = this.props.dict["notifications"]["category"]
+        var tiles = this.props.dict["weights"]["category"]
+
 
         return (
             <div className="home_page">
                 <img alt="Majordomo logo" className="majordomoLogo" src={logo} ></img>
                 <NotificationPeeker dict={notfication} />
-                <InentoryTileContainer />
+                <InentoryTileContainer dict={tiles} />
             </div>
 
         );
@@ -53,7 +57,7 @@ export class NotificationPeeker extends Component {
 
     componentDidMount() {
         var page = []
-        console.log(this.props.dict)
+
         Object.keys(this.props.dict).forEach(cat => {
             var temp = this.props.dict[cat]
             Object.keys(temp).forEach(key => {
@@ -114,9 +118,11 @@ export class InentoryTileContainer extends Component {
         let year = now.getFullYear()
         let date_str = date + "." + months + "." + year
 
-        for (let i = 0; i < 6; i++) {
-            page.push(<InventoryTile name={"fruit"} />)
+        for (let i = 0; i < category_symbols.length; i++) {
+            page.push(<CategoryDrawer cat_name={category_names[i]} symbol={category_symbols[i]} weights_dict={this.props.dict[i + 1]} cat_id={i}  tile={true} />)
         }
+
+
 
         return (
             <div>
@@ -124,6 +130,7 @@ export class InentoryTileContainer extends Component {
                 <div className="inventory_tile_container">
 
                     {page}
+
                 </div>
             </div>
         );
@@ -136,23 +143,50 @@ export class InventoryTile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            page: []
         }
 
     }
 
 
     componentDidMount() {
-
+        let dict = this.props.weights_dict
+        let temp = -999
+        let page = []
+        
+        if (dict) {
+            Object.keys(dict).forEach(key => {
+                let notification_num = dict[key]["notification_level"]
+                if (notification_num !== -1 && temp !== notification_num) {
+                    temp = notification_num
+                    page.push(<img className="header_symbols notification_toggler" src={notification_dict[notification_num]["error_symbol"]} alt="category symbol" />)
+                }
+            })
+        }
+        this.setState({ page })
     }
 
     render() {
+        console.log(this.props.weights_dict)
+
+        
+        let func,background 
+
+        if(this.props.weights_dict){
+            func = this.props.func
+            background=""
+        }
+        else
+            background="rgb(190, 190, 190)"
+        
 
         return (
 
-            <div className="inventory_tile">
+            <div className="inventory_tile" onClick={func} style={{ background: background }}>
+                <div className="home_page_cat_alerts">{this.state.page}</div>
+                <img className="category_home_img" src={this.props.symbol} alt="category symbol" />
+                <div style={{ color: this.props.cat_color }}>{this.props.name} </div>
 
-                {this.props.name} זה טייל
             </div>
         );
 

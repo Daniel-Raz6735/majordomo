@@ -6,6 +6,7 @@ import './../components/drawer.css';
 import { Dictionary, getRTL, getLeftRight } from '../Dictionary';
 import { category_names, category_symbols, category_colors } from './notifications_data';
 import { AddItem } from '../pages/orders_page';
+import { InventoryTile } from '../pages/home page/home_page';
 
 
 
@@ -87,6 +88,7 @@ export class CategoryDrawer extends React.Component {
 
 
   render() {
+    console.log(this.props.weights_dict)
     const { size, placement, show } = this.state,
       cat_id = this.props.cat_id,
       st = "5px solid " + String(category_colors[cat_id]);
@@ -94,10 +96,18 @@ export class CategoryDrawer extends React.Component {
     let clas = this.props.order_drawer ? "add_item_container" : "category_drawer_container"
 
     let see_full_inventory
-    if (!this.props.order_drawer)
+    if (!this.props.order_drawer && !this.props.tile) //inventory page 
       see_full_inventory = <div className="inventory_clicker url_like" onClick={() => this.toggleDrawer()}>{Dictionary["see_full"]}</div>
-    else
+
+    else if (this.props.order_drawer && !this.props.tile) //order page
       see_full_inventory = <AddItem func={this.toggleDrawer} />
+
+    else { // home page
+      title = ""
+      clas = "home_page_drawer"
+        
+      see_full_inventory = <InventoryTile name={this.props.cat_name} symbol={this.props.symbol} cat_color={category_colors[cat_id]}  weights_dict={this.props.weights_dict} func={this.toggleDrawer} />
+    }
 
 
 
