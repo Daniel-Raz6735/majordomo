@@ -132,6 +132,7 @@ export class NotificationList extends Component {
             }
             else {
                 Object.keys(weights_dict).forEach(category_id => {
+                    console.log(weights_dict)
                     var notifications = get_notifications_by_level(notifications_data, category_id)
                     
                     var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_data={notifications} weights_dict={weights_dict[category_id]} supplier_dict ={this.props.dict["suppliers"]}/>
@@ -209,10 +210,11 @@ export class NotificationCategory extends Component {
     }
 
     render() {
+        console.log(this.props.supplier_dict["suppliers"])
         
         return (
             <div className="notification_category_container">
-                <NotificationHeader key={"header" + this.props.cat_type + this.props.category_id} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
+                <NotificationHeader key={"header" + this.props.cat_type + this.props.category_id} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} supplier_dict={this.props.supplier_dict} cat_id={this.props.category_id} />
                 <Collapse in={this.state.show} key={this.props.category_id + "collapse" + this.props.cat_type} >
                     {(props, ref) => <Panel {...props} ref={ref} key={this.props.category_id + " panel " + this.props.cat_type} notifications={this.extract_items(this.props.notification_data)} />}
                 </Collapse>
@@ -369,15 +371,27 @@ export class NotificationHeader extends Component {
 
     render() {
         var cat_id = this.props.cat_id - 1
-        var cat_name = (this.props.cat_type==="supplier")? false:false
+        
+        var supllier_name = this.props.supplier_dict["suppliers"][this.props.cat_id]
+        var cat_name = (this.props.cat_type==="supplier")? supllier_name["name"]:false
 
-        // console.log(this.props.weights_dict)
+        // supplier case
+        let symbol, style = {borderBottomColor:"white",
+                            color:"unset"}
+
+        // item type case
+        if(!cat_name){
+            symbol = <img className="notification_toggler" src={category_symbols[cat_id]} alt="category symbol" />
+            style = {borderBottomColor:category_colors[cat_id] }
+        }
+
 
         return (
-            <div className="notificationHeader notification_toggler" onClick={(e) => this.props.on_click(e)} style={{ borderBottomColor: category_colors[cat_id] }} >
+            <div className="notificationHeader notification_toggler" onClick={(e) => this.props.on_click(e)} style={style} >
                 <CategoryDrawer key={this.props.cat_type + "drawer" + cat_id} weights_dict={this.props.weights_dict} cat_id={cat_id} cat_name={cat_name} />
                 <div className="notification_header_middle notification_toggler">
-                    <img className="notification_toggler" src={category_symbols[cat_id]} alt="category symbol" />
+                    {/* <img className="notification_toggler" src={category_symbols[cat_id]} alt="category symbol" />*/}
+                    {symbol}
                 </div>
                 <div className="notification_header_symbols notification_toggler">
                     {this.state.page}
