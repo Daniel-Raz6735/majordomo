@@ -70,8 +70,8 @@ function get_notifications_by_level(notifications_dict, category_id) {
             count += Object.keys(dict[key]).length
     })
     console.log(count)
-    
-    return [dict,count]
+
+    return [dict, count]
 }
 
 
@@ -139,26 +139,27 @@ export class NotificationList extends Component {
                 }
             }
             else {
-                var temp =[]
+                var temp = []
                 Object.keys(weights_dict).forEach(category_id => {
                     console.log(weights_dict)
-                    var notifications = get_notifications_by_level(notifications_data, category_id)?get_notifications_by_level(notifications_data, category_id)[0]:null
-                    var notifications_size = get_notifications_by_level(notifications_data, category_id)?get_notifications_by_level(notifications_data, category_id)[1]:0
-                    
+                    var notifications = get_notifications_by_level(notifications_data, category_id) ? get_notifications_by_level(notifications_data, category_id)[0] : null
+                    var notifications_size = get_notifications_by_level(notifications_data, category_id) ? get_notifications_by_level(notifications_data, category_id)[1] : 0
+
 
                     var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_data={notifications} weights_dict={weights_dict[category_id]} supplier_dict={this.props.dict["suppliers"]} />
-                    temp.push([addition,notifications_size])
-                    
+                    temp.push([addition, notifications_size])
+
                     // page.push(addition)
                 })
-            }
-           
-            // sort notification by the amount of notifications
-            temp.sort((a, b)=> {return b[1] - a[1]})
-            
-            temp.forEach(not =>{
+                temp.sort((a, b) => { return b[1] - a[1] })
+
+                temp.forEach(not => {
                 page.push(not[0])
             })
+            }
+
+            // sort notification by the amount of notifications
+            
             this.setState({ page });
 
         }
