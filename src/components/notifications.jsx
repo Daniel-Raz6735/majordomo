@@ -63,7 +63,15 @@ function get_notifications_by_level(notifications_dict, category_id) {
     }
     if (Object.keys(dict).length === 0)
         return null
-    return dict
+
+    var count = 0
+    Object.keys(dict).forEach(key => {
+        if (dict[key])
+            count += Object.keys(dict[key]).length
+    })
+    console.log(count)
+    
+    return [dict,count]
 }
 
 
@@ -131,14 +139,26 @@ export class NotificationList extends Component {
                 }
             }
             else {
+                var temp =[]
                 Object.keys(weights_dict).forEach(category_id => {
                     console.log(weights_dict)
-                    var notifications = get_notifications_by_level(notifications_data, category_id)
+                    var notifications = get_notifications_by_level(notifications_data, category_id)?get_notifications_by_level(notifications_data, category_id)[0]:null
+                    var notifications_size = get_notifications_by_level(notifications_data, category_id)?get_notifications_by_level(notifications_data, category_id)[1]:0
                     
-                    var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_data={notifications} weights_dict={weights_dict[category_id]} supplier_dict ={this.props.dict["suppliers"]}/>
-                    page.push(addition)
+
+                    var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_data={notifications} weights_dict={weights_dict[category_id]} supplier_dict={this.props.dict["suppliers"]} />
+                    temp.push([addition,notifications_size])
+                    
+                    // page.push(addition)
                 })
             }
+           
+            // sort notification by the amount of notifications
+            temp.sort((a, b)=> {return b[1] - a[1]})
+            
+            temp.forEach(not =>{
+                page.push(not[0])
+            })
             this.setState({ page });
 
         }
@@ -170,7 +190,7 @@ export class NotificationCategory extends Component {
             category_id: props.category_id,
             notification_data: props.notification_data,
             weights_dict: props.weights_dict,
-            supplier_dict:props.supplier_dict,
+            supplier_dict: props.supplier_dict,
         };
 
     }
@@ -211,7 +231,7 @@ export class NotificationCategory extends Component {
 
     render() {
         console.log(this.props.supplier_dict["suppliers"])
-        
+
         return (
             <div className="notification_category_container">
                 <NotificationHeader key={"header" + this.props.cat_type + this.props.category_id} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} supplier_dict={this.props.supplier_dict} cat_id={this.props.category_id} />
@@ -247,7 +267,7 @@ export class Notification extends Component {
     }
 
     render() {
-        
+
 
         if (this.state) {
             return (
@@ -284,13 +304,13 @@ class AlertNotifications extends Component {
     }
     render() {
         let page = [],
-        level = this.props.notifications_level,
-        i = level-1,
-        notifications = this.props.notification_info
-        if (notifications&&level) {
+            level = this.props.notifications_level,
+            i = level - 1,
+            notifications = this.props.notification_info
+        if (notifications && level) {
             Object.keys(notifications).forEach(key => {
-                var notification =  notifications[key]
-                page.push(<div className="simple_notification"><div className="cart_container">{action_btn(null, level-1, notification["item_name"], notification["order_details"])}</div>
+                var notification = notifications[key]
+                page.push(<div className="simple_notification"><div className="cart_container">{action_btn(null, level - 1, notification["item_name"], notification["order_details"])}</div>
                     {notification["item_name"]} <div class="center_items notification_weight"> {notification["total_weight"].toFixed(1).replace(/\.0+$/, '')} {notification["unit"]}</div>
                 </div>)
             })
@@ -371,18 +391,20 @@ export class NotificationHeader extends Component {
 
     render() {
         var cat_id = this.props.cat_id - 1
-        
+
         var supllier_name = this.props.supplier_dict["suppliers"][this.props.cat_id]
-        var cat_name = (this.props.cat_type==="supplier")? supllier_name["name"]:false
+        var cat_name = (this.props.cat_type === "supplier") ? supllier_name["name"] : false
 
         // supplier case
-        let symbol, style = {borderBottomColor:"white",
-                            color:"unset"}
+        let symbol, style = {
+            borderBottomColor: "gray",
+            color: "unset"
+        }
 
         // item type case
-        if(!cat_name){
+        if (!cat_name) {
             symbol = <img className="notification_toggler" src={category_symbols[cat_id]} alt="category symbol" />
-            style = {borderBottomColor:category_colors[cat_id] }
+            style = { borderBottomColor: category_colors[cat_id] }
         }
 
 
