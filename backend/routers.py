@@ -2,19 +2,20 @@ from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
 from queries.update_queries import UpdateQueries as updateQ
 from queries.delete_queries import DeleteQueries as deleteQ
+from queries.connection_manager import Connection
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+import psycopg2
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-from typing import Optional,List,Dict
+from typing import Optional, List, Dict
 from flask import request
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import uvicorn
-import datetime
 import time
 from typing import List
+
 app = FastAPI()
 origins = [
     "http://localhost",
@@ -32,14 +33,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
 # app = flask.Flask(__name__)
 # CORS(app)
 # app.config["DEBUG"] = True
-indexes = {
-    "container_id": 0,
-    "user_id": 0,
-    "business_id": 0
-}
 
 
 @app.route('/get/containers', methods=['GET'])
@@ -158,13 +156,15 @@ class WeighingList(BaseModel):
 
 @app.post('/add/weight')
 async def add_weights(lis: WeighingList, client_time: int):
+    """gets a WeighingList and inserts it in to the database"""
     arr = []
     server_time = int(time.time())
     weight_list = lis.dict()
     for weight in weight_list["weights"]:
-        time_gap = client_time-weight["weighing_date"]
-        weight_time = "to_timestamp("+str(server_time-time_gap)+")"
-        arr.insert(0, [weight_time, weight["container_id"], weight["weight_value"], weight["last_user"]])
+        time_gap = client_time - weight["weighing_date"]
+        weight_time = "to_timestamp(" + str(server_time - time_gap) + ")"
+        if weight["weight_value"] >= 0:
+            arr.insert(0, [weight_time, weight["container_id"], weight["weight_value"], weight["last_user"]])
     query, res_code = createQ.insert_to_table_query("weights",
                                                     ["weighing_date", "container_id", "weight_value", "last_user"],
                                                     arr)
@@ -173,7 +173,7 @@ async def add_weights(lis: WeighingList, client_time: int):
 
 
 class OrderItem(BaseModel):
-    order_id: int
+    order_id: int = 0
     business_id: int
     supplier_id: int
     item_id: int
@@ -182,16 +182,28 @@ class OrderItem(BaseModel):
 
 
 @app.post('/order/add/item')
-async def add_order_item(item: OrderItem):
-    if item.amount < 0:
-        return "Bad request - illegal amount", 400
+# async def add_order_item(item: OrderItem):
+async def add_order_item(item_id: int, order_id: int, business_id: int, supplier_id: int, amount: int, unit: int):
+    try:
+        connection = Connection()
+        updater = updateQ(connection)
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("error: ", error)
+        raise HTTPException(status_code=400, detail="Item not found")
+        # return error, 400
+    # res, res_code, order_id = updater.add_order_item(item["item_id"], item["order_id"], item["business_id"],
+    #                                        item["supplier_id"], item["amount"], item["unit"])
+    res, res_code, order_id = updater.add_order_item(item_id, order_id, business_id,
+                                                     supplier_id, amount, unit)
 
-
+    del connection
+    return res, res_code
     # query, res_code = createQ.insert_to_table_query("weights",
     #                                                 ["weighing_date", "container_id", "weight_value", "last_user"],
     #                                                 arr)
     # await manager.broadcast(f"weights updated on #{client_time}", 1)
     # return process_create_query([[query, "add weights"]], res_code)
+
 
 # @app.get('/')
 # async def read_item(item_id: str, q: Optional[str] = None):
@@ -253,8 +265,6 @@ def process_create_query(query, res_code):
         return error_message(res_code, result, "unable to process request")
 
 
-
-
 class ConnectionManager:
     def __init__(self):
         self.active_connections = {}
@@ -284,23 +294,17 @@ class ConnectionManager:
 manager = ConnectionManager()
 
 
-
-
-
-
 @app.websocket("/ws/{business_id}/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, business_id: int, user_id: int):
-    await manager.connect(websocket,business_id)
+    await manager.connect(websocket, business_id)
     try:
         while True:
             data = await websocket.receive_text()
             # await manager.send_personal_message(f"You wrote: {data}", websocket)
             await manager.broadcast(f"Client {user_id} from {business_id} says: {data}", business_id, websocket)
     except WebSocketDisconnect:
-        manager.disconnect(websocket,business_id)
+        manager.disconnect(websocket, business_id)
         # await manager.broadcast(f"Client #{user_id} left the chat")
-
-
 
 # @app.route('/get/restart', methods=['GET'])
 # def restart_tables():

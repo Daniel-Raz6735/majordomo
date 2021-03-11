@@ -23,7 +23,7 @@ lang varchar(2)
 # list of businesses
 business
 ------------
-business_id int PK FK
+business_id int PK
 admin int FK - users.user_id
 business_name varchar(100)
 
@@ -34,6 +34,8 @@ food_items
 item_id int PK
 item_name varchar(40)
 category_id int FK >- categories.category_id
+unit int FK >- units.unit_id
+business_id int FK >- business.business_id
 
 
 
@@ -95,8 +97,8 @@ order_content
 item_id int FK >- food_items.item_id
 order_id int FK >- orders.order_id
 price_per_unit real null
-amount int null
-unit varchar(2)
+amount real null
+unit int FK >- units.unit_id
 
 
 #contains of recipes in each row
@@ -105,7 +107,7 @@ recipe_content
 recipe_id int FK >- recipes.recipe_id
 item_id int FK >- food_items.item_id
 amount int
-unit varchar(2)
+unit int FK >- units.unit_id
 
 
 #has a cntainer and its contence id in every row
@@ -122,14 +124,24 @@ weights
 ------------
 weighing_date timestamp PK
 container_id int FK >- containers.container_id
-weight_value int
+weight_value real
 last_user int NULL FK >- users.user_id
+unit int FK >- units.unit_id
+item_id int FK >- food_items.item_id
+business_id int FK >- business.business_id
 
 
 categories
 -----------
 category_id PK int
 category_name varchar(100)
+
+
+units
+-----------
+unit_id PK int
+unit_name varchar(2)
+
 
 
 rules

@@ -1,14 +1,17 @@
-from flask import request, jsonify
+from fastapi import HTTPException
 from psycopg2.extras import RealDictCursor
 from config import config
-from functions import Functions
 from db_queries import DbQueries
+from queries.connection_manager import Connection
 import psycopg2
 
 
 class ReadQueries:
-    def __init__(self):
-        pass
+    def __init__(self, connection=False):
+        if not connection:
+            connection = Connection()
+        self.connection = connection
+
 
     @staticmethod
     def get_rules(args):
@@ -33,6 +36,84 @@ class ReadQueries:
             conditions)
         if res_code != 200:
             return error_message(res_code, final_query), 400
+        return final_query, 200
+
+    @staticmethod
+    def get_order(order_id):
+        """creates an SQL query that will return a specific order based on the id"""
+        conditions = []
+        if order_id:
+            conditions.append(["AND", "orders.order_id", "=", int(order_id)])
+        else:
+            raise HTTPException(status_code=400, detail="No order id sent")
+        final_query, res_code = DbQueries.select_query([["orders"]], [], conditions)
+        if res_code != 200:
+            raise HTTPException(status_code=res_code, detail=final_query)
+        return final_query, 200
+
+    @staticmethod
+    def get_order_by_supplier(business_id, supplier_id, open_orders=False):
+        """creates an sql query that gets a specific order by supplier.
+        open orders is in case the request is only open orders(orders with no date)"""
+        conditions = []
+        if supplier_id:
+            conditions.append(["AND", "orders.supplier_id", "=", int(supplier_id)])
+        else:
+            return error_message(400, "Bad request", "no supplier id sent"), 400
+        if business_id:
+            conditions.append(["AND", "orders.business_id", "=", int(business_id)])
+        else:
+            return error_message(400, "Bad request", "no business id sent"), 400
+        if open_orders:
+            conditions.append(["AND", "orders.order_date", " is ", 'null'])
+
+        final_query, res_code = DbQueries.select_query([["orders"]], [], conditions)
+        if res_code != 200:
+            return error_message(res_code, final_query), 400
+        return final_query, 200
+
+    @staticmethod
+    def get_item_from_order(item_id, order_id):
+        """creates an sql query that gets a specific item from an order"""
+        conditions = []
+        if order_id:
+            conditions.append(["AND", "order_content.order_id", "=", int(order_id)])
+        else:
+            raise HTTPException(status_code=400, detail="No order_id id sent")
+        if item_id:
+            conditions.append(["AND", "order_content.item_id", "=", int(item_id)])
+        else:
+            raise HTTPException(status_code=400, detail="No item id sent")
+
+        conditions.append(["AND", "order_content.order_id", "=", "orders.order_id"])
+        final_query, res_code = DbQueries.select_query([["orders"], ["order_content"]],
+                                                       [[], [["item_id"], ["order_id"], ["price_per_unit"], ["amount"], ["unit"]]],
+                                                       conditions)
+        if res_code != 200:
+            raise HTTPException(status_code=400, detail=final_query)
+        return final_query, 200
+
+    @staticmethod
+    def get_supplier(business_id, supplier_id, item_id):
+        """Create a supplier sql query based on the item_id, business_id and supplier_id"""
+        conditions = []
+        if item_id:
+            conditions.append(["AND", "supplier.item_id", "=", int(item_id)])
+        else:
+            return "No order id sent", 400
+        if supplier_id:
+            conditions.append(["AND", "supplier.supplier_id", "=", int(supplier_id)])
+        else:
+            return "No supplier id sent", 400
+        if business_id:
+            conditions.append(["AND", "supplier.business_id", "=", int(business_id)])
+        else:
+            return "No business id sent", 400
+        final_query, res_code = DbQueries.select_query([["supplier"]],
+                                                       [],
+                                                       conditions)
+        if res_code != 200:
+            return "Unable to create query", 400
         return final_query, 200
 
     @staticmethod
