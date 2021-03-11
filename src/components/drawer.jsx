@@ -39,9 +39,12 @@ export class CategoryDrawer extends React.Component {
     this.setState({
       show: false
     });
+    
   }
 
-  toggleDrawer() {
+  toggleDrawer(main_render) {
+    if(main_render)
+      this.switchContent(false);
     this.setState({
       placement: 'bottom',
       show: true
@@ -97,7 +100,7 @@ export class CategoryDrawer extends React.Component {
 
     let see_full_inventory
     if (!this.props.order_drawer && !this.props.tile) //inventory page 
-      see_full_inventory = <div className="inventory_clicker url_like" onClick={() => this.toggleDrawer()}>{Dictionary["see_full"]}</div>
+      see_full_inventory = <div className="inventory_clicker url_like" onClick={() => this.toggleDrawer(true)}>{Dictionary["see_full"]}</div>
 
     else if (this.props.order_drawer && !this.props.tile) //order page
       see_full_inventory = <AddItem func={this.toggleDrawer} />
