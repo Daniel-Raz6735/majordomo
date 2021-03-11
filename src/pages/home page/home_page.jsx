@@ -84,7 +84,7 @@ export class NotificationPeeker extends Component {
 
 
         return (
-            <div>
+            <div className="home_notification_inventory">
                 <div className="home_titles"><div>Notifications</div>  <div>{date_str}</div></div>
                 <div className="notification_peeker">
                     {this.state.page}
@@ -125,7 +125,7 @@ export class InentoryTileContainer extends Component {
 
 
         return (
-            <div>
+            <div className="home_notification_inventory">
                 <div className="home_titles"><div>Inventory</div>  <div>{date_str}</div></div>
                 <div className="inventory_tile_container">
 

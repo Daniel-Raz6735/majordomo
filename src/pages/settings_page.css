@@ -1,6 +1,8 @@
 .majordomoLogo {
-    width: 30%;
-    margin: auto;
+    height: 45px;
+    width: 150px;
+    margin: 0 auto 0 auto;
+    height: fit-content;
 }
 
 .rs-btn .rs-btn-subtle .rs-dropdown-toggle {
