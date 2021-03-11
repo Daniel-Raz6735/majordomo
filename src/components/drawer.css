@@ -98,6 +98,7 @@
 
 .inventory_clicker{
     width: fit-content;
+    cursor:pointer;
 }
 /* .notification_toggler{
     width: fit-content;

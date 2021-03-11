@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import './LoginPage.css';
 import $ from 'jquery';
 import { auth } from '../../config/firebaseConfig';
-import {Dictionary} from '../../Dictionary';
+import { Dictionary } from '../../Dictionary';
 import { SiteFrame } from '../../components/bars';
 import logo from '../../images/icons/Majordomo logo.svg'
 require('jquery-validation');
@@ -36,7 +36,7 @@ class LoginPage extends Component {
                     minlength: 1,
                 },
             },
-            messages:{ }
+            messages: {}
         });
 
         if (!$("#login_form").valid()) return;
@@ -54,42 +54,37 @@ class LoginPage extends Component {
 
     render() {
         return (
-            <div id="LPcover" className="cover">
-                <div id="loginWrapper" className="wrapper">
-                    <div className="loginContainer">
-                        <div id="buttonWrapper123">
-                        <img className="logo" src ={logo} alt ="logo"></img>
-                            <form dir="RTL" id="login_form" name="login_form_name" >
-                                < input type="email"
-                                    id="email"
-                                    name="email"
-                                    placeholder={Dictionary.enterMail}
-                                    autoComplete='off'
-                                    defaultValue="" required
-                                    onChange={this.handleChange}>
-                                </input>
-                                < input type="password"
-                                    id="password"
-                                    name="password"
-                                    placeholder={Dictionary.enterPass}
-                                    autoComplete='off'
-                                    defaultValue="" required
-                                    onChange={this.handleChange}
-                                >
-                                </input>
-                                <button id="loginbtn"
-                                    type="submit"
-                                    text={Dictionary.login}
-                                    className="btn btn-success"
-                                    onClick={this.login} >
-                                    {Dictionary.login}
-                                </button>
-                            </form>
-                        </div>
-                      
-                    </div>
-                </div>
+            <div className="buttonWrapper123">
+                <img className="logo" src={logo} alt="logo"></img>
+                <form dir="RTL" id="login_form" name="login_form_name" >
+                    < input type="email"
+                        id="email"
+                        name="email"
+                        placeholder={Dictionary.enterMail}
+                        autoComplete='off'
+                        defaultValue="" required
+                        onChange={this.handleChange}>
+                    </input>
+                    < input type="password"
+                        id="password"
+                        name="password"
+                        placeholder={Dictionary.enterPass}
+                        autoComplete='off'
+                        defaultValue="" required
+                        onChange={this.handleChange}
+                    >
+                    </input>
+                    <button id="loginbtn"
+                        type="submit"
+                        text={Dictionary.login}
+                        className="btn btn-success"
+                        onClick={this.login} >
+                        {Dictionary.login}
+                    </button>
+                </form>
             </div>
+
+
         )
     }
 }
@@ -98,7 +93,7 @@ class LoginPage extends Component {
 
 
 class LoginComponent extends Component {
-// this class contains the basic rendering for the site 
+    // this class contains the basic rendering for the site 
     constructor(props) {
         super(props);
         this.state = {
@@ -107,12 +102,12 @@ class LoginComponent extends Component {
             permission: false,
         }
     }
-    
+
     authListener() {
         auth.onAuthStateChanged((user) => {
-            if (user) 
+            if (user)
                 this.setState({ user });
-            else 
+            else
                 this.setState({ user: false });
         })
     }
@@ -120,19 +115,19 @@ class LoginComponent extends Component {
     signOutFun() {
         auth.signOut();
     }
-    
+
     componentDidMount() {
         auth.onAuthStateChanged(user => {
-            var comp=[]
-            if (user){
+            var comp = []
+            if (user) {
                 comp = <Router>
-                     <Route path="/"  component={SiteFrame} />
-                    </Router>
+                    <Route path="/" component={SiteFrame} />
+                </Router>
             }
-            else{
-                comp = <LoginPage/>
+            else {
+                comp = <LoginPage />
             }
-            this.setState({page:comp})
+            this.setState({ page: comp })
         })
     }
     render() {

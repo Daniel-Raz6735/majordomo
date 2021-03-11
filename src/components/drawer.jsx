@@ -19,9 +19,9 @@ export class CategoryDrawer extends React.Component {
       show: false,
       weights_dict: props.weights_dict,
       cat_id: props.cat_id,
-      cat_name: this.props.cat_name?this.props.cat_name:category_names[props.cat_id],
+      cat_name: this.props.cat_name ? this.props.cat_name : category_names[props.cat_id],
       page: [],
-      cat_image:[]
+      cat_image: []
     };
     this.close = this.close.bind(this);
     this.toggleDrawer = this.toggleDrawer.bind(this);
@@ -31,7 +31,8 @@ export class CategoryDrawer extends React.Component {
 
   }
 
-  componentDidMount(){
+  componentDidMount() {
+    // console.log(this.props.weights_dict["cat_name"])
     this.switchContent(this.props.item_id)
   }
 
@@ -67,23 +68,23 @@ export class CategoryDrawer extends React.Component {
       }
     })
 
-    this.setState({ page: <Containers weights_dict={newDict} openItem ={this.switchContent}/> });
+    this.setState({ page: <Containers weights_dict={newDict} openItem={this.switchContent} /> });
 
   }
-  switchContent(item_id){
+  switchContent(item_id) {
     let page = [],
-    cat_image = [],
-    cat_id = this.props.cat_id
-     if(item_id){
-        cat_image=<div onClick ={()=>this.switchContent()}>this is a back arrow</div>
-        page = <div>here are fruit statistics</div>
-     }
-     else{
+      cat_image = [],
+      cat_id = this.props.cat_id
+    if (item_id) {
+      cat_image = <div onClick={() => this.switchContent()}>this is a back arrow</div>
+      page = <div>here are fruit statistics</div>
+    }
+    else {
       page.push(<SearchBar handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />)
-      page.push(<Containers weights_dict={this.props.weights_dict} openItem ={this.switchContent}/>)
+      page.push(<Containers weights_dict={this.props.weights_dict} openItem={this.switchContent} />)
       cat_image = <img src={category_symbols[cat_id]} alt={category_names[cat_id]} />
-     }
-     this.setState({page,cat_image})
+    }
+    this.setState({ page, cat_image })
 
 
   }
@@ -93,9 +94,15 @@ export class CategoryDrawer extends React.Component {
   render() {
     console.log(this.props.weights_dict)
     const { size, placement, show } = this.state,
-      cat_id = this.props.cat_id,
-      st = "5px solid " + String(category_colors[cat_id]);
-    let title = <div className="notification_toggler" style={{ color: category_colors[cat_id], width: 'fit-content' }} >{this.state.cat_name}</div>
+      cat_id = this.props.cat_id
+     
+
+    // invnetory page - supplier case
+    let color = this.props.cat_name ? "gray" : category_colors[cat_id]
+    let symbol = this.props.cat_name ? "" : this.state.cat_image
+
+    let st = "5px solid " + String(color);
+    let title = <div className="notification_toggler" style={{ color: color, width: 'fit-content' }} >{this.state.cat_name}</div>
     let clas = this.props.order_drawer ? "add_item_container" : "category_drawer_container"
 
     let see_full_inventory
@@ -108,13 +115,9 @@ export class CategoryDrawer extends React.Component {
     else { // home page
       title = ""
       clas = "home_page_drawer"
-        
-      see_full_inventory = <InventoryTile name={this.props.cat_name} symbol={this.props.symbol} cat_color={category_colors[cat_id]}  weights_dict={this.props.weights_dict} func={this.toggleDrawer} />
+
+      see_full_inventory = <InventoryTile name={this.props.cat_name} symbol={this.props.symbol} cat_color={category_colors[cat_id]} weights_dict={this.props.weights_dict} func={this.toggleDrawer} />
     }
-
-
-
-
 
 
     return (
@@ -133,9 +136,10 @@ export class CategoryDrawer extends React.Component {
           <div className="drawer_header">
             <div className="sub_drawer_header">
               <img className="close_btn_div" src={x_icon} onClick={this.close} alt="X" />
-              <div className="drawer_title h4" style={{ color: category_colors[cat_id] }} >{this.state.cat_name}</div>
+              <div className="drawer_title h4" style={{ color: color }} >{this.state.cat_name}</div>
               <div className="cat_drawer_symbol">
-                {this.state.cat_image}
+                {/* {this.state.cat_image} */}
+                {symbol}
               </div>
             </div>
             <div className="drawer_title_border" style={{ borderBottom: st }} />

@@ -5,7 +5,7 @@ import cart from '../images/icons/cart.svg'
 import profile from '../images/profile.svg'
 import React, { Component } from 'react';
 import { auth } from '../config/firebaseConfig'
-import { Dictionary, getRTL, LangBtn } from '../Dictionary';
+import { Dictionary, getRTL, getTime, LangBtn } from '../Dictionary';
 import logo from '../images/icons/Majordomo logo.svg';
 import InventoryPage from "../pages/inventory_page"
 import OrdersPage from "../pages/orders_page"
@@ -195,14 +195,7 @@ export class SiteFrame extends Component {
 
 export class TitleComponent extends Component {
     render() {
-        let temp = Date.now()
-        let now = new Date(temp)
-        let date = now.getDate()
-        let months = now.getMonth() + 1
-        let year = now.getFullYear()
-
-        let date_str = date + "." + months + "." + year
-        return <div className="page_title">{Dictionary[this.props.title_name] + " | " + date_str}</div>;
+        return <div className="page_title">{Dictionary[this.props.title_name] + " | " + getTime()}</div>;
     }
 }
 

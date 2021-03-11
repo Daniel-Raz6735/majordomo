@@ -63,7 +63,15 @@ function get_notifications_by_level(notifications_dict, category_id) {
     }
     if (Object.keys(dict).length === 0)
         return null
-    return dict
+
+    var count = 0
+    Object.keys(dict).forEach(key => {
+        if (dict[key])
+            count += Object.keys(dict[key]).length
+    })
+    console.log(count)
+
+    return [dict, count]
 }
 
 
@@ -131,13 +139,27 @@ export class NotificationList extends Component {
                 }
             }
             else {
+                var temp = []
                 Object.keys(weights_dict).forEach(category_id => {
-                    var notifications = get_notifications_by_level(notifications_data, category_id)
-                    
-                    var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_data={notifications} weights_dict={weights_dict[category_id]} supplier_dict ={this.props.dict["suppliers"]}/>
-                    page.push(addition)
+                    console.log(weights_dict)
+                    var notifications = get_notifications_by_level(notifications_data, category_id) ? get_notifications_by_level(notifications_data, category_id)[0] : null
+                    var notifications_size = get_notifications_by_level(notifications_data, category_id) ? get_notifications_by_level(notifications_data, category_id)[1] : 0
+
+
+                    var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_data={notifications} weights_dict={weights_dict[category_id]} supplier_dict={this.props.dict["suppliers"]} />
+                    temp.push([addition, notifications_size])
+
+                    // page.push(addition)
                 })
+                temp.sort((a, b) => { return b[1] - a[1] })
+
+                temp.forEach(not => {
+                page.push(not[0])
+            })
             }
+
+            // sort notification by the amount of notifications
+            
             this.setState({ page });
 
         }
@@ -169,7 +191,7 @@ export class NotificationCategory extends Component {
             category_id: props.category_id,
             notification_data: props.notification_data,
             weights_dict: props.weights_dict,
-            supplier_dict:props.supplier_dict,
+            supplier_dict: props.supplier_dict,
         };
 
     }
@@ -209,10 +231,11 @@ export class NotificationCategory extends Component {
     }
 
     render() {
-        
+        console.log(this.props.supplier_dict["suppliers"])
+
         return (
             <div className="notification_category_container">
-                <NotificationHeader key={"header" + this.props.cat_type + this.props.category_id} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
+                <NotificationHeader key={"header" + this.props.cat_type + this.props.category_id} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} supplier_dict={this.props.supplier_dict} cat_id={this.props.category_id} />
                 <Collapse in={this.state.show} key={this.props.category_id + "collapse" + this.props.cat_type} >
                     {(props, ref) => <Panel {...props} ref={ref} key={this.props.category_id + " panel " + this.props.cat_type} notifications={this.extract_items(this.props.notification_data)} />}
                 </Collapse>
@@ -245,7 +268,7 @@ export class Notification extends Component {
     }
 
     render() {
-        
+
 
         if (this.state) {
             return (
@@ -282,13 +305,13 @@ class AlertNotifications extends Component {
     }
     render() {
         let page = [],
-        level = this.props.notifications_level,
-        i = level-1,
-        notifications = this.props.notification_info
-        if (notifications&&level) {
+            level = this.props.notifications_level,
+            i = level - 1,
+            notifications = this.props.notification_info
+        if (notifications && level) {
             Object.keys(notifications).forEach(key => {
-                var notification =  notifications[key]
-                page.push(<div className="simple_notification"><div className="cart_container">{action_btn(null, level-1, notification["item_name"], notification["order_details"])}</div>
+                var notification = notifications[key]
+                page.push(<div className="simple_notification"><div className="cart_container">{action_btn(null, level - 1, notification["item_name"], notification["order_details"])}</div>
                     {notification["item_name"]} <div class="center_items notification_weight"> {notification["total_weight"].toFixed(1).replace(/\.0+$/, '')} {notification["unit"]}</div>
                 </div>)
             })
@@ -369,15 +392,29 @@ export class NotificationHeader extends Component {
 
     render() {
         var cat_id = this.props.cat_id - 1
-        var cat_name = (this.props.cat_type==="supplier")? false:false
 
-        // console.log(this.props.weights_dict)
+        var supllier_name = this.props.supplier_dict["suppliers"][this.props.cat_id]
+        var cat_name = (this.props.cat_type === "supplier") ? supllier_name["name"] : false
+
+        // supplier case
+        let symbol, style = {
+            borderBottomColor: "gray",
+            color: "unset"
+        }
+
+        // item type case
+        if (!cat_name) {
+            symbol = <img className="notification_toggler" src={category_symbols[cat_id]} alt="category symbol" />
+            style = { borderBottomColor: category_colors[cat_id] }
+        }
+
 
         return (
-            <div className="notificationHeader notification_toggler" onClick={(e) => this.props.on_click(e)} style={{ borderBottomColor: category_colors[cat_id] }} >
+            <div className="notificationHeader notification_toggler" onClick={(e) => this.props.on_click(e)} style={style} >
                 <CategoryDrawer key={this.props.cat_type + "drawer" + cat_id} weights_dict={this.props.weights_dict} cat_id={cat_id} cat_name={cat_name} />
                 <div className="notification_header_middle notification_toggler">
-                    <img className="notification_toggler" src={category_symbols[cat_id]} alt="category symbol" />
+                    {/* <img className="notification_toggler" src={category_symbols[cat_id]} alt="category symbol" />*/}
+                    {symbol}
                 </div>
                 <div className="notification_header_symbols notification_toggler">
                     {this.state.page}

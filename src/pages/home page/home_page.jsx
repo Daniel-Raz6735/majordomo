@@ -4,6 +4,7 @@ import './home_page.css'
 import { Notification } from '../../components/notifications'
 import { category_names, category_symbols, notification_dict } from '../../components/notifications_data';
 import { CategoryDrawer } from '../../components/drawer';
+import { getTime } from '../../Dictionary';
 
 
 
@@ -73,19 +74,10 @@ export class NotificationPeeker extends Component {
 
     render() {
 
-        let temp = Date.now()
-        let now = new Date(temp)
-        let date = now.getDate()
-        let months = now.getMonth() + 1
-        let year = now.getFullYear()
-
-        let date_str = date + "." + months + "." + year
-
-
-
+    
         return (
-            <div>
-                <div className="home_titles"><div>Notifications</div>  <div>{date_str}</div></div>
+            <div className="home_notification_inventory">
+                <div className="home_titles"><div>Notifications</div>  <div>{getTime()}</div></div>
                 <div className="notification_peeker">
                     {this.state.page}
                 </div>
@@ -111,22 +103,14 @@ export class InentoryTileContainer extends Component {
 
     render() {
         var page = []
-        let temp = Date.now()
-        let now = new Date(temp)
-        let date = now.getDate()
-        let months = now.getMonth() + 1
-        let year = now.getFullYear()
-        let date_str = date + "." + months + "." + year
 
         for (let i = 0; i < category_symbols.length; i++) {
-            page.push(<CategoryDrawer cat_name={category_names[i]} symbol={category_symbols[i]} weights_dict={this.props.dict[i + 1]} cat_id={i}  tile={true} />)
+            page.push(<CategoryDrawer cat_name={category_names[i]} symbol={category_symbols[i]} weights_dict={this.props.dict[i + 1]} cat_id={i} tile={true} />)
         }
 
-
-
         return (
-            <div>
-                <div className="home_titles"><div>Inventory</div>  <div>{date_str}</div></div>
+            <div className="home_notification_inventory">
+                <div className="home_titles"><div>Inventory</div>  <div>{getTime()}</div></div>
                 <div className="inventory_tile_container">
 
                     {page}
@@ -153,7 +137,7 @@ export class InventoryTile extends Component {
         let dict = this.props.weights_dict
         let temp = -999
         let page = []
-        
+
         if (dict) {
             Object.keys(dict).forEach(key => {
                 let notification_num = dict[key]["notification_level"]
@@ -169,16 +153,16 @@ export class InventoryTile extends Component {
     render() {
         console.log(this.props.weights_dict)
 
-        
-        let func,background 
 
-        if(this.props.weights_dict){
+        let func, background
+
+        if (this.props.weights_dict) {
             func = this.props.func
-            background=""
+            background = ""
         }
         else
-            background="rgb(190, 190, 190)"
-        
+            background = "rgb(190, 190, 190)"
+
 
         return (
 

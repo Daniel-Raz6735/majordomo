@@ -183,6 +183,16 @@ export function getLeftRight(lang) {
   }
 }
 
+export function getTime(){
+  let temp = Date.now()
+  let now = new Date(temp)
+  let date = now.getDate()
+  let months = now.getMonth() + 1
+  let year = now.getFullYear()
+  let date_str = date + "." + months + "." + year
+  return date_str
+}
+
 
 //sets a globe image with three language buttons 
 export const LangBtn = () => {

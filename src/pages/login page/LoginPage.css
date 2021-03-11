@@ -18,6 +18,19 @@ body {
     height: 100%;
   }
 
+.buttonWrapper123{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-evenly; */
+    align-items: center;
+    background: url('../../images/icons/loginBacground.svg') no-repeat center center fixed ;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
 input {
 
     text-align: center;
@@ -51,6 +64,11 @@ input {
 
     margin-top: 1%;
     justify-content: space-around;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-around; */
+    height: 150px;
 }
 
 #bigLogo {
@@ -106,8 +124,14 @@ input {
     right: 0%;
 }
 
+.loginWrapper{
+    height: 100%;
+}
+
 .loginContainer {
+    height: 100%;
     text-align: center
+    
 }
 
 #renderDiv{
@@ -115,10 +139,15 @@ input {
     margin-top: 0;
     height: 100%;
     width: 100%;
+    
+    
 }
 #LPcover{
     margin: auto;
-    background-image: url('../../images/icons/loginBacground.svg') ;
+    background: url('../../images/icons/loginBacground.svg') no-repeat center center fixed ;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-size: cover;
     height: 100%;
     width: 100%;
