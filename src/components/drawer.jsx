@@ -1,12 +1,14 @@
 import { Drawer, Icon, InputGroup, Input } from 'rsuite';
 import React from 'react';
 import x_icon from '../images/x_icon.svg'
+import back_icon from '../images/icons/arrows/right_arrow.svg'
 import { Containers } from './containers';
 import './../components/drawer.css';
 import { Dictionary, getRTL, getLeftRight } from '../Dictionary';
 import { category_names, category_symbols, category_colors } from './notifications_data';
 import { AddItem } from '../pages/orders_page';
 import { InventoryTile } from '../pages/home page/home_page';
+import { CharTest } from './charts';
 
 
 
@@ -76,8 +78,8 @@ export class CategoryDrawer extends React.Component {
       cat_image = [],
       cat_id = this.props.cat_id
     if (item_id) {
-      cat_image = <div onClick={() => this.switchContent()}>this is a back arrow</div>
-      page = <div>here are fruit statistics</div>
+      cat_image = <div onClick={() => this.switchContent()}><img src={back_icon} alt="back"/></div>
+      page = <div><CharTest/></div>
     }
     else {
       page.push(<SearchBar handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />)
