@@ -91,6 +91,27 @@ provided optional params: can get only active rules and a specific rule
     return process_read_query(query, res_code)
 
 
+@app.get('/get/item/history')
+async def get_item_history(business_id: int, item_id: int, min_date: Optional[int] = -1, max_date: Optional[int] = -1):
+    """gets an items weight history
+    input: business_id, item_id - ids
+           max,min dates -  Unix Timestamp - represents the time window for the history"""
+    if min_date <= 0:
+        min_date = None
+    if max_date < 0:
+        max_date = None
+    if not min_date and not max_date:
+        raise HTTPException(status_code=404, detail="No date to reference")
+    connection = Connection()
+    reading = readQ(connection)
+    query, res_code = reading.get_weight_history(item_id, business_id, min_date, max_date)
+    if res_code != 200:
+        raise HTTPException(status_code=500, detail="Unable to create a history query")
+    res, res_code = connection.get_result(query)
+    del connection
+    return res
+
+
 @app.get('/get/suppliers')
 async def get_suppliers(business_id: int, item_id: Optional[int] = -1, item_ids: Optional[List] = None):
     """gets all suppliers based on business_id,
@@ -182,8 +203,8 @@ class OrderItem(BaseModel):
 
 
 @app.post('/order/add/item')
-# async def add_order_item(item: OrderItem):
-async def add_order_item(item_id: int, order_id: int, business_id: int, supplier_id: int, amount: int, unit: int):
+async def add_order_item(item: OrderItem):
+    # async def add_order_item(item_id: int, order_id: int, business_id: int, supplier_id: int, amount: int, unit: int):
     try:
         connection = Connection()
         updater = updateQ(connection)
@@ -191,10 +212,10 @@ async def add_order_item(item_id: int, order_id: int, business_id: int, supplier
         print("error: ", error)
         raise HTTPException(status_code=400, detail="Item not found")
         # return error, 400
-    # res, res_code, order_id = updater.add_order_item(item["item_id"], item["order_id"], item["business_id"],
-    #                                        item["supplier_id"], item["amount"], item["unit"])
-    res, res_code, order_id = updater.add_order_item(item_id, order_id, business_id,
-                                                     supplier_id, amount, unit)
+    res, res_code, order_id = updater.add_order_item(item["item_id"], item["order_id"], item["business_id"],
+                                                     item["supplier_id"], item["amount"], item["unit"])
+    # res, res_code, order_id = updater.add_order_item(item_id, order_id, business_id,
+    #                                                  supplier_id, amount, unit)
 
     del connection
     return res, res_code
@@ -232,11 +253,6 @@ async def add_order_item(item_id: int, order_id: int, business_id: int, supplier
 #     return "<h1>404</h1><p>The resource could not be found.</p><p>" + str(e) + "</p>", 404
 
 
-# @app.route('/', methods=['GET'])
-# def home():
-#     return {'<h1>Majordomo back end</h1>'}
-
-
 def error_message(code, message, info=None):
     res = "<h1>" + str(code) + "</h1><p>" + str(message) + "</p>"
 
@@ -265,11 +281,11 @@ def process_create_query(query, res_code):
         return error_message(res_code, result, "unable to process request")
 
 
-class ConnectionManager:
+class WebSocketManager:
     def __init__(self):
         self.active_connections = {}
 
-    async def connect(self, websocket: WebSocket, business_id: int):
+    async def connect_socket(self, websocket: WebSocket, business_id: int):
         await websocket.accept()
         if business_id not in self.active_connections:
             self.active_connections[business_id] = []
@@ -291,12 +307,13 @@ class ConnectionManager:
             print("no client connected")
 
 
-manager = ConnectionManager()
+manager = WebSocketManager()
 
 
 @app.websocket("/ws/{business_id}/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, business_id: int, user_id: int):
-    await manager.connect(websocket, business_id)
+    """create a connection with the client accessing this route"""
+    await manager.connect_socket(websocket, business_id)
     try:
         while True:
             data = await websocket.receive_text()

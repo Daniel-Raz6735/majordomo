@@ -210,6 +210,33 @@ class ReadQueries:
         return final_query, 200
 
     @staticmethod
+    def get_weight_history(item_id, business_id, min_date, max_date):
+        """creates an items weight history query
+           input: business_id, item_id - ids
+           max,min dates -  Unix Timestamp - represents the time window for the history"""
+        conditions = []
+        if business_id:
+            conditions.append(["AND", "weights.business_id", "=", int(business_id)])
+        else:
+            raise HTTPException(status_code=400, detail="No business id sent")
+        if item_id:
+            conditions.append(["AND", "weights.item_id", "=", int(item_id)])
+        else:
+            raise HTTPException(status_code=400, detail="No item id sent")
+        if min_date is not None:
+            conditions.append(["AND", "weights.weighing_date", ">=",  "to_timestamp(" + str(min_date) + ")"])
+        if max_date is not None:
+            conditions.append(["AND", "weights.weighing_date", "<=", "to_timestamp(" + str(max_date) + ")"])
+
+        cols_to_bring = [[["weight_value", "weight", "SUM"], ["weighing_date", "date"],
+                          ["unit"], ["item_id"]]]
+
+        query, res_code = DbQueries.select_query(["weights"], cols_to_bring, conditions)
+        if res_code != 200:
+            raise HTTPException(status_code=500, detail="Error creating weight query")
+        return query, 200
+
+    @staticmethod
     def get_suppliers(args):
         # list_of_cols = ["business_id", "items_ids"]
         conditions = []
