@@ -93,8 +93,8 @@ export class AddToOrder extends Component {
     console.log(value)
 
     let dict = {
-      "item_id": parseInt(this.props.item_id), "order_id": parseInt(this.props.order_id), "business_id": this.props.business_id,
-      "supplier_id": this.props.supplier_id, "amount": value, "unit": this.props.unit
+      item_id: parseInt(this.props.item_id), order_id: parseInt(this.props.order_id), business_id: this.props.business_id,
+      supplier_id: this.props.supplier_id, amount: value, unit: this.state.unit
     }
 
     let request = base_url + "/order/add/item"
@@ -104,6 +104,8 @@ export class AddToOrder extends Component {
       type: "POST",
       data: JSON.stringify(dict),
       contantType: "application/json",
+      // processData: true,
+      // enCode: true,
       success: function (res) {
           
           console.log(res)

@@ -13,6 +13,7 @@ from flask import request
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import json
 import time
 from typing import List
 
@@ -199,12 +200,17 @@ class OrderItem(BaseModel):
     supplier_id: int
     item_id: int
     amount: float
-    unit: str
+    unit: int
 
 
 @app.post('/order/add/item')
 async def add_order_item(item: OrderItem):
     # async def add_order_item(item_id: int, order_id: int, business_id: int, supplier_id: int, amount: int, unit: int):
+
+    item = item.dict()
+    # print(json.loads(item))
+
+
     try:
         connection = Connection()
         updater = updateQ(connection)

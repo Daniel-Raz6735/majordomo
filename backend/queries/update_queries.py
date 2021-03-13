@@ -182,7 +182,9 @@ class UpdateQueries:
         if res_code != 200:
             raise HTTPException(status_code=500, detail="Server error")
 
-        return self.connection.insert_data(insert_query, "Parameter error", update_query, ['item_id', "order_id"]), order_id
+        res , res_code = self.connection.insert_data(insert_query, "Parameter error", update_query, ['item_id', "order_id"])
+
+        return res, res_code, order_id
 
     def execute_query(self, query, res_code):
         """executes a query and return its result """

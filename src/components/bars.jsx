@@ -97,7 +97,7 @@ export class SiteFrame extends Component {
                 url: request,
                 success: function (res) {
                     callback(res, true, tab_name);
-                    // console.log(res)
+                    console.log(res)
                 },
                 error: function (err) {
                     callback(fake_data, true);
