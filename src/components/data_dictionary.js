@@ -285,6 +285,27 @@ export function confirm_papulation(dict, area_name, message = "", dict_to_test =
 
 }
 
+export function getUnitById(id){
+
+    switch(id)
+    {
+        default:
+            return "kg"
+
+        case 1:
+            return "kg"
+            
+        
+        case 2:
+            return "lb"
+            
+        
+        case 3:
+            return "un"
+            
+    }
+}
+
 // function download(content, fileName, contentType) {
 //     var a = document.createElement("a");
 //     var file = new Blob([content], { type: contentType });

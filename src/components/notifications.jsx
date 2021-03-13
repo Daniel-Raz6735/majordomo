@@ -69,8 +69,7 @@ function get_notifications_by_level(notifications_dict, category_id) {
         if (dict[key])
             count += Object.keys(dict[key]).length
     })
-    console.log(count)
-
+  
     return [dict, count]
 }
 
@@ -141,7 +140,7 @@ export class NotificationList extends Component {
             else {
                 var temp = []
                 Object.keys(weights_dict).forEach(category_id => {
-                    console.log(weights_dict)
+                    
                     var notifications = get_notifications_by_level(notifications_data, category_id) ? get_notifications_by_level(notifications_data, category_id)[0] : null
                     var notifications_size = get_notifications_by_level(notifications_data, category_id) ? get_notifications_by_level(notifications_data, category_id)[1] : 0
 
@@ -231,7 +230,7 @@ export class NotificationCategory extends Component {
     }
 
     render() {
-        console.log(this.props.supplier_dict["suppliers"])
+        
 
         return (
             <div className="notification_category_container">

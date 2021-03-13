@@ -7,9 +7,6 @@ import { CategoryDrawer } from '../../components/drawer';
 import { getTime } from '../../Dictionary';
 
 
-
-
-
 export class HomePage extends Component {
     constructor(props) {
         super(props);
@@ -151,9 +148,7 @@ export class InventoryTile extends Component {
     }
 
     render() {
-        console.log(this.props.weights_dict)
-
-
+      
         let func, background
 
         if (this.props.weights_dict) {

@@ -64,20 +64,23 @@ export class Containers extends Component {
         this.render_container = this.render_container.bind(this);
     }
 
-    render_container(weights_dict ) {
+    render_container(weights_dict) {
         //gets a list of weights and puts and renders the maximal  
         var res = [];
         var sorted = sortWeightDict(weights_dict)
         if (weights_dict) {
             sorted.forEach(key => {
                 let weight = weights_dict[key],
-                    order_details = weight["order_details"]
+                    order_details = weight["order_details"],
+                    supplier_details = weight["suppliers"]
                 if (!order_details)
                     order_details = {}
+                console.log(weights_dict)
                 res.push(
                     <ItemBlock {...this.props} item_id={key} key={key + "" + weight["item_name"]} name={weight["item_name"]}
-                        weight={weight["total_weight"]} weight_date={weight["date"]} symbol={weight["notification_level"]} 
-                        unit={order_details["unit"]} defult_val={order_details["amount"]}  />)
+                        weight={weight["total_weight"]} weight_date={weight["date"]} symbol={weight["notification_level"]}
+                        unit={order_details["unit"]} defult_val={order_details["amount"]} order_dict={weights_dict}
+                        business_id={1} supplier_id={supplier_details["0"]} order_id={0} />)
             });
         }
         return res;
@@ -115,6 +118,8 @@ export class ItemBlock extends Component {
 
         }
     }
+
+
     render() {
 
         let sym
@@ -136,7 +141,7 @@ export class ItemBlock extends Component {
 
         return (
             <div className="item_container">
-                <div className="item_squere" onClick={()=>this.props.openItem(this.props.item_id)}>
+                <div className="item_squere" onClick={() => this.props.openItem(this.props.item_id)}>
                     {sym}
                     <div >
                         {this.state.name}
@@ -146,7 +151,8 @@ export class ItemBlock extends Component {
                         <div className="weight_date">{this.state.weight_date} </div>
                     </div>
                 </div>
-                <AddToOrder kind={1} title={this.state.name} defult_val={this.state.defult_val} is_in_order={this.state.is_in_order} />
+                <AddToOrder item_id={this.props.item_id} order_id={this.props.item_id} business_id={this.props.business_id} supplier_id={this.props.supplier_id} unit={this.props.unit}
+                    kind={1} title={this.state.name} defult_val={this.state.defult_val} is_in_order={this.state.is_in_order} order_dict={this.props.order_dict} />
             </div>
         )
     }

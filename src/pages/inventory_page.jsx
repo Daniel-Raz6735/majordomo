@@ -7,6 +7,7 @@ import './inventory_page.css'
 import cart_plus from '../images/icons/orders/cart_plus.svg'
 import x_icon from '../images/x_icon.svg'
 import $ from 'jquery'
+import { base_url } from "..";
 
 
 
@@ -42,11 +43,18 @@ export class AddToOrder extends Component {
       kind: props.kind,
       title: props.title,
       is_in_order: props.is_in_order,
-      defult_val: props.defult_val,
-      unit: props.unit
+      defult_val: props.defult_val ? props.defult_val : 10,
+      incraments: props.incraments ? props.incraments : 1,
+      quantity: 10,
+      min: 1,
+      max: 99,
+      unit: props.unit ? props.unit : Dictionary["unknown"]
     };
     this.close = this.close.bind(this);
     this.open = this.open.bind(this);
+    this.addOrder = this.addOrder.bind(this);
+    this.handleMinus = this.handleMinus.bind(this);
+    this.handlePlus = this.handlePlus.bind(this);
   }
   close() {
     this.setState({ show: false });
@@ -57,6 +65,62 @@ export class AddToOrder extends Component {
       show: true
     });
   }
+
+  handleMinus() {
+    var new_val = this.state.quantity - this.state.incraments;
+    console.log(new_val)
+    if (new_val >= this.state.min)
+      this.setState({ quantity: new_val });
+    else
+      alert("enterd to little")
+  }
+
+  handlePlus() {
+    var new_val = this.state.quantity + this.state.incraments;
+    console.log(new_val)
+    if (new_val <= this.state.max)
+      this.setState({ quantity: new_val });
+    else
+      alert("enterd to much")
+  }
+
+  // getQuantity(value) {
+  //   this.setState({value:value})
+  //   console.log(value)
+  // }
+
+  addOrder(value) {
+    console.log(value)
+
+    let dict = {
+      "item_id": parseInt(this.props.item_id), "order_id": parseInt(this.props.order_id), "business_id": this.props.business_id,
+      "supplier_id": this.props.supplier_id, "amount": value, "unit": this.props.unit
+    }
+
+    let request = base_url + "/order/add/item"
+
+    $.ajax({
+      url: request,
+      type: "POST",
+      data: JSON.stringify(dict),
+      contantType: "application/json",
+      success: function (res) {
+          
+          console.log(res)
+      },
+      error: function (err) {
+          
+          console.log(err)
+      }
+  });
+
+  }
+
+  componentDidMount() {
+    // console.log(this.props.order_dict)
+  }
+
+
   render() {
     var button_text = (this.state.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"],
       btn_color = "#73D504",
@@ -90,9 +154,9 @@ export class AddToOrder extends Component {
             <div className="model_item_name clamp_line">
               {this.state.title}
             </div>
-            <Quantity defult_val={this.state.defult_val} unit={this.state.unit} />
+            <Quantity value={this.state.quantity} handleMinus={this.handleMinus} handlePlus={this.handlePlus} defult_val={this.state.defult_val} unit={this.props.unit} />
 
-            <button className="add_to_order_btn" onClick={()=>{open('success');this.close()}} style={{ backgroundColor: btn_color }} >
+            <button className="add_to_order_btn" onClick={() => { open('success'); this.addOrder(this.state.quantity); this.close() }} style={{ backgroundColor: btn_color }} >
               {Dictionary["add_to_order"]}
             </button>
             <div className="model_footer_xs" onClick={() => { $("#reset_frame").val("OrdersPage").change() }}>{Dictionary["go_to_orders"]}</div>
@@ -105,8 +169,8 @@ export class AddToOrder extends Component {
 }
 
 function open(funcName) {
- 
-  note[funcName]({ 
+
+  note[funcName]({
     title: "Item added successfully",
     description: <div >10 kg tomato</div>
   });
@@ -116,36 +180,19 @@ export class Quantity extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      quantity: props.defult_val ? props.defult_val : 10,
-      incraments: props.incraments ? props.incraments : 1,
-      unit: props.unit ? props.unit : Dictionary["unknown"],
-      min: 1,
-      max: 99,
+
+
     };
-    this.handleMinus = this.handleMinus.bind(this);
-    this.handlePlus = this.handlePlus.bind(this);
+
   }
-  handleMinus() {
-    var new_val = this.state.quantity - this.state.incraments;
-    if (new_val >= this.state.min)
-      this.setState({ quantity: new_val });
-    else
-      alert("enterd to little")
-  }
-  handlePlus() {
-    var new_val = this.state.quantity + this.state.incraments;
-    if (new_val <= this.state.max)
-      this.setState({ quantity: new_val });
-    else
-      alert("enterd to much")
-  }
+
 
   render() {
     return (
       <div className="quantity_container">
-        <div className="quantity_select minus_symbol" onClick={this.handleMinus} >-</div>
-        <input type="text" className="quantity_window" name="quantity window" style={{ cursor: "default" }} dir={getRTL()} value={this.state.quantity + " " + this.state.unit} disabled />
-        <div className="quantity_select plus_symbol" onClick={this.handlePlus}>+</div>
+        <div className="quantity_select minus_symbol" onClick={this.props.handleMinus} >-</div>
+        <input type="text" className="quantity_window" name="quantity window" style={{ cursor: "default" }} defaultValue={this.props.defaultValue} dir={getRTL()} value={this.props.value + " " + this.state.unit} disabled />
+        <div className="quantity_select plus_symbol" onClick={this.props.handlePlus}>+</div>
       </div>)
   }
 }

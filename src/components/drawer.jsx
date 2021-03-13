@@ -89,7 +89,7 @@ export class CategoryDrawer extends React.Component {
 
 
   render() {
-    console.log(this.props.weights_dict)
+    
     const { size, placement, show } = this.state,
       cat_id = this.props.cat_id
      
