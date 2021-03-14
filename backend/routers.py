@@ -108,6 +108,7 @@ async def get_item_history(business_id: int, item_id: int, min_date: Optional[in
     query, res_code = reading.get_weight_history(item_id, business_id, min_date, max_date)
     if res_code != 200:
         raise HTTPException(status_code=500, detail="Unable to create a history query")
+    print(query)
     res, res_code = connection.get_result(query)
     del connection
     return res

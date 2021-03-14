@@ -1,5 +1,5 @@
-import { Drawer, Icon, InputGroup, Input } from 'rsuite';
-import React from 'react';
+import { Drawer, Icon, InputGroup, Input, Divider } from 'rsuite';
+import React, { Component } from 'react';
 import x_icon from '../images/x_icon.svg'
 import back_icon from '../images/icons/arrows/right_arrow.svg'
 import { Containers } from './containers';
@@ -8,7 +8,10 @@ import { Dictionary, getRTL, getLeftRight } from '../Dictionary';
 import { category_names, category_symbols, category_colors } from './notifications_data';
 import { AddItem } from '../pages/orders_page';
 import { InventoryTile } from '../pages/home page/home_page';
-import { CharTest } from './charts';
+import Chart from 'chart.js'
+import { base_url } from '../index';
+import $ from 'jquery';
+
 
 
 
@@ -42,11 +45,11 @@ export class CategoryDrawer extends React.Component {
     this.setState({
       show: false
     });
-    
+
   }
 
   toggleDrawer(main_render) {
-    if(main_render)
+    if (main_render)
       this.switchContent(false);
     this.setState({
       placement: 'bottom',
@@ -78,8 +81,8 @@ export class CategoryDrawer extends React.Component {
       cat_image = [],
       cat_id = this.props.cat_id
     if (item_id) {
-      cat_image = <div onClick={() => this.switchContent()}><img src={back_icon} alt="back"/></div>
-      page = <div><CharTest/></div>
+      cat_image = <div onClick={() => this.switchContent()}><img src={back_icon} alt="back" /></div>
+      page = <ItemInfo business_id={1} item_id={1} />
     }
     else {
       page.push(<SearchBar handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />)
@@ -94,10 +97,10 @@ export class CategoryDrawer extends React.Component {
 
 
   render() {
-    
+
     const { size, placement, show } = this.state,
       cat_id = this.props.cat_id
-     
+
 
     // invnetory page - supplier case
     let color = this.props.cat_name ? "gray" : category_colors[cat_id]
@@ -189,4 +192,137 @@ export class SearchBar extends React.Component {
       </div>
     );
   }
+}
+export class ItemInfo extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      chart_id:"food_chart" + this.props.item_id + "chart"
+    };
+    this.devide_data = this.devide_data.bind(this);
+
+  }
+  componentDidMount() {
+    var request = base_url + '/get/item/history';
+    var business_id = this.props.business_id,
+      item_id = this.props.item_id,
+      min_date = get_old_date(new Date(), 30)
+
+    if (business_id) {
+      request += "?business_id=" + business_id + "&item_id=" + item_id + "&min_date=" + min_date
+      console.log(request)
+      var callback = this.devide_data
+      $.ajax({
+        url: request,
+        success: function (res) {
+          callback(res)
+        },
+        error: function (err) {
+          console.log(err)
+        }
+      });
+    }
+    else {
+      console.log("no user id enterd. nothing happend")
+    }
+  }
+  render_chart(prop_datasets,labels, id) {
+    var ctx = document.getElementById(id).getContext('2d');
+    var sets = []
+    if(prop_datasets){
+        console.log(prop_datasets)
+        prop_datasets.forEach(set=>{sets.push({label:set[0],data:set[1]})})
+    }
+     new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets:sets,
+            
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    })
+    
+}
+
+  devide_data(res) {
+    console.log(res)
+    this.render_chart([["fruit", [12, 19, 3, 5, 2, 3]]],["12:20", '15:30', '17:30', '18:20', '19:30', '21:30'],this.state.chart_id)
+  }
+
+  render() {
+    return (
+
+      <div className="item_info">
+        <canvas className="usage_chart" id={this.state.chart_id}/>
+        <div className="cube_container">
+          <InfoCube additional_data="skl" />
+          <InfoCube additional_data="skl" />
+          <InfoCube additional_data="skl" />
+        </div>
+        <div className="cube_container">
+          <InfoCube additional_data="skl" />
+          <InfoCube additional_data="skl" />
+        </div>
+        <div className="cube_container">
+          <InfoCube additional_data="skl" />
+          <InfoCube additional_data="skl" />
+          <InfoCube additional_data="skl" />
+        </div>
+        <div className="cube_container">
+          <InfoCube additional_data="skl" />
+          <InfoCube additional_data="skl" />
+        </div>
+      </div>
+    );
+  }
+}
+export class InfoCube extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    };
+    // this.close = this.close.bind(this);
+
+  }
+
+  // close(){
+
+  // }
+
+  render() {
+
+    var page = []
+    page.push(<div>header</div>)
+    page.push(<div>23.5 kg</div>)
+
+    if (this.props.additional_data) {
+      page.push(<Divider />)
+      page.push(<div> 12:15-12:20 </div>)
+    }
+
+
+    return (
+
+      <div className="info_cube">
+        {page}
+      </div>
+    );
+  }
+}
+function get_old_date(date, num_of_days) {
+  date.setHours(0, 0, 0, 0);
+  date.setDate(date.getDate() - num_of_days);
+  return date.getTime() / 1000
 }

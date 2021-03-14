@@ -103,3 +103,21 @@
 /* .notification_toggler{
     width: fit-content;
 } */
+.info_cube{
+    width: 100%;
+    margin: 5px;
+    border: 1px solid black;
+}
+.cube_container{
+    width: 90%;
+    display: flex;
+    margin: auto;
+    flex-wrap: nowrap;
+}
+.usage_chart{
+    height: 40%!important;
+    width: 80%!important;
+    max-height: 269px;
+    max-width: 538px;
+    margin: auto;
+}
