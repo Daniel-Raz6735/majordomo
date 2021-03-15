@@ -71,6 +71,7 @@ export class SiteFrame extends Component {
             // download(JSON.stringify(data) , 'file.json', 'text/plain');
             if (typeof (data) == "object") {
                 var dict = create_initial_data_dict(data);
+                console.log(dict)
                 if (!dict)
                     this.setState({ page: <div> we encounterd a problem in loading data</div> })
 

@@ -8,6 +8,7 @@ import red_circle from '../images/circle red warning.png'
 import triangle_warning from '../images/icons/triangle_warning.svg'
 import overflow_sign from '../images/icons/overflow sign.svg'
 import empty_symbol from '../images/icons/empty_symbol.svg'
+import { getUnitById } from './data_dictionary';
 
 
 
@@ -68,18 +69,22 @@ export class Containers extends Component {
         //gets a list of weights and puts and renders the maximal  
         var res = [];
         var sorted = sortWeightDict(weights_dict)
+        console.log(weights_dict)
+
         if (weights_dict) {
             sorted.forEach(key => {
                 let weight = weights_dict[key],
                     order_details = weight["order_details"],
                     supplier_details = weight["suppliers"]
+                    
                 if (!order_details)
                     order_details = {}
-                console.log(weights_dict)
+                    
+                console.log(order_details["unit"])
                 res.push(
                     <ItemBlock {...this.props} item_id={key} key={key + "" + weight["item_name"]} name={weight["item_name"]}
                         weight={weight["total_weight"]} weight_date={weight["date"]} symbol={weight["notification_level"]}
-                        unit={order_details["unit"]} defult_val={order_details["amount"]} order_dict={weights_dict}
+                        unit={weight["unit"]} defult_val={order_details["amount"]} order_dict={weights_dict}
                         business_id={1} supplier_id={supplier_details["0"]} order_id={0} />)
             });
         }
@@ -107,7 +112,7 @@ export class ItemBlock extends Component {
         this.state = {
             name: props.name,
             weight: props.weight,
-            unit: props.unit ? props.unit : "kg",
+            unit: props.unit ,
             weight_date: date,
             color: props.color,
             symbol: props.symbol ? props.symbol : empty_symbol,
@@ -146,12 +151,12 @@ export class ItemBlock extends Component {
                     <div >
                         {this.state.name}
                     </div>
-                    <div >{this.state.weight.toFixed(1).replace(/\.0+$/, '')} {" "} {this.state.unit}</div>
+                    <div >{this.state.weight.toFixed(1).replace(/\.0+$/, '')} {" "} {getUnitById(this.state.unit)}</div>
                     <div className="last_registred" style={{ direction: getRTL() }}>{Dictionary["last_registred"] + ":"}
                         <div className="weight_date">{this.state.weight_date} </div>
                     </div>
                 </div>
-                <AddToOrder item_id={this.props.item_id} order_id={this.props.item_id} business_id={this.props.business_id} supplier_id={this.props.supplier_id} unit={this.props.unit}
+                <AddToOrder item_id={this.props.item_id} order_id={this.props.item_id} business_id={this.props.business_id} supplier_id={this.props.supplier_id} unit={this.state.unit}
                     kind={1} title={this.state.name} defult_val={this.state.defult_val} is_in_order={this.state.is_in_order} order_dict={this.props.order_dict} />
             </div>
         )

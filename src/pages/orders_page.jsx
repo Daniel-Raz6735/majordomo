@@ -265,7 +265,8 @@ export class Order extends Component {
         console.log(this.props.order)
         let quantity = this.props.order["amount"],
             unit = this.props.order["unit"]
-        unit = Dictionary[unit] ? Dictionary[unit] : Dictionary["unknown"]
+        // unit = Dictionary[unit] ? Dictionary[unit] : Dictionary["unknown"]
+        console.log(unit)
         if (this.state) {
             return (
                 <div className="order_container">

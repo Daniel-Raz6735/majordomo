@@ -107,10 +107,12 @@ function create_weights_dict(weight_data, suppliers_data, notifications_data, or
         var element = weight_data[key]
         if (element) {
             confirm_papulation(element, "create_weights_dict")
+            console.log(element)
             var item_name = element["item_name"],
                 item_id = element["item_id"],
                 category_id = element["category_id"],
                 category_name = element["category_name"],
+                unit = element["unit"],
                 notification_level = -1
             if (item_name && item_id && category_id && category_name) {
                 if (!dict["category"][category_id])
@@ -128,6 +130,7 @@ function create_weights_dict(weight_data, suppliers_data, notifications_data, or
                     "date": element["date"],
                     "item_name": item_name,
                     "total_weight": element["weight"],
+                    "unit":unit,
                     "notification_level": notification_level,
                     "suppliers": []
                 }
@@ -289,8 +292,7 @@ export function getUnitById(id){
 
     switch(id)
     {
-        default:
-            return "kg"
+        
 
         case 1:
             return "kg"
@@ -302,6 +304,9 @@ export function getUnitById(id){
         
         case 3:
             return "un"
+
+        case 4:
+            return "li"
             
     }
 }

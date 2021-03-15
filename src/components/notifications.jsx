@@ -9,7 +9,7 @@ import { Dictionary, getRTL } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
 import v_icon from '../images/icons/v icon.svg'
 import { ButtonsComponent } from './bars';
-import { confirm_papulation } from './data_dictionary';
+import { confirm_papulation, getUnitById } from './data_dictionary';
 import { notifications_levels } from './notifications_data'
 
 
@@ -218,8 +218,8 @@ export class NotificationCategory extends Component {
                 if (items_in_level) {
                     Object.keys(items_in_level).forEach(item_id => {
                         var obj = items_in_level[item_id]
-                        // console.log(obj)
-                        page.push(<Notification key={item_id + notification_level + "notification"} notification_level={obj["notification_level"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]} item_id={item_id} unit={obj["unit"]} order_details={obj["order_details"]} />)
+                        console.log(obj)
+                        page.push(<Notification key={item_id + notification_level + "notification"} notification_level={obj["notification_level"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]} item_id={item_id} unit={getUnitById(obj["unit"])} order_details={obj["order_details"]} />)
                     })
                 }
             })
@@ -262,7 +262,7 @@ export class Notification extends Component {
                 action_btn: action_btn(props.defult_weight, notification_level, props.item_name, props.order_details),
                 error_symbol: notification_dict[notification_level]["error_symbol"],
                 color: notification_dict[notification_level]["color"],
-                unit: props.unit ? props.unit : "kg"
+                unit: props.unit
             }
     }
 
@@ -311,7 +311,7 @@ class AlertNotifications extends Component {
             Object.keys(notifications).forEach(key => {
                 var notification = notifications[key]
                 page.push(<div className="simple_notification"><div className="cart_container">{action_btn(null, level - 1, notification["item_name"], notification["order_details"])}</div>
-                    {notification["item_name"]} <div class="center_items notification_weight"> {notification["total_weight"].toFixed(1).replace(/\.0+$/, '')} {notification["unit"]}</div>
+                    {notification["item_name"]} <div class="center_items notification_weight"> {notification["total_weight"].toFixed(1).replace(/\.0+$/, '')} {getUnitById(notification["unit"]) }</div>
                 </div>)
             })
         }

@@ -5,6 +5,7 @@ import { Notification } from '../../components/notifications'
 import { category_names, category_symbols, notification_dict } from '../../components/notifications_data';
 import { CategoryDrawer } from '../../components/drawer';
 import { getTime } from '../../Dictionary';
+import { getUnitById } from '../../components/data_dictionary';
 
 
 export class HomePage extends Component {
@@ -62,7 +63,7 @@ export class NotificationPeeker extends Component {
                 var obj = temp[key]
                 Object.keys(obj).forEach(key2 => {
                     var obj2 = obj[key2]
-                    page.push(<Notification notification_level={obj2["notification_level"]} item_name={obj2["item_name"]} total_weight={obj2["total_weight"]} unit={obj2["unit"]} order_details={obj2["order_details"]} />)
+                    page.push(<Notification notification_level={obj2["notification_level"]} item_name={obj2["item_name"]} total_weight={obj2["total_weight"]} unit={getUnitById(obj2["unit"])} order_details={obj2["order_details"]} />)
                 })
             })
         })
