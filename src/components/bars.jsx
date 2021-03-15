@@ -38,8 +38,10 @@ export class SiteFrame extends Component {
     componentDidMount() {
         var ws = new socket_client('wss://majordomo.cloudns.asia/ws/1/1');
         // var ws = new socket_client('ws://127.0.0.1:8000/ws/1/1');
+        // var wss = new socket_client('wss://majordomo.cloudns.asia/wss');
 
 
+        // wss.onopen = function () { console.log('wss open'); };
         ws.onopen = function () { console.log('ws open'); };
         ws.onmessage = (message) => {
             // const dataFromServer = JSON.parse(message.data);
