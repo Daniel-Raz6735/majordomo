@@ -62,8 +62,10 @@ function create_notification_dict(notification_data, suppliers_data, orders_dict
 
             if (suppliers_data && suppliers_data["items"] && suppliers_data["items"][item_id]) {
                 suppliers_id = suppliers_data["items"][item_id]["suppliers"]
-                if (suppliers_id)
+                if (suppliers_id){
                     notification_to_insert["suppliers"] = suppliers_data["suppliers"][suppliers_id]
+                    notification_to_insert["supplier_id"]= suppliers_id[0];
+                }
             }
 
 
@@ -107,7 +109,6 @@ function create_weights_dict(weight_data, suppliers_data, notifications_data, or
         var element = weight_data[key]
         if (element) {
             confirm_papulation(element, "create_weights_dict")
-            console.log(element)
             var item_name = element["item_name"],
                 item_id = element["item_id"],
                 category_id = element["category_id"],
@@ -289,11 +290,10 @@ export function confirm_papulation(dict, area_name, message = "", dict_to_test =
 }
 
 export function getUnitById(id){
-
     switch(id)
     {
         
-
+        default:
         case 1:
             return "kg"
             

@@ -79,8 +79,6 @@ export class Containers extends Component {
                     
                 if (!order_details)
                     order_details = {}
-                    
-                console.log(order_details["unit"])
                 res.push(
                     <ItemBlock {...this.props} item_id={key} key={key + "" + weight["item_name"]} name={weight["item_name"]}
                         weight={weight["total_weight"]} weight_date={weight["date"]} symbol={weight["notification_level"]}

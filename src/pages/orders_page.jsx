@@ -252,28 +252,38 @@ class OrderCategory extends Component {
 }
 
 //3
-export class Order extends Component {
+class Order extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-
+            quantity:props.order["amount"]
         }
+        this.handle_plus = this.handle_plus.bind(this);
+        this.handle_minus = this.handle_minus.bind(this);
+    }
+    handle_plus(){
+        
+    }
+    handle_minus(){
+
     }
 
+
     render() {
-        console.log(this.props.order)
-        let quantity = this.props.order["amount"],
+        let quantity=null,unit=null
+        if(this.props.order){
+            quantity = this.props.order["amount"]
             unit = this.props.order["unit"]
+        }
         // unit = Dictionary[unit] ? Dictionary[unit] : Dictionary["unknown"]
-        console.log(unit)
         if (this.state) {
             return (
                 <div className="order_container">
                     <div className="order_item_name">
                         {this.props.item_id}
                     </div>
-                    <Quantity defult_val={quantity} unit={unit} />
+                    <Quantity defult_val={quantity} value={this.state.quantity} unit={unit} />
                 </div>
             )
         }

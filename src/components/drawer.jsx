@@ -82,7 +82,11 @@ export class CategoryDrawer extends React.Component {
       cat_id = this.props.cat_id
     if (item_id) {
       cat_image = <div onClick={() => this.switchContent()}><img src={back_icon} alt="back" /></div>
-      page = <ItemInfo business_id={1} item_id={1} />
+     
+      if(this.props.weights_dict)
+        page = <ItemInfo business_id={1} item_id={item_id} weight_info={this.props.weights_dict[item_id]}/>
+      else
+        console.log("No weights dict, can't render item")
     }
     else {
       page.push(<SearchBar handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />)
@@ -120,8 +124,7 @@ export class CategoryDrawer extends React.Component {
     else { // home page
       title = ""
       clas = "home_page_drawer"
-
-      see_full_inventory = <InventoryTile name={this.props.cat_name} symbol={this.props.symbol} cat_color={category_colors[cat_id]} weights_dict={this.props.weights_dict} func={this.toggleDrawer} />
+      see_full_inventory = <InventoryTile key={this.props.cat_name + cat_id} name={this.props.cat_name} symbol={this.props.symbol} cat_color={category_colors[cat_id]} weights_dict={this.props.weights_dict} func={this.toggleDrawer} />
     }
 
 
@@ -143,7 +146,7 @@ export class CategoryDrawer extends React.Component {
               <img className="close_btn_div" src={x_icon} onClick={this.close} alt="X" />
               <div className="drawer_title h4" style={{ color: color }} >{this.state.cat_name}</div>
               <div className="cat_drawer_symbol">
-                {/* {this.state.cat_image} */}
+                {this.state.cat_image}
                 {symbol}
               </div>
             </div>
@@ -208,10 +211,15 @@ export class ItemInfo extends Component {
     var business_id = this.props.business_id,
       item_id = this.props.item_id,
       min_date = get_old_date(new Date(), 30)
-
-    if (business_id) {
+      
+    if (!business_id) {
+      console.log("No business id enterd. nothing happend")
+    }
+    else if(!item_id){
+      console.log("No item id enterd. nothing happend")
+    } 
+    else {
       request += "?business_id=" + business_id + "&item_id=" + item_id + "&min_date=" + min_date
-      console.log(request)
       var callback = this.devide_data
       $.ajax({
         url: request,
@@ -223,16 +231,19 @@ export class ItemInfo extends Component {
         }
       });
     }
-    else {
-      console.log("no user id enterd. nothing happend")
-    }
   }
   render_chart(prop_datasets,labels, id) {
+    var weight_info= this.props.weight_info,
+    setName = weight_info?weight_info["item_name"]:Dictionary["unknown"]
+    
+
+    console.log()
+
     var ctx = document.getElementById(id).getContext('2d');
     var sets = []
     if(prop_datasets){
         console.log(prop_datasets)
-        prop_datasets.forEach(set=>{sets.push({label:set[0],data:set[1]})})
+        prop_datasets.forEach(set=>{sets.push({label:setName,data:set[1]})})
     }
      new Chart(ctx, {
         type: 'line',
@@ -265,22 +276,22 @@ export class ItemInfo extends Component {
       <div className="item_info">
         <canvas className="usage_chart" id={this.state.chart_id}/>
         <div className="cube_container">
-          <InfoCube additional_data="skl" />
-          <InfoCube additional_data="skl" />
-          <InfoCube additional_data="skl" />
+          <InfoCube key={1} additional_data="skl" />
+          <InfoCube key={2} additional_data="skl" />
+          <InfoCube key={3} additional_data="skl" />
         </div>
         <div className="cube_container">
-          <InfoCube additional_data="skl" />
-          <InfoCube additional_data="skl" />
+          <InfoCube key={4} additional_data="skl" />
+          <InfoCube key={6} additional_data="skl" />
         </div>
         <div className="cube_container">
-          <InfoCube additional_data="skl" />
-          <InfoCube additional_data="skl" />
-          <InfoCube additional_data="skl" />
+          <InfoCube key={5} additional_data="skl" />
+          <InfoCube key={7} additional_data="skl" />
+          <InfoCube key={8} additional_data="skl" />
         </div>
         <div className="cube_container">
-          <InfoCube additional_data="skl" />
-          <InfoCube additional_data="skl" />
+          <InfoCube key={9} additional_data="skl" />
+          <InfoCube key={10} additional_data="skl" />
         </div>
       </div>
     );

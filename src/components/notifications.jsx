@@ -217,9 +217,12 @@ export class NotificationCategory extends Component {
 
                 if (items_in_level) {
                     Object.keys(items_in_level).forEach(item_id => {
-                        var obj = items_in_level[item_id]
-                        console.log(obj)
-                        page.push(<Notification key={item_id + notification_level + "notification"} notification_level={obj["notification_level"]} item_name={obj["item_name"]} total_weight={obj["total_weight"]} item_id={item_id} unit={getUnitById(obj["unit"])} order_details={obj["order_details"]} />)
+                        var item_info = items_in_level[item_id]
+                        page.push(<Notification key={item_id + notification_level + "notification"} 
+                        notification_level={item_info["notification_level"]} item_name={item_info["item_name"]} 
+                        total_weight={item_info["total_weight"]} item_id={item_id} 
+                        supplier_id={item_info["supplier_id"]}
+                        unit={getUnitById(item_info["unit"])} order_details={item_info["order_details"]} />)
                     })
                 }
             })
@@ -230,8 +233,6 @@ export class NotificationCategory extends Component {
     }
 
     render() {
-        
-
         return (
             <div className="notification_category_container">
                 <NotificationHeader key={"header" + this.props.cat_type + this.props.category_id} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} supplier_dict={this.props.supplier_dict} cat_id={this.props.category_id} />
@@ -254,12 +255,13 @@ export class Notification extends Component {
             console.log("no notification configerd for notification_level " + notification_level)
         }
         else
+        
             this.state = {
                 notification_level: notification_level,
                 item_name: props.item_name,
                 total_weight: props.total_weight,
                 message: props.message ? props.message : notification_dict[notification_level]["message"],
-                action_btn: action_btn(props.defult_weight, notification_level, props.item_name, props.order_details),
+                action_btn: action_btn(props.defult_weight, notification_level, props.item_name, props.order_details,this.props.item_id,this.props.supplier_id),
                 error_symbol: notification_dict[notification_level]["error_symbol"],
                 color: notification_dict[notification_level]["color"],
                 unit: props.unit
@@ -296,6 +298,7 @@ export class Notification extends Component {
 
 
 class AlertNotifications extends Component {
+    //notification component for the alert area in the inventory page
     constructor(props) {
         super(props);
         this.state = {
@@ -310,7 +313,7 @@ class AlertNotifications extends Component {
         if (notifications && level) {
             Object.keys(notifications).forEach(key => {
                 var notification = notifications[key]
-                page.push(<div className="simple_notification"><div className="cart_container">{action_btn(null, level - 1, notification["item_name"], notification["order_details"])}</div>
+                page.push(<div className="simple_notification"><div className="cart_container">{action_btn(null, level - 1, notification["item_name"], notification["order_details"],key,notification["supplier_id"])}</div>
                     {notification["item_name"]} <div class="center_items notification_weight"> {notification["total_weight"].toFixed(1).replace(/\.0+$/, '')} {getUnitById(notification["unit"]) }</div>
                 </div>)
             })

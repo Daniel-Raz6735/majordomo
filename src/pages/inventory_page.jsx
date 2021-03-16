@@ -49,7 +49,7 @@ export class AddToOrder extends Component {
       quantity: 10,
       min: 1,
       max: 99,
-      unit: props.unit ? getUnitById(props.unit) : Dictionary["unknown"]
+      unit: props.unit
     };
     this.close = this.close.bind(this);
     this.open = this.open.bind(this);
@@ -89,14 +89,20 @@ export class AddToOrder extends Component {
   //   this.setState({value:value})
   //   console.log(value)
   // }
-
+  
   addOrder(value) {
-    console.log(value)
-
+    var unit = this.state.unit,
+    title = this.state.title
+    console.log(unit)
     let dict = {
-      item_id: parseInt(this.props.item_id), order_id: parseInt(this.props.order_id), business_id: this.props.business_id,
-      supplier_id: this.props.supplier_id, amount: value, unit: this.state.unit
+      business_id: this.props.business_id,
+      item_id: parseInt(this.props.item_id), 
+      order_id: parseInt(this.props.order_id)?parseInt(this.props.order_id):0, 
+      supplier_id: this.props.supplier_id, 
+      amount: value, 
+      unit: unit
     }
+    console.log(dict)
 
     let request = base_url + "/order/add/item"
 
@@ -108,14 +114,15 @@ export class AddToOrder extends Component {
       // processData: true,
       // enCode: true,
       success: function (res) {
-          
-          console.log(res)
+        console.log(unit)
+        scree_alert('success',dict["amount"],getUnitById(unit),title);
+        console.log(res)
       },
       error: function (err) {
-          
-          console.log(err)
+
+        console.log(err)
       }
-  });
+    });
 
   }
 
@@ -125,7 +132,6 @@ export class AddToOrder extends Component {
 
 
   render() {
-    console.log(this.props.unit)
     var button_text = (this.state.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"],
       btn_color = "#73D504",
       btn = <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />,
@@ -160,7 +166,7 @@ export class AddToOrder extends Component {
             </div>
             <Quantity value={this.state.quantity} handleMinus={this.handleMinus} handlePlus={this.handlePlus} defult_val={this.state.defult_val} unit={this.state.unit} />
 
-            <button className="add_to_order_btn" onClick={() => { open('success'); this.addOrder(this.state.quantity); this.close() }} style={{ backgroundColor: btn_color }} >
+            <button className="add_to_order_btn" onClick={() => {  this.addOrder(this.state.quantity); this.close() }} style={{ backgroundColor: btn_color }} >
               {Dictionary["add_to_order"]}
             </button>
             <div className="model_footer_xs" onClick={() => { $("#reset_frame").val("OrdersPage").change() }}>{Dictionary["go_to_orders"]}</div>
@@ -172,11 +178,11 @@ export class AddToOrder extends Component {
   }
 }
 
-function open(funcName) {
+function scree_alert(funcName,amount,unit,item_name) {
 
   note[funcName]({
-    title: "Item added successfully",
-    description: <div >10 kg tomato</div>
+    title: Dictionary["item_added"],
+    description: <div >{amount} {unit} {item_name} </div>
   });
 }
 
@@ -190,13 +196,11 @@ export class Quantity extends Component {
 
   }
 
-
   render() {
-    console.log(getUnitById (this.props.unit))
     return (
       <div className="quantity_container">
         <div className="quantity_select minus_symbol" onClick={this.props.handleMinus} >-</div>
-        <input type="text" className="quantity_window" name="quantity window" style={{ cursor: "default" }} defaultValue={this.props.defaultValue} dir={getRTL()} value={this.props.value + " " +  Dictionary[getUnitById(this.props.unit)]} disabled />
+        <input type="text" className="quantity_window" name="quantity window" style={{ cursor: "default" }} defaultValue={this.props.defaultValue} dir={getRTL()} value={this.props.value + " " + Dictionary[getUnitById(this.props.unit)]} disabled />
         <div className="quantity_select plus_symbol" onClick={this.props.handlePlus}>+</div>
       </div>)
   }

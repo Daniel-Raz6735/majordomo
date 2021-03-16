@@ -4,7 +4,7 @@ import './home_page.css'
 import { Notification } from '../../components/notifications'
 import { category_names, category_symbols, notification_dict } from '../../components/notifications_data';
 import { CategoryDrawer } from '../../components/drawer';
-import { getTime } from '../../Dictionary';
+import { Dictionary, getTime } from '../../Dictionary';
 import { getUnitById } from '../../components/data_dictionary';
 
 
@@ -28,12 +28,12 @@ export class HomePage extends Component {
         var notfication = this.props.dict["notifications"]["category"]
         var tiles = this.props.dict["weights"]["category"]
 
-
+        console.log(tiles)
         return (
             <div className="home_page">
                 <img alt="Majordomo logo" className="majordomoLogo" src={logo} ></img>
                 <NotificationPeeker dict={notfication} />
-                <InentoryTileContainer dict={tiles} />
+                <InentoryTileContainer key={"tile"} dict={tiles} />
             </div>
 
         );
@@ -56,14 +56,16 @@ export class NotificationPeeker extends Component {
 
     componentDidMount() {
         var page = []
-
-        Object.keys(this.props.dict).forEach(cat => {
-            var temp = this.props.dict[cat]
-            Object.keys(temp).forEach(key => {
-                var obj = temp[key]
-                Object.keys(obj).forEach(key2 => {
-                    var obj2 = obj[key2]
-                    page.push(<Notification notification_level={obj2["notification_level"]} item_name={obj2["item_name"]} total_weight={obj2["total_weight"]} unit={getUnitById(obj2["unit"])} order_details={obj2["order_details"]} />)
+        Object.keys(this.props.dict).forEach(level => {
+            var level_dict = this.props.dict[level]
+            Object.keys(level_dict).forEach(supplier_id => {
+                var supplier_info = level_dict[supplier_id]
+                Object.keys(supplier_info).forEach(item_id => {
+                    var item_info = supplier_info[item_id]
+                    page.push(<Notification notification_level={item_info["notification_level"]} 
+                                            item_name={item_info["item_name"]} total_weight={item_info["total_weight"]} 
+                                            unit={getUnitById(item_info["unit"])} order_details={item_info["order_details"]}
+                                            item_id={item_id} supplier_id={item_info["supplier_id"]} />)
                 })
             })
         })
@@ -75,7 +77,7 @@ export class NotificationPeeker extends Component {
     
         return (
             <div className="home_notification_inventory">
-                <div className="home_titles"><div>Notifications</div>  <div>{getTime()}</div></div>
+                <div className="home_titles"><div>{Dictionary["notifications"]}</div>  <div>{getTime()}</div></div>
                 <div className="notification_peeker">
                     {this.state.page}
                 </div>
@@ -121,7 +123,7 @@ export class InentoryTileContainer extends Component {
 }
 
 export class InventoryTile extends Component {
-
+//previews the inventory tilels that a click on them opens the inventory drawer
     constructor(props) {
         super(props);
         this.state = {

@@ -41,6 +41,7 @@ export const Dictionary = new LocalizedStrings({
     go_to_orders: "Go to orders",
 
     //notifications
+    notifications: "Notifications",
     just_few: "Just a few left",
     running_low: "Running low",
     must_use: "Must use ASAP",
@@ -52,6 +53,7 @@ export const Dictionary = new LocalizedStrings({
     un:"units",
     looks_good: "Inventory looks good",
     serach_placeholder: "what are you looking for",
+    item_added: "Item added successfully",
 
     //category names
     fish: "Fish",
@@ -104,6 +106,7 @@ export const Dictionary = new LocalizedStrings({
     go_to_orders: "מעבר להזמנות",
 
     //notifications
+    notifications: "התראות",
     just_few: "נותרו רק כמה",
     running_low: "אוזל",
     must_use: "צריך להשתמש בדחיפות",
@@ -115,6 +118,7 @@ export const Dictionary = new LocalizedStrings({
     looks_good: "המלאי נראה טוב",
     suggest_dish: "הצע מנה",
     serach_placeholder: "מה אתה מחפש",
+    item_added: "מוצר התווסף בהצלחה",
 
     //category names
     fish: "דגים",

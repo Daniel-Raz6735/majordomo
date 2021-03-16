@@ -49,7 +49,6 @@ export class SiteFrame extends Component {
             // this.change_tab(this.state.tab_name);
             window.location.reload()
         }
-        console.log(ws)
         this.setState({ socket: ws });
 
         this.get_initial_data(this.process_initial_data, 1, this.state.tab_name)
