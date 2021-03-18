@@ -39,9 +39,10 @@ export const notification_dict = {
 }
 
 export function action_btn(defult_val, level, title, order_details,item_id,supplier_id) {
-    var val = 10,
+    var val,
         unit = 1,
         is_in_order = false
+        console.log(order_details)
     if (order_details && order_details["amount"]) {
         is_in_order = true
         val = order_details["amount"]

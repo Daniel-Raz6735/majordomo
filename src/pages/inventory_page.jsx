@@ -44,9 +44,13 @@ export class AddToOrder extends Component {
       kind: props.kind,
       title: props.title,
       is_in_order: props.is_in_order,
-      defult_val: props.defult_val ? props.defult_val : 10,
+      // defult_val: props.defult_val ? props.defult_val : 10,
       incraments: props.incraments ? props.incraments : 1,
-      quantity: 10,
+      quantity: props.defult_val ? props.defult_val : 10,
+      div_content: "",
+      btn_color: "#73D504",
+      btn: <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />,
+      button_text :(this.props.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"],
       min: 1,
       max: 99,
       unit: props.unit
@@ -89,23 +93,26 @@ export class AddToOrder extends Component {
   //   this.setState({value:value})
   //   console.log(value)
   // }
-  
+
   addOrder(value) {
     var unit = this.state.unit,
-    title = this.state.title
+      title = this.state.title
     console.log(unit)
+
+    // order details dictionary
     let dict = {
       business_id: this.props.business_id,
-      item_id: parseInt(this.props.item_id), 
-      order_id: parseInt(this.props.order_id)?parseInt(this.props.order_id):0, 
-      supplier_id: this.props.supplier_id, 
-      amount: value, 
+      item_id: parseInt(this.props.item_id),
+      order_id: parseInt(this.props.order_id) ? parseInt(this.props.order_id) : 0,
+      supplier_id: this.props.supplier_id,
+      amount: value,
       unit: unit
     }
     console.log(dict)
 
     let request = base_url + "/order/add/item"
 
+    // 
     $.ajax({
       url: request,
       type: "POST",
@@ -115,43 +122,72 @@ export class AddToOrder extends Component {
       // enCode: true,
       success: function (res) {
         console.log(unit)
-        scree_alert('success',dict["amount"],getUnitById(unit),title);
+        scree_alert('success', dict["amount"], getUnitById(unit), title);
         console.log(res)
       },
       error: function (err) {
 
         console.log(err)
       }
+
+
     });
 
+    // here we can edit badge for items in order
+    if(this.state.kind === 0){
+
+      let div_content
+  
+      div_content = <Badge content={value} >{this.state.btn}</Badge>
+  
+      div_content = <div className="cart_container">
+        <div className="cart_photo_container">{div_content}</div>
+        <div className="cart_text_container">{this.state.button_text}</div>
+      </div>
+  
+      this.setState({ div_content:div_content,
+      quantity:value})
+    }
   }
 
   componentDidMount() {
     // console.log(this.props.order_dict)
+
+    // var button_text = (this.state.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"]
+    // btn = <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />
+    let div_content = ""
+
+    // add to order button.
+    if (this.state.kind === 0) {
+
+      // item is allready in order
+      if (this.state.is_in_order)
+        div_content = <Badge content={this.state.defult_val}>{this.state.btn}</Badge>
+
+      else
+        div_content = this.state.btn
+
+      div_content = <div className="cart_container">
+        <div className="cart_photo_container">{div_content}</div>
+        <div className="cart_text_container">{this.state.button_text}</div>
+      </div>
+
+
+    }
+    // add to order from category drawer.
+    else if (this.state.kind === 1)
+      div_content = Dictionary.add_to_order
+
+    this.setState({ div_content })
   }
 
 
   render() {
-    var button_text = (this.state.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"],
-      btn_color = "#73D504",
-      btn = <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />,
-      div_content = ""
-    if (this.state.kind === 0) {
-      if (this.state.is_in_order)
-        div_content = <Badge content={this.state.defult_val}>{btn}</Badge>
-      else
-        div_content = btn
-      div_content = <div className="cart_container">
-        <div className="cart_photo_container">{div_content}</div>
-        <div className="cart_text_container">{button_text}</div>
-      </div>
-    }
-    else if (this.state.kind === 1)
-      div_content = Dictionary.add_to_order
+
 
     return (
       <div className="add_to_cart_modal_container">
-        <ButtonToolbar><div className="add_to_order" onClick={() => this.open('xs')} >{div_content}</div> </ButtonToolbar>
+        <ButtonToolbar><div className="add_to_order" onClick={() => this.open('xs')} >{this.state.div_content}</div> </ButtonToolbar>
         <Modal size={this.state.size} show={this.state.show} onHide={this.close}>
 
 
@@ -166,7 +202,7 @@ export class AddToOrder extends Component {
             </div>
             <Quantity value={this.state.quantity} handleMinus={this.handleMinus} handlePlus={this.handlePlus} defult_val={this.state.defult_val} unit={this.state.unit} />
 
-            <button className="add_to_order_btn" onClick={() => {  this.addOrder(this.state.quantity); this.close() }} style={{ backgroundColor: btn_color }} >
+            <button className="add_to_order_btn" onClick={() => { this.addOrder(this.state.quantity); this.close() }} style={{ backgroundColor: this.state.btn_color }} >
               {Dictionary["add_to_order"]}
             </button>
             <div className="model_footer_xs" onClick={() => { $("#reset_frame").val("OrdersPage").change() }}>{Dictionary["go_to_orders"]}</div>
@@ -178,7 +214,7 @@ export class AddToOrder extends Component {
   }
 }
 
-function scree_alert(funcName,amount,unit,item_name) {
+function scree_alert(funcName, amount, unit, item_name) {
 
   note[funcName]({
     title: Dictionary["item_added"],
