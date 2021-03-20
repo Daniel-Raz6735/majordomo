@@ -162,7 +162,7 @@ export class AddToOrder extends Component {
 
       // item is allready in order
       if (this.state.is_in_order)
-        div_content = <Badge content={this.state.defult_val}>{this.state.btn}</Badge>
+        div_content = <Badge content={this.state.quantity}>{this.state.btn}</Badge>
 
       else
         div_content = this.state.btn
@@ -200,7 +200,7 @@ export class AddToOrder extends Component {
             <div className="model_item_name clamp_line">
               {this.state.title}
             </div>
-            <Quantity value={this.state.quantity} handleMinus={this.handleMinus} handlePlus={this.handlePlus} defult_val={this.state.defult_val} unit={this.state.unit} />
+            <Quantity value={this.state.quantity} handleMinus={this.handleMinus} handlePlus={this.handlePlus} defaultValue={this.state.quantity} unit={this.state.unit} />
 
             <button className="add_to_order_btn" onClick={() => { this.addOrder(this.state.quantity); this.close() }} style={{ backgroundColor: this.state.btn_color }} >
               {Dictionary["add_to_order"]}
