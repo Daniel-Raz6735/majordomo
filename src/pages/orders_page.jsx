@@ -258,17 +258,31 @@ class Order extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            quantity:props.order["amount"]
+            quantity:props.order["amount"],
+            incraments:props.incraments? props.incraments:1,
+            min:1,
+            max:99
         }
-        this.handle_plus = this.handle_plus.bind(this);
-        this.handle_minus = this.handle_minus.bind(this);
+        this.handlePlus = this.handlePlus.bind(this);
+        this.handleMinus = this.handleMinus.bind(this);
     }
-    handle_plus(){
-        
-    }
-    handle_minus(){
-
-    }
+    handleMinus() {
+        var new_val = this.state.quantity - this.state.incraments;
+        console.log(new_val)
+        if (new_val >= this.state.min)
+          this.setState({ quantity: new_val });
+        else
+          alert("enterd to little")
+      }
+    
+      handlePlus() {
+        var new_val = this.state.quantity + this.state.incraments;
+        console.log(new_val)
+        if (new_val <= this.state.max)
+          this.setState({ quantity: new_val });
+        else
+          alert("enterd to much")
+      }
 
 
     render() {
@@ -284,7 +298,7 @@ class Order extends Component {
                     <div className="order_item_name">
                         {this.props.item_id}
                     </div>
-                    <Quantity defult_val={quantity} value={this.state.quantity} unit={unit} />
+                    <Quantity handlePlus={this.handlePlus} handleMinus={this.handleMinus}  defult_val={quantity} value={this.state.quantity} unit={unit} />
                 </div>
             )
         }
