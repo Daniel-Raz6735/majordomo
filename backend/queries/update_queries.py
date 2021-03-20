@@ -10,40 +10,6 @@ from fastapi import HTTPException
 
 
 
-def insert_to_table_query(table_name, cols, values):
-    """creates a insert SQL query using the parameters
-        input: table name: string with table name
-                cols: list of column names.
-                values: list of lists: [[col1 val,  col2 val,....],[...]]
-        output: insert statement if legal parameters. None if not"""
-    if not table_name or not cols or not values:
-        return None, 400
-    num_of_cols = len(cols)
-    query = "INSERT INTO " + table_name + " ("
-    for col in cols:
-        query += col + ", "
-    query = query[:-2]
-    query += ") \nVALUES ("
-    entered_loop = False
-    for value in values:
-        if len(value) != num_of_cols:
-            continue
-        for val in value:
-            entered_loop = True
-            if type(val) == str and "to_timestamp" not in val:
-                query += "'" + val + "', "
-            else:
-                if not val and val != 0:
-                    query += "null, "
-                else:
-                    query += str(val) + ", "
-        query = query[:-2] + "),\n("
-    query = query[:-3] + ";"
-    if entered_loop:
-        return query, 200
-    else:
-        return "Bad request", 400
-
 
 def convert_val(val):
     if type(val) == str and "to_timestamp" not in val:
@@ -105,15 +71,6 @@ def update_order_content_query(item_id, order_id, amount, unit, price_per_unit=N
     return update_table_query("order_content", cols_to_set, vals_to_set, conditions, include_t_name)
 
 
-def add_empty_order(business_id, supplier_id):
-    """Creates an SQL query for adding an empty order based on supplier_id and a business_id"""
-    cols = ["business_id", "supplier_id"]
-    vals = [[business_id, supplier_id]]
-    query, res_code = insert_to_table_query("orders", cols, vals)
-    if res_code != 200:
-        print(query)
-        raise HTTPException(status_code=500, detail="Server error")
-    return query, res_code
 
 
 class UpdateQueries:
@@ -172,7 +129,7 @@ class UpdateQueries:
             raise HTTPException(status_code=400, detail="Wrong supplier id sent")
 
         # add item to order
-        insert_query, res_code = insert_to_table_query('order_content',
+        insert_query, res_code = self.insert_to_table_query('order_content',
                                                        ['item_id', "order_id", "amount", "unit"],
                                                        [[item_id, order_id, amount, unit]])
         if res_code != 200:
@@ -197,7 +154,7 @@ class UpdateQueries:
     def add_order(self, business_id, supplier_id):
         """Adds a new order entry"""
 
-        query, res_code = add_empty_order(business_id, supplier_id)
+        query, res_code = self.add_empty_order(business_id, supplier_id)
         if res_code != 200:  # unable to get an add empty order query
             print(query)
             raise HTTPException(status_code=500, detail="Server error")
@@ -215,3 +172,52 @@ class UpdateQueries:
             raise HTTPException(status_code=500, detail="Server error")
         supply_info, res_code = self.connection.get_result(query)
         return supply_info, res_code
+
+    def add_empty_order(self, business_id, supplier_id):
+        """Creates an SQL query for adding an empty order based on supplier_id and a business_id"""
+        cols = ["business_id", "supplier_id"]
+        vals = [[business_id, supplier_id]]
+        query, res_code = self.insert_to_table_query("orders", cols, vals)
+        if res_code != 200:
+            print(query)
+            raise HTTPException(status_code=500, detail="Server error")
+        return query, res_code
+
+    @staticmethod
+    def insert_to_table_query(table_name, cols, values):
+        """creates a insert SQL query using the parameters
+            input: table name: string with table name
+                    cols: list of column names.
+                    values: list of lists: [[col1 val,  col2 val,....],[...]]
+            output: insert statement if legal parameters. None if not"""
+        if not table_name or not cols or not values:
+            return None, 400
+        num_of_cols = len(cols)
+        query = "INSERT INTO " + table_name + " ("
+        for col in cols:
+            query += col + ", "
+        query = query[:-2]
+        query += ") \nVALUES ("
+        entered_loop = False
+        for value in values:
+            if len(value) != num_of_cols:
+                continue
+            for val in value:
+                entered_loop = True
+                if type(val) == str and "to_timestamp" not in val:
+                    query += "'" + val + "', "
+                else:
+                    if not val and val != 0:
+                        query += "null, "
+                    else:
+                        query += str(val) + ", "
+            query = query[:-2] + "),\n("
+        query = query[:-3] + ";"
+        if entered_loop:
+            return query, 200
+        else:
+            return "Bad request", 400
+
+
+
+

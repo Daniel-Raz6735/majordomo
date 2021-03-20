@@ -50,11 +50,12 @@ const { Collapse } = Animation;
 // }
 // export default OrdersPage
 
-function sort_by_key_val(jsObj, key, reverse) {
+export function sort_by_key_val(jsObj, sort_by_key, reverse) {
+    //sort an array of key and value [key,val]
     var sortedArray = []
     Object.keys(jsObj).forEach(key => {
         // Push each JSON Object entry in array by [value, key]
-        if (key)
+        if (sort_by_key)
             sortedArray.push([jsObj[key], key]);
         else
             sortedArray.push([key, jsObj[key]]);
@@ -139,10 +140,10 @@ export class OrdersPage extends Component {
                         sellers[key] = 0
                 })
                 var sorted_sellers = sort_by_key_val(sellers, false, true)
-                let temp = dict["weights"]["supplier"]
+                let weight_sup_dict = dict["weights"]["supplier"]
                 console.log(sorted_sellers)
-                sorted_sellers.forEach(obj => {
-                    page.push(<OrderCategory weights_dict={temp[obj[1]]} supplier={suppliers_dict[obj[1]]} />)
+                sorted_sellers.forEach(supplier => {
+                    page.push(<OrderCategory weights_dict={weight_sup_dict[supplier[1]]} supplier={suppliers_dict[supplier[1]]} />)
                 })
 
 

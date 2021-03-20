@@ -29,5 +29,5 @@ def add_weight(container_id, weight):
 
 
 if __name__ == '__main__':
-    add_weight(11, 25.2745)
+    add_weight(1, 19)
 

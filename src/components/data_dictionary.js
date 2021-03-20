@@ -296,18 +296,12 @@ export function getUnitById(id){
         default:
         case 1:
             return "kg"
-            
-        
         case 2:
-            return "lb"
-            
-        
+            return "lb"       
         case 3:
             return "un"
-
         case 4:
             return "li"
-            
     }
 }
 
