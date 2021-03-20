@@ -79,10 +79,11 @@ export class Containers extends Component {
                     
                 if (!order_details)
                     order_details = {}
+                    
                 res.push(
                     <ItemBlock {...this.props} item_id={key} key={key + "" + weight["item_name"]} name={weight["item_name"]}
                         weight={weight["total_weight"]} weight_date={weight["date"]} symbol={weight["notification_level"]}
-                        unit={weight["unit"]} defult_val={order_details["amount"]} order_dict={weights_dict}
+                        unit={weight["unit"]} defult_val={order_details["amount"]} order_dict={order_details}
                         business_id={1} supplier_id={supplier_details["0"]} order_id={0} />)
             });
         }
@@ -124,6 +125,7 @@ export class ItemBlock extends Component {
 
 
     render() {
+        console.log(this.props.order_dict)
 
         let sym
         switch (this.props.symbol) {
@@ -154,7 +156,7 @@ export class ItemBlock extends Component {
                         <div className="weight_date">{this.state.weight_date} </div>
                     </div>
                 </div>
-                <AddToOrder item_id={this.props.item_id} order_id={this.props.item_id} business_id={this.props.business_id} supplier_id={this.props.supplier_id} unit={this.state.unit}
+                <AddToOrder item_id={this.props.item_id}  business_id={this.props.business_id} supplier_id={this.props.supplier_id} unit={this.state.unit}
                     kind={1} title={this.state.name} defult_val={this.state.defult_val} is_in_order={this.state.is_in_order} order_dict={this.props.order_dict} />
             </div>
         )

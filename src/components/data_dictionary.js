@@ -9,7 +9,7 @@ export function create_initial_data_dict(data) {
         dict["suppliers"] = create_suppliers_dict(data["suppliers"], dict["orders"])
         dict["notifications"] = create_notification_dict(data["notifications"], dict["suppliers"], dict["orders"])
         dict["weights"] = create_weights_dict(data["weights"], dict["suppliers"], dict["notifications"], dict["orders"])
-        // console.log(dict)
+        console.log(dict)
         // download(JSON.stringify(dict) , 'dict.json', 'text/plain');
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
         if (!dict["weights"]) {
@@ -237,16 +237,19 @@ function create_orders_dict(orders_data) {
             let supplier_id = element["supplier_id"],
                 item_id = element["item_id"],
                 amount = element["amount"],
-                unit = element["unit"]
+                unit = element["unit"],
+                order_id = element["order_id"]
             if (supplier_id && item_id && amount && unit) {
 
                 if (!suppliers[supplier_id])
                     suppliers[supplier_id] = {}
                 suppliers[supplier_id][item_id] = {
+                    "order_id":order_id,
                     "amount": amount,
                     "unit": unit
                 }
                 items[item_id] = {
+                    "order_id":order_id,
                     "amount": amount,
                     "unit": unit
                 }

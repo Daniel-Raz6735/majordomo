@@ -73,7 +73,7 @@ export class AddToOrder extends Component {
 
   handleMinus() {
     var new_val = this.state.quantity - this.state.incraments;
-    console.log(new_val)
+    // console.log(new_val)
     if (new_val >= this.state.min)
       this.setState({ quantity: new_val });
     else
@@ -82,7 +82,7 @@ export class AddToOrder extends Component {
 
   handlePlus() {
     var new_val = this.state.quantity + this.state.incraments;
-    console.log(new_val)
+    // console.log(new_val)
     if (new_val <= this.state.max)
       this.setState({ quantity: new_val });
     else
@@ -103,7 +103,7 @@ export class AddToOrder extends Component {
     let dict = {
       business_id: this.props.business_id,
       item_id: parseInt(this.props.item_id),
-      order_id: parseInt(this.props.order_id) ? parseInt(this.props.order_id) : 0,
+      order_id: this.props.order_dict ? parseInt(this.props.order_dict["order_id"]) : 0,
       supplier_id: this.props.supplier_id,
       amount: value,
       unit: unit
@@ -151,7 +151,7 @@ export class AddToOrder extends Component {
   }
 
   componentDidMount() {
-    // console.log(this.props.order_dict)
+    console.log(this.props.order_dict)
 
     // var button_text = (this.state.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"]
     // btn = <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />
