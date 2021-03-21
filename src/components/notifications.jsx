@@ -10,7 +10,8 @@ import { CategoryDrawer } from './drawer';
 import v_icon from '../images/icons/v icon.svg'
 import { ButtonsComponent } from './bars';
 import { confirm_papulation, getUnitById } from './data_dictionary';
-import { notifications_levels } from './notifications_data'
+import { notifications_levels } from './notifications_data';
+
 
 
 const { Collapse } = Animation;
@@ -214,6 +215,7 @@ export class NotificationCategory extends Component {
             confirm_papulation(notification_data, "extract items NotificationCategory")
             Object.keys(notification_data).forEach(notification_level => {
                 var items_in_level = notification_data[notification_level]
+                
 
                 if (items_in_level) {
                     Object.keys(items_in_level).forEach(item_id => {
@@ -322,7 +324,8 @@ class AlertNotifications extends Component {
         return (
             <div className="alert_notifications" style={{ backgroundColor: notification_colors[i] }}>
                 <div className="simple_notification_header" onClick={() => this.setState({ show: !this.state.show })}>
-                    <div className="header_items" ><img className="header_symbols" alt="header symbol" src={notification_dict[level]["error_symbol"]} /></div>
+                    <div className="header_items" ><img className="header_symbols" alt="header symbol" src={notification_dict[level]["alert_filter_symbol"]} /></div>
+                    {/* <div className="header_items" ><img className="header_symbols" alt="header symbol" src={notification_dict[level]["error_symbol"]} /></div> */}
                     <div className="header_items">{notification_dict[level]["message"]}</div></div>
                 <Collapse in={this.state.show} key={"notification_collapse" + level} >
                     {(props, ref) => <Panel {...props} ref={ref} key={"notification_panel" + level} notifications={page} />}

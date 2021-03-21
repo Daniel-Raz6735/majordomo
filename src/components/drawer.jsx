@@ -72,8 +72,10 @@ export class CategoryDrawer extends React.Component {
         newDict[key] = dict[key]
       }
     })
-
-    this.setState({ page: <Containers weights_dict={newDict} openItem={this.switchContent} /> });
+    var page = []
+    page.push(<SearchBar handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />)
+    page.push(<Containers weights_dict={newDict} openItem={this.switchContent} />)
+    this.setState({ page});
 
   }
   switchContent(item_id) {
@@ -123,6 +125,8 @@ export class CategoryDrawer extends React.Component {
 
     else { // home page
       title = ""
+      color = category_colors[cat_id]
+      st = "5px solid " + String(color)
       clas = "home_page_drawer"
       see_full_inventory = <InventoryTile key={this.props.cat_name + cat_id} name={this.props.cat_name} symbol={this.props.symbol} cat_color={category_colors[cat_id]} weights_dict={this.props.weights_dict} func={this.toggleDrawer} />
     }

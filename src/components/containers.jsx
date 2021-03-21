@@ -4,11 +4,11 @@ import "./containers.css"
 import { base_url } from '../index'
 import $ from 'jquery'
 import { AddToOrder } from '../pages/inventory_page';
-import red_circle from '../images/circle red warning.png'
-import triangle_warning from '../images/icons/triangle_warning.svg'
-import overflow_sign from '../images/icons/overflow sign.svg'
+import inventory_looks_good from '../images/icons/inventory looks good.svg'
 import empty_symbol from '../images/icons/empty_symbol.svg'
 import { getUnitById } from './data_dictionary';
+import { notification_colors, notification_dict, styleArr} from './notifications_data';
+
 
 
 
@@ -84,7 +84,7 @@ export class Containers extends Component {
                     <ItemBlock {...this.props} item_id={key} key={key + "" + weight["item_name"]} name={weight["item_name"]}
                         weight={weight["total_weight"]} weight_date={weight["date"]} symbol={weight["notification_level"]}
                         unit={weight["unit"]} defult_val={order_details["amount"]} order_dict={order_details}
-                        business_id={1} supplier_id={supplier_details["0"]} order_id={0} />)
+                        business_id={1} supplier_id={supplier_details["0"]} weight_dict={weight} order_id={0} />)
             });
         }
         return res;
@@ -125,29 +125,37 @@ export class ItemBlock extends Component {
 
 
     render() {
-        console.log(this.props.order_dict)
+        console.log(this.props.weight_dict)
 
         let sym
+        let color =  this.props.symbol !== -1 ? notification_colors[this.props.symbol-1]: styleArr[3]
+        let source = this.props.symbol !== -1 ? notification_dict[this.props.symbol]["alert_filter_symbol"] : inventory_looks_good
+        let messege = this.props.symbol !== -1 ? notification_dict[this.props.symbol]["message"] : " looks good"
+
         switch (this.props.symbol) {
             case 3:
-                sym = <img className="full_inventory_alert_symbol" src={overflow_sign} alt="few left" />
+                sym = <img className="full_inventory_alert_symbol" src={source} alt="few left" />
+                // sym = <img className="full_inventory_alert_symbol" src={overflow_sign} alt="few left" />
                 break;
             case 2:
-                sym = <img className="full_inventory_alert_symbol" src={triangle_warning} alt="few left" />
+                sym = <img className="full_inventory_alert_symbol" src={source} alt="few left" />
                 break;
             case 1:
-                sym = <img className="full_inventory_alert_symbol" src={red_circle} alt="few left" />
+                sym = <img className="full_inventory_alert_symbol" src={source} alt="few left" />
                 break;
             default:
-                sym = <img className="full_inventory_alert_symbol" src={empty_symbol} alt="" />
+                sym = <img className="full_inventory_alert_symbol" src={source} alt="" />
+                // sym = <img className="full_inventory_alert_symbol" src={empty_symbol} alt="" />
                 break;
         }
 
 
+        
         return (
             <div className="item_container">
+                <div className="item_squere_header" style={{background:color}} > {sym}{messege}</div>
                 <div className="item_squere" onClick={() => this.props.openItem(this.props.item_id)}>
-                    {sym}
+                    {/* {sym} */}
                     <div >
                         {this.state.name}
                     </div>
