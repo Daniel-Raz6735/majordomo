@@ -142,8 +142,11 @@ export class OrdersPage extends Component {
                 var sorted_sellers = sort_by_key_val(sellers, false, true)
                 let weight_sup_dict = dict["weights"]["supplier"]
                 console.log(sorted_sellers)
+                console.log(suppliers_dict)
                 sorted_sellers.forEach(supplier => {
-                    page.push(<OrderCategory weights_dict={weight_sup_dict[supplier[1]]} supplier={suppliers_dict[supplier[1]]} />)
+                    console.log(supplier)
+                    var supplier_id = supplier[0]
+                    page.push(<OrderCategory weights_dict={weight_sup_dict[supplier_id]} supplier={suppliers_dict[supplier_id]} />)
                 })
 
 
@@ -238,8 +241,9 @@ class OrderCategory extends Component {
 
     render() {
         // console.log(this.props.supplier)
-        console.log(this.props.weights_dict)
-        let supplier = this.props.supplier
+        console.log(this.props.supplier)
+        let supplier = this.props.supplier, supplier_name = supplier? supplier["name"]:""
+        
         // console.log(supplier)
         return (
             <div className="notification_category_container">
