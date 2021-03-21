@@ -52,6 +52,28 @@ class ReadQueries:
         return final_query, 200
 
     @staticmethod
+    def get_container_item_id_query(business_id, container_id, using_end_date=None):
+        """creates an SQL query that will return a containers item id"""
+        conditions = []
+        if business_id:
+            conditions.append(["AND", "containers.business_id", "=", int(business_id)])
+        else:
+            raise HTTPException(status_code=400, detail="No business id sent")
+        if business_id:
+            conditions.append(["AND", "containers.container_id", "=", int(container_id)])
+        else:
+            raise HTTPException(status_code=400, detail="No business id sent")
+        if using_end_date:
+            conditions.append(["AND", "containers.using_end_date", "=", "to timestamp("+using_end_date+")"])
+        else:
+            conditions.append(["AND", "containers.using_end_date", "is", "null"])
+
+        final_query, res_code = DbQueries.select_query([["containers"]], [[["item_id"]]], conditions)
+        if res_code != 200:
+            raise HTTPException(status_code=res_code, detail=final_query)
+        return final_query, 200
+
+    @staticmethod
     def get_order_by_supplier(business_id, supplier_id, open_orders=False):
         """creates an sql query that gets a specific order by supplier.
         open orders is in case the request is only open orders(orders with no date)"""

@@ -172,7 +172,8 @@ class Weighing(BaseModel):
     weight_value: float
     weighing_date: int
     last_user: int = None
-    unit: str = "kg"
+    unit: int = 1
+    business_id: int = 1
 
 
 class WeighingList(BaseModel):
@@ -182,19 +183,48 @@ class WeighingList(BaseModel):
 @app.post('/add/weight')
 async def add_weights(lis: WeighingList, client_time: int):
     """gets a WeighingList and inserts it in to the database"""
-    arr = []
-    server_time = int(time.time())
-    weight_list = lis.dict()
-    for weight in weight_list["weights"]:
-        time_gap = client_time - weight["weighing_date"]
-        weight_time = "to_timestamp(" + str(server_time - time_gap) + ")"
-        if weight["weight_value"] >= 0:
-            arr.insert(0, [weight_time, weight["container_id"], weight["weight_value"], weight["last_user"]])
-    query, res_code = createQ.insert_to_table_query("weights",
-                                                    ["weighing_date", "container_id", "weight_value", "last_user"],
-                                                    arr)
-    await manager.broadcast(f"weights updated on #{client_time}", 1)
-    return process_create_query([[query, "add weights"]], res_code)
+
+    try:
+        connection = Connection()
+        reader = readQ(connection)
+        updater = updateQ(connection)
+        arr = []
+        server_time = int(time.time())
+        weight_list = lis.dict()
+        for weight in weight_list["weights"]:
+            time_gap = client_time - weight["weighing_date"]
+            weight_time = "to_timestamp(" + str(server_time - time_gap) + ")"
+            if weight["weight_value"] >= 0:
+                query, res_code = reader.get_container_item_id_query(weight["business_id"], weight["container_id"])
+                if res_code != 200:
+                    raise HTTPException(status_code=res_code, detail=query)
+                res, res_code = connection.get_result(query)
+                if res_code != 200:
+                    raise HTTPException(status_code=res_code, detail=query)
+                item_id_dict = res[0]
+                if len(item_id_dict) > 0:
+                    item_id = item_id_dict["item_id"]
+                else:
+                    raise HTTPException(status_code=404, detail="Container has no item configured")
+                arr.insert(0, [weight_time, weight["business_id"], weight["container_id"], item_id,
+                               weight["weight_value"], weight["last_user"], weight["unit"]])
+
+        query, res_code = updater.insert_to_table_query("weights",
+                                                        ["weighing_date", "business_id", "container_id", "item_id",
+                                                         "weight_value", "last_user", "unit"],
+                                                        arr)
+
+        connection.insert_data(query, res_code)
+        await manager.broadcast(f"weights updated on #{client_time}", 1)
+        del connection
+        # return res, res_code
+        # return "success", 200
+
+
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("error: ", error)
+        raise HTTPException(status_code=400, detail="unable to add weight")
 
 
 class OrderItem(BaseModel):

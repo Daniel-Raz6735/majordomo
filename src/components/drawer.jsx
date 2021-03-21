@@ -15,6 +15,7 @@ import $ from 'jquery';
 
 
 
+
 export class CategoryDrawer extends React.Component {
   constructor(props) {
     super(props);
@@ -84,9 +85,9 @@ export class CategoryDrawer extends React.Component {
       cat_id = this.props.cat_id
     if (item_id) {
       cat_image = <div onClick={() => this.switchContent()}><img src={back_icon} alt="back" /></div>
-     
-      if(this.props.weights_dict)
-        page = <ItemInfo business_id={1} item_id={item_id} weight_info={this.props.weights_dict[item_id]}/>
+
+      if (this.props.weights_dict)
+        page = <ItemInfo business_id={1} item_id={item_id} weight_info={this.props.weights_dict[item_id]} />
       else
         console.log("No weights dict, can't render item")
     }
@@ -205,23 +206,25 @@ export class ItemInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chart_id:"food_chart" + this.props.item_id + "chart"
-    };
+      page: ""
+    }
     this.devide_data = this.devide_data.bind(this);
+    this.get_relavent_data = this.get_relavent_data.bind(this);
 
   }
+
   componentDidMount() {
     var request = base_url + '/get/item/history';
     var business_id = this.props.business_id,
       item_id = this.props.item_id,
       min_date = get_old_date(new Date(), 30)
-      
+
     if (!business_id) {
       console.log("No business id enterd. nothing happend")
     }
-    else if(!item_id){
+    else if (!item_id) {
       console.log("No item id enterd. nothing happend")
-    } 
+    }
     else {
       request += "?business_id=" + business_id + "&item_id=" + item_id + "&min_date=" + min_date
       var callback = this.devide_data
@@ -236,49 +239,144 @@ export class ItemInfo extends Component {
       });
     }
   }
-  render_chart(prop_datasets,labels, id) {
-    var weight_info= this.props.weight_info,
-    setName = weight_info?weight_info["item_name"]:Dictionary["unknown"]
-    
-
-    console.log()
-
-    var ctx = document.getElementById(id).getContext('2d');
-    var sets = []
-    if(prop_datasets){
-        console.log(prop_datasets)
-        prop_datasets.forEach(set=>{sets.push({label:setName,data:set[1]})})
-    }
-     new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets:sets,
-            
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    })
-    
-}
-
   devide_data(res) {
-    console.log(res)
-    this.render_chart([["fruit", [12, 19, 3, 5, 2, 3]]],["12:20", '15:30', '17:30', '18:20', '19:30', '21:30'],this.state.chart_id)
+    var page = [], dates_to_pull = [1, 7, 30];
+    dates_to_pull.forEach(days => {
+      var relavent_data = this.get_relavent_data(res, days)
+      page.push(<ChartComponent {...this.props} num_of_days={days} dict={relavent_data} />);
+    })
+    this.setState({ page });
+    // console.log(res)
+    // if (res && res.length > 0)
+    //   this.render_chart([["fruit", [12, 19, 3, 5, 2, 3]]], ["12:20", '15:30', '17:30', '18:20', '19:30', '21:30'], this.state.chart_id)
+    // else { }
+  }
+  get_relavent_data(res, days) {
+    var min_date = get_old_date(new Date(), days),
+      relavent_data = {}, sorted_data = {};
+    min_date = new Date(min_date * 1000)
+
+    if (res) {
+      res.forEach(weighing => {
+        var date = new Date(weighing["date"])
+        if (date >= min_date) {
+          relavent_data[date] = weighing;
+        }
+      })
+
+      var keys = Object.keys(relavent_data).sort();
+      keys.forEach(key => sorted_data[key] = relavent_data[key])
+    }
+    return sorted_data;
   }
 
   render() {
     return (
 
       <div className="item_info">
-        <canvas className="usage_chart" id={this.state.chart_id}/>
+        {this.state.page}
+      </div>
+    );
+  }
+}
+
+
+export class ChartComponent extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      num_of_days: props.num_of_days,
+      chart_id: "food_chart" + this.props.item_id + "chart" + props.num_of_days
+    };
+    this.devide_data = this.devide_data.bind(this);
+    this.pharse_date = this.pharse_date.bind(this);
+    this.render_chart = this.render_chart.bind(this);
+
+  }
+  componentDidMount() {
+    var props = this.props,
+      dict = props.dict,
+      weights = [], date_time = [];
+    console.log(dict)
+    if (dict && Object.keys(dict).length > 0) {
+      console.log(1)
+      Object.keys(dict).forEach(date => {
+        console.log(2)
+        var weight = dict[date]["weight"]
+        if (weight !== undefined) {
+          weights.push(weight);
+          date_time.push(this.pharse_date(new Date(date)));
+        }
+
+      });
+      var weight_info = this.props.weight_info,
+        setName = weight_info ? weight_info["item_name"] : Dictionary["unknown"]
+      this.render_chart([[setName, weights]], date_time, this.state.chart_id)
+    }
+    else {
+      //insert no data to show for theis time period 
+    }
+  }
+  devide_data(res) {
+    console.log(res)
+    // if (res && res.length > 0)
+
+    // else { }
+  }
+  pharse_date(date) {
+    if (!date)
+      return date
+    var new_date = new Date(date),
+      today = new Date(),
+      unix_today = get_old_date(today, 1)*1000,
+      diffarence = unix_today - new_date.getTime(),//old day is a day before at 00:00
+      res = "";
+    if (diffarence <= 86400) {//if the wight is yesterday or today
+      res += new_date.getHours() + ":" + new_date.getMinutes();
+    }
+    else {
+      res += new_date.getDate() + "/" + new_date.getMonth();
+      let year = new_date.getFullYear();
+      if (today.getFullYear() !== year)
+        res += "/" + year
+    }
+    return res;
+  }
+
+
+  render_chart(prop_datasets, labels, id) {
+    var ctx = document.getElementById(id).getContext('2d');
+    var sets = []
+    if (prop_datasets) {
+      prop_datasets.forEach(set => { sets.push({ label: set[0], data: set[1] }) })
+    }
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: sets,
+
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    })
+
+  }
+
+  render() {
+
+    return (
+      <div className="chart_container">
+
+        <canvas className="usage_chart" id={this.state.chart_id} />
         <div className="cube_container">
           <InfoCube key={1} additional_data="skl" />
           <InfoCube key={2} additional_data="skl" />
@@ -288,19 +386,11 @@ export class ItemInfo extends Component {
           <InfoCube key={4} additional_data="skl" />
           <InfoCube key={6} additional_data="skl" />
         </div>
-        <div className="cube_container">
-          <InfoCube key={5} additional_data="skl" />
-          <InfoCube key={7} additional_data="skl" />
-          <InfoCube key={8} additional_data="skl" />
-        </div>
-        <div className="cube_container">
-          <InfoCube key={9} additional_data="skl" />
-          <InfoCube key={10} additional_data="skl" />
-        </div>
       </div>
     );
   }
 }
+
 export class InfoCube extends Component {
 
   constructor(props) {
@@ -336,7 +426,12 @@ export class InfoCube extends Component {
     );
   }
 }
+
+
 function get_old_date(date, num_of_days) {
+  date = new Date(date)
+  if (!date)
+    return date
   date.setHours(0, 0, 0, 0);
   date.setDate(date.getDate() - num_of_days);
   return date.getTime() / 1000
