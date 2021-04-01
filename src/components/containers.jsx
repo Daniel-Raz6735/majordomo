@@ -7,7 +7,7 @@ import { AddToOrder } from '../pages/inventory_page';
 import inventory_looks_good from '../images/icons/inventory looks good.svg'
 import empty_symbol from '../images/icons/empty_symbol.svg'
 import { getUnitById } from './data_dictionary';
-import { notification_colors, notification_dict, styleArr} from './notifications_data';
+import { notification_colors, notification_dict, styleArr } from './notifications_data';
 
 
 
@@ -76,10 +76,10 @@ export class Containers extends Component {
                 let weight = weights_dict[key],
                     order_details = weight["order_details"],
                     supplier_details = weight["suppliers"]
-                    
+
                 if (!order_details)
                     order_details = {}
-                    
+
                 res.push(
                     <ItemBlock {...this.props} item_id={key} key={key + "" + weight["item_name"]} name={weight["item_name"]}
                         weight={weight["total_weight"]} weight_date={weight["date"]} symbol={weight["notification_level"]}
@@ -111,7 +111,7 @@ export class ItemBlock extends Component {
         this.state = {
             name: props.name,
             weight: props.weight,
-            unit: props.unit ,
+            unit: props.unit,
             weight_date: date,
             color: props.color,
             symbol: props.symbol ? props.symbol : empty_symbol,
@@ -128,7 +128,7 @@ export class ItemBlock extends Component {
         console.log(this.props.weight_dict)
 
         let sym
-        let color =  this.props.symbol !== -1 ? notification_colors[this.props.symbol-1]: styleArr[3]
+        let color = this.props.symbol !== -1 ? notification_colors[this.props.symbol - 1] : styleArr[3]
         let source = this.props.symbol !== -1 ? notification_dict[this.props.symbol]["alert_filter_symbol"] : inventory_looks_good
         let messege = this.props.symbol !== -1 ? notification_dict[this.props.symbol]["message"] : " looks good"
 
@@ -150,21 +150,20 @@ export class ItemBlock extends Component {
         }
 
 
-        
+
         return (
             <div className="item_container">
-                <div className="item_squere_header" style={{background:color}} > {sym}{messege}</div>
+                <div className="item_squere_header" style={{ background: color }} > {sym}{messege}</div>
                 <div className="item_squere" onClick={() => this.props.openItem(this.props.item_id)}>
-                    {/* {sym} */}
-                    <div >
+                    <div style={{fontWeight:"bold" ,fontSize: "13pt"}}>
                         {this.state.name}
                     </div>
-                    <div >{this.state.weight.toFixed(1).replace(/\.0+$/, '')} {" "} {getUnitById(this.state.unit)}</div>
+                    <div className="center_items notification_weight" style={{fontWeight:"bold"}} >{this.state.weight.toFixed(1).replace(/\.0+$/, '')} {" "} {getUnitById(this.state.unit)}</div>
                     <div className="last_registred" style={{ direction: getRTL() }}>{Dictionary["last_registred"] + ":"}
                         <div className="weight_date">{this.state.weight_date} </div>
                     </div>
                 </div>
-                <AddToOrder item_id={this.props.item_id}  business_id={this.props.business_id} supplier_id={this.props.supplier_id} unit={this.state.unit}
+                <AddToOrder item_id={this.props.item_id} business_id={this.props.business_id} supplier_id={this.props.supplier_id} unit={this.state.unit}
                     kind={1} title={this.state.name} defult_val={this.state.defult_val} is_in_order={this.state.is_in_order} order_dict={this.props.order_dict} />
             </div>
         )
