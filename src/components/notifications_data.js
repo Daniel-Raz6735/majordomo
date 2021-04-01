@@ -36,7 +36,7 @@ export const category_symbols = [vegetables, fruit, meet_and_fish, dairy, dry_fo
     category_names = [Dictionary["vegtables"], Dictionary["fruit"],
     Dictionary["fish"] + " " + Dictionary["and"] + Dictionary["meat"], Dictionary["dairy"],
     Dictionary["dry_foods"], Dictionary["other"]]
-const minus_one = -1;
+
 export const notification_dict = {
     "-1": { "color": styleArr[3], "error_symbol": error_symbol[6], "alert_filter_symbol": error_symbol[6], message: messages[3], "action_symbol": action_symbol[0], "action_desc": text_descp[0] },
     1: { "color": styleArr[0], "error_symbol": error_symbol[0], "alert_filter_symbol": error_symbol[3], message: messages[0], "action_symbol": action_symbol[0], "action_desc": text_descp[0] },

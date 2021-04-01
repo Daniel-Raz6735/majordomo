@@ -281,19 +281,22 @@ export class ItemPage extends Component {
     }
     var notifications_level, notification_info
     if (this.props["item_id"] && this.props["business_id"] && this.props["weight_info"]) {
-      notification_info = { ... this.props["weight_info"] }
+      notification_info = { ...this.props["weight_info"] }
       notification_info["item_id"] = this.props["item_id"]
       notification_info["business_id"] = this.props["business_id"]
       notifications_level = (this.props["notification_level"] === -1) ? "-1" : this.props["notification_level"]
       notification_info = { notification_info }
     }
 
-    console.log(this.props)
+
 
     return (
       <div className="item_info">
+        <h1 style={{ textAlign: "center" }}>{this.props.weight_info["item_name"]}</h1>
         <AlertNotifications notifications_level={notifications_level} notification_info={notification_info} />
+        <ItemDeatils dict={this.props.weight_info} />
         <div className="chart_container">
+          <h4>Usage</h4>
           <div className="chart_header">
             <Dropdown title={Dictionary[active_chart]} activeKey={active_chart}>
               {this.state.dropdown_content}
@@ -302,13 +305,13 @@ export class ItemPage extends Component {
           {chart}
         </div>
         <div className="cube_container">
-          <InfoCube key={1} additional_data="skl" />
-          <InfoCube key={2} additional_data="skl" />
-          <InfoCube key={3} additional_data="skl" />
+          <InfoCube key={1} additional_data="skl" dict={relavent_data} />
+          <InfoCube key={2} additional_data="skl" dict={relavent_data} />
+          <InfoCube key={3} additional_data="skl" dict={relavent_data} />
         </div>
         <div className="cube_container">
-          <InfoCube key={4} additional_data="skl" />
-          <InfoCube key={6} additional_data="skl" />
+          <InfoCube key={4} additional_data="skl" dict={relavent_data} />
+          <InfoCube key={6} additional_data="skl" dict={relavent_data} />
         </div>
       </div>
     );
@@ -348,6 +351,7 @@ export class ChartComponent extends Component {
       });
       var weight_info = this.props.weight_info,
         setName = weight_info ? weight_info["item_name"] : Dictionary["unknown"]
+      console.log(Math.min.apply(null, weights))
       this.render_chart([[setName, weights]], date_time, this.state.chart_id, point_colors, point_radius)
     }
     else {
@@ -430,7 +434,7 @@ export class InfoCube extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      weights: []
     };
     // this.close = this.close.bind(this);
 
@@ -439,6 +443,19 @@ export class InfoCube extends Component {
   // close(){
 
   // }
+
+  componentDidMount() {
+    var weights = []
+    if (this.props.dict) {
+      Object.keys(this.props.dict).forEach(date => {
+        var weight = this.props.dict[date]["weight"]
+        if (weight !== undefined)
+          weights.push(weight);
+      })
+    }
+    this.setState({ weights })
+  }
+
 
   render() {
 
@@ -469,4 +486,30 @@ function get_old_date(date, num_of_days) {
   date.setHours(0, 0, 0, 0);
   date.setDate(date.getDate() - num_of_days);
   return date.getTime() / 1000
+}
+
+const ItemDeatils = (props) => {
+
+  let min_max_style = {
+    fontWeight: "bold"
+  }
+
+  let divider_style = {
+    height: "unset",
+    width: "3px"
+  }
+
+  console.log(props.dict)
+
+
+  return (
+    <div className="item_details">
+      <div>Containers</div>
+      <Divider style={divider_style} vertical="true" />
+      <div className="item_min_max"><div style={min_max_style}>2.5 kg</div><div>{Dictionary["min"]}</div></div>
+      <Divider style={divider_style} vertical="true" />
+      <div className="item_min_max"><div style={min_max_style}>10 kg</div><div>{Dictionary["max"]}</div></div>
+    </div>
+  )
+
 }

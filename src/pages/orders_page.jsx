@@ -239,8 +239,7 @@ class OrderCategory extends Component {
     render() {
         // console.log(this.props.supplier)
         console.log(this.props.supplier)
-        let supplier = this.props.supplier, supplier_name = supplier? supplier["name"]:""
-        
+        let supplier = this.props.supplier
         // console.log(supplier)
         return (
             <div className="notification_category_container">

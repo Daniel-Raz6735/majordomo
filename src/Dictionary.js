@@ -42,6 +42,8 @@ export const Dictionary = new LocalizedStrings({
     30:"Past month",
     7:"Past week",
     1:"Past day",
+    min:"Minimum",
+    max:"Maximum",
 
     //notifications
     notifications: "Notifications",
@@ -111,6 +113,8 @@ export const Dictionary = new LocalizedStrings({
     30:"חודש שעבר",
     7:"שבוע שעבר",
     1:"יום שעבר",
+    min:"מינימום",
+    max:"מקסימום",
 
     //notifications
     notifications: "התראות",

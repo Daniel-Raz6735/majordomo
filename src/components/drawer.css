@@ -103,6 +103,24 @@
 /* .notification_toggler{
     width: fit-content;
 } */
+
+.item_info{
+    color: black;
+}
+
+.item_details{
+    display: flex;
+    background-color: #D6D6D6;
+    justify-content: space-evenly;
+    color: #A1A1A1;
+}
+
+.item_min_max{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .info_cube{
     width: 100%;
     margin: 5px;
