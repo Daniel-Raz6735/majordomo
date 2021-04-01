@@ -87,7 +87,8 @@ export class CategoryDrawer extends React.Component {
       cat_image = <div onClick={() => this.switchContent()}><img src={back_icon} alt="back" /></div>
 
       if (this.props.weights_dict)
-        page = <ItemPage business_id={1} item_id={item_id} weight_info={this.props.weights_dict[item_id]} />
+        page = <ItemPage business_id={1} item_id={item_id} notification_level={this.props.weights_dict[item_id]["notification_level"]} weight_info={this.props.weights_dict[item_id]} />
+
       else
         console.log("No weights dict, can't render item")
     }
@@ -283,10 +284,10 @@ export class ItemPage extends Component {
       notification_info = { ... this.props["weight_info"] }
       notification_info["item_id"] = this.props["item_id"]
       notification_info["business_id"] = this.props["business_id"]
-      notifications_level = (this.props["notification_level"]==-1)?"-1":this.props["notification_level"]
-      notification_info = {notification_info}
+      notifications_level = (this.props["notification_level"] === -1) ? "-1" : this.props["notification_level"]
+      notification_info = { notification_info }
     }
-   
+
     console.log(this.props)
 
     return (

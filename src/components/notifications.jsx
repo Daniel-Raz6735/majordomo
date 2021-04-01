@@ -308,9 +308,10 @@ export class AlertNotifications extends Component {
         }
     }
     render() {
+        console.log(this.props.notification_level)
         let page = [],
             level = this.props.notifications_level>0?this.props.notifications_level:"-1",
-            i = level - 1>0?level - 1:-1,
+            i = level - 1>=0?level - 1:-1,
             notifications = this.props.notification_info;
             console.log(notifications)
         if (notifications && level) {
