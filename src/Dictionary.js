@@ -72,6 +72,7 @@ export const Dictionary = new LocalizedStrings({
     add_item:"Add item",
     new_item:"New item",
     unknown:"Unknown",
+    cart:"Cart",
 
     //settings page
     language:"Language",
