@@ -70,7 +70,7 @@ function get_notifications_by_level(notifications_dict, category_id) {
         if (dict[key])
             count += Object.keys(dict[key]).length
     })
-  
+
     return [dict, count]
 }
 
@@ -141,7 +141,7 @@ export class NotificationList extends Component {
             else {
                 var temp = []
                 Object.keys(weights_dict).forEach(category_id => {
-                    
+
                     var notifications = get_notifications_by_level(notifications_data, category_id) ? get_notifications_by_level(notifications_data, category_id)[0] : null
                     var notifications_size = get_notifications_by_level(notifications_data, category_id) ? get_notifications_by_level(notifications_data, category_id)[1] : 0
 
@@ -154,12 +154,12 @@ export class NotificationList extends Component {
                 temp.sort((a, b) => { return b[1] - a[1] })
 
                 temp.forEach(not => {
-                page.push(not[0])
-            })
+                    page.push(not[0])
+                })
             }
 
             // sort notification by the amount of notifications
-            
+
             this.setState({ page });
 
         }
@@ -215,16 +215,16 @@ export class NotificationCategory extends Component {
             confirm_papulation(notification_data, "extract items NotificationCategory")
             Object.keys(notification_data).forEach(notification_level => {
                 var items_in_level = notification_data[notification_level]
-                
+
 
                 if (items_in_level) {
                     Object.keys(items_in_level).forEach(item_id => {
                         var item_info = items_in_level[item_id]
-                        page.push(<Notification key={item_id + notification_level + "notification"} 
-                        notification_level={item_info["notification_level"]} item_name={item_info["item_name"]} 
-                        total_weight={item_info["total_weight"]} item_id={item_id} 
-                        supplier_id={item_info["supplier_id"]}
-                        unit={getUnitById(item_info["unit"])} order_details={item_info["order_details"]} />)
+                        page.push(<Notification key={item_id + notification_level + "notification"}
+                            notification_level={item_info["notification_level"]} item_name={item_info["item_name"]}
+                            total_weight={item_info["total_weight"]} item_id={item_id}
+                            supplier_id={item_info["supplier_id"]}
+                            unit={getUnitById(item_info["unit"])} order_details={item_info["order_details"]} />)
                     })
                 }
             })
@@ -257,13 +257,13 @@ export class Notification extends Component {
             console.log("no notification configerd for notification_level " + notification_level)
         }
         else
-        
+
             this.state = {
                 notification_level: notification_level,
                 item_name: props.item_name,
                 total_weight: props.total_weight,
                 message: props.message ? props.message : notification_dict[notification_level]["message"],
-                action_btn: action_btn(props.defult_weight, notification_level, props.item_name, props.order_details,this.props.item_id,this.props.supplier_id),
+                action_btn: action_btn(props.defult_weight, notification_level, props.item_name, props.order_details, this.props.item_id, this.props.supplier_id),
                 error_symbol: notification_dict[notification_level]["error_symbol"],
                 color: notification_dict[notification_level]["color"],
                 unit: props.unit
@@ -299,7 +299,7 @@ export class Notification extends Component {
 }
 
 
-class AlertNotifications extends Component {
+export class AlertNotifications extends Component {
     //notification component for the alert area in the inventory page
     constructor(props) {
         super(props);
@@ -309,14 +309,23 @@ class AlertNotifications extends Component {
     }
     render() {
         let page = [],
-            level = this.props.notifications_level,
-            i = level - 1,
-            notifications = this.props.notification_info
+            level = this.props.notifications_level>0?this.props.notifications_level:"-1",
+            i = level - 1>0?level - 1:-1,
+            notifications = this.props.notification_info;
+            console.log(notifications)
         if (notifications && level) {
             Object.keys(notifications).forEach(key => {
-                var notification = notifications[key]
-                page.push(<div className="simple_notification"><div className="cart_container">{action_btn(null, level - 1, notification["item_name"], notification["order_details"],key,notification["supplier_id"])}</div>
-                    {notification["item_name"]} <div class="center_items notification_weight"> {notification["total_weight"].toFixed(1).replace(/\.0+$/, '')} {getUnitById(notification["unit"]) }</div>
+                var notification = notifications[key],
+                total_weight = notification["total_weight"]?notification["total_weight"].toFixed(1).replace(/\.0+$/, ''):-1
+                page.push(<div className="simple_notification">
+                    <div className="cart_container">
+                        {action_btn(null, i, notification["item_name"], notification["order_details"], key, notification["supplier_id"])}
+                    </div>
+                    {notification["item_name"]}
+                     <div class="center_items notification_weight">
+                        {total_weight}
+                        {getUnitById(notification["unit"])}
+                    </div>
                 </div>)
             })
         }

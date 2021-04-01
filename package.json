@@ -26,7 +26,8 @@
     "rsuite": "^4.8.8",
     "web-vitals": "^0.2.4",
     "websocket": "^1.0.33",
-    "ws": "^7.4.3"
+    "ws": "^7.4.3",
+    "wscat": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

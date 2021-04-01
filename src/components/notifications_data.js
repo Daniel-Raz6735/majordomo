@@ -14,16 +14,17 @@ import others from '../images/icons/category_symbols/others.svg'
 import dairy from '../images/icons/category_symbols/dairy.svg'
 import vegetables from '../images/icons/category_symbols/vegetables.svg'
 import fruit from '../images/icons/category_symbols/fruit.svg'
+import inventory_looks_good from '../images/icons/inventory looks good.svg'
 
 export const notifications_levels = [3, 2, 1], notification_colors = ["#FD5E53", "#F1C033", "#F78745"],
     action_symbol = [cart_plus, cart_plus, suggest_dish]
 
-export const styleArr = ["rgba(235, 104, 104, 0.32)", "rgba(247, 231, 185, 0.85)", "rgba(255, 103, 14, 0.2)","rgba(115, 213, 4, 1)"]//red, green, orange
+export const styleArr = ["rgba(235, 104, 104, 0.32)", "rgba(247, 231, 185, 0.85)", "rgba(255, 103, 14, 0.2)", "rgba(115, 213, 4, 1)"]//red, green, orange
 
-var error_symbol = [circle_warning, yellow_warning, overflow_sign, white_circle, white_triangle, white_overflow],
+var error_symbol = [circle_warning, yellow_warning, overflow_sign, white_circle, white_triangle, white_overflow, inventory_looks_good],
 
 
-    messages = [Dictionary["just_few"], Dictionary["running_low"], Dictionary["must_use"]],
+    messages = [Dictionary["just_few"], Dictionary["running_low"], Dictionary["must_use"], Dictionary["looks_good"]],
 
     text_descp = [Dictionary["add_to_order"], Dictionary["add_to_order"], Dictionary["suggest_dish"]]
 
@@ -35,8 +36,9 @@ export const category_symbols = [vegetables, fruit, meet_and_fish, dairy, dry_fo
     category_names = [Dictionary["vegtables"], Dictionary["fruit"],
     Dictionary["fish"] + " " + Dictionary["and"] + Dictionary["meat"], Dictionary["dairy"],
     Dictionary["dry_foods"], Dictionary["other"]]
-
+const minus_one = -1;
 export const notification_dict = {
+    "-1": { "color": styleArr[3], "error_symbol": error_symbol[6], "alert_filter_symbol": error_symbol[6], message: messages[3], "action_symbol": action_symbol[0], "action_desc": text_descp[0] },
     1: { "color": styleArr[0], "error_symbol": error_symbol[0], "alert_filter_symbol": error_symbol[3], message: messages[0], "action_symbol": action_symbol[0], "action_desc": text_descp[0] },
     2: { "color": styleArr[1], "error_symbol": error_symbol[1], "alert_filter_symbol": error_symbol[4], message: messages[1], "action_symbol": action_symbol[1], "action_desc": text_descp[1] },
     3: { "color": styleArr[2], "error_symbol": error_symbol[2], "alert_filter_symbol": error_symbol[5], message: messages[2], "action_symbol": action_symbol[2], "action_desc": text_descp[2] }
@@ -57,11 +59,11 @@ export function action_btn(defult_val, level, title, order_details, item_id, sup
         val = defult_val
 
     switch (level) {
-        case 2:
+        case 2: //item is going bad
             return <img src={suggest_dish} alt={Dictionary["suggest_dish"]} />
-
-        case 0:
-        case 1:
+        case 0:// item is critical 
+        case 1:// item is in danger
+        case 3:// item looks good
         default:
             console.log(supplier_id)
             return <AddToOrder kind={0} title={title} defult_val={val} unit={unit} is_in_order={is_in_order} business_id={1} item_id={item_id} supplier_id={supplier_id} />

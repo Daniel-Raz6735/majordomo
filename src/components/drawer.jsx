@@ -1,8 +1,9 @@
-import { Drawer, Icon, InputGroup, Input, Divider } from 'rsuite';
+import { Drawer, Icon, InputGroup, Input, Divider, Dropdown, } from 'rsuite';
 import React, { Component } from 'react';
 import x_icon from '../images/x_icon.svg'
 import back_icon from '../images/icons/arrows/right_arrow.svg'
 import { Containers } from './containers';
+import { AlertNotifications } from './notifications';
 import './../components/drawer.css';
 import { Dictionary, getRTL, getLeftRight } from '../Dictionary';
 import { category_names, category_symbols, category_colors } from './notifications_data';
@@ -11,7 +12,6 @@ import { InventoryTile } from '../pages/home page/home_page';
 import Chart from 'chart.js'
 import { base_url } from '../index';
 import $ from 'jquery';
-
 
 
 
@@ -76,7 +76,7 @@ export class CategoryDrawer extends React.Component {
     var page = []
     page.push(<SearchBar handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />)
     page.push(<Containers weights_dict={newDict} openItem={this.switchContent} />)
-    this.setState({ page});
+    this.setState({ page });
 
   }
   switchContent(item_id) {
@@ -87,7 +87,7 @@ export class CategoryDrawer extends React.Component {
       cat_image = <div onClick={() => this.switchContent()}><img src={back_icon} alt="back" /></div>
 
       if (this.props.weights_dict)
-        page = <ItemInfo business_id={1} item_id={item_id} weight_info={this.props.weights_dict[item_id]} />
+        page = <ItemPage business_id={1} item_id={item_id} weight_info={this.props.weights_dict[item_id]} />
       else
         console.log("No weights dict, can't render item")
     }
@@ -201,12 +201,16 @@ export class SearchBar extends React.Component {
     );
   }
 }
-export class ItemInfo extends Component {
+export class ItemPage extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      page: ""
+      page: "",
+      dropdown_content: "",
+      active_index: 0,
+      dates_to_pull: [30, 7, 1]
+
     }
     this.devide_data = this.devide_data.bind(this);
     this.get_relavent_data = this.get_relavent_data.bind(this);
@@ -240,16 +244,12 @@ export class ItemInfo extends Component {
     }
   }
   devide_data(res) {
-    var page = [], dates_to_pull = [1, 7, 30];
+    var page = [], dates_to_pull = this.state.dates_to_pull, dropdown_content = [], i = 0;
     dates_to_pull.forEach(days => {
-      var relavent_data = this.get_relavent_data(res, days)
-      page.push(<ChartComponent {...this.props} num_of_days={days} dict={relavent_data} />);
+      var j = i++;
+      dropdown_content.push(<Dropdown.Item eventKey={days} onSelect={() => { this.setState({ active_index: j }) }}>{Dictionary[days]}</Dropdown.Item>)
     })
-    this.setState({ page });
-    // console.log(res)
-    // if (res && res.length > 0)
-    //   this.render_chart([["fruit", [12, 19, 3, 5, 2, 3]]], ["12:20", '15:30', '17:30', '18:20', '19:30', '21:30'], this.state.chart_id)
-    // else { }
+    this.setState({ page, dropdown_content, res });
   }
   get_relavent_data(res, days) {
     var min_date = get_old_date(new Date(), days),
@@ -271,10 +271,44 @@ export class ItemInfo extends Component {
   }
 
   render() {
-    return (
+    let active_index = this.state.active_index,
+      active_chart = this.state.dates_to_pull[active_index], chart,
+      res = this.state.res;
+    if (res) {
+      var relavent_data = this.get_relavent_data(res, active_chart)
+      chart = <ChartComponent {...this.props} key={active_chart} num_of_days={active_chart} dict={relavent_data} />
+    }
+    var notifications_level, notification_info
+    if (this.props["item_id"] && this.props["business_id"] && this.props["weight_info"]) {
+      notification_info = { ... this.props["weight_info"] }
+      notification_info["item_id"] = this.props["item_id"]
+      notification_info["business_id"] = this.props["business_id"]
+      notifications_level = (this.props["notification_level"]==-1)?"-1":this.props["notification_level"]
+      notification_info = {notification_info}
+    }
+   
+    console.log(this.props)
 
+    return (
       <div className="item_info">
-        {this.state.page}
+        <AlertNotifications notifications_level={notifications_level} notification_info={notification_info} />
+        <div className="chart_container">
+          <div className="chart_header">
+            <Dropdown title={Dictionary[active_chart]} activeKey={active_chart}>
+              {this.state.dropdown_content}
+            </Dropdown>
+          </div>
+          {chart}
+        </div>
+        <div className="cube_container">
+          <InfoCube key={1} additional_data="skl" />
+          <InfoCube key={2} additional_data="skl" />
+          <InfoCube key={3} additional_data="skl" />
+        </div>
+        <div className="cube_container">
+          <InfoCube key={4} additional_data="skl" />
+          <InfoCube key={6} additional_data="skl" />
+        </div>
       </div>
     );
   }
@@ -297,22 +331,23 @@ export class ChartComponent extends Component {
   componentDidMount() {
     var props = this.props,
       dict = props.dict,
-      weights = [], date_time = [];
+      weights = [], date_time = [],
+      point_colors = [], point_radius = []
     console.log(dict)
     if (dict && Object.keys(dict).length > 0) {
-      console.log(1)
       Object.keys(dict).forEach(date => {
-        console.log(2)
         var weight = dict[date]["weight"]
         if (weight !== undefined) {
           weights.push(weight);
+          point_colors.push("rgba(253, 94, 83, 1)")
+          point_radius.push(5)
           date_time.push(this.pharse_date(new Date(date)));
         }
 
       });
       var weight_info = this.props.weight_info,
         setName = weight_info ? weight_info["item_name"] : Dictionary["unknown"]
-      this.render_chart([[setName, weights]], date_time, this.state.chart_id)
+      this.render_chart([[setName, weights]], date_time, this.state.chart_id, point_colors, point_radius)
     }
     else {
       //insert no data to show for theis time period 
@@ -329,7 +364,7 @@ export class ChartComponent extends Component {
       return date
     var new_date = new Date(date),
       today = new Date(),
-      unix_today = get_old_date(today, 1)*1000,
+      unix_today = get_old_date(today, 1) * 1000,
       diffarence = unix_today - new_date.getTime(),//old day is a day before at 00:00
       res = "";
     if (diffarence <= 86400) {//if the wight is yesterday or today
@@ -345,11 +380,17 @@ export class ChartComponent extends Component {
   }
 
 
-  render_chart(prop_datasets, labels, id) {
+  render_chart(prop_datasets, labels, id, point_colors, point_radius) {
     var ctx = document.getElementById(id).getContext('2d');
     var sets = []
     if (prop_datasets) {
-      prop_datasets.forEach(set => { sets.push({ label: set[0], data: set[1] }) })
+      prop_datasets.forEach(set => {
+        sets.push({
+          label: set[0],
+          data: set[1], backgroundColor: ['transparent'], borderColor: ['rgba(253, 94, 83, 1)'],
+          pointBackgroundColor: point_colors, pointRadius: point_radius
+        })
+      })
     }
     new Chart(ctx, {
       type: 'line',
@@ -357,8 +398,10 @@ export class ChartComponent extends Component {
         labels: labels,
         datasets: sets,
 
+
       },
       options: {
+
         scales: {
           yAxes: [{
             ticks: {
@@ -367,26 +410,16 @@ export class ChartComponent extends Component {
           }]
         }
       }
-    })
+    });
 
   }
 
   render() {
 
     return (
-      <div className="chart_container">
 
-        <canvas className="usage_chart" id={this.state.chart_id} />
-        <div className="cube_container">
-          <InfoCube key={1} additional_data="skl" />
-          <InfoCube key={2} additional_data="skl" />
-          <InfoCube key={3} additional_data="skl" />
-        </div>
-        <div className="cube_container">
-          <InfoCube key={4} additional_data="skl" />
-          <InfoCube key={6} additional_data="skl" />
-        </div>
-      </div>
+      <canvas className="usage_chart" id={this.state.chart_id} />
+
     );
   }
 }

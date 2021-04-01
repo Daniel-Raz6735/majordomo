@@ -106,18 +106,55 @@
 .info_cube{
     width: 100%;
     margin: 5px;
-    border: 1px solid black;
+    
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 6px 6px 0 #00000029;
+
 }
 .cube_container{
     width: 90%;
     display: flex;
     margin: auto;
     flex-wrap: nowrap;
+    margin-top: 10px;
+}
+.chart_container{
+    width: 90%;
+    background-color: rgba(249, 249, 249, 1);
+    margin: auto;
+    box-shadow: rgba(0, 0, 0, 1);
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 6px 6px 0 #00000029;
 }
 .usage_chart{
     height: 40%!important;
-    width: 80%!important;
+    width: 100%!important;
     max-height: 269px;
     max-width: 538px;
     margin: auto;
+    border-radius:0 0 6px 6px;
+}
+
+.chart_header{
+    width: 100%;
+    margin: auto;
+    background-color: rgba(115, 213, 4, 1);
+    border-radius: 6px 6px 0 0;
+    
+}
+.rs-dropdown-menu > .rs-dropdown-item-active > .rs-dropdown-item-content{
+    color:rgba(253, 94, 83, 1);
+}
+.rs-dropdown-menu > .rs-dropdown-item-active > .rs-dropdown-item-content:hover, .rs-dropdown-menu > .rs-dropdown-item-active > .rs-dropdown-item-content:focus{
+    color:rgba(115, 213, 4, 1);
+}
+
+.rs-dropdown .rs-dropdown-placement-bottom-start:hover{
+    background-color: rgba(0, 0, 0, 0.212);
+
+
+}
+.rs-btn.rs-btn-subtle.rs-dropdown-toggle{
+    color: white;
+    background-color: transparent;
 }

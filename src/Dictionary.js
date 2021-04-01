@@ -39,6 +39,9 @@ export const Dictionary = new LocalizedStrings({
     last_registred: "last registred at",
     see_full: "See full inventory",
     go_to_orders: "Go to orders",
+    30:"Past month",
+    7:"Past week",
+    1:"Past day",
 
     //notifications
     notifications: "Notifications",
@@ -104,6 +107,9 @@ export const Dictionary = new LocalizedStrings({
     last_registred: "נרשם לאחרונה ב",
     see_full: "לצפייה בכל המלאי",
     go_to_orders: "מעבר להזמנות",
+    30:"חודש שעבר",
+    7:"שבוע שעבר",
+    1:"יום שעבר",
 
     //notifications
     notifications: "התראות",

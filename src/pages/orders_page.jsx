@@ -163,9 +163,6 @@ export class OrdersPage extends Component {
                         console.log(sells_items[key]["order_details"])
 
                 })
-
-
-
             }
             console.log(supplier["sells_items"])
 
