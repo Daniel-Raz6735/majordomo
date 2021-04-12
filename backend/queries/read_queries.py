@@ -12,31 +12,25 @@ class ReadQueries:
             connection = Connection()
         self.connection = connection
 
-
     @staticmethod
-    def get_rules(args):
+    def get_rules_query(business_id=None):
         """method for getting the rules by business id
             parameters received: required: business_id, optional: active, rule_id
             output:[["rule_id", "item_id", "content_minimum_per_day", "content_maximum_per_day",
                 "content_total_minimum", "content_total_maximum", "active"]....]"""
 
-        # list_of_cols = ["business_id", "active", "rule_id"]
-        # used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
         conditions = []
-        if "business_id" in args:
-            conditions.append(["AND", "rules.business_id", "=", int(args["business_id"])])
-        else:
-            return error_message(400, "Bad request", "no business id sent"), 400
-        if "active" in args:
-            conditions.append(["AND", "rules.active", "=", args["business_id"]])
+        if business_id:
+            conditions.append(["AND", "food_items.business_id", "=", int(business_id)])
+
         final_query, res_code = DbQueries.select_query(
-            ["rules"],
-            [[["rule_id"], ["item_id"], ["content_minimum_per_day"], ["content_maximum_per_day"],
-              ["content_total_minimum"], ["content_total_maximum"], ["active"]]],
+            ["food_items"],
+            [[["item_id"], ["business_id"], ["content_minimum_per_day"], ["content_maximum_per_day"],
+              ["content_total_minimum"], ["content_total_maximum"], ["item_average_weight"]]],
             conditions)
         if res_code != 200:
-            return error_message(res_code, final_query), 400
-        return final_query, 200
+            raise HTTPException(status_code=res_code, detail=final_query)
+        return final_query
 
     @staticmethod
     def get_order(order_id):
@@ -139,28 +133,41 @@ class ReadQueries:
         return final_query, 200
 
     @staticmethod
-    def get_notifications(args):
+    def get_notifications(business_id=None, active=True, notification_id=None):
         """method for getting the active notifications by business id
+            output:[["code", "message", "item_id", "active", "closed_by_user"]]"""
+        conditions = []
+        if business_id:
+            conditions.append(["AND", "notifications.business_id", "=", int(business_id)])
+
+        if active:
+            conditions.append(["AND", "notifications.active", "=", active])
+        if notification_id:
+            conditions.append(["AND", "notifications.notification_id", "=", int(notification_id)])
+
+        final_query, res_code = DbQueries.select_query(
+            [["notifications"]],
+            [[["code"], ["business_id"], ["message"], ["food_item_id", "item_id"], ["active"], ["closed_by_user"]]],
+            conditions)
+        return final_query
+
+    @staticmethod
+    def get_notifications_with_info(business_id=None, active=True, notification_id=None):
+        """this function creates a full notification information kit query
+             a notification kit includes the active notifications and the
             parameters received: required: business_id,
             optional: active, notification_id
             output:[["code", "message", "item_id", "active", "closed_by_user"]]"""
-        # list_of_cols = ["business_id", "active", "notification_id"]
-        # used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
-        used_p = args
         conditions = []
-        if "business_id" in used_p:
-            conditions.append(["AND", "notifications.business_id", "=", int(used_p["business_id"])])
-        else:
-            return error_message(400, "Bad request", "no business id sent"), 400
-        if "active" in used_p:
-            conditions.append(["AND", "notifications.active", "=", used_p["active"]])
-        if "notification_id" in used_p:
-            conditions.append(["AND", "notifications.notification_id", "=", used_p["notification_id"]])
+        if business_id:
+            conditions.append(["AND", "notifications.business_id", "=", int(business_id)])
+        if active:
+            conditions.append(["AND", "notifications.active", "=", active])
+        if notification_id:
+            conditions.append(["AND", "notifications.notification_id", "=", int(notification_id)])
         conditions.append(["AND", "notifications.food_item_id", "=", "food.item_id"])
         conditions.append(["AND", "food.category_id", "=", "cat.category_id"])
-        sub_table, res_code = ReadQueries.get_current_weight({"business_id": used_p["business_id"]})
-        if res_code != 200:
-            return sub_table, res_code
+        sub_table = ReadQueries.get_current_weight(business_id)
         sub_table = sub_table[:-1]
         conditions.append(["AND", "sub.item_id", "=", "food.item_id"])
 
@@ -177,28 +184,23 @@ class ReadQueries:
         return final_query, 200
 
     @staticmethod
-    def get_current_weight(args, get_by_container=False):
-        # list_of_cols = ["container_id", "business_id", "items_ids"]
-        # used_p, non_used_p = Functions.phrase_parameters(args, list_of_cols)
-        # used_p = args
+    def get_current_weight(business_id=None, container_ids=None, item_ids=None, get_by_container=False):
+
         conditions = []
-        if "business_id" in args:
-            conditions.append(["AND", "containers.business_id", "=", int(args["business_id"])])
-        else:
-            return error_message(400, "Bad request", "no business id sent"), 400
-        if "container_id" in args:
-            containers = args["container_id"]
+        if business_id:
+            conditions.append(["AND", "containers.business_id", "=", int(business_id)])
+
+        if container_ids:
             and_or = "AND"
-            if type(containers) == list:
-                for container in containers:
-                    conditions.append([and_or, "containers.container_id", "=", int(container)])
+            if type(container_ids) == list:
+                for container_id in container_ids:
+                    conditions.append([and_or, "containers.container_id", "=", int(container_id)])
                     and_or = "OR"
             else:
-                conditions.append(["AND", "containers.container_id", "=", int(containers)])
-        if "item_ids" in args:
+                conditions.append(["AND", "containers.container_id", "=", int(container_ids)])
+        if item_ids:
             and_or = "AND"
-            items = args["item_ids"]
-            for item in items:
+            for item in item_ids:
                 conditions.append([and_or, "containers.item_id", "=", int(item)])
                 and_or = "OR"
         conditions.append(["AND", "weights.container_id", "=", "containers.container_id"])
@@ -210,13 +212,13 @@ class ReadQueries:
         conditions.append(["AND", "t1.date", "=", "weights.weighing_date"])
         conditions.append(["AND", "t1.container_id", "=", "containers.container_id"])
         conditions.append(["AND", "food_items.category_id", "=", "categories.category_id"])
-
-        cols_to_bring = [[["container_id"]],
-                         [["weight_value", "weight"], ["weighing_date", "date"]],
-                         [["item_name"], ["item_id"], ["unit"]],
-                         [["category_name"], ["category_id"]],
-                         []]
-        if not get_by_container:
+        if get_by_container:
+            cols_to_bring = [[["container_id"],["business_id"]],
+                             [["weight_value", "weight"], ["weighing_date", "date"]],
+                             [["item_name"], ["item_id"], ["unit"]],
+                             [["category_name"], ["category_id"]],
+                             []]
+        else:
             cols_to_bring = [[[]],
                              [["weight_value", "weight", "SUM"], ["weighing_date", "date", "MAX"]],
                              [["item_name"], ["item_id"], ["unit"]],
@@ -228,8 +230,8 @@ class ReadQueries:
             cols_to_bring,
             conditions)
         if res_code != 200:
-            return error_message(res_code, final_query), 400
-        return final_query, 200
+            raise HTTPException(status_code=400, detail=final_query)
+        return final_query
 
     @staticmethod
     def get_weight_history(item_id, business_id, min_date, max_date):

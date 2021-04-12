@@ -36,6 +36,12 @@ item_name varchar(40)
 category_id int FK >- categories.category_id
 unit int FK >- units.unit_id
 business_id int FK >- business.business_id
+content_minimum_per_day real
+content_maximum_per_day real
+content_total_minimum real
+content_total_maximum real
+item_average_weight real
+
 
 
 
@@ -154,13 +160,3 @@ content_maximum_per_day real
 content_total_minimum real
 content_total_maximum real
 active boolean
-
-
-# server indexes maximum index for client
-indexes
------------
-index_name varchar(20)
-index_val int
-
-
-

@@ -5,6 +5,11 @@ from fastapi import HTTPException
 
 
 class Connection:
+    """The Connection class is a class that opens a connection with the DB and executes requests
+    for classes that created it
+    self contains : conn - the connection to the DB.
+                    cur - the connection cursor"""
+
     def __init__(self):
         """establish a connection with the DB"""
         # DB connection parameters
@@ -25,15 +30,14 @@ class Connection:
             print('Database connection closed.')
             self.conn = None
             self.cur = None
-            return True
-        return False
 
     def get_result(self, query):
-        """execute query and return its result"""
+        """execute query and returns its result
+           output: a list of dicts: [{col name: value,col2 name: value...},{...}...]"""
         try:
             self.cur.execute(query)
             res = dictionify_res(self.cur.fetchall())
-            return res, 200
+            return res
 
         except (Exception, psycopg2.DatabaseError) as error:
             print("error: ", error)
@@ -42,7 +46,7 @@ class Connection:
     def insert_data(self, insert_query, error_message, update_query=None, conflict_fields=None):
         """executes an insert data query. provided an update query it will update the values if their is a conflict
         in the conflict fields
-        input: sql query, error message if query is un successful, sql query, list of field names """
+        input: sql query, error message if query is un successful, sql query, list of field names that are tested for conflict """
         if update_query:
             fields = "("
             colon = ""
@@ -79,7 +83,8 @@ def init_connection():
 
 
 def dictionify_res(rows):
-    """convert a RealDictCursor dict to a regular python list of dicts"""
+    """ convert a RealDictCursor dict to a regular python list of dicts
+        output: [{col name: value,col2 name: value...},{...}...] """
     res = []
     if type(rows) == list:
         for row in rows:
