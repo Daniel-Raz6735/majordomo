@@ -3,15 +3,8 @@ from queries.create_queries import CreateQueries as createQ
 from fastapi import HTTPException
 
 
-# def add_dummy():
-#
-#     res = load_dummy_data(tables_to_read, table_info.tables)
-#     return select_connection(res, False)
-
-
-
-
 def convert_val(val):
+    """convert a value from an object to a string that can be inserted to an SQL query"""
     if type(val) == str and "to_timestamp" not in val:
         return "'" + val + "' "
     else:
@@ -71,8 +64,6 @@ def update_order_content_query(item_id, order_id, amount, unit, price_per_unit=N
     return update_table_query("order_content", cols_to_set, vals_to_set, conditions, include_t_name)
 
 
-
-
 class UpdateQueries:
     def __init__(self, connection):
         self.connection = connection
@@ -92,7 +83,7 @@ class UpdateQueries:
         output: "success" message, res code, order_id"""
 
         # confirm supplier provides this item to client
-        supply, res_code = self.get_supply(business_id, supplier_id, item_id)
+        supply = self.get_supply(business_id, supplier_id, item_id)
         if len(supply) == 0:  # order does not exist
             raise HTTPException(status_code=404, detail="Supplier not found")
 
@@ -148,7 +139,7 @@ class UpdateQueries:
         if res_code != 200:  # if query failed
             print("Unable to create get query: ", query)
             raise HTTPException(status_code=500, detail="Server error")
-        order_info, res_code = self.connection.get_result(query)
+        order_info = self.connection.get_result(query)
         return order_info
 
     def add_order(self, business_id, supplier_id):
@@ -170,8 +161,8 @@ class UpdateQueries:
         if res_code != 200:  # if query failed
             print("Unable to create get order query", query)
             raise HTTPException(status_code=500, detail="Server error")
-        supply_info, res_code = self.connection.get_result(query)
-        return supply_info, res_code
+        supply_info= self.connection.get_result(query)
+        return supply_info
 
     def add_empty_order(self, business_id, supplier_id):
         """Creates an SQL query for adding an empty order based on supplier_id and a business_id"""

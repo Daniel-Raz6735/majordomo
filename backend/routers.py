@@ -1,12 +1,15 @@
 from fastapi.responses import HTMLResponse
 
+from email_client import EmailManager
 from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
 from queries.update_queries import UpdateQueries as updateQ
 from queries.delete_queries import DeleteQueries as deleteQ
 from queries.connection_manager import Connection
-
+from notifacations import NotificationsHandler
+from threading import Thread
 import psycopg2
+import schedule
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
@@ -14,11 +17,17 @@ from typing import Optional, List, Dict
 from flask import request
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-import json
+from pydantic import BaseModel, BaseSettings
 import time
 from typing import List
 
+
+class Settings(BaseSettings):
+    notifications_handler: NotificationsHandler = NotificationsHandler()
+    email_client = EmailManager()
+
+
+settings = Settings()
 app = FastAPI()
 origins = [
     "http://localhost",
@@ -31,30 +40,47 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    # origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-# app = flask.Flask(__name__)
-# CORS(app)
-# app.config["DEBUG"] = True
+@app.on_event("startup")
+async def startup_event():
+    notifications_handler = settings.notifications_handler
+    # notifications_handler.play_schedules((1, 2, 3, 4))
+    # notifications_handler.create_alert_dictionary()
+    # thread = Thread(target=schedule_runner)
+    # thread.start()
+    # time.sleep(10)
+    # del notifications_handler
+    # settings.notifications_handler = None
+    pass
 
 
-@app.route('/get/containers', methods=['GET'])
-def get_containers():
+def schedule_runner():
+    i = 0
+    while True and settings.notifications_handler:
+        i += 1
+        settings.notifications_handler.run_tasks()
+        print(i)
+        time.sleep(1)
+
+
+@app.get('/get/containers')
+def get_containers(business_id: int, container_id: int = None):
     """gets all current weight for all items of a specific business
          provided optional params: can get specific containers
         required parameters: business_id
         optional parameters: container_id """
-    query, res_code = readQ.get_current_weight(request.args, get_by_container=True)
+    query, res_code = readQ.get_current_weight(business_id=business_id, container_ids=container_id,
+                                               get_by_container=True)
     return process_read_query(query, res_code)
 
 
-@app.route('/get/current_weights', methods=['GET'])
-def get_current_weight():
+@app.get('/get/current_weights')
+def get_current_weight(business_id: int, item_ids: List[int] = None):
     """gets all current weight for all items of a specific business
      provided optional params: can get specific items by item id
     required parameters: business_id
@@ -72,26 +98,29 @@ def get_user_preferences():
     return process_read_query(query, res_code)
 
 
-@app.route('/get/notifications', methods=['GET'])
-def get_notifications():
+@app.get('/get/notifications')
+def get_notifications(business_id: int, active: bool = True, notification_id: int = None):
     """gets all notifications based on business_id,
     provided optional params: can get only active notifications and a specific notification
             required parameters: business_id
             optional parameters: active ,notification_id
     """
-    query, res_code = readQ.get_notifications(request.args)
+    query, res_code = readQ.get_notifications_with_info(business_id=business_id, active=active,
+                                                        notification_id=notification_id)
     return process_read_query(query, res_code)
 
 
-@app.route('/get/rules', methods=['GET'])
-def get_rules():
+@app.get('/get/rules')
+async def get_rules(business_id: int, active: Optional[bool] = False, rule_id: Optional[int] = -1):
     """gets all rules based on business_id,
 provided optional params: can get only active rules and a specific rule
            required parameters: business_id
            optional parameters: active ,rule_id
            """
-    query, res_code = readQ.get_rules(request.args)
-    return process_read_query(query, res_code)
+    if not business_id:
+        raise HTTPException(status_code=400, detail="no business id sent")
+    query = readQ.get_rules_query(business_id, active, rule_id)
+    return process_read_query(query, 200)
 
 
 @app.get('/get/item/history')
@@ -136,12 +165,12 @@ async def get_suppliers(business_id: int, item_id: Optional[int] = -1, item_ids:
 async def get_current_view(business_id: int):
     """gets all the info a user needs based on business_id"""
     args = {"business_id": business_id, "active": True}
-    weight_query, weight_code = readQ.get_current_weight(args)
-    notifications_query, notifications_code = readQ.get_notifications(args)
+    weight_query = readQ.get_current_weight(business_id)
+    notifications_query, notifications_code = readQ.get_notifications_with_info(business_id, active=True)
     suppliers_query, supplier_code = readQ.get_suppliers(args)
     orders_query, orders_code = readQ.get_open_orders(args)
-    if weight_code != 200:
-        return process_read_query([[weight_query, "weights"]], weight_code)
+    # if weight_code != 200:
+    #     return process_read_query([[weight_query, "weights"]], weight_code)
     if notifications_code != 200:
         return process_read_query([[notifications_query, "notifications"]], notifications_code)
     if supplier_code != 200:
@@ -198,9 +227,7 @@ async def add_weights(lis: WeighingList, client_time: int):
                 query, res_code = reader.get_container_item_id_query(weight["business_id"], weight["container_id"])
                 if res_code != 200:
                     raise HTTPException(status_code=res_code, detail=query)
-                res, res_code = connection.get_result(query)
-                if res_code != 200:
-                    raise HTTPException(status_code=res_code, detail=query)
+                res = connection.get_result(query)
                 item_id_dict = res[0]
                 if len(item_id_dict) > 0:
                     item_id = item_id_dict["item_id"]
@@ -217,13 +244,9 @@ async def add_weights(lis: WeighingList, client_time: int):
         connection.insert_data(query, res_code)
         await manager.broadcast(f"weights updated on #{client_time}", 1)
         del connection
-        # return res, res_code
-        # return "success", 200
-
-
 
     except (Exception, psycopg2.DatabaseError) as error:
-        print("error: ", error)
+        settings.email_client.email_admin("Unable to add weight", "error details:" + str(error))
         raise HTTPException(status_code=400, detail="unable to add weight")
 
 
@@ -242,7 +265,6 @@ async def add_order_item(item: OrderItem):
 
     item = item.dict()
     # print(json.loads(item))
-
 
     try:
         connection = Connection()
@@ -362,7 +384,7 @@ html = """
         <ul id='messages'>
         </ul>
         <script>
-            var ws = new WebSocket("wss://majordomo.cloudns.asia/wss");
+            var ws = new WebSocket("ws://localhost:8000/wss");
             ws.onmessage = function(event) {
                 var messages = document.getElementById('messages')
                 var message = document.createElement('li')
@@ -380,7 +402,6 @@ html = """
     </body>
 </html>
 """
-
 
 
 @app.get('/get/wss')
@@ -409,14 +430,3 @@ async def websocket_endpoint(websocket: WebSocket, business_id: int, user_id: in
     except WebSocketDisconnect:
         manager.disconnect(websocket, business_id)
         # await manager.broadcast(f"Client #{user_id} left the chat")
-
-# @app.route('/get/restart', methods=['GET'])
-# def restart_tables():
-#     drop_tables()
-#     print("*****************removed********************")
-#     code, query = db_queries.add_table_code()
-#     result, code = select_connection(query, False)
-#     return str(code)
-
-# if __name__ == '__main__':
-#     app.run()
