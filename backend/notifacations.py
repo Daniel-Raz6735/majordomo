@@ -13,6 +13,7 @@ class NotificationsHandler:
         self.content_maximum_time: int = 4
         self.email_client = EmailManager()
         self.alert_dict = self.create_alert_dictionary()
+        self.dict_unit = 1
 
     def __del__(self):
         schedule.clear()
@@ -94,17 +95,58 @@ class NotificationsHandler:
 
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
-            self.email_client.email_admin("Error reading notification data", "error details:"+str(error))
+            self.email_client.email_admin("Error reading notification data", "error details:" + str(error))
         del connection
         return alert_dict
 
     def test_minimum(self, business_id, item_id):
+
         pass
 
     def test_maximum(self, business_id, item_id):
         pass
 
-    def test_new_weight(self, business_id, item_id):
+    def get_item(self, business_id, item_id):
+        """tests if an item is in the alert dict and returns its information. returns None if not"""
+        if self.alert_dict and business_id in self.alert_dict and item_id in self.alert_dict[business_id]:
+            return self.alert_dict[business_id][item_id]
+        return None
+
+    def test_item(self, business_id, item_id):
+        """test an item in the alert dict and see if it needs a notification"""
+        item_info = self.get_item(business_id, item_id)
+        if item_info and "containers" in item_info:
+            containers = item_info["containers"]
+            sum = 0
+            for key in containers:
+                container = containers[key]
+                if "unit" in container and "weight" in container:
+                    if container["unit"] == 3:  # if item is weighed in units
+                        pass
+                    sum += self.convert_unit(container["unit"], container["weight"])
+            if 'total_minimum' in item_info:
+                pass
+
+        pass
+
+    def convert_unit(self, source_unit, item_weight, target_unit=None):
+        """convert units of items. if no target unit is entered so the system default is used
+        (KG when writing this code)"""
+        if target_unit is None:
+            target_unit = self.dict_unit
+        if source_unit == 1:
+            if target_unit == 1:  # kg to kg
+                pass
+            elif target_unit == 2:  # lb to kg
+                item_weight *= 2.205
+        elif source_unit == 2:
+            if target_unit == 1:  # lb to kg
+                item_weight /= 2.205
+            elif target_unit == 2:  # lb to lb
+                pass
+        return item_weight
+
+    def add_weight(self, business_id, item):
         pass
 
     @staticmethod

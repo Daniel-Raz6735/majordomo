@@ -1,4 +1,6 @@
 from fastapi.responses import HTMLResponse
+
+from email_client import EmailManager
 from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
 from queries.update_queries import UpdateQueries as updateQ
@@ -22,6 +24,7 @@ from typing import List
 
 class Settings(BaseSettings):
     notifications_handler: NotificationsHandler = NotificationsHandler()
+    email_client = EmailManager()
 
 
 settings = Settings()
@@ -243,7 +246,7 @@ async def add_weights(lis: WeighingList, client_time: int):
         del connection
 
     except (Exception, psycopg2.DatabaseError) as error:
-        print("error: ", error)
+        settings.email_client.email_admin("Unable to add weight", "error details:" + str(error))
         raise HTTPException(status_code=400, detail="unable to add weight")
 
 
@@ -427,14 +430,3 @@ async def websocket_endpoint(websocket: WebSocket, business_id: int, user_id: in
     except WebSocketDisconnect:
         manager.disconnect(websocket, business_id)
         # await manager.broadcast(f"Client #{user_id} left the chat")
-
-# @app.route('/get/restart', methods=['GET'])
-# def restart_tables():
-#     drop_tables()
-#     print("*****************removed********************")
-#     code, query = db_queries.add_table_code()
-#     result, code = select_connection(query, False)
-#     return str(code)
-
-# if __name__ == '__main__':
-#     app.run()

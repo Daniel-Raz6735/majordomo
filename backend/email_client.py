@@ -15,7 +15,7 @@ class EmailManager:
 
 
 def send_email(target_address, subject, text, html=None):
-"""send an email to a target. if you have special html code to put the text in you can send it as a parameter """
+    """send an email to a target. if you have special html code to put the text in you can send it as a parameter """
     user_name = params['username']
     server.login(user_name, params['password'])
     source_address = params['server_address']
