@@ -1,6 +1,7 @@
 from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
 from fastapi import HTTPException
+from queries.connection_manager import Connection
 
 
 def convert_val(val):
@@ -174,6 +175,42 @@ class UpdateQueries:
             raise HTTPException(status_code=500, detail="Server error")
         return query, res_code
 
+    def add_notification(self, business_id, item_id, notification_level, message=None, remove_only=False):
+        """remove all previous notifications and if not remove_only add a notification to the data """
+        remove_query = self.remove_active_notifications_query(business_id, item_id)
+        add_query = self.add_notification_query(business_id, item_id, notification_level, message)
+        self.connection.execute_query(remove_query, "Unable to remove notifications")
+        if not remove_only:
+            self.connection.execute_query(add_query, "Unable to add new notifications")
+
+
+    def add_notification_query(self, business_id, item_id, notification_level, message=None):
+        """Creates an SQL query for adding a new notification"""
+        cols = ["business_id", "food_item_id", "code", "active"]
+        vals = [[business_id, item_id, notification_level, True]]
+        if message is not None:
+            cols.append("message")
+            vals.append(message)
+        query, res_code = self.insert_to_table_query("notifications", cols, vals)
+        if res_code != 200:
+            print(query)
+            raise HTTPException(status_code=500, detail="Server error")
+        return query
+
+    @staticmethod
+    def remove_active_notifications_query(business_id, item_id, notification_level=None):
+        """set all previous notifications active to false """
+        cols = ["active"]
+        vals = [False]
+        conditions = [["business_id", "=", int(business_id)], ["food_item_id", "=", int(item_id)]]
+        if notification_level is not None:
+            conditions.append(["code", "=", int(notification_level)])
+        query, res_code = update_table_query("notifications", cols, vals, conditions)
+        if res_code != 200:
+            print(query)
+            raise HTTPException(status_code=500, detail="Server error")
+        return query
+
     @staticmethod
     def insert_to_table_query(table_name, cols, values):
         """creates a insert SQL query using the parameters
@@ -208,7 +245,3 @@ class UpdateQueries:
             return query, 200
         else:
             return "Bad request", 400
-
-
-
-

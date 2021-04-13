@@ -208,11 +208,28 @@ class Weighing(BaseModel):
 class WeighingList(BaseModel):
     weights: List[Weighing]
 
+    def __str__(self):
+        string = ""
+        if self.weights:
+            for weight in self.weights:
+                weight = weight.dict()
+                string += "\nContainer_id: " + str(weight["container_id"])
+                string += "\nbusiness_id: " + str(weight["business_id"])
+                string += "\nweight_value: " + str(weight["weight_value"])
+                string += "\nweighing_date: " + str(weight["weighing_date"])
+                string += "\nunit: " + str(weight["unit"])
+                string += "\nlast_user: "
+                if weight["last_user"]:
+                    string += str(weight["last_user"])
+                else:
+                    string += "no user yet "
+                    string += "\n\n"
+        return string
+
 
 @app.post('/add/weight')
 async def add_weights(lis: WeighingList, client_time: int):
     """gets a WeighingList and inserts it in to the database"""
-
     try:
         connection = Connection()
         reader = readQ(connection)
@@ -224,9 +241,7 @@ async def add_weights(lis: WeighingList, client_time: int):
             time_gap = client_time - weight["weighing_date"]
             weight_time = "to_timestamp(" + str(server_time - time_gap) + ")"
             if weight["weight_value"] >= 0:
-                query, res_code = reader.get_container_item_id_query(weight["business_id"], weight["container_id"])
-                if res_code != 200:
-                    raise HTTPException(status_code=res_code, detail=query)
+                query = reader.get_container_item_id_query(weight["business_id"], weight["container_id"])
                 res = connection.get_result(query)
                 item_id_dict = res[0]
                 if len(item_id_dict) > 0:
@@ -236,16 +251,20 @@ async def add_weights(lis: WeighingList, client_time: int):
                 arr.insert(0, [weight_time, weight["business_id"], weight["container_id"], item_id,
                                weight["weight_value"], weight["last_user"], weight["unit"]])
 
+                settings.notifications_handler.update_item(weight["business_id"],
+                                                           item_id, weight["container_id"],
+                                                           weight["weight_value"], weight["unit"]
+                                                           , updater)
         query, res_code = updater.insert_to_table_query("weights",
                                                         ["weighing_date", "business_id", "container_id", "item_id",
                                                          "weight_value", "last_user", "unit"],
                                                         arr)
-
         connection.insert_data(query, res_code)
         await manager.broadcast(f"weights updated on #{client_time}", 1)
         del connection
 
     except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
         settings.email_client.email_admin("Unable to add weight", "error details:" + str(error))
         raise HTTPException(status_code=400, detail="unable to add weight")
 
@@ -430,3 +449,4 @@ async def websocket_endpoint(websocket: WebSocket, business_id: int, user_id: in
     except WebSocketDisconnect:
         manager.disconnect(websocket, business_id)
         # await manager.broadcast(f"Client #{user_id} left the chat")
+        

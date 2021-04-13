@@ -3,7 +3,6 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
 params = config(filename='email_info.ini', section='email')
 
 
@@ -16,6 +15,7 @@ class EmailManager:
 
 def send_email(target_address, subject, text, html=None):
     """send an email to a target. if you have special html code to put the text in you can send it as a parameter """
+    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     user_name = params['username']
     server.login(user_name, params['password'])
     source_address = params['server_address']
@@ -36,7 +36,7 @@ def send_email(target_address, subject, text, html=None):
     # send your email
     server.sendmail(source_address, target_address, message.as_string())
     server.quit()
-    print('Sent')
+    
 
 
 demo_text = """
