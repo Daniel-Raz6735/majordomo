@@ -151,7 +151,7 @@
 
 .alert_notifications{
     width: 95%;
-    margin: auto;
+    /* margin: auto; */
     display: flex;
     flex-direction: column;
     border-radius: 5px;

@@ -167,7 +167,7 @@ if (language === null) {
 Dictionary.setLanguage(language);
 
 //save new language in session storage and reload page
-function changeLanguage(lang) {
+export function changeLanguage(lang) {
   return function () {
     sessionStorage.setItem("current_language", lang);
     window.location.reload();
