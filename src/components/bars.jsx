@@ -5,8 +5,7 @@ import cart from '../images/icons/cart.svg'
 import profile from '../images/profile.svg'
 import React, { Component } from 'react';
 import { auth } from '../config/firebaseConfig'
-import { Dictionary, getRTL, getTime, LangBtn } from '../Dictionary';
-import logo from '../images/icons/Majordomo logo.svg';
+import { Dictionary, getRTL, getTime} from '../Dictionary';
 import InventoryPage from "../pages/inventory_page"
 import OrdersPage from "../pages/orders_page"
 import { Loader } from 'rsuite';
@@ -220,8 +219,8 @@ export class NavBar extends Component {
 
         return (
             <header className="header">
-                <LangBtn />
-                <img alt="Majordomo logo" className="majordomoLogo" src={logo} onClick={() => { window.location = '/'; }}></img>
+                {/* <LangBtn /> */}
+                {/* <img alt="Majordomo logo" className="majordomoLogo" src={logo} onClick={() => { window.location = '/'; }}></img> */}
                 <button id="logoutBtn" onClick={() => {
                     auth.signOut()
                     window.location.reload()

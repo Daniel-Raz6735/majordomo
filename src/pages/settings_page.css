@@ -22,7 +22,8 @@
 .side_nav_container{
         width: 90%;
         display: flex;
-        margin: auto;     
+        margin: auto;   
+        flex-direction: column;  
 }
 .setting_name {
     font-weight: bold;
@@ -42,4 +43,22 @@
 .profile_pic{
     width:100px;
     margin: auto;
+    display: flex;
+}
+
+.settings_page_container{
+    display: flex;
+    flex-direction: column;
+}
+
+.profile_details{
+    height:150px;
+}
+
+.settings_issues{
+    margin-bottom: 30px;
+}
+
+.notification_system_toggler{
+    padding: 15px 40px 15px 56px;
 }

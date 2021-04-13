@@ -324,7 +324,7 @@ export class AlertNotifications extends Component {
                     </div>
                     {notification["item_name"]}
                      <div class="center_items notification_weight">
-                        {total_weight}
+                        {total_weight+" "}
                         {getUnitById(notification["unit"])}
                     </div>
                 </div>)
