@@ -43,6 +43,17 @@ class Connection:
             print("error: ", error)
             return error, 400
 
+    def execute_query(self, query, error_message):
+        """execute an sql query query"""
+        try:
+            print(query)
+            self.cur.execute(query)
+            self.conn.commit()
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("error: ", error)
+            raise HTTPException(status_code=400, detail=error_message)
+
     def insert_data(self, insert_query, error_message, update_query=None, conflict_fields=None):
         """executes an insert data query. provided an update query it will update the values if their is a conflict
         in the conflict fields

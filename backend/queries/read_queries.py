@@ -65,7 +65,7 @@ class ReadQueries:
         final_query, res_code = DbQueries.select_query([["containers"]], [[["item_id"]]], conditions)
         if res_code != 200:
             raise HTTPException(status_code=res_code, detail=final_query)
-        return final_query, 200
+        return final_query
 
     @staticmethod
     def get_order_by_supplier(business_id, supplier_id, open_orders=False):

@@ -1,10 +1,7 @@
 from psycopg2.extras import RealDictCursor
 from config import config
 from queries.read_queries import ReadQueries as readQ
-# from queries.update_queries import UpdateQueries as updateQ
 from queries.connection_manager import Connection
-from functions import Functions
-from db_queries import DbQueries
 import psycopg2
 
 

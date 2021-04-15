@@ -3,7 +3,15 @@ import psycopg2
 
 from email_client import EmailManager
 from queries.read_queries import ReadQueries as readQ
+from queries.update_queries import UpdateQueries as updateQ
 from queries.connection_manager import Connection
+
+ITEM_CRITICAL = 1
+ITEM_LOW = 2
+ITEM_OVER = 3
+KG = 1
+LB = 2
+UN = 3
 
 
 class NotificationsHandler:
@@ -100,7 +108,6 @@ class NotificationsHandler:
         return alert_dict
 
     def test_minimum(self, business_id, item_id):
-
         pass
 
     def test_maximum(self, business_id, item_id):
@@ -112,37 +119,80 @@ class NotificationsHandler:
             return self.alert_dict[business_id][item_id]
         return None
 
-    def test_item(self, business_id, item_id):
+    def update_item(self, business_id, item_id, container_id, weight, unit, updater):
+        try:
+            if self.alert_dict:
+                self.alert_dict[business_id][item_id]["containers"][container_id] = {'weight': weight, 'unit': unit}
+                self.test_item(business_id, item_id, updater)
+            else:
+                raise KeyError
+        except KeyError:
+            self.create_alert_dictionary()
+
+    def test_item(self, business_id, item_id, updater):
         """test an item in the alert dict and see if it needs a notification"""
         item_info = self.get_item(business_id, item_id)
-        if item_info and "containers" in item_info:
-            containers = item_info["containers"]
-            sum = 0
-            for key in containers:
-                container = containers[key]
-                if "unit" in container and "weight" in container:
-                    if container["unit"] == 3:  # if item is weighed in units
-                        pass
-                    sum += self.convert_unit(container["unit"], container["weight"])
-            if 'total_minimum' in item_info:
-                pass
+        if item_info:
+            active_notification = -1
+            new_notification_level = -1
+            if "active_notification" in item_info:
+                active_notification = item_info["active_notification"]
+            if "containers" in item_info:
+                containers = item_info["containers"]
+                sum = 0
+                for key in containers:
+                    container = containers[key]
+                    if "unit" in container and "weight" in container:
+                        if container["unit"] == UN:  # if item is weighed in units
+                            if "item_average_weight" in item_info:
+                                pass  # TODO take care of the condition that an item is weighed in units
+                        sum += self.convert_unit(container["unit"], container["weight"])
+                item_info["sum"] = sum
+                if "total_minimum" in item_info:
+                    total_minimum = item_info["total_minimum"]
+                    if sum <= total_minimum:
+                        new_notification_level = ITEM_CRITICAL
 
-        pass
+                    if total_minimum < sum <= total_minimum * 2:
+                        new_notification_level = ITEM_LOW
+
+                if "total_maximum" in item_info:
+                    total_maximum = item_info["total_maximum"]
+                    if sum >= total_maximum:
+                        new_notification_level = ITEM_OVER
+
+                if "minimum_per_day" in item_info:
+                    minimum_per_day = item_info["minimum_per_day"]
+                    pass
+                if "maximum_per_day" in item_info:
+                    maximum_per_day = item_info["maximum_per_day"]
+                    pass
+                if active_notification != new_notification_level:
+                    self.notify_clients(business_id, item_id, new_notification_level, updater)
+                    item_info["active_notification"] = new_notification_level
+        else:
+            self.email_client.email_admin("Error loading item info",
+                                          "Error loading item info business: "+ str(business_id)+" item: "+str(item_id))
+
+    def notify_clients(self, business_id, item_id, notification_level,updater):
+        """notify the clients connected that the a notification status """
+        updater.add_notification(business_id, item_id, notification_level, remove_only=notification_level == -1)
+
 
     def convert_unit(self, source_unit, item_weight, target_unit=None):
         """convert units of items. if no target unit is entered so the system default is used
         (KG when writing this code)"""
         if target_unit is None:
             target_unit = self.dict_unit
-        if source_unit == 1:
-            if target_unit == 1:  # kg to kg
+        if source_unit == KG:
+            if target_unit == KG: 
                 pass
-            elif target_unit == 2:  # lb to kg
+            elif target_unit == LB:
                 item_weight *= 2.205
-        elif source_unit == 2:
-            if target_unit == 1:  # lb to kg
+        elif source_unit == LB:
+            if target_unit == KG:  
                 item_weight /= 2.205
-            elif target_unit == 2:  # lb to lb
+            elif target_unit == LB:  
                 pass
         return item_weight
 
