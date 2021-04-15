@@ -50,7 +50,7 @@ export class AddToOrder extends Component {
       div_content: "",
       btn_color: "#73D504",
       btn: <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />,
-      button_text :(this.props.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"],
+      button_text: (this.props.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"],
       min: 1,
       max: 99,
       unit: props.unit
@@ -112,6 +112,8 @@ export class AddToOrder extends Component {
 
     let request = base_url + "/order/add/item"
 
+    let response
+
     // 
     $.ajax({
       url: request,
@@ -121,33 +123,43 @@ export class AddToOrder extends Component {
       // processData: true,
       // enCode: true,
       success: function (res) {
+        response = res
         console.log(unit)
         scree_alert('success', dict["amount"], getUnitById(unit), title);
         console.log(res)
       },
       error: function (err) {
-
+        response = err
+        scree_alert('error', dict["amount"], getUnitById(unit), title);
         console.log(err)
+
       }
 
 
+    }).then(() => {
+
+      // here we can edit badge for items in order
+      if (this.state.kind === 0 && response && response[1] === 200) {
+
+        let div_content
+
+        div_content = <Badge content={value} >{this.state.btn}</Badge>
+
+        div_content = <div className="cart_container">
+          <div className="cart_photo_container">{div_content}</div>
+          <div className="cart_text_container">{this.state.button_text}</div>
+        </div>
+
+        this.setState({
+          div_content: div_content,
+          quantity: value
+        })
+      }
     });
 
-    // here we can edit badge for items in order
-    if(this.state.kind === 0){
 
-      let div_content
-  
-      div_content = <Badge content={value} >{this.state.btn}</Badge>
-  
-      div_content = <div className="cart_container">
-        <div className="cart_photo_container">{div_content}</div>
-        <div className="cart_text_container">{this.state.button_text}</div>
-      </div>
-  
-      this.setState({ div_content:div_content,
-      quantity:value})
-    }
+
+
   }
 
   componentDidMount() {
@@ -214,10 +226,10 @@ export class AddToOrder extends Component {
   }
 }
 
+// This function get  if add to order request success or failed and notify the user the condition of the request.
 function scree_alert(funcName, amount, unit, item_name) {
-
   note[funcName]({
-    title: Dictionary["item_added"],
+    title: funcName === 'success' ? Dictionary["item_added"] : Dictionary["item_added_failed"],
     description: <div >{amount} {unit} {item_name} </div>
   });
 }

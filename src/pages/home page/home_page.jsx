@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from '../../images/icons/Majordomo logo.svg';
 import './home_page.css'
-import { Notification } from '../../components/notifications'
+import { Notification, OKNotification } from '../../components/notifications'
 import { category_names, category_symbols, notification_dict } from '../../components/notifications_data';
 import { CategoryDrawer } from '../../components/drawer';
 import { Dictionary, getTime } from '../../Dictionary';
@@ -31,7 +31,7 @@ export class HomePage extends Component {
 
         var tiles = this.props.dict["weights"]["category"]
 
-        let temp = notfication ? <NotificationPeeker dict={notfication} /> : <div>All Inventory good</div>
+        let temp = notfication ? <NotificationPeeker dict={notfication} /> : <OKNotification />
 
         return (
             <div className="home_page">

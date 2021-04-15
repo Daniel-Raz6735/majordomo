@@ -59,6 +59,7 @@ export const Dictionary = new LocalizedStrings({
     looks_good: "Inventory looks good",
     serach_placeholder: "what are you looking for",
     item_added: "Item added successfully",
+    item_added_failed: "Item added failed",
 
     //category names
     fish: "Fish",
@@ -130,6 +131,7 @@ export const Dictionary = new LocalizedStrings({
     suggest_dish: "הצע מנה",
     serach_placeholder: "מה אתה מחפש",
     item_added: "מוצר התווסף בהצלחה",
+    item_added_failed: "הוספת מוצר נכשלה",
 
     //category names
     fish: "דגים",
