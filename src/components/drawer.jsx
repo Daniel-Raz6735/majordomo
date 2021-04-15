@@ -203,7 +203,7 @@ export class SearchBar extends React.Component {
   }
 }
 export class ItemPage extends Component {
-
+  /* shows all of the information about an item and its statistics*/
   constructor(props) {
     super(props);
     this.state = {
@@ -220,23 +220,24 @@ export class ItemPage extends Component {
 
   componentDidMount() {
     var request = base_url + '/get/item/history';
+    
     var business_id = this.props.business_id,
       item_id = this.props.item_id,
       min_date = get_old_date(new Date(), 30)
 
-    if (!business_id) {
+    if (!business_id) 
       console.log("No business id enterd. nothing happend")
-    }
-    else if (!item_id) {
+    else if (!item_id) 
       console.log("No item id enterd. nothing happend")
-    }
     else {
       request += "?business_id=" + business_id + "&item_id=" + item_id + "&min_date=" + min_date
+
       var callback = this.devide_data
       $.ajax({
         url: request,
         success: function (res) {
           callback(res)
+          console.log(res)
         },
         error: function (err) {
           console.log(err)
@@ -244,7 +245,9 @@ export class ItemPage extends Component {
       });
     }
   }
+
   devide_data(res) {
+    /*devide the data to diffarent dates and add a dropdown item stating the category*/
     var page = [], dates_to_pull = this.state.dates_to_pull, dropdown_content = [], i = 0;
     dates_to_pull.forEach(days => {
       var j = i++;
@@ -252,7 +255,9 @@ export class ItemPage extends Component {
     })
     this.setState({ page, dropdown_content, res });
   }
+
   get_relavent_data(res, days) {
+    /* takes all data from the past dates and puts them in a dict that the keys are the wighings and the */
     var min_date = get_old_date(new Date(), days),
       relavent_data = {}, sorted_data = {};
     min_date = new Date(min_date * 1000)
@@ -268,7 +273,19 @@ export class ItemPage extends Component {
       var keys = Object.keys(relavent_data).sort();
       keys.forEach(key => sorted_data[key] = relavent_data[key])
     }
-    return sorted_data;
+    console.log(sorted_data);
+    var last_weight = 0, range=1, last_date, no_repatition_dict={};
+    Object.keys(sorted_data).forEach(date_key=>{
+      var current_weight =sorted_data[date_key]["weight"]
+      var diffarence = Math.abs( current_weight - last_weight)
+      if(diffarence>range){
+        no_repatition_dict[date_key] = sorted_data[date_key]
+        last_weight = current_weight
+        last_date = date_key
+      }
+
+    })    
+    return no_repatition_dict;
   }
 
   render() {
@@ -277,6 +294,7 @@ export class ItemPage extends Component {
       res = this.state.res;
     if (res) {
       var relavent_data = this.get_relavent_data(res, active_chart)
+      
       chart = <ChartComponent {...this.props} key={active_chart} num_of_days={active_chart} dict={relavent_data} />
     }
     var notifications_level, notification_info
@@ -427,6 +445,14 @@ export class ChartComponent extends Component {
 
     );
   }
+}
+
+function download(content, fileName, contentType) {
+    var a = document.createElement("a");
+    var file = new Blob([content], { type: contentType });
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
 }
 
 export class InfoCube extends Component {
