@@ -81,6 +81,12 @@ export class SiteFrame extends Component {
                     confirm_papulation(dict, "process_initial_data", "initial data not recived well")
                     this.change_tab(tab_name, dict)
                     this.setState({ dict })
+                    console.log(dict)
+                    if(dict["preferences"]){
+                        sessionStorage.setItem("developer",dict["preferences"]["developer"])
+                        console.log(dict["preferences"]["developer"])
+
+                    }
                 }
             }
             else {
@@ -96,7 +102,7 @@ export class SiteFrame extends Component {
         var request = base_url + '/get/current_view';
 
         if (business_id) {
-            request += "?business_id=" + business_id + "&active=true"
+            request += "?business_id=" + business_id
             
             $.ajax({
                 url: request,

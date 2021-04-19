@@ -4,7 +4,7 @@ export function create_initial_data_dict(data) {
     //this function gets a response from the server and breaks it down to 4 dictionary 
     var dict = {}
     if (data) {
-        
+        dict["preferences"] = data["preferences"]
         dict["orders"] = create_orders_dict(data["orders"])
         dict["suppliers"] = create_suppliers_dict(data["suppliers"], dict["orders"])
         dict["notifications"] = create_notification_dict(data["notifications"], dict["suppliers"], dict["orders"])
