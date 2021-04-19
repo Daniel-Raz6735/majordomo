@@ -31,7 +31,7 @@ export class HomePage extends Component {
 
         var tiles = this.props.dict["weights"]["category"]
 
-        let temp = notfication ? <NotificationPeeker dict={notfication} /> : <OKNotification />
+        let temp = notfication ? <NotificationPeeker key={"notification_peeker"} dict={notfication} /> : <OKNotification />
 
         return (
             <div className="home_page">
@@ -67,7 +67,7 @@ export class NotificationPeeker extends Component {
                 var supplier_info = level_dict[supplier_id]
                 Object.keys(supplier_info).forEach(item_id => {
                     var item_info = supplier_info[item_id]
-                    page.push(<Notification notification_level={item_info["notification_level"]}
+                    page.push(<Notification key={"not" + item_id} notification_level={item_info["notification_level"]}
                         item_name={item_info["item_name"]} total_weight={item_info["total_weight"]}
                         unit={getUnitById(item_info["unit"])} order_details={item_info["order_details"]}
                         item_id={item_id} supplier_id={item_info["supplier_id"]} />)
@@ -110,7 +110,7 @@ export class InentoryTileContainer extends Component {
         var page = []
 
         for (let i = 0; i < category_symbols.length; i++) {
-            page.push(<CategoryDrawer cat_name={category_names[i]} symbol={category_symbols[i]} weights_dict={this.props.dict[i + 1]} cat_id={i} tile={true} />)
+            page.push(<CategoryDrawer key={"cat_drawer" + i} cat_name={category_names[i]} symbol={category_symbols[i]} weights_dict={this.props.dict[i + 1]} cat_id={i} tile={true} />)
         }
 
         return (
@@ -148,7 +148,7 @@ export class InventoryTile extends Component {
                 let notification_num = dict[key]["notification_level"]
                 if (notification_num !== -1 && temp !== notification_num) {
                     temp = notification_num
-                    page.push(<img className="header_symbols notification_toggler" src={notification_dict[notification_num]["error_symbol"]} alt="category symbol" />)
+                    page.push(<img key={"img" + key} className="header_symbols notification_toggler" src={notification_dict[notification_num]["error_symbol"]} alt="category symbol" />)
                 }
             })
         }

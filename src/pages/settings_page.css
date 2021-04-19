@@ -29,6 +29,11 @@
     font-weight: bold;
 }
 
+.header{
+    display: flex;
+    justify-content: center;
+}
+
 .setting_value {
     margin-right: 50px;
 }

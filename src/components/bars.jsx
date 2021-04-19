@@ -8,7 +8,7 @@ import { auth } from '../config/firebaseConfig'
 import { Dictionary, getRTL, getTime } from '../Dictionary';
 import InventoryPage from "../pages/inventory_page"
 import OrdersPage from "../pages/orders_page"
-import { Loader } from 'rsuite';
+import { Button, Loader } from 'rsuite';
 import { create_initial_data_dict, confirm_papulation } from './data_dictionary';
 import SettingPage from "../pages/settings_page"
 import fake_data from '../fake_data.json'
@@ -41,10 +41,10 @@ export class SiteFrame extends Component {
 
 
         // wss.onopen = function () { console.log('wss open'); };
-        ws.onopen = function () { console.log('ws open'); };
+        ws.onopen = function () {  };
         ws.onmessage = (message) => {
             // const dataFromServer = JSON.parse(message.data);
-            console.log('got reply! ' + message.data);
+            
             // this.change_tab(this.state.tab_name);
             window.location.reload()
         }
@@ -57,7 +57,7 @@ export class SiteFrame extends Component {
         this.get_initial_data(this.process_initial_data, 1, tab_name)
 
         //establishing a way for chield components to switch tabs across the app
-        $("#reset_frame").change(() => { console.log(this.change_tab($("#reset_frame").val())) })
+        $("#reset_frame").change(() => {  })
 
 
     }
@@ -97,16 +97,16 @@ export class SiteFrame extends Component {
 
         if (business_id) {
             request += "?business_id=" + business_id + "&active=true"
-            console.log(request)
+            
             $.ajax({
                 url: request,
                 success: function (res) {
                     callback(res, true, tab_name);
-                    console.log(res)
+                    
                 },
                 error: function (err) {
                     callback(fake_data, true);
-                    console.log(err)
+                    
                 }
             });
         }
@@ -235,10 +235,11 @@ export class NavBar extends Component {
             <header className="header">
                 {/* <LangBtn /> */}
                 {/* <img alt="Majordomo logo" className="majordomoLogo" src={logo} onClick={() => { window.location = '/'; }}></img> */}
-                <button id="logoutBtn" onClick={() => {
+            
+                <Button color="red" id="logoutBtn" onClick={() => {
                     auth.signOut()
                     window.location.reload()
-                }} >{Dictionary.signOut}</button>
+                }} >{Dictionary.signOut}</Button>
             </header>
         );
 

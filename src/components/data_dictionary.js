@@ -4,12 +4,12 @@ export function create_initial_data_dict(data) {
     //this function gets a response from the server and breaks it down to 4 dictionary 
     var dict = {}
     if (data) {
-        // console.log(data)
+        
         dict["orders"] = create_orders_dict(data["orders"])
         dict["suppliers"] = create_suppliers_dict(data["suppliers"], dict["orders"])
         dict["notifications"] = create_notification_dict(data["notifications"], dict["suppliers"], dict["orders"])
         dict["weights"] = create_weights_dict(data["weights"], dict["suppliers"], dict["notifications"], dict["orders"])
-        console.log(dict)
+        
         // download(JSON.stringify(dict) , 'dict.json', 'text/plain');
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
         if (!dict["weights"]) {
@@ -281,13 +281,13 @@ export function confirm_papulation(dict, area_name, message = "", dict_to_test =
         if (not_found_keys) {
             var keys = ""
             not_found_keys.forEach(key => { keys += key + ", " })
-            // console.log("couldent find "+keys+" in "+area_name + message)
+            
             return keys
         }
     }
     else {
 
-        // console.log("no dictionary recived" + area_name + message)
+       
     }
 
 }

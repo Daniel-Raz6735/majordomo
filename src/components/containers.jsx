@@ -33,7 +33,7 @@ export function req_weights(callback, user_id, item_id = null) {
         request += "?business_id=" + user_id
         if (item_id)
             request += "&item_id=" + item_id
-        console.log(request)
+        
         $.ajax({
             url: request,
             success: function (res) {
@@ -69,7 +69,7 @@ export class Containers extends Component {
         //gets a list of weights and puts and renders the maximal  
         var res = [];
         var sorted = sortWeightDict(weights_dict)
-        console.log(weights_dict)
+        
 
         if (weights_dict) {
             sorted.forEach(key => {
@@ -125,7 +125,7 @@ export class ItemBlock extends Component {
 
 
     render() {
-        console.log(this.props.weight_dict)
+        
 
         let sym
         let color = this.props.symbol !== -1 ? notification_colors[this.props.symbol - 1] : styleArr[3]

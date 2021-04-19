@@ -30,7 +30,7 @@ const { Collapse } = Animation;
 
 
 //     call_back(seller_dict) {
-//         // console.log(seller_dict)
+
 //     }
 
 //     render() {
@@ -86,7 +86,7 @@ export class OrdersPage extends Component {
     }
 
     call_back(toggle_number) {
-        // console.log(seller_dict)
+      
     }
 
     sort_dict(index) {
@@ -107,7 +107,7 @@ export class OrdersPage extends Component {
                     // current_dict = suppliers_dict["items"]
                     break;
             }
-            // console.log(current_dict)
+           
             // Object.keys(current_dict).forEach(key => {
             //     page.push(<OrderCategory order_dict={current_dict[key]} />)
             //     page.push(<AddItem />)
@@ -129,7 +129,7 @@ export class OrdersPage extends Component {
         if (dict && dict["suppliers"] && dict["suppliers"]["suppliers"]) {
             suppliers_dict = dict["suppliers"]["suppliers"]
             var sellers = {}
-            console.log(dict)
+            
             if (suppliers_dict) {
 
                 Object.keys(suppliers_dict).forEach(key => {
@@ -141,10 +141,9 @@ export class OrdersPage extends Component {
                 })
                 var sorted_sellers = sort_by_key_val(sellers, false, true)
                 let weight_sup_dict = dict["weights"]["supplier"]
-                console.log(sorted_sellers)
-                console.log(suppliers_dict)
+             
                 sorted_sellers.forEach(supplier => {
-                    console.log(supplier)
+                    
                     var supplier_id = supplier[0]
                     page.push(<OrderCategory weights_dict={weight_sup_dict[supplier_id]} supplier={suppliers_dict[supplier_id]} />)
                 })
@@ -159,19 +158,21 @@ export class OrdersPage extends Component {
             var sells_items = supplier["sells_items"]
             if (sells_items) {
                 Object.keys(sells_items).forEach(key => {
-                    if (sells_items[key]["order_details"])
-                        console.log(sells_items[key]["order_details"])
+                    if (sells_items[key]["order_details"]){
+
+                    }
+                        
 
                 })
             }
-            console.log(supplier["sells_items"])
+            
 
         }
     }
 
 
     render() {
-        console.log(this.props.dict)
+        
         return (
             <div className="orders_page_container">
                 <TitleComponent title_name="orders" />
@@ -215,10 +216,10 @@ class OrderCategory extends Component {
         var page = []
         if (supplier) {
             var sells_items = supplier["sells_items"]
-            console.log(supplier)
+            
 
             if (sells_items) {
-                console.log(sells_items)
+                
                 Object.keys(sells_items).forEach(key => {
                     let temp = this.props.weights_dict[key], item_name
                     item_name = temp && temp["item_name"] ? temp["item_name"] : key
@@ -227,9 +228,9 @@ class OrderCategory extends Component {
                         page.push(<Order order={sells_items[key]["order_details"]} item_id={item_name} />)
                 })
             }
-            page.push(<CategoryDrawer weights_dict={this.props.weights_dict} order_drawer={true} />)
+            page.push(<CategoryDrawer key={"cat_drawer_order_page"} weights_dict={this.props.weights_dict} order_drawer={true} />)
             // page.push(<AddItem weights_dict={this.props.weights_dict}/>)
-            // console.log(supplier["sells_items"])
+            
 
         }
         return page
@@ -237,10 +238,9 @@ class OrderCategory extends Component {
 
 
     render() {
-        // console.log(this.props.supplier)
-        console.log(this.props.supplier)
+        
         let supplier = this.props.supplier
-        // console.log(supplier)
+        
         return (
             <div className="notification_category_container">
                 <OrderHeader key={"header" + this.props.cat_type + this.props.category_id} cat_name={supplier["name"]} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
@@ -268,7 +268,7 @@ class Order extends Component {
     }
     handleMinus() {
         var new_val = this.state.quantity - this.state.incraments;
-        console.log(new_val)
+        
         if (new_val >= this.state.min)
           this.setState({ quantity: new_val });
         else
@@ -277,7 +277,7 @@ class Order extends Component {
     
       handlePlus() {
         var new_val = this.state.quantity + this.state.incraments;
-        console.log(new_val)
+        
         if (new_val <= this.state.max)
           this.setState({ quantity: new_val });
         else

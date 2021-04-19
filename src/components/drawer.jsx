@@ -38,7 +38,7 @@ export class CategoryDrawer extends React.Component {
   }
 
   componentDidMount() {
-    // console.log(this.props.weights_dict["cat_name"])
+
     this.switchContent(this.props.item_id)
   }
 
@@ -74,8 +74,8 @@ export class CategoryDrawer extends React.Component {
       }
     })
     var page = []
-    page.push(<SearchBar handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />)
-    page.push(<Containers weights_dict={newDict} openItem={this.switchContent} />)
+    page.push(<SearchBar key={"search_bar1"} handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />)
+    page.push(<Containers key = {"containers1"} weights_dict={newDict} openItem={this.switchContent} />)
     this.setState({ page });
 
   }
@@ -87,14 +87,14 @@ export class CategoryDrawer extends React.Component {
       cat_image = <div onClick={() => this.switchContent()}><img src={back_icon} alt="back" /></div>
 
       if (this.props.weights_dict)
-        page = <ItemPage business_id={1} item_id={item_id} notification_level={this.props.weights_dict[item_id]["notification_level"]} weight_info={this.props.weights_dict[item_id]} />
+        page = <ItemPage key={"item_page"} business_id={1} item_id={item_id} notification_level={this.props.weights_dict[item_id]["notification_level"]} weight_info={this.props.weights_dict[item_id]} />
 
       else
         console.log("No weights dict, can't render item")
     }
     else {
-      page.push(<SearchBar handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />)
-      page.push(<Containers weights_dict={this.props.weights_dict} openItem={this.switchContent} />)
+      page.push(<SearchBar key={"search_bar2"} handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />)
+      page.push(<Containers key = {"containers2"} weights_dict={this.props.weights_dict} openItem={this.switchContent} />)
       cat_image = <img src={category_symbols[cat_id]} alt={category_names[cat_id]} />
     }
     this.setState({ page, cat_image })
@@ -123,7 +123,7 @@ export class CategoryDrawer extends React.Component {
       see_full_inventory = <div className="inventory_clicker url_like" onClick={() => this.toggleDrawer(true)}>{Dictionary["see_full"]}</div>
 
     else if (this.props.order_drawer && !this.props.tile) //order page
-      see_full_inventory = <AddItem func={this.toggleDrawer} />
+      see_full_inventory = <AddItem key={"add_item"} func={this.toggleDrawer} />
 
     else { // home page
       title = ""
@@ -141,6 +141,7 @@ export class CategoryDrawer extends React.Component {
 
 
         <Drawer
+          key={"drawer_cat"}
           size={size}
           placement={placement}
           show={show}
@@ -220,14 +221,14 @@ export class ItemPage extends Component {
 
   componentDidMount() {
     var request = base_url + '/get/item/history';
-    
+
     var business_id = this.props.business_id,
       item_id = this.props.item_id,
       min_date = get_old_date(new Date(), 30)
 
-    if (!business_id) 
+    if (!business_id)
       console.log("No business id enterd. nothing happend")
-    else if (!item_id) 
+    else if (!item_id)
       console.log("No item id enterd. nothing happend")
     else {
       request += "?business_id=" + business_id + "&item_id=" + item_id + "&min_date=" + min_date
@@ -237,10 +238,10 @@ export class ItemPage extends Component {
         url: request,
         success: function (res) {
           callback(res)
-          console.log(res)
+          
         },
         error: function (err) {
-          console.log(err)
+          
         }
       });
     }
@@ -284,7 +285,7 @@ export class ItemPage extends Component {
         last_date = date_key
       }
 
-    })    
+    })
     return no_repatition_dict;
   }
 
@@ -294,7 +295,7 @@ export class ItemPage extends Component {
       res = this.state.res;
     if (res) {
       var relavent_data = this.get_relavent_data(res, active_chart)
-      
+
       chart = <ChartComponent {...this.props} key={active_chart} num_of_days={active_chart} dict={relavent_data} />
     }
     var notifications_level, notification_info
@@ -355,7 +356,7 @@ export class ChartComponent extends Component {
       dict = props.dict,
       weights = [], date_time = [],
       point_colors = [], point_radius = []
-    console.log(dict)
+
     if (dict && Object.keys(dict).length > 0) {
       Object.keys(dict).forEach(date => {
         var weight = dict[date]["weight"]
@@ -369,7 +370,7 @@ export class ChartComponent extends Component {
       });
       var weight_info = this.props.weight_info,
         setName = weight_info ? weight_info["item_name"] : Dictionary["unknown"]
-      console.log(Math.min.apply(null, weights))
+      
       this.render_chart([[setName, weights]], date_time, this.state.chart_id, point_colors, point_radius)
     }
     else {
@@ -377,7 +378,7 @@ export class ChartComponent extends Component {
     }
   }
   devide_data(res) {
-    console.log(res)
+  
     // if (res && res.length > 0)
 
     // else { }
@@ -525,7 +526,6 @@ const ItemDeatils = (props) => {
     width: "3px"
   }
 
-  console.log(props.dict)
 
 
   return (
