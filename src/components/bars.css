@@ -73,4 +73,17 @@
     /* overflow: auto; */
 }
 
+.page_not_found{
+    margin: auto;
+    text-align: center;
+    text-justify: auto;
+    font-weight: bolder;
+    font-size: larger;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    
+}
+
 

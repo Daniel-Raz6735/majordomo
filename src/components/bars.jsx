@@ -5,7 +5,7 @@ import cart from '../images/icons/cart.svg'
 import profile from '../images/profile.svg'
 import React, { Component } from 'react';
 import { auth } from '../config/firebaseConfig'
-import { Dictionary, getRTL, getTime} from '../Dictionary';
+import { Dictionary, getRTL, getTime } from '../Dictionary';
 import InventoryPage from "../pages/inventory_page"
 import OrdersPage from "../pages/orders_page"
 import { Loader } from 'rsuite';
@@ -50,7 +50,11 @@ export class SiteFrame extends Component {
         }
         this.setState({ socket: ws });
 
-        this.get_initial_data(this.process_initial_data, 1, this.state.tab_name)
+        var tab_name = sessionStorage.getItem('tab_name') ? sessionStorage.getItem('tab_name') : "";
+        this.setState({ tab_name: tab_name });
+        sessionStorage.removeItem('tab_name');
+
+        this.get_initial_data(this.process_initial_data, 1, tab_name)
 
         //establishing a way for chield components to switch tabs across the app
         $("#reset_frame").change(() => { console.log(this.change_tab($("#reset_frame").val())) })
@@ -69,10 +73,10 @@ export class SiteFrame extends Component {
             // download(JSON.stringify(data) , 'file.json', 'text/plain');
             if (typeof (data) == "object") {
                 var dict = create_initial_data_dict(data);
-                console.log(dict)
-                if (!dict)
-                    this.setState({ page: <div> we encounterd a problem in loading data</div> })
-
+                if (!dict) {
+                    this.setState({ page: <PageNotFound status_code={500}/> })
+                    console.log("Data rcived from server is corrupt")
+                }
                 else {
                     confirm_papulation(dict, "process_initial_data", "initial data not recived well")
                     this.change_tab(tab_name, dict)
@@ -84,7 +88,7 @@ export class SiteFrame extends Component {
             }
         }
         else
-            this.setState({ page: <div> we encounterd a problem in loading data</div> })
+            this.setState({ page: <PageNotFound status_code={500}/> })
     }
 
     get_initial_data(callback, business_id, tab_name) {
@@ -123,18 +127,18 @@ export class SiteFrame extends Component {
                 break;
 
             case "OrdersPage":
-            
+
                 i = 2;
                 page = <OrdersPage dict={dict} />
                 break;
 
             case "InventoryPage":
-           
+
                 i = 1;
                 page = <InventoryPage dict={dict} />
                 break;
 
-            case "HomePage": 
+            case "HomePage":
             default:
                 i = 0;
                 page = <HomePage dict={dict} />
@@ -200,6 +204,16 @@ export class TitleComponent extends Component {
     }
 }
 
+export class PageNotFound extends Component {
+
+    render() {
+        var status_code = ""
+        if (this.props["status_code"])
+            status_code += Dictionary["status_code"] + ": " + this.props["status_code"]
+        return <div className="page_not_found">{Dictionary["page_not_found"]+"."} <br/> {status_code}</div>;
+    }
+}
+
 export class NavBar extends Component {
 
     constructor(props) {
@@ -244,7 +258,7 @@ export class ButtonsComponent extends Component {
     }
 
     componentDidMount() {
-        var def_btn = this.props.def_btn?this.props.def_btn:0
+        var def_btn = this.props.def_btn ? this.props.def_btn : 0
         this.btn_handler(def_btn)
     }
 

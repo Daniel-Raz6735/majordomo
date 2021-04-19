@@ -273,8 +273,8 @@ export class ItemPage extends Component {
       var keys = Object.keys(relavent_data).sort();
       keys.forEach(key => sorted_data[key] = relavent_data[key])
     }
-    console.log(sorted_data);
-    var last_weight = 0, range=1, last_date, no_repatition_dict={};
+    
+    var last_weight = 0, range=0.5, last_date, no_repatition_dict={};
     Object.keys(sorted_data).forEach(date_key=>{
       var current_weight =sorted_data[date_key]["weight"]
       var diffarence = Math.abs( current_weight - last_weight)
@@ -447,13 +447,13 @@ export class ChartComponent extends Component {
   }
 }
 
-function download(content, fileName, contentType) {
-    var a = document.createElement("a");
-    var file = new Blob([content], { type: contentType });
-    a.href = URL.createObjectURL(file);
-    a.download = fileName;
-    a.click();
-}
+// function download(content, fileName, contentType) {
+//     var a = document.createElement("a");
+//     var file = new Blob([content], { type: contentType });
+//     a.href = URL.createObjectURL(file);
+//     a.download = fileName;
+//     a.click();
+// }
 
 export class InfoCube extends Component {
 
