@@ -34,16 +34,17 @@ export const Dictionary = new LocalizedStrings({
 
 
 
+
     //containers
     unknown_date: "unknown date",
     last_registred: "last registred at",
     see_full: "See full inventory",
     go_to_orders: "Go to orders",
-    30:"Past month",
-    7:"Past week",
-    1:"Past day",
-    min:"Minimum",
-    max:"Maximum",
+    30: "Past month",
+    7: "Past week",
+    1: "Past day",
+    min: "Minimum",
+    max: "Maximum",
 
     //notifications
     notifications: "Notifications",
@@ -51,11 +52,11 @@ export const Dictionary = new LocalizedStrings({
     running_low: "Running low",
     must_use: "Must use ASAP",
     add_to_order: "Add to order",
-    edit_order:"Edit order",
+    edit_order: "Edit order",
     suggest_dish: "Suggest Dish",
     kg: "kg",
     lb: "lbs",
-    un:"units",
+    un: "units",
     looks_good: "Inventory looks good",
     serach_placeholder: "what are you looking for",
     item_added: "Item added successfully",
@@ -75,13 +76,17 @@ export const Dictionary = new LocalizedStrings({
     email: "Email",
     phone: "Phone",
     whatsapp: "WhatsApp",
-    add_item:"Add item",
-    new_item:"New item",
-    unknown:"Unknown",
-    cart:"Cart",
+    add_item: "Add item",
+    new_item: "New item",
+    unknown: "Unknown",
+    cart: "Cart",
 
     //settings page
-    language:"Language",
+    language: "Language",
+
+    //messages
+    page_not_found: "Sorry, the page you were looking for was not found",
+    status_code: "Status code",
 
 
 
@@ -111,11 +116,11 @@ export const Dictionary = new LocalizedStrings({
     last_registred: "נרשם לאחרונה ב",
     see_full: "לצפייה בכל המלאי",
     go_to_orders: "מעבר להזמנות",
-    30:"חודש שעבר",
-    7:"שבוע שעבר",
-    1:"יום שעבר",
-    min:"מינימום",
-    max:"מקסימום",
+    30: "חודש שעבר",
+    7: "שבוע שעבר",
+    1: "יום שעבר",
+    min: "מינימום",
+    max: "מקסימום",
 
     //notifications
     notifications: "התראות",
@@ -123,10 +128,10 @@ export const Dictionary = new LocalizedStrings({
     running_low: "אוזל",
     must_use: "צריך להשתמש בדחיפות",
     add_to_order: "הוסף להזמנה",
-    edit_order:"ערוך הזמנה",
+    edit_order: "ערוך הזמנה",
     kg: "ק''ג",
     lb: "פאונד",
-    un:"יח'",
+    un: "יח'",
     looks_good: "המלאי נראה טוב",
     suggest_dish: "הצע מנה",
     serach_placeholder: "מה אתה מחפש",
@@ -147,12 +152,16 @@ export const Dictionary = new LocalizedStrings({
     email: "דואר אלקטרוני",
     phone: "טלפון",
     whatsapp: "ווטסטאפ",
-    add_item:"הוסף מוצר",
-    new_item:"מוצר חדש",
-    unknown:"לא ידוע",
+    add_item: "הוסף מוצר",
+    new_item: "מוצר חדש",
+    unknown: "לא ידוע",
 
     //settings page
-    language:"שפה",
+    language: "שפה",
+
+    //messages
+    page_not_found: "מתנצלים, הדף שחיפשתם לא נמצא.",
+    status_code: "קוד שגיאה",
 
   }
 });
@@ -172,6 +181,7 @@ Dictionary.setLanguage(language);
 export function changeLanguage(lang) {
   return function () {
     sessionStorage.setItem("current_language", lang);
+    sessionStorage.setItem('tab_name', "SettingPage")
     window.location.reload();
   }
 }
@@ -200,7 +210,7 @@ export function getLeftRight(lang) {
   }
 }
 
-export function getTime(){
+export function getTime() {
   let temp = Date.now()
   let now = new Date(temp)
   let date = now.getDate()
