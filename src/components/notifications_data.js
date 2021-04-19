@@ -66,7 +66,7 @@ export function action_btn(defult_val, level, title, order_details, item_id, sup
         case 3:// item looks good
         default:
             
-            return <AddToOrder kind={0} title={title} defult_val={val} unit={unit} is_in_order={is_in_order} business_id={1} item_id={item_id} supplier_id={supplier_id} />
+            return <AddToOrder key={"add_to_order_key"} kind={0} title={title} defult_val={val} unit={unit} is_in_order={is_in_order} business_id={1} item_id={item_id} supplier_id={supplier_id} />
 
     }
 }

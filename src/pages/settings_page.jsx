@@ -165,7 +165,7 @@ class DropdownToggle extends Component {
           let event_key = String(this.state.event_key) + "-" + String(i)
           let lang = i === 0 ? "EN" : "HE"
 
-          page.push(<Dropdown.Item eventKey={event_key} onSelect={changeLanguage(lang)} ><div className={this.state.text_class[i]} >{this.state.options[i]}</div></Dropdown.Item>)
+          page.push(<Dropdown.Item key={"dropdown_item"+i} eventKey={event_key} onSelect={changeLanguage(lang)} ><div className={this.state.text_class[i]} >{this.state.options[i]}</div></Dropdown.Item>)
         }
 
         test = <Dropdown toggleClassName='dropdown_title' eventKey={String(this.state.event_key)} title={<div className="title_container" ><div className="setting_name">{this.props.setting_name}</div><div className="setting_value">{this.props.options[this.state.chosen]}</div></div>} >
