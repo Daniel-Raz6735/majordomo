@@ -261,18 +261,16 @@ class ReadQueries:
         return query, 200
 
     @staticmethod
-    def get_suppliers(args):
-        # list_of_cols = ["business_id", "items_ids"]
+    def get_suppliers_query(business_id, items_ids=None):
         conditions = []
-        if "business_id" in args:
-            conditions.append(["AND", "supplier.business_id", "=", int(args["business_id"])])
+        if business_id:
+            conditions.append(["AND", "supplier.business_id", "=", int(business_id)])
         else:
             return error_message(400, "Bad request", "no business id sent"), 400
 
-        if "item_ids" in args:
+        if items_ids:
             and_or = "AND"
-            items = args["item_ids"]
-            for item in items:
+            for item in items_ids:
                 conditions.append([and_or, "supplier.item_id", "=", int(item)])
                 and_or = "OR"
 
@@ -287,17 +285,16 @@ class ReadQueries:
         return final_query, 200
 
     @staticmethod
-    def get_open_orders(args):
+    def get_open_orders_query(business_id, order_ids=None):
         conditions = []
-        if "business_id" in args:
-            conditions.append(["AND", "orders.business_id", "=", int(args["business_id"])])
+        if business_id:
+            conditions.append(["AND", "orders.business_id", "=", int(business_id)])
         else:
             return error_message(400, "Bad request", "no business id sent"), 400
 
-        if "order_ids" in args:
+        if order_ids:
             and_or = "AND"
-            orders = args["order_ids"]
-            for order in orders:
+            for order in order_ids:
                 conditions.append([and_or, "orders.order_id", "=", int(order)])
                 and_or = "OR"
 
@@ -313,27 +310,27 @@ class ReadQueries:
         return final_query, 200
 
     @staticmethod
-    def get_user_preferences(args):
-        # list_of_params = ["user_email"]
-        # used_p, non_used_p = Functions.phrase_parameters(args, list_of_params)
-        column_list = [[["lang"]], [["user_id"]]]
+    def get_user_preferences_query(user_email):
+        column_list = [[["user_id"],["lang"],["minimum_reach_alerts"],["freshness_alerts"],["developer"]],[]]
         conditions = []
-        if "user_email" in args:
-            email = args["user_email"].split("@")
+        if user_email:
+            if ";" in user_email:
+                raise HTTPException(status_code=400, detail="request not allowed")
+            email = user_email.split("@")
             if len(email) != 2:
-                return error_message(400, "Bad request", " invalid email"), 400
+                raise HTTPException(status_code=400, detail="Invalid email")
             conditions.append(["AND", "users.email_user_name", "=", "'" + email[0] + "'"])
             conditions.append(["AND", "users.email_domain_name", "=", "'" + email[1] + "'"])
             conditions.append(["AND", "users.user_id", "=", "user_preference.user_id"])
         else:
-            return error_message(400, "Bad request", " user email not sent"), 400
+            raise HTTPException(status_code=400, detail=" user email not sent")
 
         final_query, res_code = DbQueries.select_query(["user_preference", "users"],
                                                        column_list,
                                                        conditions)
         if res_code != 200:
-            return error_message(res_code, final_query), 400
-        return final_query, 200
+            raise HTTPException(status_code=res_code, detail=final_query)
+        return final_query
 
     @staticmethod
     def select_connection(query, expecting_result=True):

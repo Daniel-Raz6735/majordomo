@@ -85,17 +85,17 @@ def get_current_weight(business_id: int, item_ids: List[int] = None):
      provided optional params: can get specific items by item id
     required parameters: business_id
     optional parameters: item_ids"""
-    query, res_code = readQ.get_current_weight(request.args)
-    return process_read_query(query, res_code)
+    query = readQ.get_current_weight(business_id=business_id, item_ids=item_ids)
+    return process_read_query(query)
 
 
-@app.route('/get/preferences', methods=['GET'])
-def get_user_preferences():
+@app.get('/get/preferences')
+def get_user_preferences(user_email: str):
     """gets preferences for a specific user based on user_email
         required parameters: user_email
         optional parameters: none"""
-    query, res_code = readQ.get_user_preferences(request.args)
-    return process_read_query(query, res_code)
+    query = readQ.get_user_preferences_query(user_email)
+    return process_read_query(query)
 
 
 @app.get('/get/notifications')
@@ -149,40 +149,58 @@ async def get_item_history(business_id: int, item_id: int, min_date: Optional[in
 async def get_suppliers(business_id: int, item_id: Optional[int] = -1, item_ids: Optional[List] = None):
     """gets all suppliers based on business_id,
         provided optional params: can get only specific suppliers by item_ids"""
-    args = {"business_id": business_id}
     ids = None
     if item_id > 0:
         ids = [item_id]
     elif item_ids:
         ids = item_ids
-    if ids:
-        args["items_ids"] = ids
-    query, res_code = readQ.get_suppliers(args)
+    query, res_code = readQ.get_suppliers_query(business_id, items_ids=ids)
     return process_read_query(query, res_code)
 
 
 @app.get('/get/current_view')
 async def get_current_view(business_id: int):
     """gets all the info a user needs based on business_id"""
-    args = {"business_id": business_id, "active": True}
+    user_preferences_query = readQ.get_user_preferences_query("shlomow6@gmail.com")
+    message = "unable to load preferences"
     weight_query = readQ.get_current_weight(business_id)
     notifications_query, notifications_code = readQ.get_notifications_with_info(business_id, active=True)
-    suppliers_query, supplier_code = readQ.get_suppliers(args)
-    orders_query, orders_code = readQ.get_open_orders(args)
-    # if weight_code != 200:
-    #     return process_read_query([[weight_query, "weights"]], weight_code)
-    if notifications_code != 200:
-        return process_read_query([[notifications_query, "notifications"]], notifications_code)
-    if supplier_code != 200:
-        return process_read_query([[suppliers_query, "suppliers"]], supplier_code)
-    if orders_code != 200:
-        return process_read_query([[orders_query, "orders"]], orders_code)
+    suppliers_query, supplier_code = readQ.get_suppliers_query(business_id)
+    orders_query, orders_code = readQ.get_open_orders_query(business_id)
 
-    return process_read_query([[notifications_query, "notifications"],
-                               [weight_query, "weights"],
-                               [suppliers_query, "suppliers"],
-                               [orders_query, "orders"]],
-                              orders_code)
+    try:
+        if notifications_code != 200:
+            message = notifications_query
+            raise Exception
+        if supplier_code != 200:
+            message = suppliers_query
+            raise Exception
+        if orders_code != 200:
+            message = orders_query
+            raise Exception
+        connection = Connection()
+        reader = readQ(connection)
+        preferences = connection.get_result(user_preferences_query)[0]
+        notifications = connection.get_result(notifications_query)
+        weights = connection.get_result(weight_query)
+        suppliers = connection.get_result(suppliers_query)
+        orders = connection.get_result(orders_query)
+        res = {
+            "preferences": preferences,
+            "notifications": notifications,
+            "weights": weights,
+            "suppliers": suppliers,
+            "orders": orders,
+
+        }
+        del connection
+        return res
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        settings.email_client.email_admin(message, "error details:" + str(error))
+        raise HTTPException(status_code=400, detail=message)
+
 
 
 # @app.get('/')
@@ -341,7 +359,7 @@ def error_message(code, message, info=None):
     return res, code
 
 
-def process_read_query(query, res_code):
+def process_read_query(query, res_code=200):
     if res_code != 200:
         return query
     result, res_code = readQ.select_connection(query)
@@ -449,4 +467,3 @@ async def websocket_endpoint(websocket: WebSocket, business_id: int, user_id: in
     except WebSocketDisconnect:
         manager.disconnect(websocket, business_id)
         # await manager.broadcast(f"Client #{user_id} left the chat")
-        
