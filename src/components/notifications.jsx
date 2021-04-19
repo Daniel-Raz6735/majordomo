@@ -23,15 +23,15 @@ export function get_notifications(callback, client_id) {
 
     if (client_id) {
         request += "?business_id=" + client_id + "&active=true"
-        console.log(request)
+       
         $.ajax({
             url: request,
             success: function (res) {
                 callback(res);
-                console.log(res)
+                
             },
             error: function (err) {
-                console.log(err)
+                
             }
         });
     }
@@ -45,7 +45,7 @@ export function get_notifications(callback, client_id) {
 export function process_notifications(data, success) {
     // var page = []
     if (typeof (data) == "object") {
-        console.log(data)
+        
         // var dict = create_notification_dict(data);      
         // ReactDOM.render( <NotificationList dict = {dict} />,document.getElementById('first_notification'))
     }
@@ -209,7 +209,7 @@ export class NotificationCategory extends Component {
 
     //extract the items in to Notification components if there are no notifications 
     extract_items(notification_data) {
-        // console.log(notification_data)
+       
         var page = []
         if (notification_data) {
             confirm_papulation(notification_data, "extract items NotificationCategory")
@@ -308,12 +308,12 @@ export class AlertNotifications extends Component {
         }
     }
     render() {
-        console.log(this.props.notification_level)
+        
         let page = [],
             level = this.props.notifications_level>0?this.props.notifications_level:"-1",
             i = level - 1>=0?level - 1:-1,
             notifications = this.props.notification_info;
-            console.log(notifications)
+          
         if (notifications && level) {
             Object.keys(notifications).forEach(key => {
                 var notification = notifications[key],
@@ -401,7 +401,7 @@ export class NotificationHeader extends Component {
             }
         })
         this.setState({ page })
-        // console.log(this.props.weights_dict)
+       
     }
 
 

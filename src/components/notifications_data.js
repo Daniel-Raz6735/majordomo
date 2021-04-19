@@ -48,7 +48,7 @@ export function action_btn(defult_val, level, title, order_details, item_id, sup
     var val,
         unit = 1,
         is_in_order = false
-    console.log(order_details)
+    
     if (order_details && order_details["amount"]) {
         is_in_order = true
         val = order_details["amount"]
@@ -65,7 +65,7 @@ export function action_btn(defult_val, level, title, order_details, item_id, sup
         case 1:// item is in danger
         case 3:// item looks good
         default:
-            console.log(supplier_id)
+            
             return <AddToOrder kind={0} title={title} defult_val={val} unit={unit} is_in_order={is_in_order} business_id={1} item_id={item_id} supplier_id={supplier_id} />
 
     }

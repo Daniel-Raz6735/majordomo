@@ -73,7 +73,7 @@ export class AddToOrder extends Component {
 
   handleMinus() {
     var new_val = this.state.quantity - this.state.incraments;
-    // console.log(new_val)
+    
     if (new_val >= this.state.min)
       this.setState({ quantity: new_val });
     else
@@ -82,7 +82,7 @@ export class AddToOrder extends Component {
 
   handlePlus() {
     var new_val = this.state.quantity + this.state.incraments;
-    // console.log(new_val)
+    
     if (new_val <= this.state.max)
       this.setState({ quantity: new_val });
     else
@@ -91,13 +91,13 @@ export class AddToOrder extends Component {
 
   // getQuantity(value) {
   //   this.setState({value:value})
-  //   console.log(value)
+ 
   // }
 
   addOrder(value) {
     var unit = this.state.unit,
       title = this.state.title
-    console.log(unit)
+    
 
     // order details dictionary
     let dict = {
@@ -108,7 +108,7 @@ export class AddToOrder extends Component {
       amount: value,
       unit: unit
     }
-    console.log(dict)
+    
 
     let request = base_url + "/order/add/item"
 
@@ -124,14 +124,14 @@ export class AddToOrder extends Component {
       // enCode: true,
       success: function (res) {
         response = res
-        console.log(unit)
+       
         scree_alert('success', dict["amount"], getUnitById(unit), title);
-        console.log(res)
+        
       },
       error: function (err) {
         response = err
         scree_alert('error', dict["amount"], getUnitById(unit), title);
-        console.log(err)
+        
 
       }
 
@@ -163,7 +163,7 @@ export class AddToOrder extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.order_dict)
+   
 
     // var button_text = (this.state.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"]
     // btn = <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />
