@@ -4,6 +4,8 @@ from email_client import EmailManager
 from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
 from queries.update_queries import UpdateQueries as updateQ
+from utilities.logs import LogManager
+from utilities.websockets import WebSocketManager
 from queries.delete_queries import DeleteQueries as deleteQ
 from queries.connection_manager import Connection
 from notifacations import NotificationsHandler
@@ -25,6 +27,8 @@ from typing import List
 class Settings(BaseSettings):
     notifications_handler: NotificationsHandler = NotificationsHandler()
     email_client = EmailManager()
+    log_manager = LogManager()
+    web_socket_manager = WebSocketManager()
 
 
 settings = Settings()
@@ -49,6 +53,7 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup_event():
     notifications_handler = settings.notifications_handler
+    # settings.log_manager.log_debug("application started now")
     # notifications_handler.play_schedules((1, 2, 3, 4))
     # notifications_handler.create_alert_dictionary()
     # thread = Thread(target=schedule_runner)
@@ -158,6 +163,16 @@ async def get_suppliers(business_id: int, item_id: Optional[int] = -1, item_ids:
     return process_read_query(query, res_code)
 
 
+@app.get('/containers/add')
+async def add_container_to_business(business_id: int, container_id: int):
+    """"""
+    pass
+
+@app.get('/containers/remove')
+async def remove_container(container_id: int):
+    """removes a container from all businesses"""
+    pass
+
 @app.get('/get/current_view')
 async def get_current_view(business_id: int):
     """gets all the info a user needs based on business_id"""
@@ -200,6 +215,7 @@ async def get_current_view(business_id: int):
         print(error)
         settings.email_client.email_admin(message, "error details:" + str(error))
         raise HTTPException(status_code=400, detail=message)
+
 
 
 
@@ -324,26 +340,7 @@ async def add_order_item(item: OrderItem):
     # return process_create_query([[query, "add weights"]], res_code)
 
 
-# @app.get('/')
-# async def read_item(item_id: str, q: Optional[str] = None):
-#     if q:
-#         return {"item_id": item_id, "q": q}
-#     return {"item_id": item_id}
 
-
-# @app.route('/get/create', methods=['GET'])
-# def create():
-#     pass
-#
-#
-# @app.route('/get/drop/all', methods=['GET'])
-# def drop_tables():
-#     pass
-#
-#
-# @app.route('/get/add/dummy_data', methods=['GET'])
-# def add_dummy():
-#     pass
 
 
 # @app.errorhandler(404)
@@ -379,76 +376,18 @@ def process_create_query(query, res_code):
         return error_message(res_code, result, "unable to process request")
 
 
-class WebSocketManager:
-    def __init__(self):
-        self.active_connections = {}
-
-    async def connect_socket(self, websocket: WebSocket, business_id: int):
-        await websocket.accept()
-        if business_id not in self.active_connections:
-            self.active_connections[business_id] = []
-        self.active_connections[business_id].append(websocket)
-        # await self.broadcast(str(business_id)+" joined the room ", business_id, websocket)
-
-    def disconnect(self, websocket: WebSocket, business_id: int):
-        self.active_connections[business_id].remove(websocket)
-
-    async def send_personal_message(self, message: str, websocket: WebSocket):
-        await websocket.send_text(message)
-
-    async def broadcast(self, message: str, business_id: int, websocket: WebSocket = None):
-        if business_id in self.active_connections:
-            for connection in self.active_connections[business_id]:
-                if websocket != connection:
-                    await connection.send_text(message)
-        else:
-            print("no client connected")
-
-
-manager = WebSocketManager()
-html = """
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Chat</title>
-    </head>
-    <body>
-        <h1>WebSocket Chat</h1>
-        <form action="" onsubmit="sendMessage(event)">
-            <input type="text" id="messageText" autocomplete="off"/>
-            <button>Send</button>
-        </form>
-        <ul id='messages'>
-        </ul>
-        <script>
-            var ws = new WebSocket("ws://localhost:8000/wss");
-            ws.onmessage = function(event) {
-                var messages = document.getElementById('messages')
-                var message = document.createElement('li')
-                var content = document.createTextNode(event.data)
-                message.appendChild(content)
-                messages.appendChild(message)
-            };
-            function sendMessage(event) {
-                var input = document.getElementById("messageText")
-                ws.send(input.value)
-                input.value = ''
-                event.preventDefault()
-            }
-        </script>
-    </body>
-</html>
-"""
+manager = settings.web_socket_manager
 
 
 @app.get('/get/wss')
 async def return_socket_page():
     """socket test"""
-    return HTMLResponse(html)
+    return HTMLResponse(manager.get_socket_page)
 
 
 @app.websocket("/wss")
 async def websocket_endpoint(websocket: WebSocket):
+    settings.log_manager.log_debug("connection established successfully /wss")
     await websocket.accept()
     while True:
         data = await websocket.receive_text()
@@ -458,6 +397,7 @@ async def websocket_endpoint(websocket: WebSocket):
 @app.websocket("/ws/{business_id}/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, business_id: int, user_id: int):
     """create a connection with the client accessing this route"""
+    settings.log_manager.log_debug("connection established successfully /ws/business_id/user_id")
     await manager.connect_socket(websocket, business_id)
     try:
         while True:

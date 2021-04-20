@@ -221,7 +221,6 @@ export class ItemPage extends Component {
 
   componentDidMount() {
     var request = base_url + '/get/item/history';
-
     var business_id = this.props.business_id,
       item_id = this.props.item_id,
       min_date = get_old_date(new Date(), 30)
@@ -241,7 +240,7 @@ export class ItemPage extends Component {
           
         },
         error: function (err) {
-          
+          console.log(err)
         }
       });
     }
@@ -295,7 +294,6 @@ export class ItemPage extends Component {
       res = this.state.res;
     if (res) {
       var relavent_data = this.get_relavent_data(res, active_chart)
-
       chart = <ChartComponent {...this.props} key={active_chart} num_of_days={active_chart} dict={relavent_data} />
     }
     var notifications_level, notification_info
