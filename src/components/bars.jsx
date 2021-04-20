@@ -35,8 +35,13 @@ export class SiteFrame extends Component {
 
     }
     componentDidMount() {
+        var ws =""
         // var ws = new socket_client('wss://majordomo.cloudns.asia/ws/1/1');
-        var ws = new socket_client('ws://127.0.0.1:8000/ws/1/1');
+
+        if (base_url.includes("majordomo.cloudns"))
+            ws = new socket_client('ws://127.0.0.1:8000/ws/1/1');
+        else
+            ws = new socket_client('ws://majordomo.cloudns.asia:5000/ws/1/1')
         // var wss = new socket_client('wss://majordomo.cloudns.asia/wss');
 
 
@@ -84,8 +89,6 @@ export class SiteFrame extends Component {
                     
                     if(dict["preferences"]){
                         sessionStorage.setItem("developer",dict["preferences"]["developer"])
-                        
-
                     }
                 }
             }
