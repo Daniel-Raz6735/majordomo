@@ -59,14 +59,24 @@ export function action_btn(defult_val, level, title, order_details, item_id, sup
         val = defult_val
 
     switch (level) {
-        case 2: //item is going bad
-            return <img src={suggest_dish} alt={Dictionary["suggest_dish"]} />
-        case 0:// item is critical 
+        case 3: //item is overflow case
+            // return <img src={suggest_dish} alt={Dictionary["add_to_order"]} />
+            return <SuggestDish button_text={"Suggest Dish"} />
+        case 0:// item is critical
         case 1:// item is in danger
-        case 3:// item looks good
+        case 2:// item looks good
         default:
-            
             return <AddToOrder key={"add_to_order_key"} kind={0} title={title} defult_val={val} unit={unit} is_in_order={is_in_order} business_id={1} item_id={item_id} supplier_id={supplier_id} />
 
     }
+}
+
+export const SuggestDish = (props) => {
+    
+    return (
+        <div className= "add_to_order">
+            <img src={suggest_dish} alt={"suggestDish"} style={{width:"35%",margin:"auto"}} />
+            <div className="cart_text_container">{props.button_text}</div>
+        </div>
+    )
 }

@@ -81,10 +81,10 @@ export class SiteFrame extends Component {
                     confirm_papulation(dict, "process_initial_data", "initial data not recived well")
                     this.change_tab(tab_name, dict)
                     this.setState({ dict })
-                    console.log(dict)
+                    
                     if(dict["preferences"]){
                         sessionStorage.setItem("developer",dict["preferences"]["developer"])
-                        console.log(dict["preferences"]["developer"])
+                        
 
                     }
                 }

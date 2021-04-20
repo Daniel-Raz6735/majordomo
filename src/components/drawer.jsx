@@ -491,7 +491,7 @@ export class InfoCube extends Component {
     page.push(<div>23.5 kg</div>)
 
     if (this.props.additional_data) {
-      page.push(<Divider />)
+      page.push(<Divider key={"divider"} />)
       page.push(<div> 12:15-12:20 </div>)
     }
 
@@ -531,9 +531,9 @@ const ItemDeatils = (props) => {
   return (
     <div className="item_details">
       <div>Containers</div>
-      <Divider style={divider_style} vertical="true" />
+      <Divider key={"divider1"} style={divider_style} vertical={true} />
       <div className="item_min_max"><div style={min_max_style}>2.5 kg</div><div>{Dictionary["min"]}</div></div>
-      <Divider style={divider_style} vertical="true" />
+      <Divider key={"divider2"} style={divider_style} vertical={true} />
       <div className="item_min_max"><div style={min_max_style}>10 kg</div><div>{Dictionary["max"]}</div></div>
     </div>
   )
