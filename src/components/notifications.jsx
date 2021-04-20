@@ -23,15 +23,15 @@ export function get_notifications(callback, client_id) {
 
     if (client_id) {
         request += "?business_id=" + client_id + "&active=true"
-       
+
         $.ajax({
             url: request,
             success: function (res) {
                 callback(res);
-                
+
             },
             error: function (err) {
-                
+
             }
         });
     }
@@ -45,7 +45,7 @@ export function get_notifications(callback, client_id) {
 export function process_notifications(data, success) {
     // var page = []
     if (typeof (data) == "object") {
-        
+
         // var dict = create_notification_dict(data);      
         // ReactDOM.render( <NotificationList dict = {dict} />,document.getElementById('first_notification'))
     }
@@ -134,7 +134,7 @@ export class NotificationList extends Component {
             if (cat === "alerts") {
                 for (let i = 1; i <= notification_colors.length; i++) {
                     if (notifications_data && notifications_data[i]) {
-                        page.push(<AlertNotifications notifications_level={i} notification_info={notifications_data[i]} />)
+                        page.push(<AlertNotifications key={"alert_not" + i} notifications_level={i} notification_info={notifications_data[i]} />)
                     }
                 }
             }
@@ -209,7 +209,7 @@ export class NotificationCategory extends Component {
 
     //extract the items in to Notification components if there are no notifications 
     extract_items(notification_data) {
-       
+
         var page = []
         if (notification_data) {
             confirm_papulation(notification_data, "extract items NotificationCategory")
@@ -308,23 +308,23 @@ export class AlertNotifications extends Component {
         }
     }
     render() {
-        
+
         let page = [],
-            level = this.props.notifications_level>0?this.props.notifications_level:"-1",
-            i = level - 1>=0?level - 1:-1,
+            level = this.props.notifications_level > 0 ? this.props.notifications_level : "-1",
+            i = level - 1 >= 0 ? level - 1 : -1,
             notifications = this.props.notification_info;
-          
+
         if (notifications && level) {
             Object.keys(notifications).forEach(key => {
                 var notification = notifications[key],
-                total_weight = notification["total_weight"]?notification["total_weight"].toFixed(1).replace(/\.0+$/, ''):-1
-                page.push(<div key={"div"+key} className="simple_notification">
+                    total_weight = notification["total_weight"] ? notification["total_weight"].toFixed(1).replace(/\.0+$/, '') : -1
+                page.push(<div key={"div" + key} className="simple_notification">
                     <div className="cart_container">
-                        {action_btn(null, i, notification["item_name"], notification["order_details"], key, notification["supplier_id"])}
+                        {action_btn(null, level, notification["item_name"], notification["order_details"], key, notification["supplier_id"])}
                     </div>
                     {notification["item_name"]}
-                     <div class="center_items notification_weight">
-                        {total_weight+" "}
+                    <div className="center_items notification_weight">
+                        {total_weight + " "}
                         {getUnitById(notification["unit"])}
                     </div>
                 </div>)
@@ -397,11 +397,11 @@ export class NotificationHeader extends Component {
             let notification_num = dict[key]["notification_level"]
             if (notification_num !== -1 && temp !== notification_num) {
                 temp = notification_num
-                page.push(<img key={"image"+key} className="header_symbols notification_toggler" src={notification_dict[notification_num]["error_symbol"]} alt="category symbol" />)
+                page.push(<img key={"image" + key} className="header_symbols notification_toggler" src={notification_dict[notification_num]["error_symbol"]} alt="category symbol" />)
             }
         })
         this.setState({ page })
-       
+
     }
 
 

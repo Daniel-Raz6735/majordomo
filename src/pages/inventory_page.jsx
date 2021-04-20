@@ -25,7 +25,7 @@ class InventoryPage extends Component {
     return (
       <div className="inventory_page_container">
         <TitleComponent title_name="inventory" />
-        <NotificationList dict={this.props.dict} />
+        <NotificationList key={"not_list"} dict={this.props.dict} />
       </div>
 
     );

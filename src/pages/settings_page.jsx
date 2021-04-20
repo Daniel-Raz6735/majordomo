@@ -5,13 +5,12 @@ import { Dictionary } from "../Dictionary";
 import profilePic from "../images/profile_pic.png";
 import './settings_page.css'
 import { changeLanguage } from '../Dictionary'
-import $ from 'jquery'
-import { base_url } from "..";
+
 
 var fake_settings = {
   lang: "EN",
-  minimum_reach: true,
-  freshnses: true
+  minimum_reach_alerts: true,
+  freshness_alerts: true
 }
 
 
@@ -20,41 +19,16 @@ class SettingsPage extends Component {
     super(props);
     this.state = {
       expanded: true,
-      settings: null
+      settings: this.props.dict && this.props.dict["preferences"]?this.props.dict["preferences"]:fake_settings
     }
-
-    this.getPrefrences = this.getPrefrences.bind(this);
-    this.setPrefrences = this.setPrefrences.bind(this);
-  }
-
-  componentDidMount() {
-    this.getPrefrences(this.setPrefrences)
-
-  }
-
-  getPrefrences(callback) {
-
-    let request = base_url + "/get/preferences"
-
-    $.ajax({
-      url: request,
-      success: function (res) {
-        callback(res);
-        
-      },
-      error: function (err) {
-        callback(fake_settings);
-        
-      }
-    });
-  }
-
-  setPrefrences(data) {
-    this.setState({ settings: data })
     
   }
 
+  componentDidMount() {
 
+  }
+
+  
   render() {
 
    
@@ -95,7 +69,7 @@ class SettingsPage extends Component {
               <Sidenav appearance="subtle" >
                 <div className={"settings_container"}>Notification</div>
                 <Nav>
-                  <DropdownToggle minimum_reach={settings["minimum_reach"]} freshnses={settings["freshnses"]} type={"notification"} />
+                  <DropdownToggle minimum_reach={settings["minimum_reach_alerts"]} freshnses={settings["freshness_alerts"]} type={"notification"} />
                 </Nav>
               </Sidenav>
 

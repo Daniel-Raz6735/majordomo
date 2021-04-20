@@ -14,5 +14,5 @@ if(window.location.href.includes("majordomo-me")){
 }
 export const base_url = url
 
-ReactDOM.render(<LoginComponent/>,document.getElementById('root'));
+ReactDOM.render(<LoginComponent />, document.getElementById('root'));
 

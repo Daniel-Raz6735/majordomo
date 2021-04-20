@@ -74,6 +74,8 @@
 .add_to_order{
     margin-top: 10px;
     color: #060606;
+    display: flex;
+    flex-direction: column;
 }
 
 .add_to_cart_modal_container{

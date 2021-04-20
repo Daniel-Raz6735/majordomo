@@ -67,6 +67,7 @@ export class NotificationPeeker extends Component {
                 var supplier_info = level_dict[supplier_id]
                 Object.keys(supplier_info).forEach(item_id => {
                     var item_info = supplier_info[item_id]
+                    console.log(item_info["notification_level"])
                     page.push(<Notification key={"not" + item_id} notification_level={item_info["notification_level"]}
                         item_name={item_info["item_name"]} total_weight={item_info["total_weight"]}
                         unit={getUnitById(item_info["unit"])} order_details={item_info["order_details"]}
