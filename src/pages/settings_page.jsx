@@ -5,6 +5,7 @@ import { Dictionary } from "../Dictionary";
 import profilePic from "../images/profile_pic.png";
 import './settings_page.css'
 import { changeLanguage } from '../Dictionary'
+import { Test } from "../components/qr_reader";
 
 
 var fake_settings = {
@@ -19,7 +20,8 @@ class SettingsPage extends Component {
     super(props);
     this.state = {
       expanded: true,
-      settings: this.props.dict && this.props.dict["preferences"]?this.props.dict["preferences"]:fake_settings
+      settings: this.props.dict && this.props.dict["preferences"]?this.props.dict["preferences"]:fake_settings,
+      QR:false
     }
     
   }
@@ -34,7 +36,7 @@ class SettingsPage extends Component {
    
 
     let j
-    if (this.state.settings) {
+    if (this.state.settings && !this.state.QR) {
       let settings = this.state.settings
 
       j = settings["lang"] === "EN" ? 0 : 1
@@ -96,11 +98,14 @@ class SettingsPage extends Component {
 
           </div>
           <NavBar />
+          <button onClick={()=>this.setState({QR:true})} >QR Reader</button>
         </div>
 
       );
-    } else
+    } else if(!this.state.settings && !this.state.QR)
       return (<Loader speed="fast" size="lg" content="Loading..." center vertical />)
+      else
+        return <Test/>
 
   }
 }
