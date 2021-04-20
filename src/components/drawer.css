@@ -177,3 +177,8 @@
     
     background-color: transparent;
 }
+
+.no_data{
+    display: flex;
+    justify-content: center;
+}

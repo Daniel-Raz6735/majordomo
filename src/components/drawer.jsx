@@ -1,4 +1,4 @@
-import { Drawer, Icon, InputGroup, Input, Divider, Dropdown, } from 'rsuite';
+import { Drawer, Icon, InputGroup, Input, Divider, Dropdown, Loader, } from 'rsuite';
 import React, { Component } from 'react';
 import x_icon from '../images/x_icon.svg'
 import back_icon from '../images/icons/arrows/right_arrow.svg'
@@ -75,7 +75,7 @@ export class CategoryDrawer extends React.Component {
     })
     var page = []
     page.push(<SearchBar key={"search_bar1"} handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />)
-    page.push(<Containers key = {"containers1"} weights_dict={newDict} openItem={this.switchContent} />)
+    page.push(<Containers key={"containers1"} weights_dict={newDict} openItem={this.switchContent} />)
     this.setState({ page });
 
   }
@@ -94,7 +94,7 @@ export class CategoryDrawer extends React.Component {
     }
     else {
       page.push(<SearchBar key={"search_bar2"} handleChange={this.handleChange} cat_id={this.props.cat_id} weights_dict={this.props.weights_dict} />)
-      page.push(<Containers key = {"containers2"} weights_dict={this.props.weights_dict} openItem={this.switchContent} />)
+      page.push(<Containers key={"containers2"} weights_dict={this.props.weights_dict} openItem={this.switchContent} />)
       cat_image = <img src={category_symbols[cat_id]} alt={category_names[cat_id]} />
     }
     this.setState({ page, cat_image })
@@ -237,7 +237,7 @@ export class ItemPage extends Component {
         url: request,
         success: function (res) {
           callback(res)
-          
+
         },
         error: function (err) {
           console.log(err)
@@ -251,7 +251,7 @@ export class ItemPage extends Component {
     var page = [], dates_to_pull = this.state.dates_to_pull, dropdown_content = [], i = 0;
     dates_to_pull.forEach(days => {
       var j = i++;
-      dropdown_content.push(<Dropdown.Item eventKey={days} onSelect={() => { this.setState({ active_index: j }) }}>{Dictionary[days]}</Dropdown.Item>)
+      dropdown_content.push(<Dropdown.Item key={"drop_item" + days} eventKey={days} onSelect={() => { this.setState({ active_index: j }) }}>{Dictionary[days]}</Dropdown.Item>)
     })
     this.setState({ page, dropdown_content, res });
   }
@@ -273,12 +273,12 @@ export class ItemPage extends Component {
       var keys = Object.keys(relavent_data).sort();
       keys.forEach(key => sorted_data[key] = relavent_data[key])
     }
-    
-    var last_weight = 0, range=0.5, last_date, no_repatition_dict={};
-    Object.keys(sorted_data).forEach(date_key=>{
-      var current_weight =sorted_data[date_key]["weight"]
-      var diffarence = Math.abs( current_weight - last_weight)
-      if(diffarence>range){
+
+    var last_weight = 0, range = 0.5, last_date, no_repatition_dict = {};
+    Object.keys(sorted_data).forEach(date_key => {
+      var current_weight = sorted_data[date_key]["weight"]
+      var diffarence = Math.abs(current_weight - last_weight)
+      if (diffarence > range) {
         no_repatition_dict[date_key] = sorted_data[date_key]
         last_weight = current_weight
         last_date = date_key
@@ -289,13 +289,22 @@ export class ItemPage extends Component {
   }
 
   render() {
-    let active_index = this.state.active_index,
+    let active_index = this.state.active_index,disabled=false,
       active_chart = this.state.dates_to_pull[active_index], chart,
       res = this.state.res;
     if (res) {
       var relavent_data = this.get_relavent_data(res, active_chart)
-      chart = <ChartComponent {...this.props} key={active_chart} num_of_days={active_chart} dict={relavent_data} />
+     
+      if (res.length === 0) {
+        chart = <div className="no_data">No data to show</div>
+        disabled = true
+      }
+      else
+        chart =  <ChartComponent {...this.props} key={active_chart} num_of_days={active_chart} dict={relavent_data} />
+
     }
+    else
+      chart = <Loader speed="fast" size="xs" content="Loading..." center vertical />
     var notifications_level, notification_info
     if (this.props["item_id"] && this.props["business_id"] && this.props["weight_info"]) {
       notification_info = { ...this.props["weight_info"] }
@@ -315,7 +324,7 @@ export class ItemPage extends Component {
         <div className="chart_container">
           <h4>Usage</h4>
           <div className="chart_header">
-            <Dropdown title={Dictionary[active_chart]} activeKey={active_chart}>
+            <Dropdown disabled ={disabled} title={Dictionary[active_chart]} activeKey={active_chart}>
               {this.state.dropdown_content}
             </Dropdown>
           </div>
@@ -342,7 +351,8 @@ export class ChartComponent extends Component {
     super(props);
     this.state = {
       num_of_days: props.num_of_days,
-      chart_id: "food_chart" + this.props.item_id + "chart" + props.num_of_days
+      chart_id: "food_chart" + this.props.item_id + "chart" + props.num_of_days,
+      chart: null
     };
     this.devide_data = this.devide_data.bind(this);
     this.pharse_date = this.pharse_date.bind(this);
@@ -368,15 +378,16 @@ export class ChartComponent extends Component {
       });
       var weight_info = this.props.weight_info,
         setName = weight_info ? weight_info["item_name"] : Dictionary["unknown"]
-      
+
       this.render_chart([[setName, weights]], date_time, this.state.chart_id, point_colors, point_radius)
     }
     else {
-      //insert no data to show for theis time period 
+      //insert no data to show for this time period 
+      this.setState({ chart: <div>No data to show</div> })
     }
   }
   devide_data(res) {
-  
+
     // if (res && res.length > 0)
 
     // else { }
@@ -438,9 +449,14 @@ export class ChartComponent extends Component {
 
   render() {
 
+    let temp = this.state.chart ? this.state.chart : <canvas className="usage_chart" id={this.state.chart_id} />
+
     return (
 
-      <canvas className="usage_chart" id={this.state.chart_id} />
+      <div>
+        <canvas className="usage_chart" id={this.state.chart_id} />
+        {temp}
+      </div>
 
     );
   }
