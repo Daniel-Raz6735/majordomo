@@ -145,7 +145,7 @@ export class OrdersPage extends Component {
                 sorted_sellers.forEach(supplier => {
                     
                     var supplier_id = supplier[0]
-                    page.push(<OrderCategory weights_dict={weight_sup_dict[supplier_id]} supplier={suppliers_dict[supplier_id]} />)
+                    page.push(<OrderCategory key={"order_cat"+supplier} weights_dict={weight_sup_dict[supplier_id]} supplier={suppliers_dict[supplier_id]} />)
                 })
 
 
@@ -175,9 +175,9 @@ export class OrdersPage extends Component {
         
         return (
             <div className="orders_page_container">
-                <TitleComponent title_name="orders" />
+                <TitleComponent key={"tile_comp"} title_name="orders" />
                 <ButtonsComponent key="Order_btns" def_btn={1} btn_names={["item_type", "supplier"]} callback={this.sort_dict} />
-                <SearchBar />
+                <SearchBar key={"search_bar_order_page"} />
                 {this.state.page}
             </div>
 

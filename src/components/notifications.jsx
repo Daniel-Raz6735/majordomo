@@ -318,7 +318,7 @@ export class AlertNotifications extends Component {
             Object.keys(notifications).forEach(key => {
                 var notification = notifications[key],
                 total_weight = notification["total_weight"]?notification["total_weight"].toFixed(1).replace(/\.0+$/, ''):-1
-                page.push(<div className="simple_notification">
+                page.push(<div key={"div"+key} className="simple_notification">
                     <div className="cart_container">
                         {action_btn(null, i, notification["item_name"], notification["order_details"], key, notification["supplier_id"])}
                     </div>
@@ -358,7 +358,7 @@ export class OKNotification extends Component {
         return (
             <div className="notification_container">
                 <div className="">{Dictionary["looks_good"]}  </div>
-                <NotificationSymbol color={"rgba(115, 213, 4, 0.21)"} error_symbol={v_icon} />
+                <NotificationSymbol key={"not_symbol"} color={"rgba(115, 213, 4, 0.21)"} error_symbol={v_icon} />
             </div>
         )
     }
@@ -397,7 +397,7 @@ export class NotificationHeader extends Component {
             let notification_num = dict[key]["notification_level"]
             if (notification_num !== -1 && temp !== notification_num) {
                 temp = notification_num
-                page.push(<img className="header_symbols notification_toggler" src={notification_dict[notification_num]["error_symbol"]} alt="category symbol" />)
+                page.push(<img key={"image"+key} className="header_symbols notification_toggler" src={notification_dict[notification_num]["error_symbol"]} alt="category symbol" />)
             }
         })
         this.setState({ page })
