@@ -66,6 +66,8 @@ class DbQueries:
                             condition.insert(0, " NOT ")
                 for cond in condition:
                     where += " " + str(cond)+" "
+        else:
+            where = None
         if not aggregation_info:
             group_by = None
         return select, from_q, where, group_by
@@ -110,6 +112,7 @@ class DbQueries:
 
     @staticmethod
     def drop_table_query(table_name):
+        """creates a drop table query"""
         return "DROP TABLE " + table_name + " CASCADE;", 200
 
     @staticmethod

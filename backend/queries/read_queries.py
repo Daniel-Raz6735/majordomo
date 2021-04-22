@@ -46,6 +46,21 @@ class ReadQueries:
         return final_query, 200
 
     @staticmethod
+    def get_item(item_id, business_id=None):
+        """creates an SQL query that will return a food_item"""
+        conditions = []
+        if item_id:
+            conditions.append(["AND", "item_id", "=", int(item_id)])
+        else:
+            raise HTTPException(status_code=400, detail="No item id sent")
+        if business_id is not None:
+            conditions.append(["AND", "business_id", "=", int(business_id)])
+        final_query, res_code = DbQueries.select_query([["food_items"]], [], conditions)
+        if res_code != 200:
+            raise HTTPException(status_code=res_code, detail=final_query)
+        return final_query
+
+    @staticmethod
     def get_container_item_id_query(business_id, container_id, using_end_date=None):
         """creates an SQL query that will return a containers item id"""
         conditions = []
@@ -58,7 +73,7 @@ class ReadQueries:
         else:
             raise HTTPException(status_code=400, detail="No business id sent")
         if using_end_date:
-            conditions.append(["AND", "containers.using_end_date", "=", "to timestamp("+using_end_date+")"])
+            conditions.append(["AND", "containers.using_end_date", "=", "to timestamp(" + using_end_date + ")"])
         else:
             conditions.append(["AND", "containers.using_end_date", "is", "null"])
 
@@ -103,7 +118,8 @@ class ReadQueries:
 
         conditions.append(["AND", "order_content.order_id", "=", "orders.order_id"])
         final_query, res_code = DbQueries.select_query([["orders"], ["order_content"]],
-                                                       [[], [["item_id"], ["order_id"], ["price_per_unit"], ["amount"], ["unit"]]],
+                                                       [[], [["item_id"], ["order_id"], ["price_per_unit"], ["amount"],
+                                                             ["unit"]]],
                                                        conditions)
         if res_code != 200:
             raise HTTPException(status_code=400, detail=final_query)
@@ -167,12 +183,12 @@ class ReadQueries:
             conditions.append(["AND", "notifications.notification_id", "=", int(notification_id)])
         conditions.append(["AND", "notifications.food_item_id", "=", "food.item_id"])
         conditions.append(["AND", "food.category_id", "=", "cat.category_id"])
-        sub_table = ReadQueries.get_current_weight(business_id)
+        sub_table = ReadQueries.get_current_weight_query(business_id)
         sub_table = sub_table[:-1]
         conditions.append(["AND", "sub.item_id", "=", "food.item_id"])
 
         final_query, res_code = DbQueries.select_query(
-            [["notifications"], ["food_items", "food"], ["categories", "cat"], ["("+sub_table+")", "sub"]],
+            [["notifications"], ["food_items", "food"], ["categories", "cat"], ["(" + sub_table + ")", "sub"]],
             [[["code"], ["message"], ["food_item_id", "item_id"], ["active"], ["closed_by_user"]],
              [["item_name"], ["unit"]],
              [["category_id"], ["category_name"]],
@@ -184,8 +200,13 @@ class ReadQueries:
         return final_query, 200
 
     @staticmethod
-    def get_current_weight(business_id=None, container_ids=None, item_ids=None, get_by_container=False):
-
+    def get_current_weight_query(business_id=None, container_ids=None, item_ids=None, get_by_container=False):
+        """gets an SQL query of the last weight of all items.
+        optional parameters:
+        business_id: will specify which business you want to request
+        container_ids: int or list of ints specifying which container we want
+        item_ids: int specifying which item we want
+        get by container: boolean determines if to give the results by container or by item """
         conditions = []
         if business_id:
             conditions.append(["AND", "containers.business_id", "=", int(business_id)])
@@ -213,7 +234,7 @@ class ReadQueries:
         conditions.append(["AND", "t1.container_id", "=", "containers.container_id"])
         conditions.append(["AND", "food_items.category_id", "=", "categories.category_id"])
         if get_by_container:
-            cols_to_bring = [[["container_id"],["business_id"]],
+            cols_to_bring = [[["container_id"], ["business_id"]],
                              [["weight_value", "weight"], ["weighing_date", "date"]],
                              [["item_name"], ["item_id"], ["unit"]],
                              [["category_name"], ["category_id"]],
@@ -248,7 +269,7 @@ class ReadQueries:
         else:
             raise HTTPException(status_code=400, detail="No item id sent")
         if min_date is not None:
-            conditions.append(["AND", "weights.weighing_date", ">=",  "to_timestamp(" + str(min_date) + ")"])
+            conditions.append(["AND", "weights.weighing_date", ">=", "to_timestamp(" + str(min_date) + ")"])
         if max_date is not None:
             conditions.append(["AND", "weights.weighing_date", "<=", "to_timestamp(" + str(max_date) + ")"])
 
@@ -261,7 +282,35 @@ class ReadQueries:
         return query, 200
 
     @staticmethod
+    def get_container_by_id_query(container_id):
+        """get a query with container information """
+        conditions = []
+        if container_id:
+            conditions.append(["AND", "container_id", "=", int(container_id)])
+        else:
+            raise HTTPException(status_code=400, detail="No container id sent")
+
+        cols_to_bring = []
+
+        query, res_code = DbQueries.select_query(["containers"], cols_to_bring, conditions)
+        if res_code != 200:
+            raise HTTPException(status_code=500, detail="Error creating container query")
+        return query
+
+    @staticmethod
+    def get_new_container():
+        """gets the last added container (container ids are auto incremented)"""
+        conditions = [["AND", "item_id", "is", "null"]]
+        cols_to_bring = [[["container_id", "container_id", "MAX"]]]
+        query, res_code = DbQueries.select_query(["containers"], cols_to_bring, conditions)
+        if res_code != 200:
+            raise HTTPException(status_code=500, detail="Error getting new item")
+        return query
+
+    @staticmethod
     def get_suppliers_query(business_id, items_ids=None):
+        """create an SQL query that will return all of the suppliers that sell to a business and the items that they supply.
+          provided item id list it will return the items requested"""
         conditions = []
         if business_id:
             conditions.append(["AND", "supplier.business_id", "=", int(business_id)])
@@ -286,6 +335,8 @@ class ReadQueries:
 
     @staticmethod
     def get_open_orders_query(business_id, order_ids=None):
+        """create an SQL query that will get all opened orders information  for a specific business.
+        provided order id list it will return only the open orders requested"""
         conditions = []
         if business_id:
             conditions.append(["AND", "orders.business_id", "=", int(business_id)])
@@ -311,7 +362,8 @@ class ReadQueries:
 
     @staticmethod
     def get_user_preferences_query(user_email):
-        column_list = [[["user_id"],["lang"],["minimum_reach_alerts"],["freshness_alerts"],["developer"]],[]]
+        """creates an SQL query that will return the user preferences"""
+        column_list = [[["user_id"], ["lang"], ["minimum_reach_alerts"], ["freshness_alerts"], ["developer"]], []]
         conditions = []
         if user_email:
             if ";" in user_email:
@@ -394,6 +446,7 @@ class ReadQueries:
 
 
 def error_message(code, message, info=None):
+    """creates an html page"""
     res = "<h1>" + str(code) + "</h1><p>" + str(message) + "</p>"
 
     if info:
@@ -402,6 +455,7 @@ def error_message(code, message, info=None):
 
 
 def dictionify_res(rows):
+    """gets a psycopg2 RealDictCursor dictionary and makes it a a regular key value dictionary"""
     res = []
     if type(rows) == list:
         for row in rows:

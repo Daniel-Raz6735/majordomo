@@ -74,14 +74,17 @@ def schedule_runner():
 
 
 @app.get('/get/containers')
-def get_containers(business_id: int, container_id: int = None):
+def get_containers(business_id: int, container_id: Optional[int] = None, item_id: Optional[int] = None):
     """gets all current weight for all items of a specific business
-         provided optional params: can get specific containers
+         provided optional params: can get specific containers, all containers per item
         required parameters: business_id
-        optional parameters: container_id """
-    query, res_code = readQ.get_current_weight(business_id=business_id, container_ids=container_id,
-                                               get_by_container=True)
-    return process_read_query(query, res_code)
+        optional parameters: container_id, item_id """
+    if item_id:
+        item_id = [item_id]
+    query = readQ.get_current_weight_query(business_id=business_id, container_ids=container_id, item_ids=item_id,
+                                           get_by_container=True)
+    connection = Connection()
+    return connection.get_result(query)
 
 
 @app.get('/get/current_weights')
@@ -90,15 +93,14 @@ def get_current_weight(business_id: int, item_ids: List[int] = None):
      provided optional params: can get specific items by item id
     required parameters: business_id
     optional parameters: item_ids"""
-    query = readQ.get_current_weight(business_id=business_id, item_ids=item_ids)
+    query = readQ.get_current_weight_query(business_id=business_id, item_ids=item_ids)
     return process_read_query(query)
 
 
 @app.get('/get/preferences')
 def get_user_preferences(user_email: str):
     """gets preferences for a specific user based on user_email
-        required parameters: user_email
-        optional parameters: none"""
+        required parameters: user_email"""
     query = readQ.get_user_preferences_query(user_email)
     return process_read_query(query)
 
@@ -118,7 +120,7 @@ def get_notifications(business_id: int, active: bool = True, notification_id: in
 @app.get('/get/rules')
 async def get_rules(business_id: int, active: Optional[bool] = False, rule_id: Optional[int] = -1):
     """gets all rules based on business_id,
-provided optional params: can get only active rules and a specific rule
+        provided optional params: can get only active rules and a specific rule
            required parameters: business_id
            optional parameters: active ,rule_id
            """
@@ -126,6 +128,15 @@ provided optional params: can get only active rules and a specific rule
         raise HTTPException(status_code=400, detail="no business id sent")
     query = readQ.get_rules_query(business_id, active, rule_id)
     return process_read_query(query, 200)
+
+
+# @app.post('/items/add')
+# async def add_item(business_id: int,category_id: int):
+#     """add item to business """
+#     connection = Connection()
+#     updater = updateQ(connection)
+#     reader = readQ(connection)
+
 
 
 @app.get('/get/item/history')
@@ -163,22 +174,79 @@ async def get_suppliers(business_id: int, item_id: Optional[int] = -1, item_ids:
     return process_read_query(query, res_code)
 
 
-@app.get('/containers/add')
-async def add_container_to_business(business_id: int, container_id: int):
-    """"""
-    pass
+@app.post('/containers/pair')
+async def pair_container_to_item(business_id: int, container_id: int, item_id: int):
+    """pair a container that belongs to the business provided, to the item that was provided.
+    removes all previous container pairings"""
+    connection = Connection()
+    updater = updateQ(connection)
+    reader = readQ(connection)
+    container_query = reader.get_container_by_id_query(container_id)
+    container_res = connection.get_result(container_query)
+    try:
+        container = container_res[0]
+        if business_id != container["business_id"]:
+            raise Exception
+    except Exception:
+        raise HTTPException(status_code=403, detail="Container does not belong to business")
+    item_query = reader.get_item(item_id, business_id)
+    item_res = connection.get_result(item_query)
+    if item_res is None or len(item_res) < 1:
+        raise HTTPException(status_code=403, detail="Item does not belong to business")
+    remove_query = updater.disable_container_query(container_id)
+    connection.insert_data(remove_query, "unable to remove container")
+    addition_query = updater.add_container_to_business_query(business_id, container_id, item_id)
+    connection.insert_data(addition_query, "unable to add container")
 
-@app.get('/containers/remove')
+
+@app.post('/containers/add')
+async def add_container_to_business(business_id: int, container_id: Optional[int] = None):
+    """admin removal of container from all businesses and add to a specific business
+    if no container_id provided then creates new one.
+    returns the container id of the container added"""
+    connection = Connection()
+    updater = updateQ(connection)
+    reader = readQ(connection)
+    have_container_id = container_id is not None
+    if have_container_id:
+        remove_query = updater.disable_container_query(container_id)
+        connection.insert_data(remove_query, "unable to remove container")
+    addition_query = updater.add_container_to_business_query(business_id, container_id)
+    connection.insert_data(addition_query, "unable to add container")
+    if not have_container_id:
+        get_container_id = reader.get_new_container()
+        res = connection.get_result(get_container_id)
+        if res and len(res) > 0 and res[0] and "container_id" in res[0] and res[0]["container_id"]:
+            container_id = res[0]["container_id"]
+        else:
+            raise HTTPException(status_code=500, detail="error retrieving new container created ")
+    # weighing = Weighing(container_id=container_id, weight_value=0, weighing_date=int(time.time()), business_id=business_id)
+    # lis = WeighingList(weights=[weighing])
+    # await add_weights(lis,client_time=int(time.time()))
+    return container_id
+
+
+@app.post('/containers/remove')
 async def remove_container(container_id: int):
-    """removes a container from all businesses"""
-    pass
+    """admin removal of a container from all businesses"""
+    remove_query = updateQ.disable_container_query(container_id)
+    connection = Connection()
+    connection.insert_data(remove_query, "unable to remove container")
+
 
 @app.get('/get/current_view')
-async def get_current_view(business_id: int):
-    """gets all the info a user needs based on business_id"""
-    user_preferences_query = readQ.get_user_preferences_query("shlomow6@gmail.com")
+async def get_current_view(business_id: int, user_email: str = "shlomow6@gmail.com"):
+    """gets all the info a user needs based on business_id
+    output: "preferences": pre,
+            "notifications": notifications,
+            "weights": weights,
+            "suppliers": suppliers,
+            "orders": orders,"""
+    if ";" in user_email:
+        raise HTTPException(status_code=400, detail="Illegal email")
+    user_preferences_query = readQ.get_user_preferences_query(user_email)
     message = "unable to load preferences"
-    weight_query = readQ.get_current_weight(business_id)
+    weight_query = readQ.get_current_weight_query(business_id)
     notifications_query, notifications_code = readQ.get_notifications_with_info(business_id, active=True)
     suppliers_query, supplier_code = readQ.get_suppliers_query(business_id)
     orders_query, orders_code = readQ.get_open_orders_query(business_id)
@@ -217,8 +285,6 @@ async def get_current_view(business_id: int):
         raise HTTPException(status_code=400, detail=message)
 
 
-
-
 # @app.get('/')
 # async def read_item(item_id: str, q: Optional[str] = None):
 #     if q:
@@ -238,9 +304,19 @@ class Weighing(BaseModel):
     unit: int = 1
     business_id: int = 1
 
+    # def __init__(self, container_id, weight_value, weighing_date, business_id, unit=1):
+    #     self.container_id = container_id
+    #     self.weight_value = weight_value
+    #     self.weighing_date = weighing_date
+    #     self.unit = unit
+    #     self.business_id = business_id
+
 
 class WeighingList(BaseModel):
     weights: List[Weighing]
+
+    # def __init__(self, weights):
+    #     self.weights = weights
 
     def __str__(self):
         string = ""
@@ -314,6 +390,7 @@ class OrderItem(BaseModel):
 
 @app.post('/order/add/item')
 async def add_order_item(item: OrderItem):
+    """add item to an order"""
     # async def add_order_item(item_id: int, order_id: int, business_id: int, supplier_id: int, amount: int, unit: int):
 
     item = item.dict()
@@ -338,14 +415,6 @@ async def add_order_item(item: OrderItem):
     #                                                 arr)
     # await manager.broadcast(f"weights updated on #{client_time}", 1)
     # return process_create_query([[query, "add weights"]], res_code)
-
-
-
-
-
-# @app.errorhandler(404)
-# def page_not_found(e):
-#     return "<h1>404</h1><p>The resource could not be found.</p><p>" + str(e) + "</p>", 404
 
 
 def error_message(code, message, info=None):
