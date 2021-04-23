@@ -1,45 +1,39 @@
 import React, { Component } from 'react'
-import QrReader from 'react-qr-reader'
+import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import './qr_reader.css'
 import { Button, ControlLabel, Form, FormControl, FormGroup, HelpBlock, Modal } from 'rsuite'
 
 export class Test extends Component {
     state = {
+      stopStream:false
         
     }
-
-    //   handleScan = data => {
-    //     if (data) {
-    //       this.setState({
-    //         result: data
-    //       })
-    //       console.log(data)
-    //     }
-    //   }
     handleError = err => {
         console.error(err)
-
     }
 
     componentDidMount() {
-        if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-            console.log("Let's get this party started")
-            navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { exact: "environment" } } }).catch(function (error) {
-                console.log(error)
-            })
-            
-            
-        }
+        // if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+        //     console.log("Let's get this party started")
+        //     navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { exact: "environment" } } }).catch(function (error) {
+        //         console.log(error)
+        //     }) 
+        // }
     }
     render() {
+
         return (
             <div>
-                <QrReader
-                    delay={300}
-                    onError={this.handleError}
-                    onScan={this.props.handleScan}
-                    style={{ width: '100%' }}
-                />
+            <BarcodeScannerComponent
+                    stopStream={this.state.stopStream}
+                    onUpdate={(err, result) => {
+                      console.log(err)
+                      console.log(result)
+                      if (result) 
+                        this.props.handleScan(result)
+                      else 
+                      this.handleError(err);
+                    }}/>
             </div>
         )
     }
@@ -80,8 +74,9 @@ export class ModalDemo extends React.Component {
     }
 
     handleChange(value) {
+      console.log(value)
         this.setState({
-            id: value["id"],
+            id: value["text"],
             item_name: value["item_name"]
         });
         //   console.log(value)
@@ -110,7 +105,7 @@ export class ModalDemo extends React.Component {
 
                             <FormGroup controlId="ID">
                                 <ControlLabel>Container ID</ControlLabel>
-                                <FormControl readOnly value={this.state.ID} name="ID" />
+                                <FormControl readOnly value={this.state.id} name="ID" />
                                 <HelpBlock>Required</HelpBlock>
                             </FormGroup>
                             <FormGroup>
