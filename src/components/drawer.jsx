@@ -319,7 +319,7 @@ export class ItemPage extends Component {
     return (
       <div className="item_info">
         <h1 style={{ textAlign: "center" }}>{this.props.weight_info["item_name"]}</h1>
-        <AlertNotifications notifications_level={notifications_level} notification_info={notification_info} />
+        <AlertNotifications keep_open={true} notifications_level={notifications_level} notification_info={notification_info} />
         <ItemDeatils dict={this.props.weight_info} />
         <div className="chart_container">
           <h4>Usage</h4>

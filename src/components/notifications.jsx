@@ -304,15 +304,24 @@ export class AlertNotifications extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            show: true
+            show: true,
+            keep_open: this.props.keep_open ? this.props.keep_open : false
         }
+
     }
+
+
+
+
     render() {
 
         let page = [],
             level = this.props.notifications_level > 0 ? this.props.notifications_level : "-1",
             i = level - 1 >= 0 ? level - 1 : -1,
-            notifications = this.props.notification_info;
+            notifications = this.props.notification_info,
+            color = i !== -1 ? notification_colors[i] : "rgb(115, 213, 4)";
+
+
 
         if (notifications && level) {
             Object.keys(notifications).forEach(key => {
@@ -331,13 +340,15 @@ export class AlertNotifications extends Component {
             })
         }
 
+
+
         return (
-            <div className="alert_notifications" style={{ backgroundColor: notification_colors[i] }}>
+            <div className="alert_notifications" style={{ backgroundColor: color }}>
                 <div className="simple_notification_header" onClick={() => this.setState({ show: !this.state.show })}>
                     <div className="header_items" ><img className="header_symbols" alt="header symbol" src={notification_dict[level]["alert_filter_symbol"]} /></div>
                     {/* <div className="header_items" ><img className="header_symbols" alt="header symbol" src={notification_dict[level]["error_symbol"]} /></div> */}
                     <div className="header_items">{notification_dict[level]["message"]}</div></div>
-                <Collapse in={this.state.show} key={"notification_collapse" + level} >
+                <Collapse in={this.state.show || this.state.keep_open} key={"notification_collapse" + level} >
                     {(props, ref) => <Panel {...props} ref={ref} key={"notification_panel" + level} notifications={page} />}
                 </Collapse>
 

@@ -5,7 +5,7 @@ import { Dictionary } from "../Dictionary";
 import profilePic from "../images/profile_pic.png";
 import './settings_page.css'
 import { changeLanguage } from '../Dictionary'
-import { Test } from "../components/qr_reader";
+import { ModalDemo, Test } from "../components/qr_reader";
 
 
 var fake_settings = {
@@ -49,8 +49,8 @@ class SettingsPage extends Component {
           <div className="profile_details"><img className="profile_pic" alt="Profile" src={profilePic} /></div>
 
           <div className="side_nav_container">
-
-
+          {/* <button onClick={()=>this.setState({QR:true})} >QR Reader</button> */}
+            <ModalDemo />
             <div className="settings_issues">
               <Sidenav appearance="subtle" >
                 <div className={"settings_container"}>general settings</div>
@@ -98,7 +98,7 @@ class SettingsPage extends Component {
 
           </div>
           <NavBar />
-          <button onClick={()=>this.setState({QR:true})} >QR Reader</button>
+          
         </div>
 
       );
