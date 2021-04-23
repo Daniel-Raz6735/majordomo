@@ -2,7 +2,7 @@ from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
 from fastapi import HTTPException
 from queries.connection_manager import Connection
-
+import time
 
 def convert_val(val):
     """convert a value from an object to a string that can be inserted to an SQL query"""
@@ -145,7 +145,6 @@ class UpdateQueries:
 
     def add_order(self, business_id, supplier_id):
         """Adds a new order entry"""
-
         query, res_code = self.add_empty_order(business_id, supplier_id)
         if res_code != 200:  # unable to get an add empty order query
             print(query)
@@ -183,6 +182,37 @@ class UpdateQueries:
         if not remove_only:
             self.connection.execute_query(add_query, "Unable to add new notifications")
 
+    @staticmethod
+    def disable_container_query(container_id, business_id=None):
+        """set all instances of a container to have using_en_date to be set when this function is called"""
+        if not container_id:
+            raise HTTPException(status_code=400, detail="bad container id")
+        conditions = [["container_id", "=", int(container_id)]]
+        if business_id:
+            conditions.append(["business_id", "=", int(business_id)])
+        cols_to_set = ["using_end_date"]
+        vals_to_set = ["to_timestamp("+str(int(time.time()))+")"]
+        query, res_code = update_table_query("containers", cols_to_set, vals_to_set, conditions)
+        return query
+
+    def add_container_to_business_query(self, business_id, container_id=None, item_id=None):
+        """Creates an SQL query for adding a container to a business and connect it to an item provided item_id"""
+        val = [int(business_id)]
+        cols = ["business_id"]
+
+        if container_id is not None:
+            cols.append("container_id")
+            val.append(int(container_id))
+        if item_id is not None:
+            cols.append("item_id")
+            val.append(int(item_id))
+
+        vals = [val]
+        query, res_code = self.insert_to_table_query("containers", cols, vals)
+        if res_code != 200:
+            print(query)
+            raise HTTPException(status_code=500, detail="Server error")
+        return query
 
     def add_notification_query(self, business_id, item_id, notification_level, message=None):
         """Creates an SQL query for adding a new notification"""

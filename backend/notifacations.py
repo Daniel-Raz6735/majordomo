@@ -73,7 +73,7 @@ class NotificationsHandler:
                         if business_id not in alert_dict:
                             alert_dict[business_id] = {}
                         alert_dict[business_id][item_id] = item_info
-            current_weight_by_container = reader.get_current_weight(get_by_container=True)
+            current_weight_by_container = reader.get_current_weight_query(get_by_container=True)
             containers = connection.get_result(current_weight_by_container)
             if containers:
                 for container in containers:
