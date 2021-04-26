@@ -37,7 +37,9 @@ export class HomePage extends Component {
             <div className="home_page">
                 <img alt="Majordomo logo" className="majordomoLogo" src={logo} ></img>
                 {/* <NotificationPeeker dict={notfication} /> */}
+                <div className="home_titles"><div>{Dictionary["notifications"]}</div>  <div>{getTime()}</div></div>
                 {temp}
+                <div className="home_titles"><div>Inventory Status</div>  <div>{getTime()}</div></div>
                 <InentoryTileContainer key={"tile"} dict={tiles} />
             </div>
 
@@ -83,7 +85,7 @@ export class NotificationPeeker extends Component {
 
         return (
             <div className="home_notification_inventory">
-                <div className="home_titles"><div>{Dictionary["notifications"]}</div>  <div>{getTime()}</div></div>
+                {/* <div className="home_titles"><div>{Dictionary["notifications"]}</div>  <div>{getTime()}</div></div> */}
                 <div className="notification_peeker">
                     {this.state.page}
                 </div>
@@ -116,7 +118,7 @@ export class InentoryTileContainer extends Component {
 
         return (
             <div className="home_notification_inventory">
-                <div className="home_titles"><div>Inventory</div>  <div>{getTime()}</div></div>
+                {/* <div className="home_titles"><div>Inventory Status</div>  <div>{getTime()}</div></div> */}
                 <div className="inventory_tile_container">
 
                     {page}

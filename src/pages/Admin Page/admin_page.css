@@ -1,0 +1,9 @@
+.admin_page {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+.admin_btns {
+    margin-bottom: 10px;
+}

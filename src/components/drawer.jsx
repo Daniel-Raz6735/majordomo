@@ -1,4 +1,4 @@
-import { Drawer, Icon, InputGroup, Input, Divider, Dropdown, Loader, } from 'rsuite';
+import { Drawer, Icon, InputGroup, Input, Divider, Dropdown, Loader, Whisper, Tooltip, } from 'rsuite';
 import React, { Component } from 'react';
 import x_icon from '../images/x_icon.svg'
 import back_icon from '../images/icons/arrows/right_arrow.svg'
@@ -12,6 +12,7 @@ import { InventoryTile } from '../pages/home page/home_page';
 import Chart from 'chart.js'
 import { base_url } from '../index';
 import $ from 'jquery';
+import info_symbol from '../images/icons/info_symbol.svg'
 
 
 
@@ -289,18 +290,18 @@ export class ItemPage extends Component {
   }
 
   render() {
-    let active_index = this.state.active_index,disabled=false,
+    let active_index = this.state.active_index, disabled = false,
       active_chart = this.state.dates_to_pull[active_index], chart,
       res = this.state.res;
     if (res) {
       var relavent_data = this.get_relavent_data(res, active_chart)
-     
+
       if (res.length === 0) {
         chart = <div className="no_data">No data to show</div>
         disabled = true
       }
       else
-        chart =  <ChartComponent {...this.props} key={active_chart} num_of_days={active_chart} dict={relavent_data} />
+        chart = <ChartComponent {...this.props} key={active_chart} num_of_days={active_chart} dict={relavent_data} />
 
     }
     else
@@ -320,11 +321,11 @@ export class ItemPage extends Component {
       <div className="item_info">
         <h1 style={{ textAlign: "center" }}>{this.props.weight_info["item_name"]}</h1>
         <AlertNotifications keep_open={true} notifications_level={notifications_level} notification_info={notification_info} />
-        <ItemDeatils dict={this.props.weight_info} />
+        <ItemDeatils business_id={this.props.business_id} item_id={this.props.item_id} dict={this.props.weight_info} />
         <div className="chart_container">
           <h4>Usage</h4>
           <div className="chart_header">
-            <Dropdown disabled ={disabled} title={Dictionary[active_chart]} activeKey={active_chart}>
+            <Dropdown disabled={disabled} title={Dictionary[active_chart]} activeKey={active_chart}>
               {this.state.dropdown_content}
             </Dropdown>
           </div>
@@ -529,27 +530,94 @@ function get_old_date(date, num_of_days) {
   return date.getTime() / 1000
 }
 
-const ItemDeatils = (props) => {
+class ItemDeatils extends Component {
 
-  let min_max_style = {
-    fontWeight: "bold"
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      item_id: this.props.item_id ? this.props.item_id : null,
+      business_id: this.props.business_id ? this.props.business_id : 1,
+      Containers: ""
+    }
+
+    this.getItemContainers = this.getItemContainers.bind(this)
+
   }
 
-  let divider_style = {
-    height: "unset",
-    width: "3px"
+
+
+
+  componentDidMount() {
+
+
+    let request = base_url + "/get/containers" + "?business_id=" + this.state.business_id + "&item_id=" + this.state.item_id
+    // let request = base_url + path
+
+    var callback = this.getItemContainers
+    $.ajax({
+      url: request,
+      success: function (res) {
+        callback(res)
+        // console.log(res)
+
+      },
+      error: function (err) {
+        console.log(err)
+      }
+    });
+
+
+  }
+
+  // get all containers of the item
+  getItemContainers(data) {
+    let str = ""
+    for (let i = 0; i < data.length; i++) {
+      let container = data[i]
+      str += i === data.length - 1 ? container["container_id"] : container["container_id"] + ","
+    }
+    this.setState({ str })
   }
 
 
+  render() {
 
-  return (
-    <div className="item_details">
-      <div>Containers</div>
-      <Divider key={"divider1"} style={divider_style} vertical={true} />
-      <div className="item_min_max"><div style={min_max_style}>2.5 kg</div><div>{Dictionary["min"]}</div></div>
-      <Divider key={"divider2"} style={divider_style} vertical={true} />
-      <div className="item_min_max"><div style={min_max_style}>10 kg</div><div>{Dictionary["max"]}</div></div>
-    </div>
-  )
+
+    let min_max_style = {
+      fontWeight: "bold"
+    }
+
+    let divider_style = {
+      height: "unset",
+      width: "3px"
+    }
+
+    return (
+      <div className="item_details">
+        <Whisper
+          trigger="click"
+          placement={'top'}
+          speaker={
+            <Tooltip>
+              This is a ToolTip for simple text hints. It can replace the title
+              property
+            </Tooltip>
+          }
+        >
+          <div>Containers ID:
+          
+          <div>{this.state.str}</div>
+        </div>
+        </Whisper>
+        
+        <Divider key={"divider1"} style={divider_style} vertical={true} />
+        <div className="item_min_max"><div style={min_max_style}>2.5 kg</div><div>{Dictionary["min"]}</div></div>
+        <Divider key={"divider2"} style={divider_style} vertical={true} />
+        <div className="item_min_max"><div style={min_max_style}>10 kg</div><div>{Dictionary["max"]}</div></div>
+      </div>
+    )
+  }
 
 }
+

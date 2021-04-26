@@ -153,7 +153,7 @@ export class ItemBlock extends Component {
 
         return (
             <div className="item_container">
-                <div className="item_squere_header" style={{ background: color }} > {sym}{messege}</div>
+                <div className="item_squere_header" style={{ background: color }} > <div>{sym}</div><div>{messege}</div></div>
                 <div className="item_squere" onClick={() => this.props.openItem(this.props.item_id)}>
                     <div style={{fontWeight:"bold" ,fontSize: "13pt"}}>
                         {this.state.name}
