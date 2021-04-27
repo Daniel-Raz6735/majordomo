@@ -273,8 +273,7 @@ class ReadQueries:
         if max_date is not None:
             conditions.append(["AND", "weights.weighing_date", "<=", "to_timestamp(" + str(max_date) + ")"])
 
-        cols_to_bring = [[["weight_value", "weight", "SUM"], ["weighing_date", "date"],
-                          ["unit"], ["item_id"]]]
+        cols_to_bring = [[["weight_value", "weight", "SUM"], ["weighing_date", "date"], ["item_id"]]]
 
         query, res_code = DbQueries.select_query(["weights"], cols_to_bring, conditions)
         if res_code != 200:
@@ -315,7 +314,7 @@ class ReadQueries:
         if business_id:
             conditions.append(["AND", "supplier.business_id", "=", int(business_id)])
         else:
-            return error_message(400, "Bad request", "no business id sent"), 400
+            raise HTTPException(status_code=400, detail="no business id sent")
 
         if items_ids:
             and_or = "AND"
@@ -330,8 +329,8 @@ class ReadQueries:
             None,
             conditions)
         if res_code != 200:
-            return error_message(res_code, final_query), 400
-        return final_query, 200
+            raise HTTPException(status_code=res_code, detail=final_query)
+        return final_query
 
     @staticmethod
     def get_open_orders_query(business_id, order_ids=None):
@@ -363,7 +362,7 @@ class ReadQueries:
     @staticmethod
     def get_user_preferences_query(user_email):
         """creates an SQL query that will return the user preferences"""
-        column_list = [[["user_id"], ["lang"], ["minimum_reach_alerts"], ["freshness_alerts"], ["developer"]], []]
+        column_list = [[["user_id"], ["lang"], ["minimum_reach_alerts"], ["freshness_alerts"]], []]
         conditions = []
         if user_email:
             if ";" in user_email:
