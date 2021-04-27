@@ -1,29 +1,36 @@
-.modal{
+.modal {
     background-color: whitesmoke;
-    display: flex;
+    /* display: flex; */
     margin: auto;
     flex-direction: column;
     border: 2px solid greenyellow;
     border-radius: 5%;
-    width: 100%;
-    height:auto;
+    width: fit-content;
+    height: fit-content;
     padding: 0;
 }
 
-.fade.in{
+.fade.in {
     opacity: 0.5;
 }
 
-.scan_btns_filter{
+.scan_btns_filter {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 40%;
-    border: 3px solid red;
+    /* border: 3px solid red; */
     border-radius: 5pt;
+    height: 100px;
 }
 
-.filters_area{
+.filters_area {
     display: flex;
     justify-content: space-evenly;
 }
+
+.barcode_scan_area {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+

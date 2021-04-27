@@ -43,7 +43,7 @@
     padding: 10px;
 }
 
-.rs-modal-content {
+/* .rs-modal-content {
     background-color: whitesmoke;
     display: flex;
     margin: auto;
@@ -53,7 +53,7 @@
     width: 50%;
     height: 230px;
     padding: 0;
-}
+} */
 
 .model_content_xs {
     height: 100%;
@@ -129,4 +129,9 @@
 .cart_text_container{
     margin: auto;
     margin-top: 10px;
+}
+
+.add_to_order_modal{
+    width: 50%;
+    margin: auto;
 }
