@@ -214,13 +214,14 @@ class UpdateQueries:
             raise HTTPException(status_code=500, detail="Server error")
         return query
 
-    def add_notification_query(self, business_id, item_id, notification_level, message=None):
+    def add_notification_query(self, business_id, item_id, notification_level, message=None, worker_level=1):
         """Creates an SQL query for adding a new notification"""
-        cols = ["business_id", "food_item_id", "code", "active"]
-        vals = [[business_id, item_id, notification_level, True]]
+        cols = ["date_created", "business_id", "food_item_id", "code", "active", "notification_worker_level"]
+        val = ["to_timestamp("+str(int(time.time()))+")", business_id, item_id, notification_level, True, worker_level]
         if message is not None:
             cols.append("message")
-            vals.append(message)
+            val.append(message)
+        vals = [val]
         query, res_code = self.insert_to_table_query("notifications", cols, vals)
         if res_code != 200:
             print(query)
