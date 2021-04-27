@@ -47,8 +47,8 @@ class NotificationsHandler:
                              }
                              }"""
         alert_dict = {}
+        connection = Connection()
         try:
-            connection = Connection()
             reader = readQ(connection)
             rules_query = reader.get_rules_query()
             rules = connection.get_result(rules_query)
@@ -104,7 +104,8 @@ class NotificationsHandler:
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
             self.email_client.email_admin("Error reading notification data", "error details:" + str(error))
-        del connection
+        if connection:
+            del connection
         return alert_dict
 
     def test_minimum(self, business_id, item_id):
