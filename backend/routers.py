@@ -373,10 +373,10 @@ async def add_weights(lis: WeighingList, client_time: int):
 
                 settings.notifications_handler.update_item(weight["business_id"],
                                                            item_id, weight["container_id"],
-                                                           weight["weight_value"], updater)
+                                                           weight["weight_value"], 1, updater)
         query, res_code = updater.insert_to_table_query("weights",
-                                                        ["weighing_date", "business_id", "container_id", "item_id",
-                                                         "weight_value", "last_user"],
+                                                        ["weighing_date", "business_id", "container_id",
+                                                         "item_id", "weight_value", "last_user"],
                                                         arr)
         connection.insert_data(query, res_code)
         await manager.broadcast(f"weights updated on #{client_time}", 1)
