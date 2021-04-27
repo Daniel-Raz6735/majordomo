@@ -288,7 +288,8 @@ async def get_current_view(business_id: int, user_email: str = "shlomow6@gmail.c
         }
         del connection
         return res
-
+    except HTTPException as error:
+        raise error
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         print(message)
@@ -312,7 +313,6 @@ class Weighing(BaseModel):
     weight_value: float
     weighing_date: int
     last_user: int = None
-    unit: int = 1
     business_id: int = 1
 
     # def __init__(self, container_id, weight_value, weighing_date, business_id, unit=1):
@@ -338,7 +338,6 @@ class WeighingList(BaseModel):
                 string += "\nbusiness_id: " + str(weight["business_id"])
                 string += "\nweight_value: " + str(weight["weight_value"])
                 string += "\nweighing_date: " + str(weight["weighing_date"])
-                string += "\nunit: " + str(weight["unit"])
                 string += "\nlast_user: "
                 if weight["last_user"]:
                     string += str(weight["last_user"])
@@ -364,29 +363,31 @@ async def add_weights(lis: WeighingList, client_time: int):
             if weight["weight_value"] >= 0:
                 query = reader.get_container_item_id_query(weight["business_id"], weight["container_id"])
                 res = connection.get_result(query)
-                item_id_dict = res[0]
-                if len(item_id_dict) > 0:
-                    item_id = item_id_dict["item_id"]
+
+                if len(res) > 0:
+                    item_id = res[0]["item_id"]
                 else:
-                    raise HTTPException(status_code=404, detail="Container has no item configured")
+                    raise HTTPException(status_code=404, detail="Container has no item configured for this business")
                 arr.insert(0, [weight_time, weight["business_id"], weight["container_id"], item_id,
-                               weight["weight_value"], weight["last_user"], weight["unit"]])
+                               weight["weight_value"], weight["last_user"]])
 
                 settings.notifications_handler.update_item(weight["business_id"],
                                                            item_id, weight["container_id"],
-                                                           weight["weight_value"], weight["unit"]
-                                                           , updater)
+                                                           weight["weight_value"], updater)
         query, res_code = updater.insert_to_table_query("weights",
                                                         ["weighing_date", "business_id", "container_id", "item_id",
-                                                         "weight_value", "last_user", "unit"],
+                                                         "weight_value", "last_user"],
                                                         arr)
         connection.insert_data(query, res_code)
         await manager.broadcast(f"weights updated on #{client_time}", 1)
         del connection
 
+    except HTTPException as error:
+        raise error
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         settings.email_client.email_admin("Unable to add weight", "error details:" + str(error))
+        settings.log_manager.log_error(error)
         raise HTTPException(status_code=400, detail="unable to add weight")
 
 
