@@ -170,7 +170,7 @@ export class ItemBlock extends Component {
     }
 }
 
-function getDate(elementDate) {
+export function getDate(elementDate) {
 
     if (!elementDate)
         return Dictionary["unknown_date"]
