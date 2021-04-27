@@ -1,12 +1,14 @@
 import React, { Component } from "react";
-import { Dropdown, Loader, Nav, Sidenav, Toggle } from "rsuite";
+import ReactDOM from 'react-dom';
+import {Button, Dropdown, Loader, Nav, Sidenav, Toggle } from "rsuite";
 import { NavBar } from "../components/bars";
 import { Dictionary } from "../Dictionary";
 import profilePic from "../images/profile_pic.png";
 import './settings_page.css'
 import { changeLanguage } from '../Dictionary'
 import { ModalDemo, Test } from "../components/qr_reader";
-
+import AdminPage from '../pages/Admin Page/admin_page';
+import $ from 'jquery';
 
 var fake_settings = {
   lang: "EN",
@@ -51,6 +53,7 @@ class SettingsPage extends Component {
           <div className="side_nav_container">
           {/* <button onClick={()=>this.setState({QR:true})} >QR Reader</button> */}
             <ModalDemo />
+            <ManegmentBTN/>
             <div className="settings_issues">
               <Sidenav appearance="subtle" >
                 <div className={"settings_container"}>general settings</div>
@@ -110,6 +113,16 @@ class SettingsPage extends Component {
   }
 }
 
+const ManegmentBTN = (props)=>{
+ 
+  return( 
+    <Button onClick={()=>{
+      ReactDOM.render(<AdminPage/>,document.getElementById('root'));
+      $("#root").prop('id', 'fullroot');
+  }}>Mangement</Button>
+
+  );
+}
 class DropdownToggle extends Component {
   constructor(props) {
     super(props);
