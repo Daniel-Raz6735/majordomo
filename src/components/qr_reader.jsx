@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import './qr_reader.css'
 import { Button, ControlLabel, Form, FormControl, FormGroup, HelpBlock, Modal } from 'rsuite'
-import AdminPage from '../pages/Admin Page/admin_page';
+
 
 export class Test extends Component {
     state = {
@@ -128,9 +128,7 @@ export class ModalDemo extends React.Component {
                     </Modal.Footer>
                 </Modal>
                 <Button onClick={this.open}>New Container</Button>
-                <Button onClick={()=>{
-                    ReactDOM.render(<AdminPage/>,document.getElementById('root'))
-                }}>Mangement</Button>
+               
             </div>
         );
     }
