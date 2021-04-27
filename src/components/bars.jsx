@@ -35,7 +35,7 @@ export class SiteFrame extends Component {
 
     }
     componentDidMount() {
-        var ws =""
+        var ws = ""
         // var ws = new socket_client('wss://majordomo.cloudns.asia/ws/1/1');
 
         if (!base_url.includes("majordomo.cloudns"))
@@ -46,10 +46,10 @@ export class SiteFrame extends Component {
 
 
         // wss.onopen = function () { console.log('wss open'); };
-        ws.onopen = function () {  };
+        ws.onopen = function () { };
         ws.onmessage = (message) => {
             // const dataFromServer = JSON.parse(message.data);
-            
+
             // this.change_tab(this.state.tab_name);
             window.location.reload()
         }
@@ -62,7 +62,7 @@ export class SiteFrame extends Component {
         this.get_initial_data(this.process_initial_data, 1, tab_name)
 
         //establishing a way for chield components to switch tabs across the app
-        $("#reset_frame").change(() => {  })
+        $("#reset_frame").change(() => { })
 
 
     }
@@ -79,16 +79,16 @@ export class SiteFrame extends Component {
             if (typeof (data) == "object") {
                 var dict = create_initial_data_dict(data);
                 if (!dict) {
-                    this.setState({ page: <PageNotFound status_code={500}/> })
+                    this.setState({ page: <PageNotFound status_code={500} /> })
                     console.log("Data rcived from server is corrupt")
                 }
                 else {
                     confirm_papulation(dict, "process_initial_data", "initial data not recived well")
                     this.change_tab(tab_name, dict)
                     this.setState({ dict })
-                    
-                    if(dict["preferences"]){
-                        sessionStorage.setItem("developer",dict["preferences"]["developer"])
+
+                    if (dict["preferences"]) {
+                        sessionStorage.setItem("developer", dict["preferences"]["developer"])
                     }
                 }
             }
@@ -97,7 +97,7 @@ export class SiteFrame extends Component {
             }
         }
         else
-            this.setState({ page: <PageNotFound status_code={500}/> })
+            this.setState({ page: <PageNotFound status_code={500} /> })
     }
 
     get_initial_data(callback, business_id, tab_name) {
@@ -106,16 +106,16 @@ export class SiteFrame extends Component {
 
         if (business_id) {
             request += "?business_id=" + business_id
-            
+
             $.ajax({
                 url: request,
                 success: function (res) {
                     callback(res, true, tab_name);
-                    
+
                 },
                 error: function (err) {
                     callback(fake_data, true);
-                    
+
                 }
             });
         }
@@ -219,7 +219,7 @@ export class PageNotFound extends Component {
         var status_code = ""
         if (this.props["status_code"])
             status_code += Dictionary["status_code"] + ": " + this.props["status_code"]
-        return <div className="page_not_found">{Dictionary["page_not_found"]+"."} <br/> {status_code}</div>;
+        return <div className="page_not_found">{Dictionary["page_not_found"] + "."} <br /> {status_code}</div>;
     }
 }
 
@@ -244,7 +244,7 @@ export class NavBar extends Component {
             <header className="header">
                 {/* <LangBtn /> */}
                 {/* <img alt="Majordomo logo" className="majordomoLogo" src={logo} onClick={() => { window.location = '/'; }}></img> */}
-            
+
                 <Button color="red" id="logoutBtn" onClick={() => {
                     auth.signOut()
                     window.location.reload()
@@ -295,4 +295,13 @@ export class ButtonsComponent extends Component {
             {btns}
         </div>);
     }
+}
+
+function download(content, fileName, contentType) {
+    /*download a site information from the code to file*/
+    var a = document.createElement("a");
+    var file = new Blob([content], { type: contentType });
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
 }

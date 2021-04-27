@@ -4,9 +4,9 @@ from email_client import EmailManager
 from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
 from queries.update_queries import UpdateQueries as updateQ
+from queries.delete_queries import DeleteQueries as deleteQ
 from utilities.logs import LogManager
 from utilities.websockets import WebSocketManager
-from queries.delete_queries import DeleteQueries as deleteQ
 from queries.connection_manager import Connection
 from notifacations import NotificationsHandler
 from threading import Thread
@@ -81,8 +81,8 @@ def get_containers(business_id: int, container_id: Optional[int] = None, item_id
         optional parameters: container_id, item_id """
     if item_id:
         item_id = [item_id]
-    query = readQ.get_current_weight_query(business_id=business_id, container_ids=container_id, item_ids=item_id,
-                                           get_by_container=True)
+    query = readQ.get_current_weight_query(business_id=business_id, container_ids=container_id,
+                                           item_ids=item_id, get_by_container=True)
     connection = Connection()
     return connection.get_result(query)
 
@@ -94,7 +94,8 @@ def get_current_weight(business_id: int, item_ids: List[int] = None):
     required parameters: business_id
     optional parameters: item_ids"""
     query = readQ.get_current_weight_query(business_id=business_id, item_ids=item_ids)
-    return process_read_query(query)
+    connection = Connection()
+    return connection.get_result(query)
 
 
 @app.get('/get/preferences')
@@ -116,20 +117,20 @@ def get_notifications(business_id: int, active: bool = True, notification_id: in
                                                         notification_id=notification_id)
     return process_read_query(query, res_code)
 
+# todo lose this code in next push
+# @app.get('/get/rules')
+# async def get_rules(business_id: int, active: Optional[bool] = False, rule_id: Optional[int] = -1):
+#     """gets all rules based on business_id,
+#         provided optional params: can get only active rules and a specific rule
+#            required parameters: business_id
+#            optional parameters: active ,rule_id
+#            """
+#     if not business_id:
+#         raise HTTPException(status_code=400, detail="no business id sent")
+#     query = readQ.get_rules_query(business_id, active, rule_id)
+#     return process_read_query(query, 200)
 
-@app.get('/get/rules')
-async def get_rules(business_id: int, active: Optional[bool] = False, rule_id: Optional[int] = -1):
-    """gets all rules based on business_id,
-        provided optional params: can get only active rules and a specific rule
-           required parameters: business_id
-           optional parameters: active ,rule_id
-           """
-    if not business_id:
-        raise HTTPException(status_code=400, detail="no business id sent")
-    query = readQ.get_rules_query(business_id, active, rule_id)
-    return process_read_query(query, 200)
-
-
+# todo add new functionality
 # @app.post('/items/add')
 # async def add_item(business_id: int,category_id: int):
 #     """add item to business """
@@ -138,12 +139,12 @@ async def get_rules(business_id: int, active: Optional[bool] = False, rule_id: O
 #     reader = readQ(connection)
 
 
-
 @app.get('/get/item/history')
 async def get_item_history(business_id: int, item_id: int, min_date: Optional[int] = -1, max_date: Optional[int] = -1):
     """gets an items weight history
     input: business_id, item_id - ids
-           max,min dates -  Unix Timestamp - represents the time window for the history"""
+           max,min dates -  Unix Timestamp - represents the time window for the history.
+           it is required to send one date of reference"""
     if min_date <= 0:
         min_date = None
     if max_date < 0:
@@ -170,8 +171,9 @@ async def get_suppliers(business_id: int, item_id: Optional[int] = -1, item_ids:
         ids = [item_id]
     elif item_ids:
         ids = item_ids
-    query, res_code = readQ.get_suppliers_query(business_id, items_ids=ids)
-    return process_read_query(query, res_code)
+    query = readQ.get_suppliers_query(business_id, items_ids=ids)
+    connection = Connection()
+    return connection.get_result(query)
 
 
 @app.post('/containers/pair')
@@ -244,30 +246,38 @@ async def get_current_view(business_id: int, user_email: str = "shlomow6@gmail.c
             "orders": orders,"""
     if ";" in user_email:
         raise HTTPException(status_code=400, detail="Illegal email")
+    message = "unable to load preference"
     user_preferences_query = readQ.get_user_preferences_query(user_email)
-    message = "unable to load preferences"
+    message = "unable to load weight"
     weight_query = readQ.get_current_weight_query(business_id)
+    message = "unable to load notifications"
     notifications_query, notifications_code = readQ.get_notifications_with_info(business_id, active=True)
-    suppliers_query, supplier_code = readQ.get_suppliers_query(business_id)
+    message = "unable to load suppliers"
+    suppliers_query = readQ.get_suppliers_query(business_id)
+    message = "unable to load orders"
     orders_query, orders_code = readQ.get_open_orders_query(business_id)
 
     try:
         if notifications_code != 200:
             message = notifications_query
             raise Exception
-        if supplier_code != 200:
-            message = suppliers_query
-            raise Exception
         if orders_code != 200:
             message = orders_query
             raise Exception
         connection = Connection()
-        reader = readQ(connection)
-        preferences = connection.get_result(user_preferences_query)[0]
+        # reader = readQ(connection)
+        message = "unable to load preferences"
+        preferences = connection.get_result(user_preferences_query)
+        message = "unable to load notifications"
         notifications = connection.get_result(notifications_query)
+        message = "unable to load weights"
         weights = connection.get_result(weight_query)
+        message = "unable to load suppliers"
         suppliers = connection.get_result(suppliers_query)
+        message = "unable to load orders"
         orders = connection.get_result(orders_query)
+        print(orders_query)
+
         res = {
             "preferences": preferences,
             "notifications": notifications,
@@ -281,6 +291,7 @@ async def get_current_view(business_id: int, user_email: str = "shlomow6@gmail.c
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
+        print(message)
         settings.email_client.email_admin(message, "error details:" + str(error))
         raise HTTPException(status_code=400, detail=message)
 

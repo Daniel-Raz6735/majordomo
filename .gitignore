@@ -31,3 +31,4 @@ backend/old_firebase/smartcontainerdemo-a97e4-firebase-adminsdk-khgwn-f0206e819a
 **/.firebase
 .eslintcache
 /backend/email_info.ini
+/backend/database.ini
