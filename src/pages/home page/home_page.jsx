@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from '../../images/icons/Majordomo logo.svg';
+import scan_icon from '../../images/icons/scan_icon.svg';
 import './home_page.css'
 import { Notification, OKNotification } from '../../components/notifications'
 import { category_names, category_symbols, notification_dict } from '../../components/notifications_data';
@@ -41,6 +42,7 @@ export class HomePage extends Component {
                 {temp}
                 <div className="home_titles"><div>Inventory Status</div>  <div>{getTime()}</div></div>
                 <InentoryTileContainer key={"tile"} dict={tiles} />
+                <img className="scan_icon" src={scan_icon} alt="scan"/>
             </div>
 
         );

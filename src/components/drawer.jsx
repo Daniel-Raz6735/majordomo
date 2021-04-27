@@ -13,7 +13,8 @@ import Chart from 'chart.js'
 import { base_url } from '../index';
 import $ from 'jquery';
 import info_symbol from '../images/icons/info_symbol.svg'
-
+import { getUnitById } from './data_dictionary';
+import { getDate } from './containers'
 
 
 
@@ -538,7 +539,8 @@ class ItemDeatils extends Component {
     this.state = {
       item_id: this.props.item_id ? this.props.item_id : null,
       business_id: this.props.business_id ? this.props.business_id : 1,
-      Containers: ""
+      str: "",
+      container_details: []
     }
 
     this.getItemContainers = this.getItemContainers.bind(this)
@@ -572,12 +574,18 @@ class ItemDeatils extends Component {
 
   // get all containers of the item
   getItemContainers(data) {
-    let str = ""
+    console.log(data)
+    let str = "", cont_details = []
     for (let i = 0; i < data.length; i++) {
       let container = data[i]
       str += i === data.length - 1 ? container["container_id"] : container["container_id"] + ","
+      cont_details.push(<div>{container["container_id"]}: {container["weight"]}{getUnitById(container["weight"])} {" "}{getDate(container["date"])}  </div>)
     }
-    this.setState({ str })
+    console.log(cont_details)
+    this.setState({
+      str: str,
+      container_details: cont_details
+    })
   }
 
 
@@ -595,22 +603,9 @@ class ItemDeatils extends Component {
 
     return (
       <div className="item_details">
-        <Whisper
-          trigger="click"
-          placement={'top'}
-          speaker={
-            <Tooltip>
-              This is a ToolTip for simple text hints. It can replace the title
-              property
-            </Tooltip>
-          }
-        >
-          <div>Containers ID:
-          
-          <div>{this.state.str}</div>
-        </div>
-        </Whisper>
-        
+
+        <ContainerInformationTip container_details={this.state.container_details} str={this.state.str} />
+
         <Divider key={"divider1"} style={divider_style} vertical={true} />
         <div className="item_min_max"><div style={min_max_style}>2.5 kg</div><div>{Dictionary["min"]}</div></div>
         <Divider key={"divider2"} style={divider_style} vertical={true} />
@@ -619,5 +614,26 @@ class ItemDeatils extends Component {
     )
   }
 
+}
+
+const ContainerInformationTip = (props) => {
+
+
+  return (
+    <Whisper
+      trigger="click"
+      placement={'rightStart'}
+      speaker={
+        <Tooltip>
+          {props.container_details}
+        </Tooltip>
+      }
+    >
+      <div>Containers ID:{" "}
+        <img src={info_symbol} alt="info" />
+        <div>{props.str}</div>
+      </div>
+    </Whisper>
+  )
 }
 

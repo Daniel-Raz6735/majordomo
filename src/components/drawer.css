@@ -182,3 +182,7 @@
     display: flex;
     justify-content: center;
 }
+
+.rs-tooltip .rs-tooltip-inner{
+    text-align: unset;
+}

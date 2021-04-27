@@ -142,6 +142,7 @@
 .notification_category_container {
     margin-top: 7px;
     width: 100%;
+    margin-bottom: 15px;
 }
 
 .filter_btn .active {
