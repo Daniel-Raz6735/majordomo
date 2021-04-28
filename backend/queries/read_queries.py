@@ -200,6 +200,17 @@ class ReadQueries:
         return final_query, 200
 
     @staticmethod
+    def get_users_query(business_id):
+        """this function creates a"""
+        conditions = []
+        if business_id:
+            conditions.append(["AND", "users.business_id", "=", int(business_id)])
+        final_query, res_code = DbQueries.select_query([["users"]], [], conditions)
+        if res_code != 200:
+            raise HTTPException(status_code=res_code, detail="unable to get users")
+        return final_query
+
+    @staticmethod
     def get_current_weight_query(business_id=None, container_ids=None, item_ids=None, get_by_container=False):
         """gets an SQL query of the last weight of all items.
         optional parameters:

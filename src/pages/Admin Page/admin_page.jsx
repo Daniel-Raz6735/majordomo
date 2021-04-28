@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Container, Content, ControlLabel, Drawer, Dropdown, Footer, Form, FormControl, FormGroup, Header, HelpBlock, Icon, Modal, Nav, Navbar } from 'rsuite';
+import { Button, Col, Container, Content, ControlLabel, Drawer, Dropdown, Footer, Form, FormControl, FormGroup, Header, HelpBlock, Icon, Modal, Nav, Navbar, Table } from 'rsuite';
 import LoginComponent from '../login page/LoginPage';
 import './admin_page.css';
 import $ from 'jquery';
+import { base_url } from '../..';
 
 
 
@@ -14,42 +15,18 @@ class AdminPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            show: false,
-            container_id: "",
-            business_id: ""
+            page: "press to choose what to see"
         }
 
-        this.open = this.open.bind(this)
-        this.close = this.close.bind(this)
-        this.handleChange = this.handleChange.bind(this)
-        this.associating = this.associating.bind(this)
-    }
-
-    open() {
-        this.setState({ show: true })
-    }
-
-    close() {
-        this.setState({
-            show: false,
-            business_id: "",
-            container_id: ""
-        })
-    }
-
-    handleChange(value) {
-        console.log(value)
-        this.setState({
-            business_id: value["business_id"],
-            container_id: value["container_id"]
-        });
+        this.loadPage = this.loadPage.bind(this)
 
     }
 
-    associating() {
-        console.log(this.state.container_id + "\n " + this.state.business_id)
-
+    loadPage(page) {
+        this.setState({ page });
     }
+
+
 
 
 
@@ -57,14 +34,32 @@ class AdminPage extends Component {
 
         return (
             <div className="admin_page">
-                {instance}
-               <ControlUsers/>
-               
-               <div onClick={()=>{
-                   $("#fullroot").prop('id', 'root');
-                    ReactDOM.render(<LoginComponent />, document.getElementById('root'));}}>
-               <Button color="red">Back</Button>
-               </div>
+                {/* <Container> */}
+                <Header>
+                    <Navbar appearance="subtle">
+                        <Navbar.Header>
+                            <a className="navbar-brand logo">Majordomo managemnt</a>
+                        </Navbar.Header>
+                        <Navbar.Body>
+                            <Nav>
+                                <ControlUsers loadPage={this.loadPage} />
+                                <ControlContainers loadPage={this.loadPage} />
+                            </Nav>
+                            <Nav pullRight>
+                                <Nav.Item >
+                                    <div onClick={() => {
+                                        $("#fullroot").prop('id', 'root');
+                                        ReactDOM.render(<LoginComponent />, document.getElementById('root'));
+                                    }}>
+                                        leave {/* <Button color="red">Back</Button> */}
+                                    </div>
+                                </Nav.Item>
+                            </Nav>
+                        </Navbar.Body>
+                    </Navbar>
+                </Header>
+
+                <div id="allpage">{this.state.page}</div>
             </div >
 
         )
@@ -80,18 +75,42 @@ class ControlUsers extends Component {
 
         }
 
-        // this.open = this.open.bind(this)
+        this.getUsers = this.getUsers.bind(this);
+        this.processUsers = this.processUsers.bind(this);
 
     }
 
+    processUsers(data){
+        console.log(data)
+        if(data && data["users"]){
+            this.props.loadPage(<EditTable fakeData={data["users"]}/>)
+            console.log("data loaded")
+       
+        }
+        else
+        console.log("unable to load users")
+
+    }
+    getUsers() {
+        var request = base_url + '/get/users';
+        var callback = this.processUsers
+            $.ajax({
+                url: request,
+                success: function (res) {
+                    callback(res);
+
+                },
+                error: function (err) {
+                    console.log(err)
+
+                }
+            });
+    }
 
     render() {
 
         return (
-            <div className="control_users">
-              <Button className="admin_btns">add users</Button>
-            </div >
-
+                <Nav.Item icon={<Icon icon="user" />} ><div onClick={()=>{this.getUsers()}}>users</div></Nav.Item>
         )
     }
 }
@@ -136,20 +155,20 @@ class ControlContainers extends Component {
         console.log(this.state.container_id + "\n " + this.state.business_id)
 
     }
-    
+
 
 
     render() {
 
         return (
             // <div className="control_containers">
-              
-                
-               <Dropdown title="containers">
-                  <Dropdown.Item onClick={this.open}>
-                      Associate container with a business
+
+
+            <Dropdown title="containers">
+                <Dropdown.Item onClick={this.open}>
+                    Associate container with a business
                     </Dropdown.Item>
-                      <Modal backdrop={"static"} className="add_container_area" show={this.state.show} onHide={this.close} >
+                <Modal backdrop={"static"} className="add_container_area" show={this.state.show} onHide={this.close} >
                     <Modal.Header>
                         <Modal.Title>Associating a container with a business</Modal.Title>
                     </Modal.Header>
@@ -184,40 +203,107 @@ class ControlContainers extends Component {
               </Button>
                     </Modal.Footer>
                 </Modal>
-                    
-                </Dropdown>
-                // </div >
+
+            </Dropdown>
+            // </div >
 
         )
     }
 }
 
-const instance = (
-    <div className="show-fake-browser navbar-page">
-      <Container>
-        <Header>
-          <Navbar appearance="subtle">
-            <Navbar.Header>
-              <a className="navbar-brand logo">Majordomo</a>
-            </Navbar.Header>
-            <Navbar.Body>
-              <Nav>
-                <Nav.Item icon={<Icon icon="home" />}>Home</Nav.Item>
-                <Dropdown title="users">
-                  <Dropdown.Item>Company</Dropdown.Item>
-                  <Dropdown.Item>Team</Dropdown.Item>
-                  <Dropdown.Item>Contact</Dropdown.Item>
-                </Dropdown>
-                <ControlContainers/>
-              </Nav>
-              <Nav pullRight>
-                <Nav.Item >leave</Nav.Item>
-                </Nav>
-            </Navbar.Body>
-          </Navbar>
-        </Header>
-        <Content>Content</Content>
-        {/* <Footer>Footer</Footer> */}
-      </Container>
-    </div>
-  );
+export const EditCell = ({ rowData, dataKey, onChange, ...props }) => {
+    const editing = rowData.status === 'EDIT';
+    return (
+      <Table.Cell {...props} className={editing ? 'table-content-editing' : ''}>
+        {editing ? (
+          <input
+            className="rs-input"
+            defaultValue={rowData[dataKey]}
+            onChange={event => {
+              onChange && onChange(rowData.id, dataKey, event.target.value);
+            }}
+          />
+        ) : (
+          <span className="table-content-edit-span">{rowData[dataKey]}</span>
+        )}
+      </Table.Cell>
+    );
+  };
+  
+  const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
+    return (
+      <Table.Cell {...props} style={{ padding: '6px 0' }}>
+        <Button
+          appearance="link"
+          onClick={() => {
+            onClick && onClick(rowData.id);
+          }}
+        >
+          {rowData.status === 'EDIT' ? 'Save' : 'Edit'}
+        </Button>
+      </Table.Cell>
+    );
+  };
+  const EditTable = (fakeData) => {
+    const [data, setData] = React.useState(fakeData.filter((v, i) => i < 8));
+    const handleChange = (id, key, value) => {
+      const nextData = Object.assign([], data);
+      nextData.find(item => item.id === id)[key] = value;
+      setData(nextData);
+    };
+    const handleEditState = id => {
+      const nextData = Object.assign([], data);
+      const activeItem = nextData.find(item => item.id === id);
+      activeItem.status = activeItem.status ? null : 'EDIT';
+      setData(nextData);
+    };
+  
+    return (
+      <Table height={420} data={data}>
+        <Col width={100}>
+          <Table.HeaderCell>user id</Table.HeaderCell>
+          <EditCell dataKey="firstName" onChange={handleChange} />
+        </Col>
+        <Col width={200}>
+          <Table.HeaderCell>First Name</Table.HeaderCell>
+          <EditCell dataKey="firstName" onChange={handleChange} />
+        </Col>
+  
+        <Col width={200}>
+          <Table.HeaderCell>Last Name</Table.HeaderCell>
+          <EditCell dataKey="lastName" onChange={handleChange} />
+        </Col>
+  
+        <Col width={300}>
+          <Table.HeaderCell>Email</Table.HeaderCell>
+          <EditCell dataKey="email" onChange={handleChange} />
+        </Col>
+  
+        <Col width={200}>
+          <Table.HeaderCell>phone number</Table.HeaderCell>
+          <EditCell dataKey="phoneNumber" onChange={handleChange} />
+        </Col>
+  
+        <Col width={400}>
+          <Table.HeaderCell>address</Table.HeaderCell>
+          <EditCell dataKey="address" onChange={handleChange} />
+        </Col>
+  
+        <Col width={100}>
+          <Table.HeaderCell>business id</Table.HeaderCell>
+          <EditCell dataKey="businessId" onChange={handleChange} />
+        </Col>
+  
+        <Col width={100}>
+          <Table.HeaderCell>department id</Table.HeaderCell>
+          <EditCell dataKey="departmentId" onChange={handleChange} />
+        </Col>
+  
+        <Col flexGrow={1}>
+          <Table.HeaderCell>Action</Table.HeaderCell>
+          <ActionCell dataKey="id" onClick={handleEditState} />
+        </Col>
+      </Table>
+    );
+  };
+  

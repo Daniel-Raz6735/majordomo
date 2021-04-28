@@ -115,28 +115,18 @@ def get_notifications(business_id: int, active: bool = True, notification_id: in
     """
     query, res_code = readQ.get_notifications_with_info(business_id=business_id, active=active,
                                                         notification_id=notification_id)
-    return process_read_query(query, res_code)
+    connection = Connection()
+    return connection.get_result(query)
 
-# todo lose this code in next push
-# @app.get('/get/rules')
-# async def get_rules(business_id: int, active: Optional[bool] = False, rule_id: Optional[int] = -1):
-#     """gets all rules based on business_id,
-#         provided optional params: can get only active rules and a specific rule
-#            required parameters: business_id
-#            optional parameters: active ,rule_id
-#            """
-#     if not business_id:
-#         raise HTTPException(status_code=400, detail="no business id sent")
-#     query = readQ.get_rules_query(business_id, active, rule_id)
-#     return process_read_query(query, 200)
 
 # todo add new functionality
-# @app.post('/items/add')
-# async def add_item(business_id: int,category_id: int):
-#     """add item to business """
-#     connection = Connection()
-#     updater = updateQ(connection)
-#     reader = readQ(connection)
+@app.post('/items/add')
+async def add_item(business_id: int, category_id: int):
+    """add item to business """
+    pass
+    #     connection = Connection()
+    #     updater = updateQ(connection)
+    #     reader = readQ(connection)
 
 
 @app.get('/get/item/history')
@@ -228,6 +218,24 @@ async def add_container_to_business(business_id: int, container_id: Optional[int
     return container_id
 
 
+@app.get('/get/users')
+def get_users(business_id: int=None, get_supplier: bool = False, get_businesses: bool = False):
+    """
+    """
+    res = {}
+    connection = Connection()
+    users_query = readQ.get_users_query(business_id=business_id)
+    res["users"] = connection.get_result(users_query)
+    if get_supplier:
+        users_query = readQ.get_users_query(business_id=business_id)
+        res["suppliers"] = connection.get_result(users_query)
+    if get_businesses:
+        business_query = readQ.get_users_query(business_id=business_id)
+        res["businesses"] = connection.get_result(business_query)
+    return res
+
+
+
 @app.post('/containers/remove')
 async def remove_container(container_id: int):
     """admin removal of a container from all businesses"""
@@ -296,12 +304,6 @@ async def get_current_view(business_id: int, user_email: str = "shlomow6@gmail.c
         settings.email_client.email_admin(message, "error details:" + str(error))
         raise HTTPException(status_code=400, detail=message)
 
-
-# @app.get('/')
-# async def read_item(item_id: str, q: Optional[str] = None):
-#     if q:
-#         return {"item_id": item_id, "q": q}
-#     return {"item_id": item_id}
 
 @app.get('/')
 async def home():
@@ -429,14 +431,6 @@ async def add_order_item(item: OrderItem):
     # return process_create_query([[query, "add weights"]], res_code)
 
 
-def error_message(code, message, info=None):
-    res = "<h1>" + str(code) + "</h1><p>" + str(message) + "</p>"
-
-    if info:
-        res += "<p>" + str(info) + "</p>"
-    return res, code
-
-
 def process_read_query(query, res_code=200):
     if res_code != 200:
         return query
@@ -444,7 +438,7 @@ def process_read_query(query, res_code=200):
     if res_code == 200:
         return JSONResponse(content=jsonable_encoder(result))
     else:
-        return error_message(res_code, result, "unable to process request")
+        raise HTTPException(status_code=res_code, detail=result)
 
 
 def process_create_query(query, res_code):
@@ -454,7 +448,7 @@ def process_create_query(query, res_code):
     if res_code == 200:
         return JSONResponse(content=jsonable_encoder(result[0]))
     else:
-        return error_message(res_code, result, "unable to process request")
+        raise HTTPException(status_code=res_code, detail=result)
 
 
 manager = settings.web_socket_manager

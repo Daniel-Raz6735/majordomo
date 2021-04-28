@@ -52,7 +52,6 @@ class SettingsPage extends Component {
 
           <div className="side_nav_container">
           {/* <button onClick={()=>this.setState({QR:true})} >QR Reader</button> */}
-            <ModalDemo />
             <ManegmentBTN/>
             <div className="settings_issues">
               <Sidenav appearance="subtle" >
