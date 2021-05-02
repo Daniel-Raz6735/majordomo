@@ -32,3 +32,5 @@ backend/old_firebase/smartcontainerdemo-a97e4-firebase-adminsdk-khgwn-f0206e819a
 .eslintcache
 /backend/email_info.ini
 /backend/database.ini
+/backend/QED.log
+.firebase/hosting.YnVpbGQ.cache
