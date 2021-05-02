@@ -1,5 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# ignore files that are already tracked:    git rm --cached <file>/<folder>
+
 # dependencies
 /node_modules
 /.pnp
@@ -34,3 +36,6 @@ backend/old_firebase/smartcontainerdemo-a97e4-firebase-adminsdk-khgwn-f0206e819a
 /backend/database.ini
 /backend/QED.log
 .firebase/hosting.YnVpbGQ.cache
+backend/queries/send_requests.py
+backend/utilities/logs.py
+src/index.js
