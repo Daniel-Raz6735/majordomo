@@ -1,8 +1,22 @@
 from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
-from fastapi import HTTPException
 from queries.connection_manager import Connection
+from fastapi import HTTPException
+from pydantic import BaseModel, BaseSettings
 import time
+
+
+class UserInfo(BaseModel):
+    user_id: int
+    email_domain_name: str
+    email_user_name: str
+    address: str = None
+    business_id: int = None
+    department_id: int = None
+    first_name: str = None
+    last_name: str = None
+    phone_number: int = None
+
 
 def convert_val(val):
     """convert a value from an object to a string that can be inserted to an SQL query"""
@@ -161,7 +175,7 @@ class UpdateQueries:
         if res_code != 200:  # if query failed
             print("Unable to create get order query", query)
             raise HTTPException(status_code=500, detail="Server error")
-        supply_info= self.connection.get_result(query)
+        supply_info = self.connection.get_result(query)
         return supply_info
 
     def add_empty_order(self, business_id, supplier_id):
@@ -173,6 +187,39 @@ class UpdateQueries:
             print(query)
             raise HTTPException(status_code=500, detail="Server error")
         return query, res_code
+
+
+    @staticmethod
+    def edit_user(info: UserInfo):
+        info_dict = info.dict()
+        conditions = []
+        cols_to_set = []
+        if info_dict["user_id"]:
+            conditions.append([["user_id", "=", int(info_dict["user_id"])]])
+        else:
+            raise HTTPException(status_code=400, detail="No user id sent")
+        if "email" in info_dict and info_dict["email"]:
+            split_mail = info_dict["email"]
+            if len(split_mail) != 2:
+                cols_to_set.append("email_domain_name")
+
+
+
+#         address: "vegetables place, JLM"
+# business_id: null
+# department_id: null
+# email_domain_name: "gmail.com"
+# email_user_name: "vegetables"
+# first_name: "vegetable"
+# last_name: "seller"
+# phone_number: "502001231"
+#         cols_to_set = ["amount", "unit"]
+#         vals_to_set = [amount, unit]
+#         if price_per_unit:
+#             cols_to_set.append("price_per_unit")
+#             vals_to_set.append(price_per_unit)
+#         return update_table_query("users ", cols_to_set, vals_to_set, conditions, include_t_name)
+
 
     def add_notification(self, business_id, item_id, notification_level, message=None, remove_only=False):
         """remove all previous notifications and if not remove_only add a notification to the data """
