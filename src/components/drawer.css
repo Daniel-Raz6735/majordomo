@@ -114,7 +114,10 @@
     justify-content: space-evenly;
     color: #A1A1A1;
     border-radius: 5pt;
+    margin-top: 35px;
+    margin-bottom: 10px;
 }
+
 
 .item_min_max{
     display: flex;

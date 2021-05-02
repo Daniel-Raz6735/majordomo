@@ -579,7 +579,7 @@ class ItemDeatils extends Component {
     for (let i = 0; i < data.length; i++) {
       let container = data[i]
       str += i === data.length - 1 ? container["container_id"] : container["container_id"] + ","
-      cont_details.push(<div>{container["container_id"]}: {container["weight"]}{getUnitById(container["weight"])} {" "}{getDate(container["date"])}  </div>)
+      cont_details.push(<div><span style={{ fontWeight: "bold" }}>{container["container_id"]}</span>: {container["weight"]} {getUnitById(container["weight"])} {" "}{getDate(container["date"])}  </div>)
     }
     console.log(cont_details)
     this.setState({
@@ -622,7 +622,7 @@ const ContainerInformationTip = (props) => {
   return (
     <Whisper
       trigger="click"
-      placement={'rightStart'}
+      placement={'top'}
       speaker={
         <Tooltip>
           {props.container_details}
