@@ -4,6 +4,7 @@ from email_client import EmailManager
 from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
 from queries.update_queries import UpdateQueries as updateQ
+from queries.update_queries import UserInfo
 from queries.delete_queries import DeleteQueries as deleteQ
 from utilities.logs import LogManager
 from utilities.websockets import WebSocketManager
@@ -74,7 +75,7 @@ def schedule_runner():
 
 
 @app.get('/get/containers')
-def get_containers(business_id: int, container_id: Optional[int] = None, item_id: Optional[int] = None):
+def get_containers(business_id: int = None, container_id: Optional[int] = None, item_id: Optional[int] = None):
     """gets all current weight for all items of a specific business
          provided optional params: can get specific containers, all containers per item
         required parameters: business_id
@@ -219,7 +220,7 @@ async def add_container_to_business(business_id: int, container_id: Optional[int
 
 
 @app.get('/get/users')
-def get_users(business_id: int=None, get_supplier: bool = False, get_businesses: bool = False):
+def get_users(business_id: int = None, get_supplier: bool = False, get_businesses: bool = False):
     """
     """
     res = {}
@@ -235,6 +236,34 @@ def get_users(business_id: int=None, get_supplier: bool = False, get_businesses:
     return res
 
 
+@app.get('/edit/user')
+def edit_user():
+    """"""
+    res = {}
+    try:
+        connection = Connection()
+        reader = readQ(connection)
+        updater = updateQ(connection)
+        updater.edit_user()
+        arr = []
+        # weight_list = lis.dict()
+        # for weight in weight_list["weights"]:
+        #     time_gap = client_time - weight["weighing_date"]
+        #     weight_time = "to_timestamp(" + str(server_time - time_gap) + ")"
+        #     if weight["weight_value"] >= 0:
+        #         query = reader.get_container_item_id_query(weight["business_id"], weight["container_id"])
+        #         res = connection.get_result(query)
+        #
+        #         if len(res) > 0:
+        #             item_id = res[0]["item_id"]
+        #         else:
+        #             raise HTTPException(status_code=404, detail="Container has no item configured for this business")
+        #         arr.insert(0, [weight_time, weight["business_id"], weight["container_id"], item_id,
+        #                        weight["weight_value"], weight["last_user"]])
+    except (Exception):
+        pass
+
+    return res
 
 @app.post('/containers/remove')
 async def remove_container(container_id: int):
