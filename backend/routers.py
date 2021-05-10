@@ -75,7 +75,7 @@ def schedule_runner():
 
 
 @app.get('/get/containers')
-def get_containers(business_id: int = None, container_id: Optional[int] = None, item_id: Optional[int] = None):
+def get_containers(business_id: int = None, container_id: Optional[int] = None, item_id: Optional[int] = None, only_active_containers: Optional[bool] = False):
     """gets all current weight for all items of a specific business
          provided optional params: can get specific containers, all containers per item
         required parameters: business_id
@@ -83,7 +83,8 @@ def get_containers(business_id: int = None, container_id: Optional[int] = None, 
     if item_id:
         item_id = [item_id]
     query = readQ.get_current_weight_query(business_id=business_id, container_ids=container_id,
-                                           item_ids=item_id, get_by_container=True)
+                                           item_ids=item_id, get_by_container=True,
+                                           only_active_containers=only_active_containers)
     connection = Connection()
     return connection.get_result(query)
 
@@ -192,7 +193,7 @@ async def pair_container_to_item(business_id: int, container_id: int, item_id: i
     connection.insert_data(addition_query, "unable to add container")
 
 
-@app.post('/containers/add')
+@app.post('/edit/container')
 async def add_container_to_business(business_id: int, container_id: Optional[int] = None):
     """admin removal of container from all businesses and add to a specific business
     if no container_id provided then creates new one.
@@ -201,6 +202,10 @@ async def add_container_to_business(business_id: int, container_id: Optional[int
     updater = updateQ(connection)
     reader = readQ(connection)
     have_container_id = container_id is not None
+    business_query = reader.get_business_query(business_id)
+    business_info = connection.get_result(business_query)
+    if not business_info or len(business_info) < 1:
+        raise HTTPException(status_code=404, detail="Business id not found")
     if have_container_id:
         remove_query = updater.disable_container_query(container_id)
         connection.insert_data(remove_query, "unable to remove container")
@@ -213,9 +218,6 @@ async def add_container_to_business(business_id: int, container_id: Optional[int
             container_id = res[0]["container_id"]
         else:
             raise HTTPException(status_code=500, detail="error retrieving new container created ")
-    # weighing = Weighing(container_id=container_id, weight_value=0, weighing_date=int(time.time()), business_id=business_id)
-    # lis = WeighingList(weights=[weighing])
-    # await add_weights(lis,client_time=int(time.time()))
     return container_id
 
 
@@ -233,6 +235,8 @@ def get_users(business_id: int = None, get_supplier: bool = False, get_businesse
     if get_businesses:
         business_query = readQ.get_users_query(business_id=business_id)
         res["businesses"] = connection.get_result(business_query)
+    for user in res["users"]:
+        user["email"] = user["email_user_name"]+"@"+user["email_domain_name"]
     return res
 
 
@@ -264,6 +268,7 @@ def edit_user():
         pass
 
     return res
+
 
 @app.post('/containers/remove')
 async def remove_container(container_id: int):
@@ -486,7 +491,9 @@ manager = settings.web_socket_manager
 @app.get('/get/wss')
 async def return_socket_page():
     """socket test"""
-    return HTMLResponse(manager.get_socket_page)
+    bla = manager.get_socket_page()
+    print(str(bla))
+    return HTMLResponse(manager.get_socket_page())
 
 
 @app.websocket("/wss")

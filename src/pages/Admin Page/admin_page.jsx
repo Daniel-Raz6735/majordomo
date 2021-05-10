@@ -5,7 +5,7 @@ import LoginComponent from '../login page/LoginPage';
 import './admin_page.css';
 import $ from 'jquery';
 import { base_url } from '../..';
-const { Column, HeaderCell, Cell, Pagination } = Table;
+const { Column, HeaderCell, Cell } = Table;
 
 
 const users_columns = [
@@ -25,8 +25,8 @@ const business_columns = [
 const container_columns = [
     { column_name: "Container_id", editble: false, data_key: "container_id", width: 100 },
     { column_name: "Business id", editble: true, data_key: "business_id", width: 100 },
-    { column_name: "Item name", editble: true, data_key: "item_name", width: 100 },
-    { column_name: "item id", editble: true, data_key: "item_id", width: 100 },
+    { column_name: "Item name", editble: false, data_key: "item_name", width: 100 },
+    { column_name: "item id", editble: false, data_key: "item_id", width: 100 },
 ]
 
 
@@ -106,7 +106,7 @@ class ControlUsers extends Component {
     processUsers(data) {
         console.log(data)
         if (data && data["users"])
-            this.props.loadPage(<EditTable key={"user_table"} table_data_key={"user_id"} columns={users_columns.concat(business_columns)} data={data["users"]} />)
+            this.props.loadPage(<EditTable key={"user_table"} request_name={"user"} tableDataKey={"user_id"} columns={users_columns.concat(business_columns)} data={data["users"]} />)
         else
             console.log("unable to load users")
 
@@ -178,7 +178,7 @@ class ControlContainers extends Component {
 
     }
     getContainers() {
-        var request = base_url + '/get/containers';
+        var request = base_url + '/get/containers?only_active_containers=true';
         var callback = this.processContainers
         $.ajax({
             url: request,
@@ -194,21 +194,15 @@ class ControlContainers extends Component {
     }
     processContainers(data) {
         console.log(data)
-        if (data)
-            this.props.loadPage(<EditTable key={"container_table"} table_data_key={"container_id"} columns={container_columns} data={data} />)
-        else
-            this.props.loadPage(<div>We were unable to find the container data</div>)
+        var page = data ? <EditTable key={"container_table"} request_name={"container"} tableDataKey={"container_id"} columns={container_columns} data={data} />
+            : <div>We were unable to find the container data</div>
+
+        this.props.loadPage(page)
     }
-
-
-
 
     render() {
 
         return (
-            // <div className="control_containers">
-
-
             <Dropdown title="containers">
                 <Dropdown.Item onClick={this.getContainers}>
                     Get containers
@@ -253,57 +247,39 @@ class ControlContainers extends Component {
                 </Modal>
 
             </Dropdown>
-            // </div >
-
         )
     }
 }
 
-export const EditCell = ({ rowData, dataKey, onChange, ...props }) => {
-    const editing = rowData.status === 'EDIT';
+export const EditCell = ({ rowData, colDataKey, saveChange, editable, ...props }) => {
+    const editing = rowData.status === 'EDIT' && editable;
+    var presentation = editing ? (
+        <input
+            className="rs-input"
+            defaultValue={rowData[colDataKey]}
+            onChange={event => {
+                saveChange && saveChange(rowData, colDataKey, event.target.value);
+            }}
+        />) : (<span className="table-content-edit-span">{rowData[colDataKey]}</span>)
+
+
     return (
         <Cell {...props} className={editing ? 'table-content-editing' : ''} >
-            {editing ? (
-                <input
-                    className="rs-input"
-                    defaultValue={rowData[dataKey]}
-                    onChange={event => {
-                        onChange && onChange(rowData.id, dataKey, event.target.value);
-                    }}
-                />
-            ) : (
-                <span className="table-content-edit-span">{rowData[dataKey]}</span>
-            )}
+            {presentation}
         </Cell>
     );
 };
 
-const ActionCell = ({ rowData, dataKey, onClick, ...props }, datakey) => {
-    console.log(rowData[props.data_key])
-    console.log(props)
-    console.log(rowData)
-    console.log(dataKey)
+const ActionCell = ({ rowData, handleEdit, handleSave, handleCancel, tableDataKey, ...props }) => {
 
-    const editing = rowData.status === 'EDIT'
-    const backBtn = editing ? <Button
-        appearance="link"
-        onClick={() => {
-            onClick && onClick(rowData[dataKey], false);
-        }}
-    >
-        back
-    </Button> : ""
+    const cancelBtn = <Button appearance="link" onClick={() => { handleCancel && handleCancel(rowData[tableDataKey]) }}> {"Cancel"}</Button>
+    const saveBtn = <Button appearance="link" onClick={() => { handleSave && handleSave(rowData[tableDataKey]) }}> {'Save'}</Button>
+    const editBtn = <Button appearance="link" onClick={() => { handleEdit && handleEdit(rowData[tableDataKey]) }}> {'Edit'}</Button>
+
+    const btns = (rowData.status === 'EDIT') ? [saveBtn, cancelBtn] : [editBtn]
     return (
         <Table.Cell {...props} style={{ padding: '6px 0' }}>
-            <Button
-                appearance="link"
-                onClick={() => {
-                    onClick && onClick(rowData[dataKey], true);
-                }}
-            >
-                {editing ? 'Save' : 'Edit'}
-            </Button>
-            {backBtn}
+            {btns}
         </Table.Cell>
     );
 };
@@ -313,43 +289,88 @@ class EditTable extends Component {
         super(props);
         this.state = {
             table: "",
-            data: props.data
+            data: props.data,
+            changed_columns: {}
         }
 
-        this.load_table = this.load_table.bind(this)
         this.handleEditState = this.handleEditState.bind(this)
-        this.setData = this.setData.bind(this)
-
+        this.handleCancel = this.handleCancel.bind(this)
+        this.handleSave = this.handleSave.bind(this)
+        this.saveChange = this.saveChange.bind(this)
+        this.load_table = this.load_table.bind(this)
     }
 
     componentDidMount() {
         this.load_table(this.props.columns)
     }
-    setData(data) {
-        this.setState({ data });
-    }
 
+    saveChange = (rowData, colName, value) => {
+        /* save changes localy in the table*/
+        const tableDataKey = this.props.tableDataKey
+        const id = rowData[tableDataKey]
+        var changed_columns = this.state.changed_columns
+        var changed_column = changed_columns[id]
+        if (!changed_column) {
+            const data = Object.assign([], this.state.data);
+            changed_column = data.find(item => item[tableDataKey] === id)
+        }
+        changed_column[colName] = value;
+        changed_columns[id] = changed_column;
+        this.setState({ changed_columns });
+    };
 
+    handleCancel = (id) => {
+        //remove data saved locally and set the row to be uneditable
+        const changed_columns = this.state.changed_columns
+        delete changed_columns[id]
+        this.setState({ changed_columns });
+        this.handleEditState(id);
+    };
+
+    handleSave = (id) => {
+        /*save the column information in the server*/
+        const changed_column = this.state.changed_columns[id]
+        const request_name = this.props.request_name
+        const colName = this.props.tableDataKey
+        $.ajax({
+            url: base_url + '/edit/' + request_name,
+            type: "POST",
+            data: changed_column,
+            dataType: "application/json",
+            success: function (res) {
+                console.log(res)
+                console.log("success sending information")
+                console.log(changed_column)
+            },
+            error: function (err) {
+                // todo add notification to user
+                console.log(err);
+                console.log("Unable to save the information for column: " + colName + ": " + id);
+            }
+        });
+        this.handleEditState(id);
+    };
 
     handleEditState = (id) => {
-        const nextData = Object.assign([], this.state.data);
-        const activeItem = nextData.find(item => item.id === id);
+        /* change the state of a row*/
+        const data = Object.assign([], this.state.data);
+        const activeItem = data.find(item => item[this.props.tableDataKey] === id);
         activeItem.status = activeItem.status ? null : 'EDIT';
-        this.setData(nextData);
+        this.setState({ data });
     };
+
     load_table(columns) {
         /*this function gets an array that contains a dict with all columns information for each column in this format:
         {column_name:
         editble:
         data_key:
         width:} */
-
         var table = []
         if (columns) {
             columns.forEach(col => {
                 table.push(<Column width={col["width"] ? col["width"] : ""} resizable>
                     <HeaderCell>{col["column_name"]}</HeaderCell>
-                    <EditCell dataKey={col["data_key"]} editble={col["editble"]} onChange={this.props.handleChange} />
+                    <EditCell colDataKey={col["data_key"]} editable={col["editble"]} saveChange={this.saveChange} />
                 </Column>)
 
             })
@@ -358,14 +379,16 @@ class EditTable extends Component {
     }
 
     render() {
-        return (
-            <Table height={500} data={this.state.data} autoHeight affixHeade>
-                {this.state.table}
-                <Column width={130} resizable>
-                    <HeaderCell>Action</HeaderCell>
-                    <ActionCell dataKey={this.props.table_data_key} onClick={this.handleEditState} />
-                </Column>
 
+
+
+        return (
+            <Table data={this.state.data} autoHeight affixHeader>
+                {this.state.table}
+                <Column width={135}>
+                    <HeaderCell>Action</HeaderCell>
+                    <ActionCell handleEdit={this.handleEditState} handleCancel={this.handleCancel} handleSave={this.handleSave} tableDataKey={this.props.tableDataKey} />
+                </Column>
             </Table>
         )
     }
