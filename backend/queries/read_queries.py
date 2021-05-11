@@ -33,6 +33,22 @@ class ReadQueries:
         return final_query
 
     @staticmethod
+    def get_business_query(business_id):
+        """method for getting business information based on business id"""
+
+        conditions = []
+        if business_id:
+            conditions.append(["AND", "business.business_id", "=", int(business_id)])
+
+        final_query, res_code = DbQueries.select_query(
+            ["business"],
+            [],
+            conditions)
+        if res_code != 200:
+            raise HTTPException(status_code=res_code, detail=final_query)
+        return final_query
+
+    @staticmethod
     def get_order(order_id):
         """creates an SQL query that will return a specific order based on the id"""
         conditions = []
@@ -211,7 +227,7 @@ class ReadQueries:
         return final_query
 
     @staticmethod
-    def get_current_weight_query(business_id=None, container_ids=None, item_ids=None, get_by_container=False):
+    def get_current_weight_query(business_id=None, container_ids=None, item_ids=None, get_by_container=False, only_active_containers=False):
         """gets an SQL query of the last weight of all items.
         optional parameters:
         business_id: will specify which business you want to request
@@ -235,6 +251,8 @@ class ReadQueries:
             for item in item_ids:
                 conditions.append([and_or, "containers.item_id", "=", int(item)])
                 and_or = "OR"
+        if only_active_containers:
+            conditions.append(["AND", "containers.using_end_date", "is", "null"])
         conditions.append(["AND", "weights.container_id", "=", "containers.container_id"])
         max_table, res_code = DbQueries.select_query(["containers", "weights"],
                                                      [[["container_id"]], [["weighing_date", "date", "MAX"]]],
