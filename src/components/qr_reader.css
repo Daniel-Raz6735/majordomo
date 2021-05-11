@@ -10,9 +10,9 @@
     padding: 0;
 }
 
-.fade.in {
+/* .fade.in {
     opacity: 0.5;
-}
+} */
 
 .scan_btns_filter {
     display: flex;
@@ -27,6 +27,7 @@
 .filters_area {
     display: flex;
     justify-content: space-evenly;
+    margin-top:15px ;
 }
 
 .barcode_scan_area {
@@ -34,3 +35,12 @@
     margin-bottom: 30px;
 }
 
+.add_container_area{
+    display: flex;
+    flex-direction: column;
+}
+
+.rs-modal-content{
+    display: flex;
+    flex-direction: column;
+}

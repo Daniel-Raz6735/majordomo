@@ -42,7 +42,7 @@ export class HomePage extends Component {
                 {temp}
                 <div className="home_titles"><div>Inventory Status</div>  <div>{getTime()}</div></div>
                 <InentoryTileContainer key={"tile"} dict={tiles} />
-                <ModalDemo/>
+                <ModalDemo dict={this.props.dict}/>
             </div>
 
         );

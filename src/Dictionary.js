@@ -88,6 +88,11 @@ export const Dictionary = new LocalizedStrings({
     page_not_found: "Sorry, the page you were looking for was not found",
     status_code: "Status code",
 
+    //qr barcode
+    container_id:"Container ID",
+    item:"Item",
+    
+
 
 
 
@@ -162,6 +167,10 @@ export const Dictionary = new LocalizedStrings({
     //messages
     page_not_found: "מתנצלים, הדף שחיפשתם לא נמצא.",
     status_code: "קוד שגיאה",
+
+    //qr barcode
+    container_id:"מזהה מיכל",
+    item:"מוצר",
 
   }
 });
