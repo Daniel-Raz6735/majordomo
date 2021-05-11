@@ -91,6 +91,10 @@ export const Dictionary = new LocalizedStrings({
     //qr barcode
     container_id:"Container ID",
     item:"Item",
+    container_pairing:"Container Pairing",
+    container_not_in_list:"Container not in list",
+    item_not_in_list:"Item not in list",
+
     
 
 

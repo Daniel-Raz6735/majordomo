@@ -553,7 +553,7 @@ class ItemDeatils extends Component {
   componentDidMount() {
 
 
-    let request = base_url + "/get/containers" + "?business_id=" + this.state.business_id + "&item_id=" + this.state.item_id
+    let request = base_url + "/get/containers" + "?business_id=" + this.state.business_id + "&item_id=" + this.state.item_id+"&only_active_containers=true"
     // let request = base_url + path
 
     var callback = this.getItemContainers
@@ -569,6 +569,7 @@ class ItemDeatils extends Component {
       }
     });
 
+    
 
   }
 

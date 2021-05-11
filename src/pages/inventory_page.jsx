@@ -14,6 +14,7 @@ import { getUnitById } from "../components/data_dictionary";
 
 
 
+
 class InventoryPage extends Component {
   // constructor(props) {
   //     super(props);
@@ -73,7 +74,7 @@ export class AddToOrder extends Component {
 
   handleMinus() {
     var new_val = this.state.quantity - this.state.incraments;
-    
+
     if (new_val >= this.state.min)
       this.setState({ quantity: new_val });
     else
@@ -82,7 +83,7 @@ export class AddToOrder extends Component {
 
   handlePlus() {
     var new_val = this.state.quantity + this.state.incraments;
-    
+
     if (new_val <= this.state.max)
       this.setState({ quantity: new_val });
     else
@@ -91,13 +92,13 @@ export class AddToOrder extends Component {
 
   // getQuantity(value) {
   //   this.setState({value:value})
- 
+
   // }
 
   addOrder(value) {
     var unit = this.state.unit,
       title = this.state.title
-    
+
 
     // order details dictionary
     let dict = {
@@ -108,7 +109,7 @@ export class AddToOrder extends Component {
       amount: value,
       unit: unit
     }
-    
+
 
     let request = base_url + "/order/add/item"
 
@@ -124,14 +125,17 @@ export class AddToOrder extends Component {
       // enCode: true,
       success: function (res) {
         response = res
-       
-        scree_alert('success', dict["amount"], getUnitById(unit), title);
-        
+
+        let data = { "amount": dict["amount"], "unit": getUnitById(unit), "item_name": title }
+        scree_alert('success', data, "add_to_order");
+
       },
       error: function (err) {
         response = err
-        scree_alert('error', dict["amount"], getUnitById(unit), title);
-        
+        // scree_alert('error', dict["amount"], getUnitById(unit), title);
+        let data = { "amount": dict["amount"], "unit": getUnitById(unit), "item_name": title }
+        scree_alert('error', data, "add_to_order");
+
 
       }
 
@@ -163,7 +167,7 @@ export class AddToOrder extends Component {
   }
 
   componentDidMount() {
-   
+
 
     // var button_text = (this.state.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"]
     // btn = <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />
@@ -227,12 +231,37 @@ export class AddToOrder extends Component {
 }
 
 // This function get  if add to order request success or failed and notify the user the condition of the request.
-function scree_alert(funcName, amount, unit, item_name) {
+export function scree_alert(funcName, data, type) {
+  let messeges, description
+
+  switch (type) {
+    case "add_to_order":
+      messeges = { "success": Dictionary["item_added"], "error": Dictionary["item_added_failed"] }
+      description = <div >{data["amount"]} {data["unit"]} {data["item_name"]} </div>
+      break
+
+    case "!container":
+      messeges = { "success": "Container found", "error": "Container not in list" }
+      description = <div>Container not in list</div>
+      break
+
+    case "!item":
+      messeges = { "success": "Item found", "error": "item not in list" }
+      description = <div>Item not in list</div>
+      break
+
+    case "pairing":
+      messeges = { "success": "Pairing success", "error": "Pairing Failed" }
+      description = <div>test</div>
+      break
+  }
+
   note[funcName]({
-    title: funcName === 'success' ? Dictionary["item_added"] : Dictionary["item_added_failed"],
-    description: <div >{amount} {unit} {item_name} </div>
+    title: funcName === 'success' ? messeges["success"] : messeges["error"],
+    description: description
   });
 }
+
 
 export class Quantity extends Component {
   constructor(props) {
