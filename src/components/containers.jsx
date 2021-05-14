@@ -179,7 +179,7 @@ export function getDate(elementDate) {
     var dataTime = new Date(elementDate)
     var str
 
-    if ((now.getMonth() + 1 === dataTime.getMonth() + 1) && (now.getDate() === dataTime.getDate())) {
+    if ((now.getMonth()  === dataTime.getMonth()) && (now.getDate() === dataTime.getDate())) {
         let hour = dataTime.getHours()
         let minutes = dataTime.getMinutes()
         let Seconds = ('0' + dataTime.getSeconds()).slice(-2)
