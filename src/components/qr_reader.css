@@ -33,6 +33,8 @@
 .barcode_scan_area {
     margin-top: 30px;
     margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
 }
 
 .add_container_area{
