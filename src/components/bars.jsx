@@ -128,7 +128,7 @@ export class SiteFrame extends Component {
         //changes the tab on this component by name
         var page = [], i = 0
         if (!dict)
-            dict = this.state.dict
+            dict = this.state.dict;
         switch (tab_name) {
             case "SettingPage":
                 i = 3;

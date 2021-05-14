@@ -48,11 +48,8 @@ class AdminPage extends Component {
         this.setState({ page });
     }
 
-
-
-
-
     render() {
+        console.log(this.props.dict)
 
         return (
             <div className="admin_page">
@@ -64,8 +61,8 @@ class AdminPage extends Component {
                             </Navbar.Header>
                             <Navbar.Body>
                                 <Nav>
-                                    <ControlUsers loadPage={this.loadPage} />
-                                    <ControlContainers loadPage={this.loadPage} />
+                                    <ControlUsers loadPage={this.loadPage} dict={this.props.dict}/>
+                                    <ControlContainers loadPage={this.loadPage} dict={this.props.dict}/>
                                 </Nav>
                                 <Nav pullRight>
                                     <Nav.Item >

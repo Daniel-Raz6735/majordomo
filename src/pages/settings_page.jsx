@@ -34,16 +34,11 @@ class SettingsPage extends Component {
 
   
   render() {
-
-   
-
     let j
     if (this.state.settings && !this.state.QR) {
       let settings = this.state.settings
 
       j = settings["lang"] === "EN" ? 0 : 1
-      
-
 
       return (
         <div className="settings_page_container">
@@ -52,7 +47,7 @@ class SettingsPage extends Component {
 
           <div className="side_nav_container">
           {/* <button onClick={()=>this.setState({QR:true})} >QR Reader</button> */}
-            <ManegmentBTN/>
+            <ManegmentBTN dict={this.props.dict}/>
             <div className="settings_issues">
               <Sidenav appearance="subtle" >
                 <div className={"settings_container"}>general settings</div>
@@ -116,7 +111,7 @@ const ManegmentBTN = (props)=>{
  
   return( 
     <Button onClick={()=>{
-      ReactDOM.render(<AdminPage/>,document.getElementById('root'));
+      ReactDOM.render(<AdminPage dict={props.dict}/>,document.getElementById('root'));
       $("#root").prop('id', 'fullroot');
   }}>Mangement</Button>
 
