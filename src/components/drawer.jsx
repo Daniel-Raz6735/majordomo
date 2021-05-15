@@ -224,6 +224,7 @@ export class ItemPage extends Component {
     var business_id = this.props.business_id,
       item_id = this.props.item_id,
       min_date = get_old_date(new Date(), 30)
+      min_date = min_date.getTime()/1000;
 
     if (!business_id)
       console.log("No business id enterd. nothing happend")
@@ -258,23 +259,22 @@ export class ItemPage extends Component {
 
   get_relavent_data(res, days) {
     /* takes all data from the past dates and puts them in a dict that the keys are the wighings and the */
-    var min_date = get_old_date(new Date(), days),
+    console.log(res);
+    var min_date = get_old_date(new Date(), days).getTime(),
       relavent_data = {}, sorted_data = {};
-    min_date = new Date(min_date * 1000)
-
     if (res) {
       res.forEach(weighing => {
-        var date = new Date(weighing["date"])
+        var date = new Date(weighing["date"]).getTime()
         if (date >= min_date) {
           relavent_data[date] = weighing;
         }
       })
-
       var keys = Object.keys(relavent_data).sort();
-      keys.forEach(key => sorted_data[key] = relavent_data[key])
-    }
+      keys = get_relavent_keys(relavent_data)
+      keys.forEach(key => {sorted_data[key] = relavent_data[key]})}
+      
+    var last_weight = 0, range = 0.1, last_date, no_repatition_dict = {};
 
-    var last_weight = 0, range = 0.5, last_date, no_repatition_dict = {};
     Object.keys(sorted_data).forEach(date_key => {
       var current_weight = sorted_data[date_key]["weight"]
       var diffarence = Math.abs(current_weight - last_weight)
@@ -370,9 +370,10 @@ export class ChartComponent extends Component {
         var weight = dict[date]["weight"]
         if (weight !== undefined) {
           weights.push(weight);
-          point_colors.push("rgba(253, 94, 83, 1)")
-          point_radius.push(5)
-          date_time.push(this.pharse_date(new Date(date)));
+          point_colors.push("rgba(253, 94, 83, 0)")
+          point_radius.push(1)
+          console.log(date)
+          date_time.push(this.pharse_date(date));
         }
 
       });
@@ -395,20 +396,29 @@ export class ChartComponent extends Component {
   pharse_date(date) {
     if (!date)
       return date
-    var new_date = new Date(date),
-      today = new Date(),
-      unix_today = get_old_date(today, 1) * 1000,
-      diffarence = unix_today - new_date.getTime(),//old day is a day before at 00:00
+    var new_date = new Date(parseInt(date)),
+      absolute_today = get_old_date(new Date(), 1),
+      _24hAgo= new Date(),
+      diffarence = absolute_today.getTime() - new_date.getTime(),//old day is a day before at 00:00
+      year = new_date.getFullYear(),
+      dateStr="",
+      timeStr="",
       res = "";
+      _24hAgo.setDate(new_date.getDate() - 1);
+      
+      timeStr = new_date.getHours() + ":" + new_date.getMinutes();
+      dateStr = new_date.getDate() + "/" + (new_date.getMonth()+1);
+      if (absolute_today.getFullYear() !== year)
+        dateStr += "/" + year
+
     if (diffarence <= 86400) {//if the wight is yesterday or today
-      res += new_date.getHours() + ":" + new_date.getMinutes();
+      if((_24hAgo.getTime()-new_date.getTime())>0) // if weight is between 24 houers ago and 00:00 of the previous day
+        res = dateStr+" "+ timeStr
+      else
+        res = timeStr
     }
-    else {
-      res += new_date.getDate() + "/" + new_date.getMonth();
-      let year = new_date.getFullYear();
-      if (today.getFullYear() !== year)
-        res += "/" + year
-    }
+    else 
+      res=dateStr
     return res;
   }
 
@@ -462,13 +472,13 @@ export class ChartComponent extends Component {
   }
 }
 
-// function download(content, fileName, contentType) {
-//     var a = document.createElement("a");
-//     var file = new Blob([content], { type: contentType });
-//     a.href = URL.createObjectURL(file);
-//     a.download = fileName;
-//     a.click();
-// }
+export function download(content, fileName, contentType) {
+    var a = document.createElement("a");
+    var file = new Blob([content], { type: contentType });
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+}
 
 export class InfoCube extends Component {
 
@@ -521,12 +531,14 @@ export class InfoCube extends Component {
 
 
 function get_old_date(date, num_of_days) {
-  date = new Date(date)
+  /*get a date and return 00:00 in unix time number of days ago*/
+  if(typeof(date)===Date)
+    date = new Date(date)
   if (!date)
     return date
   date.setHours(0, 0, 0, 0);
   date.setDate(date.getDate() - num_of_days);
-  return date.getTime() / 1000
+  return date
 }
 
 class ItemDeatils extends Component {
@@ -544,9 +556,6 @@ class ItemDeatils extends Component {
     this.getItemContainers = this.getItemContainers.bind(this)
 
   }
-
-
-
 
   componentDidMount() {
 
@@ -603,7 +612,7 @@ class ItemDeatils extends Component {
     return (
       <div className="item_details">
 
-        <ContainerInformationTip container_details={this.state.container_details} str={this.state.str} />
+        <ContainerInformationTip key = {this.state.item_id} container_details={this.state.container_details} str={this.state.str} />
 
         <Divider key={"divider1"} style={divider_style} vertical={true} />
         <div className="item_min_max"><div style={min_max_style}>2.5 kg</div><div>{Dictionary["min"]}</div></div>
@@ -636,3 +645,15 @@ const ContainerInformationTip = (props) => {
   )
 }
 
+function get_relavent_keys(data, num_of_days){
+  //sort a data array with weights
+  var keys = Object.keys(data).sort().reverse();
+  var sorted_keys=[keys.pop()];
+  keys.forEach(key=>{
+    var recent_date = new Date(sorted_keys[0]);
+    var new_date = new Date(key);
+    if(new_date.getHours()!=recent_date.getHours())
+      sorted_keys.push(key);
+  });
+  return sorted_keys.reverse();
+}

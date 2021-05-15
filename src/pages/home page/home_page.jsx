@@ -7,7 +7,7 @@ import { CategoryDrawer } from '../../components/drawer';
 import { Dictionary, getTime } from '../../Dictionary';
 import { getUnitById } from '../../components/data_dictionary';
 import { ModalDemo } from '../../components/qr_reader';
-import TableConst from '../../components/bars'
+
 
 
 export class HomePage extends Component {
@@ -21,7 +21,7 @@ export class HomePage extends Component {
 
     }
     componentDidMount() {
-            console.log(TableConst.LocaleText.values)
+           
     }
 
 

@@ -11,7 +11,6 @@ import './orders_page.css'
 import { Dictionary, getRTL } from "../Dictionary";
 import { CategoryDrawer, SearchBar } from "../components/drawer";
 import { Quantity } from "./inventory_page";
-import TableConst from "../components/bars"
 
 
 const { Collapse } = Animation;
@@ -298,8 +297,7 @@ class Order extends Component {
 
     handleButtonRelease() {
         clearTimeout(this.buttonPressTimer);
-        console.log(TableConst.LocaleText.values["to"] = "asaslasdl")
-        console.log(TableConst.LocaleText.values)
+        
       
     }
 
