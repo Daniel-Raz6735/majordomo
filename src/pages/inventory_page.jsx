@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Badge, ButtonToolbar, Modal, Notification as note } from "rsuite";
+import { Badge, ButtonToolbar, Modal } from "rsuite";
 import { NotificationList } from "../components/notifications";
 import { Dictionary, getRTL } from "../Dictionary";
 import { TitleComponent } from "../components/bars";
@@ -9,6 +9,7 @@ import x_icon from '../images/x_icon.svg'
 import $ from 'jquery'
 import { base_url } from "..";
 import { getUnitById } from "../components/data_dictionary";
+import {showNotification} from "../components/bars"
 
 
 
@@ -167,8 +168,6 @@ export class AddToOrder extends Component {
   }
 
   componentDidMount() {
-
-
     // var button_text = (this.state.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"]
     // btn = <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />
     let div_content = ""
@@ -237,29 +236,30 @@ export function scree_alert(funcName, data, type) {
   switch (type) {
     case "add_to_order":
       messeges = { "success": Dictionary["item_added"], "error": Dictionary["item_added_failed"] }
-      description = <div >{data["amount"]} {data["unit"]} {data["item_name"]} </div>
+      description =""+ data["amount"]+" "+ data["unit"]+" "+ data["item_name"]
       break
 
     case "!container":
       messeges = { "success": "Container found", "error": "Container not in list" }
-      description = <div>Container not in list</div>
+      description = "Container not in list"
       break
 
     case "!item":
       messeges = { "success": "Item found", "error": "item not in list" }
-      description = <div>Item not in list</div>
+      description = "Item not in list"
       break
 
     case "pairing":
       messeges = { "success": "Pairing success", "error": "Pairing Failed" }
-      description = <div>test</div>
+      description = "test"
       break
   }
-
-  note[funcName]({
-    title: funcName === 'success' ? messeges["success"] : messeges["error"],
-    description: description
-  });
+  var title=funcName === 'success' ? messeges["success"] : messeges["error"]
+  showNotification(funcName,title,description)
+  // scrren_notification[funcName]({
+  //   title: funcName === 'success' ? messeges["success"] : messeges["error"],
+  //   description: description
+  // });
 }
 
 

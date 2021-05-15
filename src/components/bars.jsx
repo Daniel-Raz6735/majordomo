@@ -15,6 +15,7 @@ import fake_data from '../fake_data.json'
 import { base_url } from '../index'
 import $ from 'jquery'
 import HomePage from "../pages/home page/home_page"
+import { Notification as scrren_notification } from "rsuite";
 var socket_client = require('websocket').w3cwebsocket;
 
 
@@ -86,6 +87,7 @@ export class SiteFrame extends Component {
                     confirm_papulation(dict, "process_initial_data", "initial data not recived well")
                     this.change_tab(tab_name, dict)
                     this.setState({ dict })
+                    // download(JSON.stringify(dict) , 'file.json', 'text/plain');
 
                     if (dict["preferences"]) {
                         sessionStorage.setItem("developer", dict["preferences"]["developer"])
@@ -166,7 +168,8 @@ export class SiteFrame extends Component {
 
         return (
 
-            <div className="main_user_page_container" dir={getRTL()}>
+            <div className="main_user_page_container" >
+                 <AlertManeger/>
                 <div className="site_data_cover">
                     {this.state.page}
                 </div>
@@ -297,6 +300,76 @@ export class ButtonsComponent extends Component {
     }
 }
 
+
+//this component contains an alert manager to show user notifications.Usage: enter information in the non trigger inputs and then trigger a change in the notification trigger
+export class AlertManeger extends Component {
+    constructor(props) {
+      super(props);
+  
+      this.showNotification = this.showNotification.bind(this);
+  
+    }
+    showNotification() {
+      var symbol = $("#notification_alert_symbol").val(),
+        title = $("#notification_alert_title").val(),
+        description = $("#notification_alert_content").val();
+  
+      scrren_notification[symbol]({
+        title: title,
+        description: description
+      })
+  
+    }
+    componentDidMount() {
+      //establishing a way for chield components to switch tabs across the app
+      $("#notification_trigger").change(() => {
+        this.showNotification()
+      })
+      $("#notification_close").change(() => {
+        scrren_notification.close();
+      })
+      $("#notification_close_all").change(() => { })
+  
+    }
+  
+    render() {
+      return (
+        <div className="alert_manger">
+          <input type="hidden" id="notification_trigger" name="" value="" />
+          <input type="hidden" id="notification_close_triger" />
+          <input type="hidden" id="notification_close_all_triger" />
+          <input type="hidden" id="notification_alert_symbol" name="notification_alert_symbol" value="" />
+          <input type="hidden" id="notification_alert_title" name="notification_alert_title" value="" />
+          <input type="hidden" id="notification_alert_content" name="notification_alert_content" value="" />
+          <div id={"extra_notification_content"} style={{ "display": "none" }}>
+            {/* this div will contain any notification content that is wanted */}
+          </div>
+        </div>
+  
+      );
+  
+    }
+  }
+
+  export function showNotification(notificationType, title, description) {
+      //collect the information from the feilds and trigger a notification
+    $("#notification_alert_symbol").val(notificationType ? notificationType : "");
+    $("#notification_alert_title").val(title ? title : "");
+    $("#notification_alert_content").val(description ? description : "");
+    //set notification to turn on
+    $("#notification_trigger").val("").change();
+  }
+  export function removeOneNotification() {
+      //remove active notifcation from the screen
+    $("#notification_close_triger").val("").change();
+  }
+  export function removeAllNotifications() {
+      //remove all active notifcation from the screen
+    $("#notification_close_all_triger").val("").change();
+  }
+  
+  
+  
 function download(content, fileName, contentType) {
     /*download a site information from the code to file*/
     var a = document.createElement("a");

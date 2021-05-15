@@ -45,4 +45,8 @@
 .rs-modal-content{
     display: flex;
     flex-direction: column;
+    max-width: 450px;
+    /* width: 50%; */
+    max-height: 90%;
+    margin: auto;
 }
