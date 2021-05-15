@@ -260,6 +260,7 @@ export function scree_alert(funcName, data, type) {
     title: funcName === 'success' ? messeges["success"] : messeges["error"],
     description: description
   });
+  note.close()
 }
 
 

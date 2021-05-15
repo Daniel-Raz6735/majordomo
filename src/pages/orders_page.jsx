@@ -11,6 +11,8 @@ import './orders_page.css'
 import { Dictionary, getRTL } from "../Dictionary";
 import { CategoryDrawer, SearchBar } from "../components/drawer";
 import { Quantity } from "./inventory_page";
+import TableConst from "../components/bars"
+
 
 const { Collapse } = Animation;
 
@@ -86,7 +88,7 @@ export class OrdersPage extends Component {
     }
 
     call_back(toggle_number) {
-      
+
     }
 
     sort_dict(index) {
@@ -107,7 +109,7 @@ export class OrdersPage extends Component {
                     // current_dict = suppliers_dict["items"]
                     break;
             }
-           
+
             // Object.keys(current_dict).forEach(key => {
             //     page.push(<OrderCategory order_dict={current_dict[key]} />)
             //     page.push(<AddItem />)
@@ -129,7 +131,7 @@ export class OrdersPage extends Component {
         if (dict && dict["suppliers"] && dict["suppliers"]["suppliers"]) {
             suppliers_dict = dict["suppliers"]["suppliers"]
             var sellers = {}
-            
+
             if (suppliers_dict) {
 
                 Object.keys(suppliers_dict).forEach(key => {
@@ -141,11 +143,11 @@ export class OrdersPage extends Component {
                 })
                 var sorted_sellers = sort_by_key_val(sellers, false, true)
                 let weight_sup_dict = dict["weights"]["supplier"]
-             
+
                 sorted_sellers.forEach(supplier => {
-                    
+
                     var supplier_id = supplier[0]
-                    page.push(<OrderCategory key={"order_cat"+supplier} weights_dict={weight_sup_dict[supplier_id]} supplier={suppliers_dict[supplier_id]} />)
+                    page.push(<OrderCategory key={"order_cat" + supplier} weights_dict={weight_sup_dict[supplier_id]} supplier={suppliers_dict[supplier_id]} />)
                 })
 
 
@@ -158,21 +160,21 @@ export class OrdersPage extends Component {
             var sells_items = supplier["sells_items"]
             if (sells_items) {
                 Object.keys(sells_items).forEach(key => {
-                    if (sells_items[key]["order_details"]){
+                    if (sells_items[key]["order_details"]) {
 
                     }
-                        
+
 
                 })
             }
-            
+
 
         }
     }
 
 
     render() {
-        
+
         return (
             <div className="orders_page_container">
                 <TitleComponent key={"tile_comp"} title_name="orders" />
@@ -216,21 +218,21 @@ class OrderCategory extends Component {
         var page = []
         if (supplier) {
             var sells_items = supplier["sells_items"]
-            
+
 
             if (sells_items) {
-                
+
                 Object.keys(sells_items).forEach(key => {
                     let temp = this.props.weights_dict[key], item_name
                     item_name = temp && temp["item_name"] ? temp["item_name"] : key
-
+                   
                     if (sells_items[key]["order_details"])
                         page.push(<Order order={sells_items[key]["order_details"]} item_id={item_name} />)
                 })
             }
             page.push(<CategoryDrawer key={"cat_drawer_order_page"} weights_dict={this.props.weights_dict} order_drawer={true} />)
             // page.push(<AddItem weights_dict={this.props.weights_dict}/>)
-            
+
 
         }
         return page
@@ -238,9 +240,9 @@ class OrderCategory extends Component {
 
 
     render() {
-        
+
         let supplier = this.props.supplier
-        
+
         return (
             <div className="notification_category_container">
                 <OrderHeader key={"header" + this.props.cat_type + this.props.category_id} cat_name={supplier["name"]} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
@@ -258,47 +260,70 @@ class Order extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            quantity:props.order["amount"],
-            incraments:props.incraments? props.incraments:1,
-            min:1,
-            max:99
+            quantity: props.order["amount"],
+            incraments: props.incraments ? props.incraments : 1,
+            min: 1,
+            max: 99,
+            delete_btn:""
+          
         }
         this.handlePlus = this.handlePlus.bind(this);
         this.handleMinus = this.handleMinus.bind(this);
+        this.handleButtonPress = this.handleButtonPress.bind(this)
+        this.handleButtonRelease = this.handleButtonRelease.bind(this)
     }
+    
+
     handleMinus() {
         var new_val = this.state.quantity - this.state.incraments;
-        
+
         if (new_val >= this.state.min)
-          this.setState({ quantity: new_val });
+            this.setState({ quantity: new_val });
         else
-          alert("enterd to little")
-      }
-    
-      handlePlus() {
+            alert("enterd to little")
+    }
+
+    handlePlus() {
         var new_val = this.state.quantity + this.state.incraments;
-        
+
         if (new_val <= this.state.max)
-          this.setState({ quantity: new_val });
+            this.setState({ quantity: new_val });
         else
-          alert("enterd to much")
-      }
+            alert("enterd to much")
+    }
+
+    handleButtonPress() {
+        this.buttonPressTimer = setTimeout(() => this.setState({delete_btn:<button className="delete_order_btn" onClick={()=>console.log(this.props.order["order_id"])}>Delete</button>}), 500);
+    }
+
+    handleButtonRelease() {
+        clearTimeout(this.buttonPressTimer);
+        console.log(TableConst.LocaleText.values["to"] = "asaslasdl")
+        console.log(TableConst.LocaleText.values)
+      
+    }
 
 
     render() {
-        let quantity=null,unit=null
-        if(this.props.order){
+        let quantity = null, unit = null
+        if (this.props.order) {
             quantity = this.props.order["amount"]
             unit = this.props.order["unit"]
         }
         // unit = Dictionary[unit] ? Dictionary[unit] : Dictionary["unknown"]
         if (this.state) {
             return (
-                <div className="order_container">
+                <div className="order_container"
+                    onTouchStart={this.handleButtonPress}
+                    onTouchEnd={this.handleButtonRelease}
+                    onMouseDown={this.handleButtonPress}
+                    onMouseUp={this.handleButtonRelease}
+                    onMouseLeave={this.handleButtonRelease} >
                     <div className="order_item_name">
                         {this.props.item_id}
                     </div>
-                    <Quantity handlePlus={this.handlePlus} handleMinus={this.handleMinus}  defult_val={quantity} value={this.state.quantity} unit={unit} />
+                    <Quantity handlePlus={this.handlePlus} handleMinus={this.handleMinus} defult_val={quantity} value={this.state.quantity} unit={unit} />
+                    {this.state.delete_btn}
                 </div>
             )
         }
@@ -306,19 +331,22 @@ class Order extends Component {
             return <div></div>
     }
 }
+
+
+
 export class AddItem extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            page:[]
+            page: []
         }
     }
     render() {
 
         return (
             <div className="add_item_container" dir={getRTL()} onClick={this.props.func} >
-               <div className="order_page_plus_symbol" >+</div>  {Dictionary["new_item"]}
+                <div className="order_page_plus_symbol" >+</div>  {Dictionary["new_item"]}
             </div>
         )
     }
