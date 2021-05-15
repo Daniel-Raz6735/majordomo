@@ -227,7 +227,7 @@ class ReadQueries:
         return final_query
 
     @staticmethod
-    def get_current_weight_query(business_id=None, container_ids=None, item_ids=None, get_by_container=False, only_active_containers=False):
+    def get_current_weight_query(business_id=None, container_ids=None, item_ids=None, get_by_container=False):
         """gets an SQL query of the last weight of all items.
         optional parameters:
         business_id: will specify which business you want to request
@@ -251,8 +251,7 @@ class ReadQueries:
             for item in item_ids:
                 conditions.append([and_or, "containers.item_id", "=", int(item)])
                 and_or = "OR"
-        if only_active_containers:
-            conditions.append(["AND", "containers.using_end_date", "is", "null"])
+        conditions.append(["AND", "containers.using_end_date", "is", "null"])
         conditions.append(["AND", "weights.container_id", "=", "containers.container_id"])
         max_table, res_code = DbQueries.select_query(["containers", "weights"],
                                                      [[["container_id"]], [["weighing_date", "date", "MAX"]]],
