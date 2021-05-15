@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
-import {Button, Dropdown, Loader, Nav, Sidenav, Toggle } from "rsuite";
+import { Button, Dropdown, Loader, Nav, Sidenav, Toggle } from "rsuite";
 import { NavBar } from "../components/bars";
 import { Dictionary } from "../Dictionary";
 import profilePic from "../images/profile_pic.png";
@@ -22,17 +22,27 @@ class SettingsPage extends Component {
     super(props);
     this.state = {
       expanded: true,
-      settings: this.props.dict && this.props.dict["preferences"]?this.props.dict["preferences"]:fake_settings,
-      QR:false
+      settings: this.props.dict && this.props.dict["preferences"] ? this.props.dict["preferences"] : fake_settings,
+      QR: false
     }
-    
+    this.changeNotificationToggle = this.changeNotificationToggle.bind(this);
+    this.changeFreshnessToggle = this.changeFreshnessToggle.bind(this);
+
   }
 
   componentDidMount() {
 
   }
 
-  
+  changeNotificationToggle(val) {
+    this.props.dict["preferences"] = val
+  }
+
+  changeFreshnessToggle(val){
+
+  }
+
+
   render() {
     let j
     if (this.state.settings && !this.state.QR) {
@@ -42,7 +52,7 @@ class SettingsPage extends Component {
 
       return (
         <div className="settings_page_container">
-          
+
           <div className="profile_details"><img className="profile_pic" alt="Profile" src={profilePic} /></div>
 
           <div className="side_nav_container">
@@ -68,7 +78,7 @@ class SettingsPage extends Component {
               <Sidenav appearance="subtle" >
                 <div className={"settings_container"}>Notification</div>
                 <Nav>
-                  <DropdownToggle minimum_reach={settings["minimum_reach_alerts"]} freshnses={settings["freshness_alerts"]} type={"notification"} />
+                  <DropdownToggle change={this.changeNotificationToggle}  minimum_reach={settings["minimum_reach_alerts"]} freshnses={settings["freshness_alerts"]} type={"notification"} />
                 </Nav>
               </Sidenav>
 
@@ -79,7 +89,7 @@ class SettingsPage extends Component {
               <Sidenav appearance="subtle" >
                 <div className={"settings_container"}>System</div>
                 <Nav>
-                  <DropdownToggle  type={"system"} setting_name={"Supplier list"} />
+                  <DropdownToggle type={"system"} setting_name={"Supplier list"} />
                 </Nav>
               </Sidenav>
 
@@ -95,14 +105,14 @@ class SettingsPage extends Component {
 
           </div>
           <NavBar />
-          
+
         </div>
 
       );
-    } else if(!this.state.settings && !this.state.QR)
+    } else if (!this.state.settings && !this.state.QR)
       return (<Loader speed="fast" size="lg" content="Loading..." center vertical />)
-      else
-        return <Test/>
+    else
+      return <Test />
 
   }
 }
@@ -113,7 +123,7 @@ const ManegmentBTN = (props)=>{
     <Button onClick={()=>{
       ReactDOM.render(<AdminPage dict={props.dict}/>,document.getElementById('root'));
       $("#root").prop('id', 'fullroot');
-  }}>Mangement</Button>
+    }}>Mangement</Button>
 
   );
 }
@@ -131,7 +141,7 @@ class DropdownToggle extends Component {
   }
 
   componentDidMount() {
-    
+
     var len = this.props.options ? this.props.options.length : 0
     var textArr = new Array(len)
     textArr[this.state.chosen] = "chosen_option"
@@ -151,7 +161,7 @@ class DropdownToggle extends Component {
           let event_key = String(this.state.event_key) + "-" + String(i)
           let lang = i === 0 ? "EN" : "HE"
 
-          page.push(<Dropdown.Item key={"dropdown_item"+i} eventKey={event_key} onSelect={changeLanguage(lang)} ><div className={this.state.text_class[i]} >{this.state.options[i]}</div></Dropdown.Item>)
+          page.push(<Dropdown.Item key={"dropdown_item" + i} eventKey={event_key} onSelect={changeLanguage(lang)} ><div className={this.state.text_class[i]} >{this.state.options[i]}</div></Dropdown.Item>)
         }
 
         test = <Dropdown toggleClassName='dropdown_title' eventKey={String(this.state.event_key)} title={<div className="title_container" ><div className="setting_name">{this.props.setting_name}</div><div className="setting_value">{this.props.options[this.state.chosen]}</div></div>} >
@@ -161,8 +171,8 @@ class DropdownToggle extends Component {
 
       case "notification":
         test = <div>
-          <div className="notification_system_toggler"> <div className="title_container" ><div className="setting_name">Minimum reach</div><div className="setting_value"><Toggle defaultChecked={this.props.minimum_reach} /></div></div></div>
-          <div className="notification_system_toggler"> <div className="title_container" ><div className="setting_name">Freshness</div><div className="setting_value"><Toggle defaultChecked={this.props.freshnses} /></div></div></div>
+          <div className="notification_system_toggler"> <div className="title_container" ><div className="setting_name">Minimum reach</div><div className="setting_value"><Toggle  onChange={this.props.change} defaultChecked={this.props.minimum_reach}  /></div></div></div>
+          <div className="notification_system_toggler"> <div className="title_container" ><div className="setting_name">Freshness</div><div className="setting_value"><Toggle onChange={this.props.change} defaultChecked={this.props.freshnses} /></div></div></div>
         </div>
         break;
 

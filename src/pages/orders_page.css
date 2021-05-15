@@ -65,3 +65,10 @@
     width: 40%;
     text-align: center;
 }
+
+.delete_order_btn{
+    color: white;
+    background-color: #FD4141;
+    border-radius: 0pt 5pt 5pt 0pt;
+    height: 70px;
+}

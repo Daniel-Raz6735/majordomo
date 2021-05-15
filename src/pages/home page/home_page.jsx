@@ -9,6 +9,7 @@ import { getUnitById } from '../../components/data_dictionary';
 import { ModalDemo } from '../../components/qr_reader';
 
 
+
 export class HomePage extends Component {
     constructor(props) {
         super(props);
@@ -20,9 +21,8 @@ export class HomePage extends Component {
 
     }
     componentDidMount() {
-
+           
     }
-
 
 
     render() {
@@ -176,7 +176,7 @@ export class InventoryTile extends Component {
 
             <div className="inventory_tile" onClick={func} style={{ background: background }}>
                 <div className="home_page_cat_alerts">{this.state.page}</div>
-                <img className="category_home_img" src={this.props.symbol} alt="category symbol" />
+                <img   className="category_home_img" src={this.props.symbol} alt="category symbol" />
                 <div style={{ color: this.props.cat_color }}>{this.props.name} </div>
 
             </div>

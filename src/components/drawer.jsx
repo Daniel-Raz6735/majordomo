@@ -114,8 +114,7 @@ export class CategoryDrawer extends React.Component {
 
     // invnetory page - supplier case
     let color = this.props.cat_name ? "gray" : category_colors[cat_id]
-    let symbol = this.props.cat_name ? "" : this.state.cat_image
-
+    
     let st = "5px solid " + String(color);
     let title = <div className="notification_toggler" style={{ color: color, width: 'fit-content' }} >{this.state.cat_name}</div>
     let clas = this.props.order_drawer ? "add_item_container" : "category_drawer_container"
@@ -156,7 +155,6 @@ export class CategoryDrawer extends React.Component {
               <div className="drawer_title h4" style={{ color: color }} >{this.state.cat_name}</div>
               <div className="cat_drawer_symbol">
                 {this.state.cat_image}
-                {symbol}
               </div>
             </div>
             <div className="drawer_title_border" style={{ borderBottom: st }} />
@@ -578,7 +576,7 @@ class ItemDeatils extends Component {
       }
     });
 
-    
+
 
   }
 
