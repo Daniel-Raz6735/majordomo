@@ -219,7 +219,7 @@ class OrderCategory extends Component {
             var sells_items = supplier["sells_items"]
 
 
-            if (sells_items) {
+            if (sells_items && sells_items.length>0) {
 
                 Object.keys(sells_items).forEach(key => {
                     let temp = this.props.weights_dict[key], item_name

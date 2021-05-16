@@ -269,12 +269,9 @@ export class ItemPage extends Component {
           relavent_data[date] = weighing;
         }
       })
-      console.log(relavent_data)
       var keys = Object.keys(relavent_data).sort();
-      console.log(keys)
       
       keys = get_relavent_keys(relavent_data)
-      console.log(keys)
       keys.forEach(key => {sorted_data[key] = relavent_data[key]})
       
       var last_weight = 0, range = 0.1, last_date, no_repatition_dict = {};
