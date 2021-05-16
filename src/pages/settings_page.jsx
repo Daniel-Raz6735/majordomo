@@ -6,7 +6,6 @@ import { Dictionary } from "../Dictionary";
 import profilePic from "../images/profile_pic.png";
 import './settings_page.css'
 import { changeLanguage } from '../Dictionary'
-import { ModalDemo, Test } from "../components/qr_reader";
 import AdminPage from '../pages/Admin Page/admin_page';
 import $ from 'jquery';
 
@@ -112,7 +111,7 @@ class SettingsPage extends Component {
     } else if (!this.state.settings && !this.state.QR)
       return (<Loader speed="fast" size="lg" content="Loading..." center vertical />)
     else
-      return <Test />
+      return <div />
 
   }
 }

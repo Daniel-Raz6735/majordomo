@@ -32,10 +32,11 @@
     display: none;
 }
 
-.rs-modal-xs {
-    /* display: block; */
-    /* margin-top: -30%; */
-}
+/* .rs-modal-xs {
+     display: block;
+     margin-top: -30%;
+ } */
+
 
 .rs-modal-body {
     width: 100%;

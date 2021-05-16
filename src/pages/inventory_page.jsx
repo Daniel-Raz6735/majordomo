@@ -239,10 +239,6 @@ export function scree_alert(funcName, data, type) {
       description =""+ data["amount"]+" "+ data["unit"]+" "+ data["item_name"]
       break
 
-    case "!container":
-      messeges = { "success": "Container found", "error": "Container not in list" }
-      description = "Container not in list"
-      break
 
     case "!item":
       messeges = { "success": "Item found", "error": "item not in list" }
@@ -256,10 +252,7 @@ export function scree_alert(funcName, data, type) {
   }
   var title=funcName === 'success' ? messeges["success"] : messeges["error"]
   showNotification(funcName,title,description)
-  // scrren_notification[funcName]({
-  //   title: funcName === 'success' ? messeges["success"] : messeges["error"],
-  //   description: description
-  // });
+
 }
 
 
