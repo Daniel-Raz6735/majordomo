@@ -262,30 +262,36 @@ export class ItemPage extends Component {
     console.log(res);
     var min_date = get_old_date(new Date(), days).getTime(),
       relavent_data = {}, sorted_data = {};
-    if (res) {
+    if (res && res.length>0) {
       res.forEach(weighing => {
         var date = new Date(weighing["date"]).getTime()
         if (date >= min_date) {
           relavent_data[date] = weighing;
         }
       })
+      console.log(relavent_data)
       var keys = Object.keys(relavent_data).sort();
-      keys = get_relavent_keys(relavent_data)
-      keys.forEach(key => {sorted_data[key] = relavent_data[key]})}
+      console.log(keys)
       
-    var last_weight = 0, range = 0.1, last_date, no_repatition_dict = {};
-
-    Object.keys(sorted_data).forEach(date_key => {
-      var current_weight = sorted_data[date_key]["weight"]
-      var diffarence = Math.abs(current_weight - last_weight)
-      if (diffarence > range) {
-        no_repatition_dict[date_key] = sorted_data[date_key]
-        last_weight = current_weight
-        last_date = date_key
-      }
-
-    })
-    return no_repatition_dict;
+      keys = get_relavent_keys(relavent_data)
+      console.log(keys)
+      keys.forEach(key => {sorted_data[key] = relavent_data[key]})
+      
+      var last_weight = 0, range = 0.1, last_date, no_repatition_dict = {};
+      console.log(sorted_data)
+      Object.keys(sorted_data).forEach(date_key => {
+        var current_weight = sorted_data[date_key]["weight"]
+        var diffarence = Math.abs(current_weight - last_weight)
+        if (diffarence > range) {
+          no_repatition_dict[date_key] = sorted_data[date_key]
+          last_weight = current_weight
+          last_date = date_key
+        }
+        
+      })
+      return no_repatition_dict;
+    }
+    return res
   }
 
   render() {

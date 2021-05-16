@@ -237,7 +237,7 @@ export class ModalDemo extends React.Component {
             success: function (res) {
                 console.log(res)
                 flag = true
-                showNotification('success', "container paired", 'Container '+ container_id +" paird with "+ item_name)
+                showNotification('success', "container paired", 'Container ' + container_id + " paird with " + item_name)
 
             },
             error: function (err) {
