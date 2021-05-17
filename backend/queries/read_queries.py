@@ -26,7 +26,7 @@ class ReadQueries:
         final_query, res_code = DbQueries.select_query(
             ["food_items"],
             [[["item_id"], ["business_id"], ["content_minimum_per_day"], ["content_maximum_per_day"],
-              ["content_total_minimum"], ["content_total_maximum"], ["item_average_weight"]]],
+              ["content_total_minimum"], ["content_total_maximum"], ["item_average_weight"], ["barcode"]]],
             conditions)
         if res_code != 200:
             raise HTTPException(status_code=res_code, detail=final_query)
@@ -206,7 +206,7 @@ class ReadQueries:
         final_query, res_code = DbQueries.select_query(
             [["notifications"], ["food_items", "food"], ["categories", "cat"], ["(" + sub_table + ")", "sub"]],
             [[["code"], ["message"], ["food_item_id", "item_id"], ["active"], ["closed_by_user"]],
-             [["item_name"], ["unit"]],
+             [["item_name"], ["unit"], ["barcode"]],
              [["category_id"], ["category_name"]],
              [["date"], ["item_name"], ["weight"]]
              ],
@@ -264,13 +264,13 @@ class ReadQueries:
         if get_by_container:
             cols_to_bring = [[["container_id"], ["business_id"]],
                              [["weight_value", "weight"], ["weighing_date", "date"]],
-                             [["item_name"], ["item_id"], ["unit"]],
+                             [["item_name"], ["item_id"], ["unit"], ["barcode"]],
                              [["category_name"], ["category_id"]],
                              []]
         else:
             cols_to_bring = [[[]],
                              [["weight_value", "weight", "SUM"], ["weighing_date", "date", "MAX"]],
-                             [["item_name"], ["item_id"], ["unit"]],
+                             [["item_name"], ["item_id"], ["unit"], ["barcode"]],
                              [["category_name"], ["category_id"]],
                              []]
 
