@@ -1,5 +1,13 @@
 import {notifications_levels} from './notifications_data'
 
+export default class TableConst {
+    static val = {
+      dict: {
+        
+      }
+    };
+   }
+
 export function create_initial_data_dict(data) {
     //this function gets a response from the server and breaks it down to 4 dictionary 
     var dict = {}
@@ -10,6 +18,8 @@ export function create_initial_data_dict(data) {
         dict["notifications"] = create_notification_dict(data["notifications"], dict["suppliers"], dict["orders"])
         dict["weights"] = create_weights_dict(data["weights"], dict["suppliers"], dict["notifications"], dict["orders"])
         
+        TableConst.val.dict["preferences"] = data["preferences"]
+
         // download(JSON.stringify(dict) , 'dict.json', 'text/plain');
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
         if (!dict["weights"]) {
@@ -17,6 +27,8 @@ export function create_initial_data_dict(data) {
             return null
         }
         return dict
+
+        
     }
     else
         console.log("create_initial_data_dict no data recived")

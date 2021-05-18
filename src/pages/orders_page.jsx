@@ -160,7 +160,7 @@ export class OrdersPage extends Component {
             if (sells_items) {
                 Object.keys(sells_items).forEach(key => {
                     if (sells_items[key]["order_details"]) {
-
+                        
                     }
 
 

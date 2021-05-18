@@ -125,7 +125,7 @@ export class ModalDemo extends React.Component {
         Object.keys(dict).forEach(cat => {
             Object.keys(dict[cat]).forEach(item => {
                 let item_data = dict[cat][item]
-                console.log(item)
+              
                 let obj = {}
                 obj["label"] = item_data["item_name"]
                 obj["value"] = item_data["item_name"]

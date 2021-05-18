@@ -6,9 +6,10 @@ import { Dictionary } from "../Dictionary";
 import profilePic from "../images/profile_pic.png";
 import './settings_page.css'
 import { changeLanguage } from '../Dictionary'
-import { ModalDemo, Test } from "../components/qr_reader";
+import {  Test } from "../components/qr_reader";
 import AdminPage from '../pages/Admin Page/admin_page';
 import $ from 'jquery';
+import TableConst from '../components/data_dictionary'
 
 var fake_settings = {
   lang: "EN",
@@ -31,15 +32,16 @@ class SettingsPage extends Component {
   }
 
   componentDidMount() {
+    console.log(TableConst.val.dict["preferences"])
 
   }
 
   changeNotificationToggle(val) {
-    this.props.dict["preferences"] = val
+    TableConst.val.dict["preferences"][0]["minimum_reach_alerts"] = val
   }
 
   changeFreshnessToggle(val){
-
+    TableConst.val.dict["preferences"][0]["freshness_alerts"] = val
   }
 
 
@@ -48,7 +50,8 @@ class SettingsPage extends Component {
     if (this.state.settings && !this.state.QR) {
       let settings = this.state.settings
 
-      j = settings["lang"] === "EN" ? 0 : 1
+      j = TableConst.val.dict["preferences"][0]["lang"] === "EN" ? 0 : 1
+      // j = settings["lang"] === "EN" ? 0 : 1
 
       return (
         <div className="settings_page_container">
@@ -78,7 +81,8 @@ class SettingsPage extends Component {
               <Sidenav appearance="subtle" >
                 <div className={"settings_container"}>Notification</div>
                 <Nav>
-                  <DropdownToggle change={this.changeNotificationToggle}  minimum_reach={settings["minimum_reach_alerts"]} freshnses={settings["freshness_alerts"]} type={"notification"} />
+                  <DropdownToggle change={this.changeNotificationToggle}  minimum_reach={TableConst.val.dict["preferences"][0]["minimum_reach_alerts"]} freshnses={TableConst.val.dict["preferences"][0]["freshness_alerts"]} type={"notification"} />
+                  {/* <DropdownToggle change={this.changeNotificationToggle}  minimum_reach={settings["minimum_reach_alerts"]} freshnses={settings["freshness_alerts"]} type={"notification"} /> */}
                 </Nav>
               </Sidenav>
 
@@ -146,6 +150,7 @@ class DropdownToggle extends Component {
     var textArr = new Array(len)
     textArr[this.state.chosen] = "chosen_option"
     this.setState({ text_class: textArr })
+    
   }
   render() {
 

@@ -4,6 +4,7 @@ import Dropdown, { DropdownContent, DropdownTrigger } from 'react-simple-dropdow
 import './Dictionary.css';
 import israelFlag from './images/icons/israel.svg';
 import usaFlag from './images/icons/USA.svg';
+// import TableConst from './components/data_dictionary'
 
 
 
@@ -192,6 +193,7 @@ Dictionary.setLanguage(language);
 
 //save new language in session storage and reload page
 export function changeLanguage(lang) {
+
   return function () {
     sessionStorage.setItem("current_language", lang);
     sessionStorage.setItem('tab_name', "SettingPage")
