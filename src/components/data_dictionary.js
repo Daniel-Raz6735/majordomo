@@ -1,12 +1,12 @@
-import {notifications_levels} from './notifications_data'
+import { notifications_levels } from './notifications_data'
 
 export default class TableConst {
     static val = {
-      dict: {
-        
-      }
+        dict: {
+
+        }
     };
-   }
+}
 
 export function create_initial_data_dict(data) {
     //this function gets a response from the server and breaks it down to 4 dictionary 
@@ -17,7 +17,7 @@ export function create_initial_data_dict(data) {
         dict["suppliers"] = create_suppliers_dict(data["suppliers"], dict["orders"])
         dict["notifications"] = create_notification_dict(data["notifications"], dict["suppliers"], dict["orders"])
         dict["weights"] = create_weights_dict(data["weights"], dict["suppliers"], dict["notifications"], dict["orders"])
-        
+
         TableConst.val.dict["preferences"] = data["preferences"]
 
         // download(JSON.stringify(dict) , 'dict.json', 'text/plain');
@@ -28,7 +28,7 @@ export function create_initial_data_dict(data) {
         }
         return dict
 
-        
+
     }
     else
         console.log("create_initial_data_dict no data recived")
@@ -65,7 +65,7 @@ function create_notification_dict(notification_data, suppliers_data, orders_dict
                     "item_name": item_name,
                     "item_id": item_id,
                     "total_weight": item_weight,
-                    "unit":unit,
+                    "unit": unit,
                     "date": date,
                     "active": active
                 },
@@ -75,9 +75,9 @@ function create_notification_dict(notification_data, suppliers_data, orders_dict
 
             if (suppliers_data && suppliers_data["items"] && suppliers_data["items"][item_id]) {
                 suppliers_id = suppliers_data["items"][item_id]["suppliers"]
-                if (suppliers_id){
+                if (suppliers_id) {
                     notification_to_insert["suppliers"] = suppliers_data["suppliers"][suppliers_id]
-                    notification_to_insert["supplier_id"]= suppliers_id[0];
+                    notification_to_insert["supplier_id"] = suppliers_id[0];
                 }
             }
 
@@ -127,7 +127,7 @@ function create_weights_dict(weight_data, suppliers_data, notifications_data, or
                 category_id = element["category_id"],
                 category_name = element["category_name"],
                 unit = element["unit"],
-                barcode=element["barcode"],
+                barcode = element["barcode"],
                 notification_level = -1
             if (item_name && item_id && category_id && category_name) {
                 if (!dict["category"][category_id])
@@ -145,9 +145,9 @@ function create_weights_dict(weight_data, suppliers_data, notifications_data, or
                     "date": element["date"],
                     "item_name": item_name,
                     "total_weight": element["weight"],
-                    "unit":unit,
+                    "unit": unit,
                     "notification_level": notification_level,
-                    "barcode":barcode,
+                    "barcode": barcode,
                     "suppliers": []
                 }
                 if (orders_dict && orders_dict["items"] && orders_dict["items"][item_id])
@@ -185,7 +185,7 @@ function create_suppliers_dict(suppliers_data, orders_dict) {
     }
     if (!suppliers_data)
         return null
-    console.log(suppliers_data)
+
     Object.keys(suppliers_data).forEach(key => {
         var element = suppliers_data[key]
         if (element) {
@@ -260,12 +260,12 @@ function create_orders_dict(orders_data) {
                 if (!suppliers[supplier_id])
                     suppliers[supplier_id] = {}
                 suppliers[supplier_id][item_id] = {
-                    "order_id":order_id,
+                    "order_id": order_id,
                     "amount": amount,
                     "unit": unit
                 }
                 items[item_id] = {
-                    "order_id":order_id,
+                    "order_id": order_id,
                     "amount": amount,
                     "unit": unit
                 }
@@ -297,26 +297,25 @@ export function confirm_papulation(dict, area_name, message = "", dict_to_test =
         if (not_found_keys) {
             var keys = ""
             not_found_keys.forEach(key => { keys += key + ", " })
-            
+
             return keys
         }
     }
     else {
 
-       
+
     }
 
 }
 
-export function getUnitById(id){
-    switch(id)
-    {
-        
+export function getUnitById(id) {
+    switch (id) {
+
         default:
         case 1:
             return "kg"
         case 2:
-            return "lb"       
+            return "lb"
         case 3:
             return "un"
         case 4:

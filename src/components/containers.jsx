@@ -33,7 +33,7 @@ export function req_weights(callback, user_id, item_id = null) {
         request += "?business_id=" + user_id
         if (item_id)
             request += "&item_id=" + item_id
-        
+
         $.ajax({
             url: request,
             success: function (res) {
@@ -69,7 +69,7 @@ export class Containers extends Component {
         //gets a list of weights and puts and renders the maximal  
         var res = [];
         var sorted = sortWeightDict(weights_dict)
-        
+
 
         if (weights_dict) {
             sorted.forEach(key => {
@@ -125,7 +125,7 @@ export class ItemBlock extends Component {
 
 
     render() {
-        
+
 
         let sym
         let color = this.props.symbol !== -1 ? notification_colors[this.props.symbol - 1] : styleArr[3]
@@ -155,10 +155,10 @@ export class ItemBlock extends Component {
             <div className="item_container">
                 <div className="item_squere_header" style={{ background: color }} > <div>{sym}</div><div>{messege}</div></div>
                 <div className="item_squere" onClick={() => this.props.openItem(this.props.item_id)}>
-                    <div style={{fontWeight:"bold" ,fontSize: "13pt"}}>
+                    <div style={{ fontWeight: "bold", fontSize: "13pt" }}>
                         {this.state.name}
                     </div>
-                    <div className="center_items notification_weight" style={{fontWeight:"bold"}} >{this.state.weight.toFixed(1).replace(/\.0+$/, '')} {" "} {getUnitById(this.state.unit)}</div>
+                    <div className="center_items notification_weight" style={{ fontWeight: "bold" }} >{this.state.weight.toFixed(1).replace(/\.0+$/, '')} {" "} {getUnitById(this.state.unit)}</div>
                     <div className="last_registred" style={{ direction: getRTL() }}>{Dictionary["last_registred"] + ":"}
                         <div className="weight_date">{this.state.weight_date} </div>
                     </div>
@@ -179,7 +179,7 @@ export function getDate(elementDate) {
     var dataTime = new Date(elementDate)
     var str
 
-    if ((now.getMonth()  === dataTime.getMonth()) && (now.getDate() === dataTime.getDate())) {
+    if ((now.getMonth() === dataTime.getMonth()) && (now.getDate() === dataTime.getDate())) {
         let hour = dataTime.getHours()
         let minutes = dataTime.getMinutes()
         let Seconds = ('0' + dataTime.getSeconds()).slice(-2)

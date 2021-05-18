@@ -336,16 +336,16 @@ export class AlertManeger extends Component {
             scrren_notification[symbol]({
                 title: title,
                 description: description,
-                onClose: ()=>{this.removeNotificationFromState(key)}
+                onClose: () => { this.removeNotificationFromState(key) }
             })
         }
-        
+
     }
 
-    notificationOnScreen(key,repeat=false) {
+    notificationOnScreen(key, repeat = false) {
         //test if key is on the screen and adds a  
         var active = this.state.active
-        if (active.hasOwnProperty(key)&&!repeat)
+        if (active.hasOwnProperty(key) && !repeat)
             return true;
         else
             active[key] = true;

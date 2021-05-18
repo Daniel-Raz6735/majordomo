@@ -45,7 +45,8 @@
     height: 20px;
     width: 20px;
 }
-.header_items{
+
+.header_items {
     margin-left: 8px;
     margin-right: 8px;
 }
@@ -70,7 +71,6 @@
     align-content: space-between;
     flex-flow: column;
 }
-
 
 .notification_collapse {
     background-color: transparent;
@@ -121,8 +121,6 @@
     justify-content: center;
 }
 
-
-
 .notification_message {
     width: 23%;
     text-align: center;
@@ -149,8 +147,7 @@
     background: tomato;
 }
 
-
-.alert_notifications{
+.alert_notifications {
     width: 95%;
     /* margin: auto; */
     display: flex;
@@ -159,14 +156,14 @@
     margin-bottom: 15px;
 }
 
-.simple_notification_header{
+.simple_notification_header {
     height: 40px;
     color: white;
     display: flex;
     align-items: center;
 }
 
-.simple_notification{
+.simple_notification {
     display: flex;
     justify-content: space-around;
     background-color: white;
@@ -176,9 +173,9 @@
     height: 60px;
     align-items: center;
     margin-bottom: 5px;
-
 }
-.cart_container{
+
+.cart_container {
     display: flex;
     flex-direction: column;
 }

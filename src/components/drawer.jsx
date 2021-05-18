@@ -114,7 +114,7 @@ export class CategoryDrawer extends React.Component {
 
     // invnetory page - supplier case
     let color = this.props.cat_name ? "gray" : category_colors[cat_id]
-    
+
     let st = "5px solid " + String(color);
     let title = <div className="notification_toggler" style={{ color: color, width: 'fit-content' }} >{this.state.cat_name}</div>
     let clas = this.props.order_drawer ? "add_item_container" : "category_drawer_container"
@@ -224,7 +224,7 @@ export class ItemPage extends Component {
     var business_id = this.props.business_id,
       item_id = this.props.item_id,
       min_date = get_old_date(new Date(), 30)
-      min_date = min_date.getTime()/1000;
+    min_date = min_date.getTime() / 1000;
 
     if (!business_id)
       console.log("No business id enterd. nothing happend")
@@ -262,7 +262,7 @@ export class ItemPage extends Component {
     console.log(res);
     var min_date = get_old_date(new Date(), days).getTime(),
       relavent_data = {}, sorted_data = {};
-    if (res && res.length>0) {
+    if (res && res.length > 0) {
       res.forEach(weighing => {
         var date = new Date(weighing["date"]).getTime()
         if (date >= min_date) {
@@ -270,10 +270,10 @@ export class ItemPage extends Component {
         }
       })
       var keys = Object.keys(relavent_data).sort();
-      
+
       keys = get_relavent_keys(relavent_data)
-      keys.forEach(key => {sorted_data[key] = relavent_data[key]})
-      
+      keys.forEach(key => { sorted_data[key] = relavent_data[key] })
+
       var last_weight = 0, range = 0.1, last_date, no_repatition_dict = {};
       console.log(sorted_data)
       Object.keys(sorted_data).forEach(date_key => {
@@ -284,7 +284,7 @@ export class ItemPage extends Component {
           last_weight = current_weight
           last_date = date_key
         }
-        
+
       })
       return no_repatition_dict;
     }
@@ -401,27 +401,27 @@ export class ChartComponent extends Component {
       return date
     var new_date = new Date(parseInt(date)),
       absolute_today = get_old_date(new Date(), 1),
-      _24hAgo= new Date(),
+      _24hAgo = new Date(),
       diffarence = absolute_today.getTime() - new_date.getTime(),//old day is a day before at 00:00
       year = new_date.getFullYear(),
-      dateStr="",
-      timeStr="",
+      dateStr = "",
+      timeStr = "",
       res = "";
-      _24hAgo.setDate(new_date.getDate() - 1);
-      
-      timeStr = new_date.getHours() + ":" + new_date.getMinutes();
-      dateStr = new_date.getDate() + "/" + (new_date.getMonth()+1);
-      if (absolute_today.getFullYear() !== year)
-        dateStr += "/" + year
+    _24hAgo.setDate(new_date.getDate() - 1);
+
+    timeStr = new_date.getHours() + ":" + new_date.getMinutes();
+    dateStr = new_date.getDate() + "/" + (new_date.getMonth() + 1);
+    if (absolute_today.getFullYear() !== year)
+      dateStr += "/" + year
 
     if (diffarence <= 86400) {//if the wight is yesterday or today
-      if((_24hAgo.getTime()-new_date.getTime())>0) // if weight is between 24 houers ago and 00:00 of the previous day
-        res = dateStr+" "+ timeStr
+      if ((_24hAgo.getTime() - new_date.getTime()) > 0) // if weight is between 24 houers ago and 00:00 of the previous day
+        res = dateStr + " " + timeStr
       else
         res = timeStr
     }
-    else 
-      res=dateStr
+    else
+      res = dateStr
     return res;
   }
 
@@ -476,11 +476,11 @@ export class ChartComponent extends Component {
 }
 
 export function download(content, fileName, contentType) {
-    var a = document.createElement("a");
-    var file = new Blob([content], { type: contentType });
-    a.href = URL.createObjectURL(file);
-    a.download = fileName;
-    a.click();
+  var a = document.createElement("a");
+  var file = new Blob([content], { type: contentType });
+  a.href = URL.createObjectURL(file);
+  a.download = fileName;
+  a.click();
 }
 
 export class InfoCube extends Component {
@@ -535,7 +535,7 @@ export class InfoCube extends Component {
 
 function get_old_date(date, num_of_days) {
   /*get a date and return 00:00 in unix time number of days ago*/
-  if(typeof(date)===Date)
+  if (typeof (date) === Date)
     date = new Date(date)
   if (!date)
     return date
@@ -563,7 +563,7 @@ class ItemDeatils extends Component {
   componentDidMount() {
 
 
-    let request = base_url + "/get/containers" + "?business_id=" + this.state.business_id + "&item_id=" + this.state.item_id+"&only_active_containers=true"
+    let request = base_url + "/get/containers" + "?business_id=" + this.state.business_id + "&item_id=" + this.state.item_id + "&only_active_containers=true"
     // let request = base_url + path
 
     var callback = this.getItemContainers
@@ -615,7 +615,7 @@ class ItemDeatils extends Component {
     return (
       <div className="item_details">
 
-        <ContainerInformationTip key = {this.state.item_id} container_details={this.state.container_details} str={this.state.str} />
+        <ContainerInformationTip key={this.state.item_id} container_details={this.state.container_details} str={this.state.str} />
 
         <Divider key={"divider1"} style={divider_style} vertical={true} />
         <div className="item_min_max"><div style={min_max_style}>2.5 kg</div><div>{Dictionary["min"]}</div></div>
@@ -648,14 +648,14 @@ const ContainerInformationTip = (props) => {
   )
 }
 
-function get_relavent_keys(data, num_of_days){
+function get_relavent_keys(data, num_of_days) {
   //sort a data array with weights
   var keys = Object.keys(data).sort().reverse();
-  var sorted_keys=[keys.pop()];
-  keys.forEach(key=>{
+  var sorted_keys = [keys.pop()];
+  keys.forEach(key => {
     var recent_date = new Date(sorted_keys[0]);
     var new_date = new Date(key);
-    if(new_date.getHours()!=recent_date.getHours())
+    if (new_date.getHours() != recent_date.getHours())
       sorted_keys.push(key);
   });
   return sorted_keys.reverse();

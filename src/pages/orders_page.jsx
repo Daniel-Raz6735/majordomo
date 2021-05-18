@@ -84,6 +84,7 @@ export class OrdersPage extends Component {
     }
     componentDidMount() {
         this.sort_dict(1)
+        console.log(this.props.dict)
     }
 
     call_back(toggle_number) {
@@ -160,10 +161,8 @@ export class OrdersPage extends Component {
             if (sells_items) {
                 Object.keys(sells_items).forEach(key => {
                     if (sells_items[key]["order_details"]) {
-                        
+
                     }
-
-
                 })
             }
 
@@ -202,6 +201,9 @@ class OrderCategory extends Component {
         };
 
     }
+    componentDidMount() {
+        console.log(this.props.weights_dict)
+    }
 
     remove_onClick(e) {
         if (e && $(e.target).attr('class')) {
@@ -213,18 +215,20 @@ class OrderCategory extends Component {
         else
             console.log("no e target enterd")
     }
+
     render_supplier(supplier) {
+        console.log(supplier)
         var page = []
         if (supplier) {
             var sells_items = supplier["sells_items"]
 
 
-            if (sells_items && sells_items.length>0) {
+            if (sells_items && sells_items.length > 0) {
 
                 Object.keys(sells_items).forEach(key => {
                     let temp = this.props.weights_dict[key], item_name
                     item_name = temp && temp["item_name"] ? temp["item_name"] : key
-                   
+                    console.log(sells_items[key]["order_details"])
                     if (sells_items[key]["order_details"])
                         page.push(<Order order={sells_items[key]["order_details"]} item_id={item_name} />)
                 })
@@ -263,15 +267,15 @@ class Order extends Component {
             incraments: props.incraments ? props.incraments : 1,
             min: 1,
             max: 99,
-            delete_btn:""
-          
+            delete_btn: ""
+
         }
         this.handlePlus = this.handlePlus.bind(this);
         this.handleMinus = this.handleMinus.bind(this);
         this.handleButtonPress = this.handleButtonPress.bind(this)
         this.handleButtonRelease = this.handleButtonRelease.bind(this)
     }
-    
+
 
     handleMinus() {
         var new_val = this.state.quantity - this.state.incraments;
@@ -292,13 +296,13 @@ class Order extends Component {
     }
 
     handleButtonPress() {
-        this.buttonPressTimer = setTimeout(() => this.setState({delete_btn:<button className="delete_order_btn" onClick={()=>console.log(this.props.order["order_id"])}>Delete</button>}), 500);
+        this.buttonPressTimer = setTimeout(() => this.setState({ delete_btn: <button className="delete_order_btn" onClick={() => console.log(this.props.order["order_id"])}>Delete</button> }), 500);
     }
 
     handleButtonRelease() {
         clearTimeout(this.buttonPressTimer);
-        
-      
+
+
     }
 
 

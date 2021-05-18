@@ -39,7 +39,7 @@ class SettingsPage extends Component {
     TableConst.val.dict["preferences"][0]["minimum_reach_alerts"] = val
   }
 
-  changeFreshnessToggle(val){
+  changeFreshnessToggle(val) {
     TableConst.val.dict["preferences"][0]["freshness_alerts"] = val
   }
 
@@ -58,8 +58,8 @@ class SettingsPage extends Component {
           <div className="profile_details"><img className="profile_pic" alt="Profile" src={profilePic} /></div>
 
           <div className="side_nav_container">
-          {/* <button onClick={()=>this.setState({QR:true})} >QR Reader</button> */}
-            <ManegmentBTN dict={this.props.dict}/>
+            {/* <button onClick={()=>this.setState({QR:true})} >QR Reader</button> */}
+            <ManegmentBTN dict={this.props.dict} />
             <div className="settings_issues">
               <Sidenav appearance="subtle" >
                 <div className={"settings_container"}>general settings</div>
@@ -80,7 +80,7 @@ class SettingsPage extends Component {
               <Sidenav appearance="subtle" >
                 <div className={"settings_container"}>Notification</div>
                 <Nav>
-                  <DropdownToggle change={this.changeNotificationToggle}  minimum_reach={TableConst.val.dict["preferences"][0]["minimum_reach_alerts"]} freshnses={TableConst.val.dict["preferences"][0]["freshness_alerts"]} type={"notification"} />
+                  <DropdownToggle change={this.changeNotificationToggle} minimum_reach={TableConst.val.dict["preferences"][0]["minimum_reach_alerts"]} freshnses={TableConst.val.dict["preferences"][0]["freshness_alerts"]} type={"notification"} />
                   {/* <DropdownToggle change={this.changeNotificationToggle}  minimum_reach={settings["minimum_reach_alerts"]} freshnses={settings["freshness_alerts"]} type={"notification"} /> */}
                 </Nav>
               </Sidenav>
@@ -120,11 +120,11 @@ class SettingsPage extends Component {
   }
 }
 
-const ManegmentBTN = (props)=>{
- 
-  return( 
-    <Button onClick={()=>{
-      ReactDOM.render(<AdminPage dict={props.dict}/>,document.getElementById('root'));
+const ManegmentBTN = (props) => {
+
+  return (
+    <Button onClick={() => {
+      ReactDOM.render(<AdminPage dict={props.dict} />, document.getElementById('root'));
       $("#root").prop('id', 'fullroot');
     }}>Mangement</Button>
 
@@ -149,7 +149,7 @@ class DropdownToggle extends Component {
     var textArr = new Array(len)
     textArr[this.state.chosen] = "chosen_option"
     this.setState({ text_class: textArr })
-    
+
   }
   render() {
 
@@ -175,7 +175,7 @@ class DropdownToggle extends Component {
 
       case "notification":
         test = <div>
-          <div className="notification_system_toggler"> <div className="title_container" ><div className="setting_name">Minimum reach</div><div className="setting_value"><Toggle  onChange={this.props.change} defaultChecked={this.props.minimum_reach}  /></div></div></div>
+          <div className="notification_system_toggler"> <div className="title_container" ><div className="setting_name">Minimum reach</div><div className="setting_value"><Toggle onChange={this.props.change} defaultChecked={this.props.minimum_reach} /></div></div></div>
           <div className="notification_system_toggler"> <div className="title_container" ><div className="setting_name">Freshness</div><div className="setting_value"><Toggle onChange={this.props.change} defaultChecked={this.props.freshnses} /></div></div></div>
         </div>
         break;

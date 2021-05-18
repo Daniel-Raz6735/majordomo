@@ -48,7 +48,7 @@ export function action_btn(defult_val, level, title, order_details, item_id, sup
     var val,
         unit = 1,
         is_in_order = false
-    
+
     if (order_details && order_details["amount"]) {
         is_in_order = true
         val = order_details["amount"]
@@ -72,10 +72,10 @@ export function action_btn(defult_val, level, title, order_details, item_id, sup
 }
 
 export const SuggestDish = (props) => {
-    
+
     return (
-        <div className= "add_to_order">
-            <img src={suggest_dish} alt={"suggestDish"} style={{width:"35%",margin:"auto"}} />
+        <div className="add_to_order">
+            <img src={suggest_dish} alt={"suggestDish"} style={{ width: "35%", margin: "auto" }} />
             <div className="cart_text_container">{props.button_text}</div>
         </div>
     )

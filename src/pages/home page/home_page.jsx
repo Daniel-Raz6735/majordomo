@@ -21,7 +21,7 @@ export class HomePage extends Component {
 
     }
     componentDidMount() {
-           
+
     }
 
 
@@ -42,7 +42,7 @@ export class HomePage extends Component {
                 {temp}
                 <div className="home_titles"><div>Inventory Status</div>  <div>{getTime()}</div></div>
                 <InentoryTileContainer key={"tile"} dict={tiles} />
-                <ModalDemo dict={this.props.dict}/>
+                <ModalDemo dict={this.props.dict} />
             </div>
 
         );
@@ -71,7 +71,6 @@ export class NotificationPeeker extends Component {
                 var supplier_info = level_dict[supplier_id]
                 Object.keys(supplier_info).forEach(item_id => {
                     var item_info = supplier_info[item_id]
-                    console.log(item_info["notification_level"])
                     page.push(<Notification key={"not" + item_id} notification_level={item_info["notification_level"]}
                         item_name={item_info["item_name"]} total_weight={item_info["total_weight"]}
                         unit={getUnitById(item_info["unit"])} order_details={item_info["order_details"]}
@@ -176,7 +175,7 @@ export class InventoryTile extends Component {
 
             <div className="inventory_tile" onClick={func} style={{ background: background }}>
                 <div className="home_page_cat_alerts">{this.state.page}</div>
-                <img   className="category_home_img" src={this.props.symbol} alt="category symbol" />
+                <img className="category_home_img" src={this.props.symbol} alt="category symbol" />
                 <div style={{ color: this.props.cat_color }}>{this.props.name} </div>
 
             </div>

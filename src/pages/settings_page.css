@@ -19,17 +19,19 @@
     display: flex;
     justify-content: space-between;
 }
-.side_nav_container{
-        width: 90%;
-        display: flex;
-        margin: auto;   
-        flex-direction: column;  
+
+.side_nav_container {
+    width: 90%;
+    display: flex;
+    margin: auto;
+    flex-direction: column;
 }
+
 .setting_name {
     font-weight: bold;
 }
 
-.header{
+.header {
     display: flex;
     justify-content: center;
 }
@@ -37,7 +39,8 @@
 .setting_value {
     margin-right: 50px;
 }
-.settings_container{
+
+.settings_container {
     font-size: 14px;
 }
 
@@ -45,26 +48,26 @@
     font-weight: "bolder";
     color: "green"
 }
-.profile_pic{
-    width:100px;
+
+.profile_pic {
+    width: 100px;
     margin: auto;
     display: flex;
 }
 
-.settings_page_container{
+.settings_page_container {
     display: flex;
     flex-direction: column;
 }
 
-.profile_details{
-    height:150px;
+.profile_details {
+    height: 150px;
 }
 
-.settings_issues{
+.settings_issues {
     margin-bottom: 30px;
 }
 
-.notification_system_toggler{
+.notification_system_toggler {
     padding: 15px 40px 15px 56px;
 }
-

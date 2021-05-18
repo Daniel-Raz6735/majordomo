@@ -61,8 +61,8 @@ class AdminPage extends Component {
                             </Navbar.Header>
                             <Navbar.Body>
                                 <Nav>
-                                    <ControlUsers loadPage={this.loadPage} dict={this.props.dict}/>
-                                    <ControlContainers loadPage={this.loadPage} dict={this.props.dict}/>
+                                    <ControlUsers loadPage={this.loadPage} dict={this.props.dict} />
+                                    <ControlContainers loadPage={this.loadPage} dict={this.props.dict} />
                                 </Nav>
                                 <Nav pullRight>
                                     <Nav.Item >
