@@ -18,10 +18,17 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background: #e5e5e5;
     width: 40%;
-    /* border: 3px solid red; */
     border-radius: 5pt;
     height: 100px;
+}
+.pressed{
+    background: #e5e5e5;
+    -webkit-box-shadow: inset 0px 0px 10px #352929;
+       -moz-box-shadow: inset 0px 0px 10px #352929;
+            box-shadow: inset 0px 0px 10px #352929;
+     outline: none;
 }
 
 .filters_area {
@@ -33,6 +40,8 @@
 .barcode_scan_area {
     margin-top: 30px;
     margin-bottom: 30px;
+    min-width: 300px;
+    min-height: 100px;
     display: flex;
     justify-content: center;
 }
@@ -42,7 +51,23 @@
     flex-direction: column;
 }
 
+
 .rs-modal-content{
     display: flex;
     flex-direction: column;
+    max-width: 450px;
+    /* width: 50%; */
+    max-height: 90%;
+    margin: auto;
+}
+
+.pair_btn{
+    background-color: #73D504;
+     color: white; 
+     margin-top: 15px; 
+     font-size: 20px;
+}
+
+#cmarArea{
+    margin: auto;
 }

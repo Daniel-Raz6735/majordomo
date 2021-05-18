@@ -58,6 +58,7 @@ function create_notification_dict(notification_data, suppliers_data, orders_dict
                 item_weight = notification["weight"],
                 date = notification["date"],
                 active = notification["active"],
+                barcode = notification["barcode"],
                 unit = notification["unit"],
                 notification_to_insert = {
                     "notification_level": notification_level,
@@ -126,6 +127,7 @@ function create_weights_dict(weight_data, suppliers_data, notifications_data, or
                 category_id = element["category_id"],
                 category_name = element["category_name"],
                 unit = element["unit"],
+                barcode=element["barcode"],
                 notification_level = -1
             if (item_name && item_id && category_id && category_name) {
                 if (!dict["category"][category_id])
@@ -145,6 +147,7 @@ function create_weights_dict(weight_data, suppliers_data, notifications_data, or
                     "total_weight": element["weight"],
                     "unit":unit,
                     "notification_level": notification_level,
+                    "barcode":barcode,
                     "suppliers": []
                 }
                 if (orders_dict && orders_dict["items"] && orders_dict["items"][item_id])
@@ -182,6 +185,7 @@ function create_suppliers_dict(suppliers_data, orders_dict) {
     }
     if (!suppliers_data)
         return null
+    console.log(suppliers_data)
     Object.keys(suppliers_data).forEach(key => {
         var element = suppliers_data[key]
         if (element) {

@@ -11,42 +11,40 @@ import { Dictionary } from '../Dictionary';
 import $ from 'jquery';
 import { base_url } from '..';
 import { scree_alert } from '../pages/inventory_page'
+import { showNotification } from './bars';
 
-export class Test extends Component {
+export class Scanner extends Component {
     state = {
         stopStream: false
-
-    }
-    handleError = err => {
-        // console.error(err)
     }
 
-    componentDidMount() {
-        // if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-        //     console.log("Let's get this party started")
-        //     navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { exact: "environment" } } }).catch(function (error) {
-        //         console.log(error)
-        //     }) 
-        // }
-    }
     render() {
-
-        return (
-            <div>
-                <BarcodeScannerComponent
-                    stopStream={this.state.stopStream}
-                    onUpdate={(err, result) => {
-                        // console.log(err)
-                        // console.log(result)
-                        if (result) {
-                            this.props.handleScan(result)
-                            // this.setState({ stopStream: true })
-                        }
-                        else
-                            this.handleError(err);
-                    }} />
-            </div>
-        )
+        if (this.props.scaned)
+            return <div></div>
+        if (this.props.switchState) {
+            var message = "Container scaned, Please scan item"
+            if (this.props.item)
+                message = "Item scanned, Please scan container";
+            return (<div>{message}</div>);
+        }
+        else
+            return (
+                <div id="cmarArea">
+                    <BarcodeScannerComponent
+                        stopStream={this.state.stopStream}
+                        onUpdate={(err, result) => {
+                            // console.log(err)
+                            // console.log(result)
+                            if (result) {
+                                this.props.handleScan(result)
+                                // this.setState({ stopStream: true })
+                            }
+                            // else
+                            //     console.log(err)
+                            // this.handleError(err);
+                        }} />
+                </div >
+            )
     }
 }
 
@@ -54,20 +52,9 @@ export class ModalDemo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: '',
-            item_name: '',
-            scaned: false,
-            show: false,
-            is_item: false,
             business_id: this.props.business_id ? this.props.business_id : 1,
             item_data: [],
             container_data: [],
-            value: null,
-            item_found: false,
-            id_found: false,
-            chain_icon_src: chain_icon,
-            pairing_complete: false,
-            load:""
 
         };
         this.close = this.close.bind(this);
@@ -78,13 +65,16 @@ export class ModalDemo extends React.Component {
         this.get_items = this.get_items.bind(this);
         this.get_containers = this.get_containers.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.found_id = this.found_id.bind(this)
-        this.found_item = this.found_item.bind(this)
+        // this.found_id = this.found_id.bind(this);
+        // this.found_item = this.found_item.bind(this);
+        this.removeCamera = this.removeCamera.bind(this);
+        this.testExistenceInDict = this.testExistenceInDict.bind(this);
+        this.resetComp = this.resetComp.bind(this);
 
     }
 
     componentDidMount() {
-
+        this.resetComp()
         let dict
         if (this.props.dict["weights"] && this.props.dict["weights"]["category"])
             dict = this.props.dict["weights"]["category"]
@@ -93,8 +83,6 @@ export class ModalDemo extends React.Component {
             this.get_items(dict)
 
         let request = base_url + "/get/containers" + "?business_id=" + this.state.business_id + "&only_active_containers=true"
-        // let request = base_url + path
-
         var callback = this.get_containers
         $.ajax({
             url: request,
@@ -106,6 +94,24 @@ export class ModalDemo extends React.Component {
             error: function (err) {
                 console.log(err)
             }
+        });
+
+    }
+
+    resetComp() {
+        this.setState({
+            show: false,
+            switchState: false, // set transition for camera model
+            item_name: Dictionary["unknown"],
+            container_id: Dictionary["unknown"],
+            is_item: false,
+            scaned: false,
+            value: null,
+            item_found: false,
+            container_id_found: false,
+            chain_icon_src: chain_icon,
+            pairing_complete: false,
+            load: ""
         });
 
     }
@@ -143,56 +149,85 @@ export class ModalDemo extends React.Component {
 
 
     close() {
-        this.setState({ show: false, id: '', item_name: '', id_found: false, item_found: false, is_item: false, chain_icon_src: chain_icon, pairing_complete: false });
+        //reset modal
+        this.resetComp();
     }
     open() {
         this.setState({ show: true });
     }
 
-    change_active() {
-        this.setState({ is_item: !this.state.is_item })
-    }
-
-    // check if the barcode that scaned found in the list of containers
-    found_id(id) {
-        for (let i = 0; i < this.state.container_data.length; i++)
-            if (this.state.container_data[i]["value"] == id)
-                return true
-        // alert("container not exist")
-
-        scree_alert("error", null, "!container")
-
-        return false
-
-    }
-
-    // check if the barcode that scaned found in the list of items
-    found_item(item) {
-        for (let i = 0; i < this.state.item_data.length; i++) {
-            console.log(this.state.item_data[i]["value"])
-            if (this.state.item_data[i]["value"] == item)
-                return true
+    // change active select filter
+    change_active(kind) {
+        if (kind == "Item") {
+            this.setState({ item_found: false, is_item: true, scaned: false })
         }
-        scree_alert("error", null, "!item")
-        return false
+        else if (kind == "Container ID")
+            this.setState({ container_id_found: false, is_item: false, scaned: false })
     }
 
+    //test dict and see if their is an item with the attribute 'value' that is equal to value
+    testExistenceInDict(value, data_dict) {
+        for (const [key, obj] of Object.entries(data_dict)) {
+            if (obj["value"] == value)
+                return true;
+        }
+        return false;
+    }
+
+    //test to see if the item chosen is one of the options and if so set it in the state 
     handleSelectChange(value) {
-
-        if (this.state.is_item)
+        var is_item = this.state.is_item;
+        if (is_item) {
+            if (!this.testExistenceInDict(value, this.state.item_data)) {
+                showNotification('error', "Item not in list", "Item " + value + " not in list")
+                return
+            }
             this.setState({ item_name: value, item_found: true })
+            if (this.state.container_id_found) {
+                this.removeCamera()
+                return
+            }
+        }
+        else {
+            if (!this.testExistenceInDict(value, this.state.container_data)) {
+                showNotification('error', "Container not in list", "Container " + value + " not in list")
+                return
+            }
+            this.setState({ container_id: parseInt(value), container_id_found: true })
+            if (this.state.item_found) {
+                this.removeCamera()
+                return
+            }
+        }
 
-        else
-            this.setState({ id: value, id_found: true })
+        this.setState({ is_item: !is_item, stopStream: true }) //set the container to switch between categories and stop stream
+        setTimeout(() => this.setState({ switchState: true }), 20) // let the stream stop before swiching state 
+        setTimeout(() => this.setState({ switchState: false }), 4000) // set a timed switch so that the scan wont start emidiatly
+    }
+
+    // scan QR and load it into container ID input
+    handleScan = data => {
+        if (data) {
+            this.handleSelectChange(data["text"])
+
+        }
+    }
+
+    removeCamera() {
+        //turn off the camera 
+        this.setState({ stopStream: true })
+        setTimeout(() => this.setState({ scaned: true }), 200)
     }
 
     handleSubmit() {
 
-        this.setState({load:<Loader speed="fast" size="lg" inverse content="Pairing..." center vertical />})
+        this.setState({ load: <Loader speed="fast" size="lg" inverse content="Pairing..." center vertical /> })
         // index of the item on the item list
         let index = this.state.item_data.findIndex(item => item.value === this.state.item_name);
+        let item_name = this.state.item_name, container_id = this.state.container_id;
 
-        let request = base_url + "/containers/pair?business_id=" + this.state.business_id + "&container_id=" + this.state.id + "&item_id=" + this.state.item_data[index][this.state.item_name]
+
+        let request = base_url + "/containers/pair?business_id=" + this.state.business_id + "&container_id=" + container_id + "&item_id=" + this.state.item_data[index][item_name]
         let flag = false
 
 
@@ -202,97 +237,66 @@ export class ModalDemo extends React.Component {
             success: function (res) {
                 console.log(res)
                 flag = true
-                scree_alert('success', null, 'pairing')
-                
+                showNotification('success', "container paired", 'Container ' + container_id + " paird with " + item_name)
+
             },
             error: function (err) {
                 console.log(err)
-                scree_alert('error', null, 'pairing')
+                showNotification('error', "Unable to pair", 'Their was a problem pairing container: ' + container_id + " with: " + item_name)
             }
         }).then(() => {
 
             console.log(flag)
-            if (flag){
-                this.setState({ chain_icon_src: green_chain_icon, pairing_complete: true,load:"" })
+            if (flag) {
+                this.setState({ chain_icon_src: green_chain_icon, pairing_complete: true, load: "" })
             }
         });
-    }
-
-    // scan QR and load it into container ID input
-    handleScan = data => {
-        if (data) {
-
-            // container ID case
-            if (!this.state.is_item) {
-
-                if (this.found_id(data["text"]))
-                    this.setState({ id: parseInt(data["text"]), id_found: true })
-            }
-
-            // item name case    
-            else
-                if (this.found_item(data["text"]))
-                    this.setState({ item_name: data["text"], item_found: true })
-
-        }
     }
 
 
     render() {
 
-        let value = this.state.is_item ? this.state.item_name : this.state.id
-        
-        let comp = this.state.pairing_complete ? <img src={pairing_complete} alt="Pairing Complete" /> : <Test handleScan={this.handleScan} />
-        
-        let submit = this.state.id_found && this.state.item_found &&!this.state.pairing_complete ? <Button className="pair_btn" onClick={this.handleSubmit} style={{ backgroundColor: "#73D504", color: "white", marginTop: "15px", fontSize: "20px" }}>Pair</Button> : ""
-        
-        let selectTitle = this.state.pairing_complete ? "" : <ControlLabel >{!this.state.is_item ? Dictionary["container_id"] : Dictionary["item"]}</ControlLabel>
-        
-        let select = this.state.pairing_complete ? "" : 
-        <SelectPicker
-            value={value}
-            onChange={this.handleSelectChange}
-            placement={'topStart'}
-            data={!this.state.is_item ? this.state.container_data : this.state.item_data}
-            style={{ width: '100%' }}
-            key={this.state.value}
-        />
-        
+        let value = this.state.is_item ? this.state.item_name : this.state.container_id;
+
+        let comp = this.state.pairing_complete ? <img src={pairing_complete} alt="Pairing Complete" /> : <Scanner handleScan={this.handleScan} is_item={this.state.is_item} switchState={this.state.switchState} scaned={this.state.scaned} />
+
+        let submit = this.state.container_id_found && this.state.item_found && !this.state.pairing_complete ? <Button className="pair_btn" onClick={this.handleSubmit} style={{}}>Pair</Button> : ""
+
+        let selectTitle = this.state.pairing_complete ? "" : <ControlLabel >{this.state.is_item ? Dictionary["item"] : Dictionary["container_id"]}</ControlLabel>
+
+        let select = this.state.pairing_complete ? "" :
+            <SelectPicker
+                value={value}
+                onChange={this.handleSelectChange}
+                placement={'topStart'}
+                data={!this.state.is_item ? this.state.container_data : this.state.item_data}
+                style={{ width: '100%' }}
+                key={this.state.value}
+            />
+
 
 
         return (
             <div className="modal_qr">
-                <Modal backdrop={"static"} size={"lg"} dialogClassName="add_container_area" show={this.state.show} onHide={this.close} >
+                <Modal size={"lg"} dialogClassName="add_container_area" show={this.state.show} onHide={this.close} >
                     <Modal.Header style={{ textAlign: "center" }}>
                         <Modal.Title>Container Pairing</Modal.Title>
                     </Modal.Header>
 
-                    <Form
-                        fluid
-                    >
+                    <Form fluid >
                         <div className="filters_area">
-                            <ScanFilter description={this.state.id} color={this.state.id_found} change_active={this.change_active} active={!this.state.is_item} key={"container" + this.state.is_item} type={"Container ID"} />
+                            <ScanFilter description={this.state.container_id} hasValue={this.state.container_id_found} change_active={this.change_active} active={!this.state.is_item && !this.state.scaned} key={"container" + this.state.is_item + this.state.scaned} type={"Container ID"} />
                             <img src={this.state.chain_icon_src} alt="chain" />
-                            <ScanFilter description={this.state.item_name} color={this.state.item_found} change_active={this.change_active} active={this.state.is_item} key={"item" + this.state.is_item} type={"Item"} />
+                            <ScanFilter description={this.state.item_name} hasValue={this.state.item_found} change_active={this.change_active} active={this.state.is_item && !this.state.scaned} key={"item" + this.state.is_item + this.state.scaned} type={"Item"} />
                         </div>
                         <div className="barcode_scan_area">
                             <FormGroup>
-                            {this.state.load}
+                                {this.state.load}
                                 {comp}
                             </FormGroup>
                         </div>
 
                         <FormGroup >
-                            {/* <ControlLabel >{!this.state.is_item ? Dictionary["container_id"] : Dictionary["item"]}</ControlLabel> */}
-                            {/* <SelectPicker
-                                value={value}
-                                onChange={this.handleSelectChange}
-                                placement={'topStart'}
-                                data={!this.state.is_item ? this.state.container_data : this.state.item_data}
-                                style={{ width: '100%' }}
-                                key={this.state.value}
-                            /> */}
-                            
                             {selectTitle}
                             {select}
                         </FormGroup>
@@ -300,7 +304,7 @@ export class ModalDemo extends React.Component {
                     </Form>
                     {submit}
                 </Modal>
-                <img className="scan_icon" onClick={this.open} src={scan_icon} alt="scan" />
+                <img className="scan_icon" onClick={this.open} src={scan_icon} alt="Scan container" />
 
             </div>
         );
@@ -308,7 +312,7 @@ export class ModalDemo extends React.Component {
 }
 
 class ScanFilter extends Component {
-
+    //this shows a button with the state of the scan pairing
     constructor(props) {
         super(props)
         this.state = {
@@ -317,17 +321,15 @@ class ScanFilter extends Component {
     }
 
     render() {
-
-
-        let description = Dictionary["unknown"]
+        let description = this.props.description
         let border = this.props.active ? "3px solid red" : "3px solid #00000054"
-        if (this.props.color) {
-            description = this.props.description
+        let className = this.props.active ? "pressed" : ""
+        if (this.props.hasValue) {
             border = "3px solid #73D504"
         }
 
         return (
-            <div onClick={this.props.change_active} className="scan_btns_filter" style={{ border: border }}>
+            <div onClick={() => this.props.change_active(this.props.type)} className={"scan_btns_filter " + className} style={{ border: border }}>
                 <div>{this.state.type}</div>
                 <div>{description}</div>
                 <img style={{ marginTop: "10px" }} src={item_scan} alt="item_scan" />

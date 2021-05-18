@@ -75,7 +75,7 @@ def schedule_runner():
 
 
 @app.get('/get/containers')
-def get_containers(business_id: int = None, container_id: Optional[int] = None, item_id: Optional[int] = None, only_active_containers: Optional[bool] = False):
+def get_containers(business_id: int = None, container_id: Optional[int] = None, item_id: Optional[int] = None):
     """gets all current weight for all items of a specific business
          provided optional params: can get specific containers, all containers per item
         required parameters: business_id
@@ -83,8 +83,7 @@ def get_containers(business_id: int = None, container_id: Optional[int] = None, 
     if item_id:
         item_id = [item_id]
     query = readQ.get_current_weight_query(business_id=business_id, container_ids=container_id,
-                                           item_ids=item_id, get_by_container=True,
-                                           only_active_containers=only_active_containers)
+                                           item_ids=item_id, get_by_container=True)
     connection = Connection()
     return connection.get_result(query)
 
@@ -294,7 +293,7 @@ async def get_current_view(business_id: int, user_email: str = "shlomow6@gmail.c
     weight_query = readQ.get_current_weight_query(business_id)
     message = "unable to load notifications"
     notifications_query, notifications_code = readQ.get_notifications_with_info(business_id, active=True)
-    message = "unable to load supplieuvicorn routers:app --reloadrs"
+    message = "unable to load suppliers"
     suppliers_query = readQ.get_suppliers_query(business_id)
     message = "unable to load orders"
     orders_query, orders_code = readQ.get_open_orders_query(business_id)
