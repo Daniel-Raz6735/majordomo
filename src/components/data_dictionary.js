@@ -6,6 +6,7 @@ export var preference,orders
 
 
 export function create_initial_data_dict(data) {
+    
     //this function gets a response from the server and breaks it down to 4 dictionary 
     var dict = {}
     if (data) {

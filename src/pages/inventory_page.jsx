@@ -128,7 +128,7 @@ export class AddToOrder extends Component {
 
         let data = { "amount": dict["amount"], "unit": getUnitById(unit), "item_name": title }
         scree_alert('success', data, "add_to_order");
-
+          
       },
       error: function (err) {
         response = err

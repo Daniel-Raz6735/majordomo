@@ -18,6 +18,8 @@ import HomePage from "../pages/home page/home_page"
 import { Notification as scrren_notification } from "rsuite";
 var socket_client = require('websocket').w3cwebsocket;
 
+export var main_dict,update=0
+
 
 export class SiteFrame extends Component {
 
@@ -78,19 +80,22 @@ export class SiteFrame extends Component {
         if (success) {
             // download(JSON.stringify(data) , 'file.json', 'text/plain');
             if (typeof (data) == "object") {
-                var dict = create_initial_data_dict(data);
-                if (!dict) {
+                main_dict = create_initial_data_dict(data);
+                // var dict = create_initial_data_dict(data);
+                if (!main_dict) {
                     this.setState({ page: <PageNotFound status_code={500} /> })
                     console.log("Data rcived from server is corrupt")
                 }
                 else {
-                    confirm_papulation(dict, "process_initial_data", "initial data not recived well")
-                    this.change_tab(tab_name, dict)
-                    this.setState({ dict })
+                    update++
+                    confirm_papulation(main_dict, "process_initial_data", "initial data not recived well")
+                    if(tab_name)
+                        this.change_tab(tab_name, main_dict)
+                    this.setState({ main_dict })
                     // download(JSON.stringify(dict) , 'file.json', 'text/plain');
 
-                    if (dict["preferences"]) {
-                        sessionStorage.setItem("developer", dict["preferences"]["developer"])
+                    if (main_dict["preferences"]) {
+                        sessionStorage.setItem("developer", main_dict["preferences"]["developer"])
                     }
                 }
             }
@@ -130,7 +135,7 @@ export class SiteFrame extends Component {
         //changes the tab on this component by name
         var page = [], i = 0
         if (!dict)
-            dict = this.state.dict;
+            dict = main_dict;
         switch (tab_name) {
             case "SettingPage":
                 i = 3;
