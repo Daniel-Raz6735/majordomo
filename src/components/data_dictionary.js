@@ -1,12 +1,9 @@
 import { notifications_levels } from './notifications_data'
 
-export default class TableConst {
-    static val = {
-        dict: {
 
-        }
-    };
-}
+
+export var preference,orders
+
 
 export function create_initial_data_dict(data) {
     //this function gets a response from the server and breaks it down to 4 dictionary 
@@ -18,7 +15,9 @@ export function create_initial_data_dict(data) {
         dict["notifications"] = create_notification_dict(data["notifications"], dict["suppliers"], dict["orders"])
         dict["weights"] = create_weights_dict(data["weights"], dict["suppliers"], dict["notifications"], dict["orders"])
 
-        TableConst.val.dict["preferences"] = data["preferences"]
+        
+        preference = data["preferences"]
+        orders = dict["orders"]
 
         // download(JSON.stringify(dict) , 'dict.json', 'text/plain');
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")

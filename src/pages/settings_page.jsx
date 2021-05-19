@@ -8,13 +8,15 @@ import './settings_page.css'
 import { changeLanguage } from '../Dictionary'
 import AdminPage from '../pages/Admin Page/admin_page';
 import $ from 'jquery';
-import TableConst from '../components/data_dictionary'
+import {preference} from '../components/data_dictionary'
 
 var fake_settings = {
   lang: "EN",
   minimum_reach_alerts: true,
   freshness_alerts: true
 }
+
+
 
 
 class SettingsPage extends Component {
@@ -31,16 +33,15 @@ class SettingsPage extends Component {
   }
 
   componentDidMount() {
-    console.log(TableConst.val.dict["preferences"])
-
+    
   }
 
   changeNotificationToggle(val) {
-    TableConst.val.dict["preferences"][0]["minimum_reach_alerts"] = val
+    preference[0]["minimum_reach_alerts"] = val
   }
 
   changeFreshnessToggle(val) {
-    TableConst.val.dict["preferences"][0]["freshness_alerts"] = val
+    preference[0]["freshness_alerts"] = val
   }
 
 
@@ -49,7 +50,7 @@ class SettingsPage extends Component {
     if (this.state.settings && !this.state.QR) {
       let settings = this.state.settings
 
-      j = TableConst.val.dict["preferences"][0]["lang"] === "EN" ? 0 : 1
+      j = preference[0]["lang"] === "EN" ? 0 : 1
       // j = settings["lang"] === "EN" ? 0 : 1
 
       return (
@@ -80,7 +81,7 @@ class SettingsPage extends Component {
               <Sidenav appearance="subtle" >
                 <div className={"settings_container"}>Notification</div>
                 <Nav>
-                  <DropdownToggle change={this.changeNotificationToggle} minimum_reach={TableConst.val.dict["preferences"][0]["minimum_reach_alerts"]} freshnses={TableConst.val.dict["preferences"][0]["freshness_alerts"]} type={"notification"} />
+                  <DropdownToggle change1={this.changeNotificationToggle} change2={this.changeFreshnessToggle} minimum_reach={preference[0]["minimum_reach_alerts"]} freshnses={preference[0]["freshness_alerts"]} type={"notification"} />
                   {/* <DropdownToggle change={this.changeNotificationToggle}  minimum_reach={settings["minimum_reach_alerts"]} freshnses={settings["freshness_alerts"]} type={"notification"} /> */}
                 </Nav>
               </Sidenav>
@@ -175,8 +176,8 @@ class DropdownToggle extends Component {
 
       case "notification":
         test = <div>
-          <div className="notification_system_toggler"> <div className="title_container" ><div className="setting_name">Minimum reach</div><div className="setting_value"><Toggle onChange={this.props.change} defaultChecked={this.props.minimum_reach} /></div></div></div>
-          <div className="notification_system_toggler"> <div className="title_container" ><div className="setting_name">Freshness</div><div className="setting_value"><Toggle onChange={this.props.change} defaultChecked={this.props.freshnses} /></div></div></div>
+          <div className="notification_system_toggler"> <div className="title_container" ><div className="setting_name">Minimum reach</div><div className="setting_value"><Toggle onChange={this.props.change1} defaultChecked={this.props.minimum_reach} /></div></div></div>
+          <div className="notification_system_toggler"> <div className="title_container" ><div className="setting_name">Freshness</div><div className="setting_value"><Toggle onChange={this.props.change2} defaultChecked={this.props.freshnses} /></div></div></div>
         </div>
         break;
 

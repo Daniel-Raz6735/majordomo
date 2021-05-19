@@ -4,7 +4,7 @@ import Dropdown, { DropdownContent, DropdownTrigger } from 'react-simple-dropdow
 import './Dictionary.css';
 import israelFlag from './images/icons/israel.svg';
 import usaFlag from './images/icons/USA.svg';
-// import TableConst from './components/data_dictionary'
+
 
 
 
@@ -90,13 +90,13 @@ export const Dictionary = new LocalizedStrings({
     status_code: "Status code",
 
     //qr barcode
-    container_id: "Container ID",
-    item: "Item",
-    container_pairing: "Container Pairing",
-    container_not_in_list: "Container not in list",
-    item_not_in_list: "Item not in list",
+    container_id:"Container ID",
+    item:"Item",
+    container_pairing:"Container Pairing",
+    container_not_in_list:"Container not in list",
+    item_not_in_list:"Item not in list",
 
-
+    
 
 
 
@@ -174,8 +174,8 @@ export const Dictionary = new LocalizedStrings({
     status_code: "קוד שגיאה",
 
     //qr barcode
-    container_id: "מזהה מיכל",
-    item: "מוצר",
+    container_id:"מזהה מיכל",
+    item:"מוצר",
 
   }
 });
