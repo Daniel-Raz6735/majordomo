@@ -8,7 +8,6 @@ import './settings_page.css'
 import { changeLanguage } from '../Dictionary'
 import AdminPage from '../pages/Admin Page/admin_page';
 import $ from 'jquery';
-import {preference} from '../components/data_dictionary'
 
 var fake_settings = {
   lang: "EN",
@@ -37,11 +36,11 @@ class SettingsPage extends Component {
   }
 
   changeNotificationToggle(val) {
-    preference[0]["minimum_reach_alerts"] = val
+    // preference[0]["minimum_reach_alerts"] = val
   }
 
   changeFreshnessToggle(val) {
-    preference[0]["freshness_alerts"] = val
+    // preference[0]["freshness_alerts"] = val
   }
 
 
@@ -50,8 +49,8 @@ class SettingsPage extends Component {
     if (this.state.settings && !this.state.QR) {
       let settings = this.state.settings
 
-      j = preference[0]["lang"] === "EN" ? 0 : 1
-      // j = settings["lang"] === "EN" ? 0 : 1
+      // j = preference[0]["lang"] === "EN" ? 0 : 1
+      j = settings["lang"] === "EN" ? 0 : 1
 
       return (
         <div className="settings_page_container">
@@ -81,7 +80,8 @@ class SettingsPage extends Component {
               <Sidenav appearance="subtle" >
                 <div className={"settings_container"}>Notification</div>
                 <Nav>
-                  <DropdownToggle change1={this.changeNotificationToggle} change2={this.changeFreshnessToggle} minimum_reach={preference[0]["minimum_reach_alerts"]} freshnses={preference[0]["freshness_alerts"]} type={"notification"} />
+                  <DropdownToggle change1={this.changeNotificationToggle} change2={this.changeFreshnessToggle} minimum_reach={settings["minimum_reach_alerts"]} freshnses={settings["freshness_alerts"]} type={"notification"} />
+                  {/* <DropdownToggle change1={this.changeNotificationToggle} change2={this.changeFreshnessToggle} minimum_reach={preference[0]["minimum_reach_alerts"]} freshnses={preference[0]["freshness_alerts"]} type={"notification"} /> */}
                   {/* <DropdownToggle change={this.changeNotificationToggle}  minimum_reach={settings["minimum_reach_alerts"]} freshnses={settings["freshness_alerts"]} type={"notification"} /> */}
                 </Nav>
               </Sidenav>

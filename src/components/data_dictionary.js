@@ -1,11 +1,6 @@
 import { notifications_levels } from './notifications_data'
 import { set_offset } from './time_manager';
 
-
-
-export var preference,orders
-
-
 export var data_dict;
 
 export function create_initial_data_dict(data) {
@@ -18,7 +13,7 @@ export function create_initial_data_dict(data) {
         dict["notifications"] = create_notification_dict(data["notifications"], dict["suppliers"], dict["orders"])
         dict["weights"] = create_weights_dict(data["weights"], dict["suppliers"], dict["notifications"], dict["orders"])
 
-        
+
         // download(JSON.stringify(dict) , 'dict.json', 'text/plain');
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
         if (!dict["weights"]) {
@@ -138,7 +133,7 @@ function create_weights_dict(weight_data, suppliers_data, notifications_data, or
                                 notification_level = level
                         })
                 }
-                
+
                 var weight_info = {
                     "cat_name": category_name,
                     "date": set_offset(element["date"]),

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Badge, ButtonToolbar, Modal } from "rsuite";
 import { NotificationList } from "../components/notifications";
 import { Dictionary, getRTL } from "../Dictionary";
-import { TitleComponent } from "../components/bars";
+import { silent_refresh, TitleComponent } from "../components/bars";
 import './inventory_page.css'
 import cart_plus from '../images/icons/orders/cart_plus.svg'
 import x_icon from '../images/x_icon.svg'
@@ -105,7 +105,7 @@ export class AddToOrder extends Component {
     let dict = {
       business_id: this.props.business_id,
       item_id: parseInt(this.props.item_id),
-      order_id: this.props.order_dict["order_id"] ? parseInt(this.props.order_dict["order_id"]) : 0,
+      order_id: (this.props.order_dict && this.props.order_dict["order_id"]) ? parseInt(this.props.order_dict["order_id"]) : 0,
       supplier_id: this.props.supplier_id,
       amount: value,
       unit: unit
@@ -128,6 +128,7 @@ export class AddToOrder extends Component {
 
         let data = { "amount": dict["amount"], "unit": getUnitById(unit), "item_name": title }
         scree_alert('success', data, "add_to_order");
+        silent_refresh()
           
       },
       error: function (err) {

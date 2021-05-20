@@ -18,7 +18,7 @@ import HomePage from "../pages/home page/home_page"
 import { Notification as scrren_notification } from "rsuite";
 var socket_client = require('websocket').w3cwebsocket;
 
-export var main_dict,update=0
+export var main_dict, update = 0
 
 
 export class SiteFrame extends Component {
@@ -34,7 +34,7 @@ export class SiteFrame extends Component {
         this.change_tab = this.change_tab.bind(this);
         this.send_msg = this.send_msg.bind(this);
         this.process_initial_data = this.process_initial_data.bind(this);
-        this.get_initial_data = this.get_initial_data.bind(this);
+        this.loadSite = this.loadSite.bind(this);
 
     }
     componentDidMount() {
@@ -62,54 +62,57 @@ export class SiteFrame extends Component {
         this.setState({ tab_name: tab_name });
         sessionStorage.removeItem('tab_name');
 
-        this.get_initial_data(this.process_initial_data, 1, tab_name)
+        this.loadSite(1, tab_name);
 
         //establishing a way for chield components to switch tabs across the app
         $("#reset_frame").change(() => { })
+        $("#silent_refresh").change(() => { this.loadSite(1, null) })
+        $("#refresh").change(() => { this.loadSite(1, this.state.tab_name) })
 
 
     }
     send_msg() {
+        //web socket message send test
         this.state.socket.send(JSON.stringify({
             type: "message",
             msg: 1
         }));
 
     }
-    process_initial_data(data, success, tab_name) {
-        if (success) {
-            // download(JSON.stringify(data) , 'file.json', 'text/plain');
-            if (typeof (data) == "object") {
-                main_dict = create_initial_data_dict(data);
-                // var dict = create_initial_data_dict(data);
-                if (!main_dict) {
-                    this.setState({ page: <PageNotFound status_code={500} /> })
-                    console.log("Data rcived from server is corrupt")
-                }
-                else {
-                    update++
-                    confirm_papulation(main_dict, "process_initial_data", "initial data not recived well")
-                    if(tab_name)
-                        this.change_tab(tab_name, main_dict)
-                    this.setState({ main_dict })
-                    // download(JSON.stringify(dict) , 'file.json', 'text/plain');
 
-                    if (main_dict["preferences"]) {
-                        sessionStorage.setItem("developer", main_dict["preferences"]["developer"])
-                    }
-                }
+    process_initial_data(data, tab_name) {
+        // load the site with assential basic data for the basic site 
+
+        // download(JSON.stringify(data) , 'file.json', 'text/plain');
+        if (typeof (data) == "object") {
+            main_dict = create_initial_data_dict(data);
+            // var dict = create_initial_data_dict(data);
+            if (!main_dict) {
+                this.setState({ page: <PageNotFound status_code={500} /> })
+                console.log("Data rcived from server is corrupt")
             }
             else {
-                console.log("intial data returnd with bad body")
+                update++;
+                confirm_papulation(main_dict, "process_initial_data", "initial data not recived well")
+                if (tab_name!=null)
+                    this.change_tab(tab_name)
+                // download(JSON.stringify(dict) , 'file.json', 'text/plain');
+
+                if (main_dict["preferences"]) {
+                    sessionStorage.setItem("developer", main_dict["preferences"]["developer"])
+                }
             }
         }
-        else
-            this.setState({ page: <PageNotFound status_code={500} /> })
+        else {
+            console.log("intial data returnd with bad body")
+        }
     }
 
-    get_initial_data(callback, business_id, tab_name) {
+    loadSite(business_id, tab_name) {
         //request all information for a business
-        var request = base_url + '/get/current_view';
+        var request = base_url + '/get/current_view',
+        thisS= this;
+
 
         if (business_id) {
             request += "?business_id=" + business_id
@@ -117,12 +120,10 @@ export class SiteFrame extends Component {
             $.ajax({
                 url: request,
                 success: function (res) {
-                    callback(res, true, tab_name);
-
+                    thisS.process_initial_data(res, tab_name);
                 },
                 error: function (err) {
-                    callback(fake_data, true);
-
+                    thisS.setState({ page: <PageNotFound status_code={500} /> });
                 }
             });
         }
@@ -131,33 +132,31 @@ export class SiteFrame extends Component {
         }
 
     }
-    change_tab(tab_name, dict) {
+    change_tab(tab_name) {
         //changes the tab on this component by name
-        var page = [], i = 0
-        if (!dict)
-            dict = main_dict;
+        var page = [], i = 0, dict = main_dict, key = tab_name + update;
+
         switch (tab_name) {
             case "SettingPage":
                 i = 3;
-                page = <SettingPage dict={dict} />
+                page = <SettingPage key={key} dict={dict} />
                 break;
 
             case "OrdersPage":
-
                 i = 2;
-                page = <OrdersPage dict={dict} />
+                page = <OrdersPage key={key} dict={dict} />
                 break;
 
             case "InventoryPage":
 
                 i = 1;
-                page = <InventoryPage dict={dict} />
+                page = <InventoryPage key={key} dict={dict} />
                 break;
 
             case "HomePage":
             default:
                 i = 0;
-                page = <HomePage dict={dict} />
+                page = <HomePage key={key} dict={dict} />
                 break;
         }
         var buttons = ["bottom_bar", "bottom_bar", "bottom_bar", "bottom_bar"]
@@ -206,7 +205,12 @@ export class SiteFrame extends Component {
                             <div className="tester">{Dictionary["profile"]}</div>
                         </div>
                     </div>
+                    {/* this input is used for switching tabs in the app */}
                     <input type="hidden" id="reset_frame" name="reset_frame" value="" />
+                    {/* this input is used for refreshing the data the app without refreshing the components */}
+                    <input type="hidden" id="silent_refresh" name="silent_refresh" value="" />
+                    {/* this input is used for refreshing the data the app and refreshes the components */}
+                    <input type="hidden" id="refresh" name="refresh" value="" />
                 </footer>
             </div>
 
@@ -214,6 +218,11 @@ export class SiteFrame extends Component {
 
     }
 }
+ 
+export function silent_refresh(){
+    $("#silent_refresh").val("").change();
+}
+
 
 export class TitleComponent extends Component {
     render() {
@@ -320,7 +329,7 @@ export class AlertManeger extends Component {
     componentDidMount() {
         //establishing a way for chield components to switch tabs across the app
         $("#notification_trigger").change(() => {
-            this.showNotification()
+            this.showNotification();
         })
         $("#notification_close_triger").change(() => {
             console.log('removing one')
