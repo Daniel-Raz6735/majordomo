@@ -1,4 +1,5 @@
 import { notifications_levels } from './notifications_data'
+import { set_offset } from './time_manager';
 
 export default class TableConst {
     static val = {
@@ -8,17 +9,20 @@ export default class TableConst {
     };
 }
 
+export var data_dict;
+
 export function create_initial_data_dict(data) {
+    data_dict = data;
     //this function gets a response from the server and breaks it down to 4 dictionary 
     var dict = {}
     if (data) {
         dict["preferences"] = data["preferences"]
         dict["orders"] = create_orders_dict(data["orders"])
-        dict["suppliers"] = create_suppliers_dict(data["suppliers"], dict["orders"])
+        dict["suppliers"] = create_suppliers_dict(data["suppliers"], dict["orders"], data["items"])
         dict["notifications"] = create_notification_dict(data["notifications"], dict["suppliers"], dict["orders"])
         dict["weights"] = create_weights_dict(data["weights"], dict["suppliers"], dict["notifications"], dict["orders"])
 
-        TableConst.val.dict["preferences"] = data["preferences"]
+        
 
         // download(JSON.stringify(dict) , 'dict.json', 'text/plain');
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
@@ -56,9 +60,8 @@ function create_notification_dict(notification_data, suppliers_data, orders_dict
                 category_id = notification["category_id"],
                 notification_level = notification["code"],
                 item_weight = notification["weight"],
-                date = notification["date"],
+                date = set_offset(notification["date"]),
                 active = notification["active"],
-                barcode = notification["barcode"],
                 unit = notification["unit"],
                 notification_to_insert = {
                     "notification_level": notification_level,
@@ -140,9 +143,10 @@ function create_weights_dict(weight_data, suppliers_data, notifications_data, or
                                 notification_level = level
                         })
                 }
+                
                 var weight_info = {
                     "cat_name": category_name,
-                    "date": element["date"],
+                    "date": set_offset(element["date"]),
                     "item_name": item_name,
                     "total_weight": element["weight"],
                     "unit": unit,
@@ -178,7 +182,7 @@ function create_weights_dict(weight_data, suppliers_data, notifications_data, or
     });
     return dict
 }
-function create_suppliers_dict(suppliers_data, orders_dict) {
+function create_suppliers_dict(suppliers_data, orders_dict, item_data) {
     var dict = {
         "items": {},
         "suppliers": {}
@@ -204,6 +208,9 @@ function create_suppliers_dict(suppliers_data, orders_dict) {
                     "providing_days": element["days_to_provide"],
                     "frequency": element["frequency"]
                 }
+
+            if (item_data && item_data[item_id])
+                item_info["item_extended_details"] = item_data[item_id]
             if (orders_dict && orders_dict["items"] && orders_dict["items"][item_id])
                 item_info["order_details"] = orders_dict["items"][item_id]
 

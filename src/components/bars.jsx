@@ -42,7 +42,7 @@ export class SiteFrame extends Component {
         if (!base_url.includes("majordomo.cloudns"))
             ws = new socket_client('ws://127.0.0.1:8000/ws/1/1');
         else
-            ws = new socket_client('wss://majordomo.cloudns.asia:5000/ws/1/1')
+            ws = new socket_client('wss://majordomo.cloudns.asia/ws/1/1')
         // var wss = new socket_client('wss://majordomo.cloudns.asia/wss');
 
 

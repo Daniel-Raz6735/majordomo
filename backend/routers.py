@@ -130,6 +130,16 @@ async def add_item(business_id: int, category_id: int):
     #     reader = readQ(connection)
 
 
+@app.get('/get/items')
+async def get_items(business_id: int):
+    """get all items of business """
+    pass
+    connection = Connection()
+    reader = readQ(connection)
+    query = reader.get_items(business_id=business_id)
+    return connection.get_result(query)
+
+
 @app.get('/get/item/history')
 async def get_item_history(business_id: int, item_id: int, min_date: Optional[int] = -1, max_date: Optional[int] = -1):
     """gets an items weight history
@@ -182,7 +192,7 @@ async def pair_container_to_item(business_id: int, container_id: int, item_id: i
             raise Exception
     except Exception:
         raise HTTPException(status_code=403, detail="Container does not belong to business")
-    item_query = reader.get_item(item_id, business_id)
+    item_query = reader.get_items(item_id, business_id)
     item_res = connection.get_result(item_query)
     if item_res is None or len(item_res) < 1:
         raise HTTPException(status_code=403, detail="Item does not belong to business")
@@ -222,18 +232,18 @@ async def add_container_to_business(business_id: int, container_id: Optional[int
 
 @app.get('/get/users')
 def get_users(business_id: int = None, get_supplier: bool = False, get_businesses: bool = False):
-    """
+    """gets all users in the DB
     """
     res = {}
     connection = Connection()
     users_query = readQ.get_users_query(business_id=business_id)
     res["users"] = connection.get_result(users_query)
-    if get_supplier:
-        users_query = readQ.get_users_query(business_id=business_id)
-        res["suppliers"] = connection.get_result(users_query)
-    if get_businesses:
-        business_query = readQ.get_users_query(business_id=business_id)
-        res["businesses"] = connection.get_result(business_query)
+    # if get_supplier:
+    #     users_query = readQ.get_users_query(business_id=business_id)
+    #     res["suppliers"] = connection.get_result(users_query)
+    # if get_businesses:
+    #     business_query = readQ.get_users_query(business_id=business_id)
+    #     res["businesses"] = connection.get_result(business_query)
     for user in res["users"]:
         user["email"] = user["email_user_name"]+"@"+user["email_domain_name"]
     return res
@@ -289,6 +299,8 @@ async def get_current_view(business_id: int, user_email: str = "shlomow6@gmail.c
         raise HTTPException(status_code=400, detail="Illegal email")
     message = "unable to load preference"
     user_preferences_query = readQ.get_user_preferences_query(user_email)
+    message = "unable to load items"
+    items_query = readQ.get_items(business_id)
     message = "unable to load weight"
     weight_query = readQ.get_current_weight_query(business_id)
     message = "unable to load notifications"
@@ -309,6 +321,8 @@ async def get_current_view(business_id: int, user_email: str = "shlomow6@gmail.c
         # reader = readQ(connection)
         message = "unable to load preferences"
         preferences = connection.get_result(user_preferences_query)
+        message = "unable to load items"
+        items = connection.get_result(items_query)
         message = "unable to load notifications"
         notifications = connection.get_result(notifications_query)
         message = "unable to load weights"
@@ -317,10 +331,10 @@ async def get_current_view(business_id: int, user_email: str = "shlomow6@gmail.c
         suppliers = connection.get_result(suppliers_query)
         message = "unable to load orders"
         orders = connection.get_result(orders_query)
-        print(orders_query)
 
         res = {
             "preferences": preferences,
+            "items": items,
             "notifications": notifications,
             "weights": weights,
             "suppliers": suppliers,

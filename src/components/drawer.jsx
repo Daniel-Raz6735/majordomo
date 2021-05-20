@@ -15,6 +15,8 @@ import $ from 'jquery';
 import info_symbol from '../images/icons/info_symbol.svg'
 import { getUnitById } from './data_dictionary';
 import { getDate } from './containers'
+import { get_date,get_time, set_offset } from './time_manager';
+import moment from 'moment';
 
 
 
@@ -249,19 +251,38 @@ export class ItemPage extends Component {
 
   devide_data(res) {
     /*devide the data to diffarent dates and add a dropdown item stating the category*/
+    var date_dict = {}
+    if (typeof res === 'object' && res !== null) {
+      res.forEach(obj => {
+        if (obj["date"]) {
+          var d = set_offset(obj["date"])
+          if (d !== undefined) {
+            obj["date"] = d;
+            var date =get_date(d),
+              time = get_time(d);
+            if (!(date in date_dict))
+              date_dict[date] = {}
+            date_dict[date][time] = obj;
+          }
+        }
+      })
+    }
     var page = [], dates_to_pull = this.state.dates_to_pull, dropdown_content = [], i = 0;
     dates_to_pull.forEach(days => {
       var j = i++;
       dropdown_content.push(<Dropdown.Item key={"drop_item" + days} eventKey={days} onSelect={() => { this.setState({ active_index: j }) }}>{Dictionary[days]}</Dropdown.Item>)
     })
-    this.setState({ page, dropdown_content, res });
+    this.setState({ page, dropdown_content, date_dict });
   }
 
   get_relavent_data(res, days) {
     /* takes all data from the past dates and puts them in a dict that the keys are the wighings and the */
-    console.log(res);
-    var min_date = get_old_date(new Date(), days).getTime(),
-      relavent_data = {}, sorted_data = {};
+    var min_date = moment().startOf('day').fromNow();
+    // min_date.subtract(days, 'days');
+
+    // var min_date = moment().startOf('day').fromNow();
+    // var min_date = get_old_date(new Date(), days).getTime(),
+    var relavent_data = {}, sorted_data = {};
     if (res && res.length > 0) {
       res.forEach(weighing => {
         var date = new Date(weighing["date"]).getTime()
@@ -294,7 +315,7 @@ export class ItemPage extends Component {
   render() {
     let active_index = this.state.active_index, disabled = false,
       active_chart = this.state.dates_to_pull[active_index], chart,
-      res = this.state.res;
+      res = this.state.date_dict;
     if (res) {
       var relavent_data = this.get_relavent_data(res, active_chart)
 
@@ -475,7 +496,7 @@ export class ChartComponent extends Component {
   }
 }
 
-export function download(content, fileName, contentType) {
+export function download(content, fileName = "file.json", contentType = 'text/plain') {
   var a = document.createElement("a");
   var file = new Blob([content], { type: contentType });
   a.href = URL.createObjectURL(file);
@@ -585,14 +606,14 @@ class ItemDeatils extends Component {
 
   // get all containers of the item
   getItemContainers(data) {
-    console.log(data)
+    // console.log(data)
     let str = "", cont_details = []
     for (let i = 0; i < data.length; i++) {
       let container = data[i]
       str += i === data.length - 1 ? container["container_id"] : container["container_id"] + ","
       cont_details.push(<div><span style={{ fontWeight: "bold" }}>{container["container_id"]}</span>: {container["weight"]} {getUnitById(container["weight"])} {" "}{getDate(container["date"])}  </div>)
     }
-    console.log(cont_details)
+    // console.log(cont_details)
     this.setState({
       str: str,
       container_details: cont_details

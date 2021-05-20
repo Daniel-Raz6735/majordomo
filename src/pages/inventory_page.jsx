@@ -9,7 +9,7 @@ import x_icon from '../images/x_icon.svg'
 import $ from 'jquery'
 import { base_url } from "..";
 import { getUnitById } from "../components/data_dictionary";
-import { showNotification } from "../components/bars"
+import {showNotification} from "../components/bars"
 
 
 
@@ -236,7 +236,7 @@ export function scree_alert(funcName, data, type) {
   switch (type) {
     case "add_to_order":
       messeges = { "success": Dictionary["item_added"], "error": Dictionary["item_added_failed"] }
-      description = "" + data["amount"] + " " + data["unit"] + " " + data["item_name"]
+      description =""+ data["amount"]+" "+ data["unit"]+" "+ data["item_name"]
       break
 
 
@@ -250,8 +250,8 @@ export function scree_alert(funcName, data, type) {
       description = "test"
       break
   }
-  var title = funcName === 'success' ? messeges["success"] : messeges["error"]
-  showNotification(funcName, title, description)
+  var title=funcName === 'success' ? messeges["success"] : messeges["error"]
+  showNotification(funcName,title,description)
 
 }
 
