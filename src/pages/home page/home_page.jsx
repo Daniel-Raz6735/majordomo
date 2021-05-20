@@ -5,7 +5,7 @@ import { Notification, OKNotification } from '../../components/notifications'
 import { category_names, category_symbols, notification_dict } from '../../components/notifications_data';
 import { CategoryDrawer } from '../../components/drawer';
 import { Dictionary, getTime } from '../../Dictionary';
-import { getUnitById } from '../../components/data_dictionary';
+import { getUnitById, temp } from '../../components/data_dictionary';
 import { ModalDemo } from '../../components/qr_reader';
 
 
@@ -21,7 +21,7 @@ export class HomePage extends Component {
 
     }
     componentDidMount() {
-
+        
     }
 
 

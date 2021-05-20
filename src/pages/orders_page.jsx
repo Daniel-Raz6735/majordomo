@@ -15,42 +15,6 @@ import { Quantity } from "./inventory_page";
 
 const { Collapse } = Animation;
 
-// class OrdersPage extends Component {
-//     constructor(props) {
-//         super(props);
-
-//         this.state = {
-
-
-//         }
-//         this.call_back = this.call_back.bind(this);
-
-//     }
-
-//     // this.render_by_category(this.state.categories[i])
-
-
-//     call_back(seller_dict) {
-
-//     }
-
-//     render() {
-
-
-//         return (
-//             <div className="orders_page_container">
-//                 <TitleComponent title_name="orders" />
-//                 <ButtonsComponent key="Order_btns" btn_names={["item_type", "supplier"]} callback={this.call_back} />
-//                 <SearchBar />
-//                 <OrderList dict={this.props.dict} />
-//             </div>
-
-//         );
-
-//     }
-// }
-// export default OrdersPage
-
 export function sort_by_key_val(jsObj, sort_by_key, reverse) {
     //sort an array of key and value [key,val]
     var sortedArray = []
@@ -202,7 +166,7 @@ class OrderCategory extends Component {
 
     }
     componentDidMount() {
-        console.log(this.props.weights_dict)
+
     }
 
     remove_onClick(e) {
@@ -217,18 +181,16 @@ class OrderCategory extends Component {
     }
 
     render_supplier(supplier) {
-        console.log(supplier)
+
         var page = []
         if (supplier) {
             var sells_items = supplier["sells_items"]
 
-
-            if (sells_items && sells_items.length > 0) {
-
+            if (sells_items && Object.keys(sells_items).length > 0) {
                 Object.keys(sells_items).forEach(key => {
-                    let temp = this.props.weights_dict[key], item_name
+                    let temp = this.props.weights_dict && this.props.weights_dict[key] ? this.props.weights_dict[key] : null, item_name
                     item_name = temp && temp["item_name"] ? temp["item_name"] : key
-                    console.log(sells_items[key]["order_details"])
+                   
                     if (sells_items[key]["order_details"])
                         page.push(<Order order={sells_items[key]["order_details"]} item_id={item_name} />)
                 })

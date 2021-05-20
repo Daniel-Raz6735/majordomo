@@ -100,23 +100,22 @@ export class AddToOrder extends Component {
     var unit = this.state.unit,
       title = this.state.title
 
-
+    
     // order details dictionary
     let dict = {
       business_id: this.props.business_id,
       item_id: parseInt(this.props.item_id),
-      order_id: this.props.order_dict ? parseInt(this.props.order_dict["order_id"]) : 0,
+      order_id: this.props.order_dict["order_id"] ? parseInt(this.props.order_dict["order_id"]) : 0,
       supplier_id: this.props.supplier_id,
       amount: value,
       unit: unit
     }
-
+    
 
     let request = base_url + "/order/add/item"
 
     let response
 
-    // 
     $.ajax({
       url: request,
       type: "POST",
@@ -129,15 +128,13 @@ export class AddToOrder extends Component {
 
         let data = { "amount": dict["amount"], "unit": getUnitById(unit), "item_name": title }
         scree_alert('success', data, "add_to_order");
-
+          
       },
       error: function (err) {
         response = err
         // scree_alert('error', dict["amount"], getUnitById(unit), title);
         let data = { "amount": dict["amount"], "unit": getUnitById(unit), "item_name": title }
         scree_alert('error', data, "add_to_order");
-
-
       }
 
 

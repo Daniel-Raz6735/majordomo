@@ -1,18 +1,14 @@
 import { notifications_levels } from './notifications_data'
 import { set_offset } from './time_manager';
 
-export default class TableConst {
-    static val = {
-        dict: {
 
-        }
-    };
-}
+
+export var preference,orders
+
 
 export var data_dict;
 
 export function create_initial_data_dict(data) {
-    data_dict = data;
     //this function gets a response from the server and breaks it down to 4 dictionary 
     var dict = {}
     if (data) {
@@ -23,7 +19,6 @@ export function create_initial_data_dict(data) {
         dict["weights"] = create_weights_dict(data["weights"], dict["suppliers"], dict["notifications"], dict["orders"])
 
         
-
         // download(JSON.stringify(dict) , 'dict.json', 'text/plain');
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
         if (!dict["weights"]) {
