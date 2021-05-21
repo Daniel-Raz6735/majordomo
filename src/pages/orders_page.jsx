@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ButtonsComponent, TitleComponent } from "../components/bars";
+import { ButtonsComponent, TitleComponent } from "../components/bars/bars";
 import { Animation } from 'rsuite';
 import whatsapp_icon from '../images/icons/contact/whatsapp.svg';
 import phone_icon from '../images/icons/contact/phone.svg';

@@ -1,20 +1,19 @@
 import "./bars.css"
-import inventory from '../images/icons/inventory.svg'
-import home from '../images/icons/home.svg'
-import cart from '../images/icons/cart.svg'
-import profile from '../images/profile.svg'
+import inventory from '../../images/icons/inventory.svg'
+import home from '../../images/icons/home.svg'
+import cart from '../../images/icons/cart.svg'
+import profile from '../../images/profile.svg'
 import React, { Component } from 'react';
-import { auth } from '../config/firebaseConfig'
-import { Dictionary, getRTL, getTime } from '../Dictionary';
-import InventoryPage from "../pages/inventory_page"
-import OrdersPage from "../pages/orders_page"
+import { auth } from '../../config/firebaseConfig'
+import { Dictionary, getTime } from '../../Dictionary';
+import InventoryPage from "../../pages/inventory_page"
+import OrdersPage from "../../pages/orders_page"
 import { Button, Loader } from 'rsuite';
-import { create_initial_data_dict, confirm_papulation } from './data_dictionary';
-import SettingPage from "../pages/settings_page"
-import fake_data from '../fake_data.json'
-import { base_url } from '../index'
+import { create_initial_data_dict, confirm_papulation } from '../data_dictionary';
+import SettingPage from "../../pages/settings_page"
+import { base_url } from '../../index'
 import $ from 'jquery'
-import HomePage from "../pages/home page/home_page"
+import HomePage from "../../pages/home page/home_page"
 import { Notification as scrren_notification } from "rsuite";
 var socket_client = require('websocket').w3cwebsocket;
 

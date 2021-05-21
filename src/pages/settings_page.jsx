@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import { Button, Dropdown, Loader, Nav, Sidenav, Toggle } from "rsuite";
-import { NavBar } from "../components/bars";
+import { NavBar } from "../components/bars/bars";
 import { Dictionary } from "../Dictionary";
 import profilePic from "../images/profile_pic.png";
 import './settings_page.css'

@@ -4,7 +4,7 @@ import './LoginPage.css';
 import $ from 'jquery';
 import { auth } from '../../config/firebaseConfig';
 import { Dictionary } from '../../Dictionary';
-import { SiteFrame } from '../../components/bars';
+import { SiteFrame } from '../../components/bars/bars';
 import logo from '../../images/icons/Majordomo logo.svg'
 require('jquery-validation');
 

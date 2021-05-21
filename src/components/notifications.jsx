@@ -8,7 +8,7 @@ import { action_btn, notification_dict, category_symbols, category_colors, notif
 import { Dictionary, getRTL } from '../Dictionary';
 import { CategoryDrawer } from './drawer';
 import v_icon from '../images/icons/v icon.svg'
-import { ButtonsComponent } from './bars';
+import { ButtonsComponent } from './bars/bars';
 import { confirm_papulation, getUnitById } from './data_dictionary';
 import { notifications_levels } from './notifications_data';
 
