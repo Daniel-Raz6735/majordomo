@@ -144,7 +144,7 @@ export class SiteFrame extends Component {
 
             case "OrdersPage":
                 i = 2;
-                page = <OrdersPage key={key} dict={dict} />
+                page = <OrdersPage key={key} update={update} dict={dict} />
                 break;
 
             case "InventoryPage":
@@ -220,7 +220,13 @@ export class SiteFrame extends Component {
 }
  
 export function silent_refresh(){
+    //refresh the site data using the silent trigger
     $("#silent_refresh").val("").change();
+}
+ 
+export function refresh(){
+    //refresh the site data using the trigger
+    $("#refresh").val("").change();
 }
 
 

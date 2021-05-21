@@ -47,7 +47,7 @@ export class OrdersPage extends Component {
 
     }
     componentDidMount() {
-        this.sort_dict(1)
+        // this.sort_dict(1)
         console.log(this.props.dict)
     }
 
@@ -78,7 +78,8 @@ export class OrdersPage extends Component {
             //     page.push(<OrderCategory order_dict={current_dict[key]} />)
             //     page.push(<AddItem />)
             // });
-            this.setState({ page });
+            return page;
+            // this.setState({ page });
         }
         else {
             console.log("problem with data. try reloading")
@@ -111,7 +112,7 @@ export class OrdersPage extends Component {
                 sorted_sellers.forEach(supplier => {
 
                     var supplier_id = supplier[0]
-                    page.push(<OrderCategory key={"order_cat" + supplier} weights_dict={weight_sup_dict[supplier_id]} supplier={suppliers_dict[supplier_id]} />)
+                    page.push(<OrderCategory key={"order_cat" + supplier+ this.props.update} weights_dict={weight_sup_dict[supplier_id]} supplier={suppliers_dict[supplier_id]} />)
                 })
 
 
@@ -136,13 +137,13 @@ export class OrdersPage extends Component {
 
 
     render() {
-
+        var page = this.sort_dict(1);
         return (
             <div className="orders_page_container">
                 <TitleComponent key={"tile_comp"} title_name="orders" />
                 <ButtonsComponent key="Order_btns" def_btn={1} btn_names={["item_type", "supplier"]} callback={this.sort_dict} />
                 <SearchBar key={"search_bar_order_page"} />
-                {this.state.page}
+                {page}
             </div>
 
         );

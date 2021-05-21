@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Badge, ButtonToolbar, Modal } from "rsuite";
 import { NotificationList } from "../components/notifications";
 import { Dictionary, getRTL } from "../Dictionary";
-import { silent_refresh, TitleComponent } from "../components/bars";
+import { refresh, silent_refresh, TitleComponent } from "../components/bars";
 import './inventory_page.css'
 import cart_plus from '../images/icons/orders/cart_plus.svg'
 import x_icon from '../images/x_icon.svg'
@@ -128,7 +128,7 @@ export class AddToOrder extends Component {
 
         let data = { "amount": dict["amount"], "unit": getUnitById(unit), "item_name": title }
         scree_alert('success', data, "add_to_order");
-        silent_refresh()
+        refresh()
           
       },
       error: function (err) {
