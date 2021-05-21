@@ -5,7 +5,7 @@ import './MainUserPage.css'
 import $, { data } from 'jquery';
 import { NotificationBlock } from "../../components/notifications"
 
-import { BottomBar, NavBar } from "../../components/bars"
+import { BottomBar, NavBar } from "../../components/bars/bars"
 import ReactDOM from 'react-dom';
 
 import cart_plus from '../../images/icons/orders/cart_plus.svg'

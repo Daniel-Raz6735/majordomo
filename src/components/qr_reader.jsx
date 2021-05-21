@@ -11,7 +11,7 @@ import { Dictionary } from '../Dictionary';
 import $ from 'jquery';
 import { base_url } from '..';
 import { scree_alert } from '../pages/inventory_page'
-import { showNotification } from './bars';
+import { showNotification } from './bars/bars';
 
 export class Scanner extends Component {
     state = {

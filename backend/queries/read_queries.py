@@ -62,13 +62,12 @@ class ReadQueries:
         return final_query, 200
 
     @staticmethod
-    def get_item(item_id, business_id=None):
-        """creates an SQL query that will return a food_item"""
+    def get_items(item_id=None, business_id=None):
+        """creates an SQL query that will return all items.
+        If provided business_id and item_id can focus the query"""
         conditions = []
         if item_id:
             conditions.append(["AND", "item_id", "=", int(item_id)])
-        else:
-            raise HTTPException(status_code=400, detail="No item id sent")
         if business_id is not None:
             conditions.append(["AND", "business_id", "=", int(business_id)])
         final_query, res_code = DbQueries.select_query([["food_items"]], [], conditions)

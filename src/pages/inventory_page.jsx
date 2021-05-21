@@ -2,14 +2,14 @@ import React, { Component } from "react";
 import { Badge, ButtonToolbar, Modal } from "rsuite";
 import { NotificationList } from "../components/notifications";
 import { Dictionary, getRTL } from "../Dictionary";
-import { TitleComponent } from "../components/bars";
+import { refresh, silent_refresh, TitleComponent, showNotification} from "../components/bars/bars";
 import './inventory_page.css'
 import cart_plus from '../images/icons/orders/cart_plus.svg'
 import x_icon from '../images/x_icon.svg'
 import $ from 'jquery'
 import { base_url } from "..";
 import { getUnitById } from "../components/data_dictionary";
-import { showNotification } from "../components/bars"
+
 
 
 
@@ -105,7 +105,7 @@ export class AddToOrder extends Component {
     let dict = {
       business_id: this.props.business_id,
       item_id: parseInt(this.props.item_id),
-      order_id: this.props.order_dict["order_id"] ? parseInt(this.props.order_dict["order_id"]) : 0,
+      order_id: (this.props.order_dict && this.props.order_dict["order_id"]) ? parseInt(this.props.order_dict["order_id"]) : 0,
       supplier_id: this.props.supplier_id,
       amount: value,
       unit: unit
@@ -128,6 +128,7 @@ export class AddToOrder extends Component {
 
         let data = { "amount": dict["amount"], "unit": getUnitById(unit), "item_name": title }
         scree_alert('success', data, "add_to_order");
+        refresh()
           
       },
       error: function (err) {
@@ -233,7 +234,7 @@ export function scree_alert(funcName, data, type) {
   switch (type) {
     case "add_to_order":
       messeges = { "success": Dictionary["item_added"], "error": Dictionary["item_added_failed"] }
-      description = "" + data["amount"] + " " + data["unit"] + " " + data["item_name"]
+      description =""+ data["amount"]+" "+ data["unit"]+" "+ data["item_name"]
       break
 
 
@@ -247,8 +248,8 @@ export function scree_alert(funcName, data, type) {
       description = "test"
       break
   }
-  var title = funcName === 'success' ? messeges["success"] : messeges["error"]
-  showNotification(funcName, title, description)
+  var title=funcName === 'success' ? messeges["success"] : messeges["error"]
+  showNotification(funcName,title,description)
 
 }
 
