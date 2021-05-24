@@ -10,7 +10,6 @@ import pairing_complete from '../images/icons/pairing_complete.svg';
 import { Dictionary } from '../Dictionary';
 import $ from 'jquery';
 import { base_url } from '..';
-import { scree_alert } from '../pages/inventory_page'
 import { showNotification } from './bars/bars';
 
 export class Scanner extends Component {
@@ -158,17 +157,17 @@ export class ModalDemo extends React.Component {
 
     // change active select filter
     change_active(kind) {
-        if (kind == "Item") {
+        if (kind === "Item") {
             this.setState({ item_found: false, is_item: true, scaned: false })
         }
-        else if (kind == "Container ID")
+        else if (kind === "Container ID")
             this.setState({ container_id_found: false, is_item: false, scaned: false })
     }
 
     //test dict and see if their is an item with the attribute 'value' that is equal to value
     testExistenceInDict(value, data_dict) {
         for (const [key, obj] of Object.entries(data_dict)) {
-            if (obj["value"] == value)
+            if (obj["value"] === value)
                 return true;
         }
         return false;

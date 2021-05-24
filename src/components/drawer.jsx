@@ -676,7 +676,7 @@ function get_relavent_keys(data, num_of_days) {
   keys.forEach(key => {
     var recent_date = new Date(sorted_keys[0]);
     var new_date = new Date(key);
-    if (new_date.getHours() != recent_date.getHours())
+    if (new_date.getHours() !== recent_date.getHours())
       sorted_keys.push(key);
   });
   return sorted_keys.reverse();
