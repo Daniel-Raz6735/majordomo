@@ -188,7 +188,6 @@ class UpdateQueries:
             raise HTTPException(status_code=500, detail="Server error")
         return query, res_code
 
-
     @staticmethod
     def edit_user(info: UserInfo):
         info_dict = info.dict()
@@ -202,8 +201,6 @@ class UpdateQueries:
             split_mail = info_dict["email"]
             if len(split_mail) != 2:
                 cols_to_set.append("email_domain_name")
-
-
 
 #         address: "vegetables place, JLM"
 # business_id: null
@@ -219,7 +216,6 @@ class UpdateQueries:
 #             cols_to_set.append("price_per_unit")
 #             vals_to_set.append(price_per_unit)
 #         return update_table_query("users ", cols_to_set, vals_to_set, conditions, include_t_name)
-
 
     def add_notification(self, business_id, item_id, notification_level, message=None, remove_only=False):
         """remove all previous notifications and if not remove_only add a notification to the data """

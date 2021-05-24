@@ -73,6 +73,26 @@ class DbQueries:
         return select, from_q, where, group_by
 
     @staticmethod
+    def condition_creator(cond_arr):
+        """this function gets a list of lists of conditions and makes an sql where statement
+         cond_arr: [[operator (send and for default), col name, condition operator, col 2 name]...]"""
+        where = ""
+        if cond_arr and len(cond_arr) > 0:
+            for i in range(len(cond_arr)):
+                condition = cond_arr[i]
+                if len(condition) == 4:
+                    if i == 0:
+                        first = condition.pop(0).lower()
+                        not_arr = ["not", "or not", "and not"]
+                        if first in not_arr:
+                            condition.insert(0, " NOT ")
+                for cond in condition:
+                    where += " " + str(cond)+" "
+        else:
+            where = None
+        return where
+
+    @staticmethod
     def parse_params_with_nick(lis):
         """receives a list that contains a list of lists and returns an SQL string that represents them
             input:[[sql key 1],[sql key 2, nick],[sql key 3]......]
