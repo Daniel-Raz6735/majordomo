@@ -245,7 +245,7 @@ def get_users(business_id: int = None, get_supplier: bool = False, get_businesse
     #     business_query = readQ.get_users_query(business_id=business_id)
     #     res["businesses"] = connection.get_result(business_query)
     for user in res["users"]:
-        user["email"] = user["email_user_name"]+"@"+user["email_domain_name"]
+        user["email"] = user["email_user_name"] + "@" + user["email_domain_name"]
     return res
 
 
@@ -476,6 +476,17 @@ async def add_order_item(item: OrderItem):
     #                                                 arr)
     # await manager.broadcast(f"weights updated on #{client_time}", 1)
     # return process_create_query([[query, "add weights"]], res_code)
+
+
+#  todo add validation to method
+@app.delete('/order/remove/item')
+async def add_order_item(order_id: int, item_id: int, business_id: int):
+    """remove item from order"""
+    connection = Connection()
+    deleter = deleteQ(connection)
+    query = deleter.remove_order_item(order_id, item_id, business_id)
+    connection.execute_query(query, "Unable to delete item from order")
+    del connection
 
 
 def process_read_query(query, res_code=200):
