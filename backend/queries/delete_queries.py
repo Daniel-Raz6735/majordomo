@@ -15,7 +15,6 @@ from db_queries import DbQueries
 #     return "200"
 
 
-
 class DeleteQueries:
     def __init__(self, connection=False):
         if not connection:
