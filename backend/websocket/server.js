@@ -1,13 +1,17 @@
 
 
-const port = 8888;
+const WebSocket = require('ws');
 const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const express = require('express');
+const port = 8888;
 const app = express();
 app.use( express.static('public') );
-app.get('/curl', (req, res) => {brodcastAll(req.params["message"])});
+app.get('/ws_test', (req, res) => {
+    brodcastAll(req.params["message"]);
+    res.json({ok: true});
+});
 
 const httpsServer = https.createServer(app);
 //     ,{
@@ -19,7 +23,6 @@ httpsServer.listen( port, function listening(){
     console.log( 'listening on ' + port );
 });
 
-const WebSocket = require('ws');
 var WebSocketServer = WebSocket.Server
 , wss = new WebSocketServer({ port: 8010 });
 wss.on('connection', function (ws) {
