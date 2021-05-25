@@ -479,10 +479,11 @@ async def add_order_item(item: OrderItem):
 
 
 @app.get('/test')
-async def test_web_socket_js(message: Optional[str] = "bla"):
+async def test_web_socket_js(message: str = "bla"):
     URL = "http://localhost:8888/ws_test?message="+message
     PARAMS = {'message': message}
     requests.get(url=URL, params=PARAMS)
+    return message;
 
 
 
