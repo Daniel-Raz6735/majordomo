@@ -13,9 +13,9 @@ import Chart from 'chart.js'
 import { base_url } from '../index';
 import $ from 'jquery';
 import info_symbol from '../images/icons/info_symbol.svg'
-import { getUnitById } from './data_dictionary';
+import { data_dict, getUnitById } from './data_dictionary';
 import { getDate } from './containers'
-import { get_date,get_time, set_offset } from './time_manager';
+import { get_date, get_time, set_offset, get_hours, get_table_key } from './time_manager';
 import moment from 'moment';
 
 
@@ -209,15 +209,19 @@ export class ItemPage extends Component {
   /* shows all of the information about an item and its statistics*/
   constructor(props) {
     super(props);
+    this.devide_data = this.devide_data.bind(this);
+    this.diluteKeys = this.diluteKeys.bind(this);
+    this.get_daily_update = this.get_daily_update.bind(this);
+    this.get_weekly_update = this.get_weekly_update.bind(this);
+    this.get_monthly_update = this.get_monthly_update.bind(this);
     this.state = {
       page: "",
       dropdown_content: "",
       active_index: 0,
-      dates_to_pull: [30, 7, 1]
+      dates_to_pull: [30, 7, 1],
+      diluteing_metohds: [this.get_monthly_update, this.get_weekly_update, this.get_daily_update]
 
     }
-    this.devide_data = this.devide_data.bind(this);
-    this.get_relavent_data = this.get_relavent_data.bind(this);
 
   }
 
@@ -258,7 +262,7 @@ export class ItemPage extends Component {
           var d = set_offset(obj["date"])
           if (d !== undefined) {
             obj["date"] = d;
-            var date =get_date(d),
+            var date = get_date(d),
               time = get_time(d);
             if (!(date in date_dict))
               date_dict[date] = {}
@@ -275,56 +279,198 @@ export class ItemPage extends Component {
     this.setState({ page, dropdown_content, date_dict });
   }
 
-  get_relavent_data(res, days) {
-    /* takes all data from the past dates and puts them in a dict that the keys are the wighings and the */
-    var min_date = moment().startOf('day').fromNow();
-    // min_date.subtract(days, 'days');
 
-    // var min_date = moment().startOf('day').fromNow();
-    // var min_date = get_old_date(new Date(), days).getTime(),
-    var relavent_data = {}, sorted_data = {};
-    if (res && res.length > 0) {
-      res.forEach(weighing => {
-        var date = new Date(weighing["date"]).getTime()
-        if (date >= min_date) {
-          relavent_data[date] = weighing;
-        }
-      })
-      var keys = Object.keys(relavent_data).sort();
-
-      keys = get_relavent_keys(relavent_data)
-      keys.forEach(key => { sorted_data[key] = relavent_data[key] })
-
-      var last_weight = 0, range = 0.1, last_date, no_repatition_dict = {};
-      console.log(sorted_data)
-      Object.keys(sorted_data).forEach(date_key => {
-        var current_weight = sorted_data[date_key]["weight"]
-        var diffarence = Math.abs(current_weight - last_weight)
-        if (diffarence > range) {
-          no_repatition_dict[date_key] = sorted_data[date_key]
-          last_weight = current_weight
-          last_date = date_key
-        }
-
-      })
-      return no_repatition_dict;
+  /* gets a result dict and returns a daily view of the weights.
+ the daily veiw is a dict with one sample from each hour in the last day 
+ (the day is considering 00:00 of the previous day) */
+  get_daily_update(res) {
+    var today = moment(), timeRes = {}, dateRes = {}, result = {}, todayTimes = {}, num_of_hours_today = Number.parseInt(get_hours(moment()))
+    if (res && res[get_date(today)] !== undefined) {
+      let todays = res[get_date(today)];
+      let temp = {}
+      if (todays) {
+        Object.keys(todays).sort().forEach(key => {
+          temp[key] = todays[key];
+        });
+        todayTimes = this.diluteKeys(temp, num_of_hours_today, 1);
+      }
     }
-    return res
+    var _24hr = moment().subtract(1, 'days'),
+      yesterdate = get_date(_24hr),
+      timeNow = get_time(_24hr);
+
+    if (yesterdate in res) {
+      var yesterday = res[yesterdate]
+      Object.keys(yesterday).sort().forEach(key => {
+        if (key > timeNow)
+          dateRes[key] = yesterday[key];
+        else
+          timeRes[key] = yesterday[key];
+      })
+    }
+    var DateD = this.diluteKeys(timeRes, 24 - num_of_hours_today, 1);
+    var timesD = this.diluteKeys(dateRes, num_of_hours_today, 1);
+    result = Object.assign({}, DateD, timesD, todayTimes);
+    return result;
+  }
+
+  /* gets a result dict and returns a weekly view of the weights.
+  the weekly veiw is a dict with 2-3 (depending on the spred of the weights) 
+  samples from each day in the past week*/
+  get_weekly_update(res) {
+    var result = {};
+    if (res && typeof (res) == 'object') {
+      var keys = Object.keys(res).sort();
+      if (keys.length < 1)
+        return result;
+      for (let i = 6; i >= 0; i--) {
+        let testDate = moment().subtract(i, 'days')
+        var obj = res[get_date(testDate)]
+        if (obj !== undefined) {
+          let times = {}
+          Object.keys(obj).sort().forEach(key => { times[key] = obj[key] })
+          var diluted = this.diluteKeys(times, 3, 2)
+          result = Object.assign({}, result, diluted);
+        }
+
+      }
+    }
+    return result;
+  }
+  /* gets a result dict and returns a monthly view of the weights.
+ the monthly veiw is a dict with one sample from each day and 2-3
+ (depending on the spred of the weights) samples of the last day */
+  get_monthly_update(res) {
+    var result = {};
+    if (res && typeof (res) == 'object') {
+      var keys = Object.keys(res).sort();
+      if (keys.length < 1)
+        return result;
+      for (let i = 29; i >= 0; i--) {
+        let testDate = moment().subtract(i, 'days')
+        var obj = res[get_date(testDate)]
+        if (obj !== undefined) {
+          let times = {}
+          Object.keys(obj).sort().forEach(key => { times[key] = obj[key] })
+          var diluted = i !== 0 ? this.diluteKeys(times, 1, 3) : this.diluteKeys(times, 3, 2)//last day will have 3 keys
+          result = Object.assign({}, result, diluted);
+        }
+
+      }
+    }
+    return result;
+  }
+
+  /*dilute the keys enterd up to num_of_keys */
+  diluteKeys(res, num_of_keys, code) {
+    if (!res || typeof (res) !== 'object')
+      return res;
+    var keys = Object.keys(res), result = {};
+    if (keys.length <= 0)
+      return result;
+    //if there are not the minimal amount of keys expected return all
+    if (keys.length < num_of_keys) {
+      Object.keys(res).forEach(key => {
+        var current_val = res[key],
+          dateTimeKey = get_table_key(current_val['date']);
+        if (dateTimeKey)
+          result[dateTimeKey] = current_val["weight"]
+      });
+      return result;
+    }
+
+    var lastKey = keys[keys.length - 1]
+    switch (code) {
+      case 1:// first weying every hour
+      default:
+        var minHour = -1
+        keys.forEach(key => {
+          let val = res[key]
+          let thisHour = get_hours(val["date"]);
+          if (thisHour !== minHour || key === lastKey) {
+            let k = get_table_key(val['date']);
+            result[k] = val["weight"];
+          }
+          minHour = thisHour
+        })
+        break;
+      case 2: // in a case of weekly weigts. this case is called per day
+        var foundSecond = false, foundThird = false;
+        var key = keys.shift()
+        let val = res[key],
+          date = moment(val["date"]);
+        if (date !== undefined)
+          result[get_table_key(date)] = val['weight'];
+
+        //get two samples from this day one in morning and one in afternoon
+        for (let i = 0; i < keys.length; i++) {
+          let val = res[keys[i]], date = moment(val["date"]);
+          if (date) {
+            let eightAM = moment(val["date"]).set('hour', 8).valueOf(),
+              fourPM = moment(val["date"]).set('hour', 16).valueOf(),
+              this_date = date.valueOf();
+            if (!foundSecond) {
+              if (this_date >= eightAM) {
+                result[get_table_key(date)] = val['weight'];
+                foundSecond = true;
+              }
+            }
+            else {
+              if (this_date >= fourPM) {
+                result[get_table_key(date)] = val['weight'];
+                foundThird = true;
+                break;
+              }
+            }
+          }
+        }
+        if (!foundThird) {
+          let val = res[lastKey], date = moment(val["date"]);
+          if (date)
+            result[get_table_key(date)] = val['weight'];
+        }
+        break;
+
+      case 3: // in a case of monthly weigts. this case is called per day
+        let found = false;
+        for (let i = 0; i < keys.length; i++) {
+          let val = res[keys[i]], date = moment(val["date"]);
+          if (date) {
+            let eightAM = moment(val["date"]).set('hour', 8).valueOf(),
+              this_date = date.valueOf();
+            if (this_date >= eightAM) {
+              result[get_table_key(date)] = val['weight'];
+              found = true;
+              break;
+            }
+          }
+        }
+
+        if (!found) {
+          let val = res[lastKey], date = moment(val["date"]);
+          if (date)
+            result[get_table_key(date)] = val['weight'];
+        }
+        break;
+
+    }
+    return result;
   }
 
   render() {
     let active_index = this.state.active_index, disabled = false,
       active_chart = this.state.dates_to_pull[active_index], chart,
+      diluteing_metohd = this.state.diluteing_metohds[active_index],
       res = this.state.date_dict;
     if (res) {
-      var relavent_data = this.get_relavent_data(res, active_chart)
-
       if (res.length === 0) {
         chart = <div className="no_data">No data to show</div>
         disabled = true
       }
-      else
+      else {
+        var relavent_data = diluteing_metohd(res)
         chart = <ChartComponent {...this.props} key={active_chart} num_of_days={active_chart} dict={relavent_data} />
+      }
 
     }
     else
@@ -378,7 +524,6 @@ export class ChartComponent extends Component {
       chart_id: "food_chart" + this.props.item_id + "chart" + props.num_of_days,
       chart: null
     };
-    this.devide_data = this.devide_data.bind(this);
     this.pharse_date = this.pharse_date.bind(this);
     this.render_chart = this.render_chart.bind(this);
 
@@ -390,17 +535,17 @@ export class ChartComponent extends Component {
       point_colors = [], point_radius = []
 
     if (dict && Object.keys(dict).length > 0) {
-      Object.keys(dict).forEach(date => {
-        var weight = dict[date]["weight"]
+      Object.keys(dict).forEach(key => {
+        var weight = dict[key]
         if (weight !== undefined) {
           weights.push(weight);
           point_colors.push("rgba(253, 94, 83, 0)")
           point_radius.push(1)
-          console.log(date)
-          date_time.push(this.pharse_date(date));
+          date_time.push(key);
         }
-
       });
+      // console.log(weights)
+      // console.log(date_time)
       var weight_info = this.props.weight_info,
         setName = weight_info ? weight_info["item_name"] : Dictionary["unknown"]
 
@@ -411,12 +556,7 @@ export class ChartComponent extends Component {
       this.setState({ chart: <div>No data to show</div> })
     }
   }
-  devide_data(res) {
 
-    // if (res && res.length > 0)
-
-    // else { }
-  }
   pharse_date(date) {
     if (!date)
       return date
@@ -459,6 +599,7 @@ export class ChartComponent extends Component {
         })
       })
     }
+    // console.log(sets)
     new Chart(ctx, {
       type: 'line',
       data: {
@@ -667,17 +808,4 @@ const ContainerInformationTip = (props) => {
       </div>
     </Whisper>
   )
-}
-
-function get_relavent_keys(data, num_of_days) {
-  //sort a data array with weights
-  var keys = Object.keys(data).sort().reverse();
-  var sorted_keys = [keys.pop()];
-  keys.forEach(key => {
-    var recent_date = new Date(sorted_keys[0]);
-    var new_date = new Date(key);
-    if (new_date.getHours() != recent_date.getHours())
-      sorted_keys.push(key);
-  });
-  return sorted_keys.reverse();
 }
