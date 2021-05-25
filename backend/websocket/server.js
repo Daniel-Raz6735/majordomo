@@ -1,5 +1,3 @@
-
-
 const WebSocket = require('ws');
 const http = require('http');
 const https = require('https');
@@ -9,16 +7,18 @@ const port = 8888;
 const app = express();
 app.use( express.static('public') );
 app.get('/ws_test', (req, res) => {
-    brodcastAll(req.params["message"]);
+    console.log("message recived");
+        console.log(req.params);
+        brodcastAll(req.params["message"]);
     res.json({ok: true});
 });
 
-const httpsServer = https.createServer(app);
+const httpsServer = http.createServer(app);
 //     ,{
     //     cert: fs.readFileSync('/etc/letsencrypt/live/majordomo.cloudns.asia/fullchain.pem;'),
     //     key: fs.readFileSync('/etc/letsencrypt/live/majordomo.cloudns.asia/privkey.pem;')
     //   }
-    
+
 httpsServer.listen( port, function listening(){
     console.log( 'listening on ' + port );
 });
@@ -31,10 +31,10 @@ wss.on('connection', function (ws) {
 console.log("Server started");
 var Msg = '';
 function brodcastAll(message) {
-    console.log('Received from client: %s', message);
-   
+        console.log('Received from client: %s', message);
+
     wss.clients.forEach(function each(client) {
-        console.log(client)
+            //console.log(client)
         if (client.readyState === WebSocket.OPEN) {
             client.send(message);
             console.log("sent")
