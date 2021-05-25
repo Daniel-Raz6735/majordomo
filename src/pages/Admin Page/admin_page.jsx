@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Col, Container, Content, ControlLabel, Drawer, Dropdown, Footer, Form, FormControl, FormGroup, Header, HelpBlock, Icon, Modal, Nav, Navbar, Table } from 'rsuite';
+import { Button,  Container,  ControlLabel,  Dropdown, Form, FormControl, FormGroup, Header, HelpBlock, Icon, Modal, Nav, Navbar, Table } from 'rsuite';
 import LoginComponent from '../login page/LoginPage';
 import './admin_page.css';
 import $ from 'jquery';

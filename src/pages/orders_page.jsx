@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ButtonsComponent, TitleComponent } from "../components/bars/bars";
+import { ButtonsComponent, TitleComponent } from "../components/bars/bars.jsx";
 import { Animation } from 'rsuite';
 import whatsapp_icon from '../images/icons/contact/whatsapp.svg';
 import phone_icon from '../images/icons/contact/phone.svg';
@@ -11,6 +11,7 @@ import './orders_page.css'
 import { Dictionary, getRTL } from "../Dictionary";
 import { CategoryDrawer, SearchBar } from "../components/drawer";
 import { Quantity } from "./inventory_page";
+import { base_url } from "../index.js";
 
 
 const { Collapse } = Animation;
@@ -48,7 +49,6 @@ export class OrdersPage extends Component {
     }
     componentDidMount() {
         // this.sort_dict(1)
-        console.log(this.props.dict)
     }
 
     call_back(toggle_number) {
@@ -112,7 +112,7 @@ export class OrdersPage extends Component {
                 sorted_sellers.forEach(supplier => {
 
                     var supplier_id = supplier[0]
-                    page.push(<OrderCategory key={"order_cat" + supplier+ this.props.update} weights_dict={weight_sup_dict[supplier_id]} supplier={suppliers_dict[supplier_id]} />)
+                    page.push(<OrderCategory key={"order_cat" + supplier + this.props.update} weights_dict={weight_sup_dict[supplier_id]} supplier={suppliers_dict[supplier_id]} />)
                 })
 
 
@@ -189,16 +189,19 @@ class OrderCategory extends Component {
 
             if (sells_items && Object.keys(sells_items).length > 0) {
                 Object.keys(sells_items).forEach(key => {
-                    let temp = this.props.weights_dict && this.props.weights_dict[key] ? this.props.weights_dict[key] : null, item_name
+                    let temp = this.props.weights_dict && this.props.weights_dict[key] ? this.props.weights_dict[key] : null, item_name, orders_details
                     item_name = temp && temp["item_name"] ? temp["item_name"] : key
-                   
-                    if (sells_items[key]["order_details"])
-                        page.push(<Order order={sells_items[key]["order_details"]} item_id={item_name} />)
+                    orders_details = sells_items[key]["order_details"]
+
+                    if (orders_details) {
+                        console.log(temp)
+                        console.log(key)
+                        page.push(<Order key={"order" + key} order={orders_details} item_name={item_name} item_id={key} order_id={orders_details["order_id"]} />)
+                    }
                 })
             }
             page.push(<CategoryDrawer key={"cat_drawer_order_page"} weights_dict={this.props.weights_dict} order_drawer={true} />)
             // page.push(<AddItem weights_dict={this.props.weights_dict}/>)
-
 
         }
         return page
@@ -230,13 +233,15 @@ class Order extends Component {
             incraments: props.incraments ? props.incraments : 1,
             min: 1,
             max: 99,
-            delete_btn: ""
+            delete_btn: "",
+            business_id: this.props.business_id ? this.props.business_id : 1
 
         }
         this.handlePlus = this.handlePlus.bind(this);
         this.handleMinus = this.handleMinus.bind(this);
         this.handleButtonPress = this.handleButtonPress.bind(this)
         this.handleButtonRelease = this.handleButtonRelease.bind(this)
+        this.removeItem = this.removeItem.bind(this)
     }
 
 
@@ -259,12 +264,15 @@ class Order extends Component {
     }
 
     handleButtonPress() {
-        this.buttonPressTimer = setTimeout(() => this.setState({ delete_btn: <button className="delete_order_btn" onClick={() => console.log(this.props.order["order_id"])}>Delete</button> }), 500);
+        this.buttonPressTimer = setTimeout(() => this.setState({ delete_btn: <button onClick={this.removeItem} className="delete_order_btn" >Delete</button> }), 500);
     }
 
     handleButtonRelease() {
         clearTimeout(this.buttonPressTimer);
+    }
 
+    removeItem() {
+        let req = base_url + "/order/remove/item" + "?order_id=" + this.props.order_id + "&item_id=" + this.props.item_id + "&business_id=" + this.state.business_id
 
     }
 
@@ -285,7 +293,7 @@ class Order extends Component {
                     onMouseUp={this.handleButtonRelease}
                     onMouseLeave={this.handleButtonRelease} >
                     <div className="order_item_name">
-                        {this.props.item_id}
+                        {this.props.item_name}
                     </div>
                     <Quantity handlePlus={this.handlePlus} handleMinus={this.handleMinus} defult_val={quantity} value={this.state.quantity} unit={unit} />
                     {this.state.delete_btn}

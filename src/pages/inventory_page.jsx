@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Badge, ButtonToolbar, Modal } from "rsuite";
 import { NotificationList } from "../components/notifications";
 import { Dictionary, getRTL } from "../Dictionary";
-import { refresh, silent_refresh, TitleComponent, showNotification} from "../components/bars/bars";
+import { refresh,  TitleComponent, showNotification} from "../components/bars/bars";
 import './inventory_page.css'
 import cart_plus from '../images/icons/orders/cart_plus.svg'
 import x_icon from '../images/x_icon.svg'
@@ -228,6 +228,7 @@ export function scree_alert(funcName, data, type) {
 
   switch (type) {
     case "add_to_order":
+      default:
       messeges = { "success": Dictionary["item_added"], "error": Dictionary["item_added_failed"] }
       description =""+ data["amount"]+" "+ data["unit"]+" "+ data["item_name"]
       break
