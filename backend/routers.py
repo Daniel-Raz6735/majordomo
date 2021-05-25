@@ -482,8 +482,8 @@ async def add_order_item(item: OrderItem):
 async def test_web_socket_js(message: str = "bla"):
     URL = "http://localhost:8888/ws_test"
     PARAMS = {'message': message}
-    requests.get(url=URL, params=PARAMS)
-    
+    r = requests.get(url=URL, params=PARAMS)
+    return r.url
 
 #  todo add validation to method
 @app.delete('/order/remove/item')
