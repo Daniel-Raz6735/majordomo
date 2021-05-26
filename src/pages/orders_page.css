@@ -60,6 +60,18 @@
     box-shadow: 0px 0px 6px #00000054;
 }
 
+.list_header {
+    height: 80px;
+    background-color: #FFFFFF;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    padding: 5%;
+    border-radius: 5px;
+}
+
+
+
 .order_item_name {
     width: 40%;
     text-align: center;
@@ -70,4 +82,23 @@
     background-color: #FD4141;
     border-radius: 0pt 5pt 5pt 0pt;
     height: 70px;
+}
+
+.order_list_items{
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 50px 10px 10px;
+    width: 80%;   
+}
+
+.list_category_container{
+    box-shadow: 0px 0px 6px #00000054;
+    margin: 10px;
+}
+
+.rs-divider-horizontal{
+    height: 1px;
+    margin: auto;
+    background: black;
+    width: 90%;
 }

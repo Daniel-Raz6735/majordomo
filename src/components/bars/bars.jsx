@@ -15,9 +15,17 @@ import { base_url } from '../../index'
 import $ from 'jquery'
 import HomePage from "../../pages/home page/home_page"
 import { Notification as scrren_notification } from "rsuite";
+import export_list from '../../images/icons/orders/export_list.svg'
 var socket_client = require('websocket').w3cwebsocket;
 
 export var main_dict, update = 0
+
+
+var xDown = null;
+var yDown = null;
+var tab_index = 0
+var tabs = ["HomePage", "InventoryPage", "OrdersPage", "SettingPage"]
+
 
 
 export class SiteFrame extends Component {
@@ -29,14 +37,20 @@ export class SiteFrame extends Component {
             buttons: ["bottom_bar active", "bottom_bar", "bottom_bar", "bottom_bar"],
             page: <Loader speed="fast" size="lg" content="Loading..." center vertical />,
 
+
         }
         this.change_tab = this.change_tab.bind(this);
         this.send_msg = this.send_msg.bind(this);
         this.process_initial_data = this.process_initial_data.bind(this);
         this.loadSite = this.loadSite.bind(this);
+        this.handleTouchMove = this.handleTouchMove.bind(this);
+        this.handleTouchStart = this.handleTouchStart.bind(this);
+        this.getTouches = this.getTouches.bind(this);
 
     }
     componentDidMount() {
+
+    
         var ws = ""
         // var ws = new socket_client('wss://majordomo.cloudns.asia/ws/1/1');
 
@@ -93,7 +107,7 @@ export class SiteFrame extends Component {
             else {
                 update++;
                 confirm_papulation(main_dict, "process_initial_data", "initial data not recived well")
-                if (tab_name!=null)
+                if (tab_name != null)
                     this.change_tab(tab_name)
                 // download(JSON.stringify(dict) , 'file.json', 'text/plain');
 
@@ -110,7 +124,7 @@ export class SiteFrame extends Component {
     loadSite(business_id, tab_name) {
         //request all information for a business
         var request = base_url + '/get/current_view',
-        thisS= this;
+            thisS = this;
 
 
         if (business_id) {
@@ -167,14 +181,64 @@ export class SiteFrame extends Component {
         })
     }
 
+    getTouches(evt) {
+        return evt.touches ||             // browser API
+            evt.originalEvent.touches; // jQuery
+    }
+
+    handleTouchStart(evt) {
+        const firstTouch = this.getTouches(evt)[0];
+        xDown = firstTouch.clientX;
+        yDown = firstTouch.clientY;
+    };
+
+    handleTouchMove(evt) {
+        if (!xDown || !yDown) {
+            return;
+        }
+
+        var xUp = evt.touches[0].clientX;
+        var yUp = evt.touches[0].clientY;
+
+        var xDiff = xDown - xUp;
+        var yDiff = yDown - yUp;
+
+        if (Math.abs(xDiff) > Math.abs(yDiff)) {/*most significant*/
+            if (xDiff > 0) {
+                /* left swipe */ console.log("left")
+                if (tab_index+1 < 4) {
+                    tab_index++
+                    this.change_tab(tabs[tab_index])
+                }
+            } else {
+                if (tab_index >0) {
+                    tab_index--
+                    this.change_tab(tabs[tab_index])
+                }
+                /* right swipe */console.log("right")
+            }
+        }
+
+        /* reset values */
+        xDown = null;
+        yDown = null;
+    };
+
+
+
     render() {
+
+
 
         return (
 
-            <div className="main_user_page_container" >
+            <div className="main_user_page_container"   >
                 <AlertManeger />
-                <div className="site_data_cover">
+
+
+                <div className="site_data_cover" onTouchStart={this.handleTouchStart} onTouchMove={this.handleTouchMove}  >
                     {this.state.page}
+
                 </div>
 
 
@@ -217,13 +281,13 @@ export class SiteFrame extends Component {
 
     }
 }
- 
-export function silent_refresh(){
+
+export function silent_refresh() {
     //refresh the site data using the silent trigger
     $("#silent_refresh").val("").change();
 }
- 
-export function refresh(){
+
+export function refresh() {
     //refresh the site data using the trigger
     $("#refresh").val("").change();
 }
@@ -313,8 +377,11 @@ export class ButtonsComponent extends Component {
             btns.push(<button className="toolbar_btn" key={"toolbar" + i} onClick={() => this.btn_handler(i)} style={this.state.btn_styles[i]} >{Dictionary[btn_names[i]]}</button>);
             width += 33;
         }
+
+        let list = this.props.orders?<img src={export_list} alt="export" onClick={this.props.export_func} />:""
         return (<div className="toolbar_buttons" style={{ width: width + "%" }}>
             {btns}
+            {list}
         </div>);
     }
 }

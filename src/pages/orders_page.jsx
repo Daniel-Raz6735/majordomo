@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { ButtonsComponent, TitleComponent } from "../components/bars/bars.jsx";
-import { Animation } from 'rsuite';
+import { ButtonsComponent, refresh, TitleComponent } from "../components/bars/bars.jsx";
+import { Animation, Button, Divider } from 'rsuite';
 import whatsapp_icon from '../images/icons/contact/whatsapp.svg';
 import phone_icon from '../images/icons/contact/phone.svg';
 import envelope_icon from '../images/icons/contact/envelope.svg';
-// import up_arrow from '../images/icons/arrows/up_arrow.svg';
 import down_arrow from '../images/icons/arrows/down_arrow.svg';
 import $ from 'jquery'
 import './orders_page.css'
@@ -12,6 +11,9 @@ import { Dictionary, getRTL } from "../Dictionary";
 import { CategoryDrawer, SearchBar } from "../components/drawer";
 import { Quantity } from "./inventory_page";
 import { base_url } from "../index.js";
+import right_arrow from '../images/icons/arrows/right_arrow.svg'
+import { getUnitById } from "../components/data_dictionary.js";
+
 
 
 const { Collapse } = Animation;
@@ -32,6 +34,9 @@ export function sort_by_key_val(jsObj, sort_by_key, reverse) {
     return sortedArray;
 }
 
+export var items = {}
+
+
 //1
 export class OrdersPage extends Component {
     //this component will get a dictionary with one seller and will make a list out of it. 
@@ -39,20 +44,43 @@ export class OrdersPage extends Component {
         super(props);
         this.state = {
             page: [],
-            dict: props.dict
+            dict: props.dict,
+            export: false,
+            weight_sup_dict: null,
+            sorted_sellers: null
+
         }
         this.sort_dict = this.sort_dict.bind(this);
         this.call_back = this.call_back.bind(this);
         this.sort_by_supplier = this.sort_by_supplier.bind(this);
+        this.export_list = this.export_list.bind(this);
+        this.back_to_list = this.back_to_list.bind(this);
 
 
     }
     componentDidMount() {
         // this.sort_dict(1)
+
+
+
+    }
+
+    componentWillUnmount() {
+
+        items = {}
     }
 
     call_back(toggle_number) {
 
+    }
+
+    export_list() {
+        this.setState({ export: true })
+    }
+
+    back_to_list() {
+
+        this.setState({ export: false })
     }
 
     sort_dict(index) {
@@ -65,21 +93,17 @@ export class OrdersPage extends Component {
             switch (index) {
                 case 1://supplier
                 default:
+
                     page = this.sort_by_supplier()
                     // current_dict = suppliers_dict["suppliers"]
-
                     break;
                 case 0:// items
                     // current_dict = suppliers_dict["items"]
                     break;
             }
 
-            // Object.keys(current_dict).forEach(key => {
-            //     page.push(<OrderCategory order_dict={current_dict[key]} />)
-            //     page.push(<AddItem />)
-            // });
             return page;
-            // this.setState({ page });
+
         }
         else {
             console.log("problem with data. try reloading")
@@ -107,7 +131,7 @@ export class OrdersPage extends Component {
                         sellers[key] = 0
                 })
                 var sorted_sellers = sort_by_key_val(sellers, false, true)
-                let weight_sup_dict = dict["weights"]["supplier"]
+                var weight_sup_dict = dict["weights"]["supplier"]
 
                 sorted_sellers.forEach(supplier => {
 
@@ -115,10 +139,9 @@ export class OrdersPage extends Component {
                     page.push(<OrderCategory key={"order_cat" + supplier + this.props.update} weights_dict={weight_sup_dict[supplier_id]} supplier={suppliers_dict[supplier_id]} />)
                 })
 
-
             }
         }
-        return page;
+        return page
     }
     render_supplier(supplier) {
         if (supplier) {
@@ -137,16 +160,20 @@ export class OrdersPage extends Component {
 
 
     render() {
-        var page = this.sort_dict(1);
-        return (
-            <div className="orders_page_container">
-                <TitleComponent key={"tile_comp"} title_name="orders" />
-                <ButtonsComponent key="Order_btns" def_btn={1} btn_names={["item_type", "supplier"]} callback={this.sort_dict} />
-                <SearchBar key={"search_bar_order_page"} />
-                {page}
-            </div>
+        var page = this.sort_dict(1)
 
-        );
+        if (!this.state.export)
+            return (
+                <div className="orders_page_container">
+                    <TitleComponent key={"tile_comp"} title_name="orders" />
+                    <ButtonsComponent key="Order_btns" def_btn={1} btn_names={["item_type", "supplier"]} orders={true} export_func={this.export_list} callback={this.sort_dict} />
+                    <SearchBar key={"search_bar_order_page"} />
+                    {page}
+                </div>
+
+            );
+        else
+            return (<div><OrderList items={items} back_to_list={this.back_to_list} /></div>)
 
     }
 } export default OrdersPage
@@ -156,14 +183,15 @@ export class OrdersPage extends Component {
 class OrderCategory extends Component {
     constructor(props) {
         super(props);
-        this.remove_onClick = this.remove_onClick.bind(this);
 
-        this.render_supplier = this.render_supplier.bind(this);
         this.state = {
             page: [],
             show: true,
 
         };
+
+        this.remove_onClick = this.remove_onClick.bind(this);
+        this.render_supplier = this.render_supplier.bind(this);
 
     }
     componentDidMount() {
@@ -194,9 +222,8 @@ class OrderCategory extends Component {
                     orders_details = sells_items[key]["order_details"]
 
                     if (orders_details) {
-                        console.log(temp)
-                        console.log(key)
-                        page.push(<Order key={"order" + key} order={orders_details} item_name={item_name} item_id={key} order_id={orders_details["order_id"]} />)
+
+                        page.push(<Order key={"order" + key} supplier_name={this.props.supplier["name"]} order={orders_details} item_name={item_name} item_id={key} order_id={orders_details["order_id"]} />)
                     }
                 })
             }
@@ -245,6 +272,7 @@ class Order extends Component {
     }
 
 
+
     handleMinus() {
         var new_val = this.state.quantity - this.state.incraments;
 
@@ -274,6 +302,18 @@ class Order extends Component {
     removeItem() {
         let req = base_url + "/order/remove/item" + "?order_id=" + this.props.order_id + "&item_id=" + this.props.item_id + "&business_id=" + this.state.business_id
 
+
+        $.ajax({
+            url: req,
+            type: "DELETE",
+            success: function (res) {
+                refresh()
+
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        });
     }
 
 
@@ -283,6 +323,16 @@ class Order extends Component {
             quantity = this.props.order["amount"]
             unit = this.props.order["unit"]
         }
+
+        console.log(this.props.order)
+        let obj = { "item_name": this.props.item_name, "quantity": this.state.quantity, "unit": getUnitById(this.props.order["unit"]) }
+        if (!items[this.props.supplier_name])
+            items[this.props.supplier_name] = [obj]
+        else
+            items[this.props.supplier_name].push(obj)
+
+
+
         // unit = Dictionary[unit] ? Dictionary[unit] : Dictionary["unknown"]
         if (this.state) {
             return (
@@ -315,6 +365,9 @@ export class AddItem extends Component {
             page: []
         }
     }
+
+
+
     render() {
 
         return (
@@ -352,8 +405,13 @@ export class OrderHeader extends Component {
     }
 
     render() {
+        let clas = this.props.export_list ? "list_header order_toggler" : "order_header order_toggler"
+        let checkbox = this.props.export_list ? <div ><input onChange={() => this.props.func(this.props.cat_name)} style={{ width: "fit-content" }} type="checkbox" /></div> : ""
+
+
         return (
-            <div className="order_header order_toggler" onClick={(e) => this.props.on_click(e)}  >
+            <div className={clas} onClick={(e) => this.props.on_click(e)}  >
+                {checkbox}
                 <div className="order_item_name order_toggler">
                     {this.props.cat_name}
                 </div>
@@ -361,12 +419,134 @@ export class OrderHeader extends Component {
                     <img src={phone_icon} alt={Dictionary["phone"]} className="order_symbol" />
                     <img src={whatsapp_icon} alt={Dictionary["whatsapp"]} className="order_symbol" />
                     <img src={envelope_icon} alt={Dictionary["email"]} className="order_symbol" />
-
-
                 </div>
                 {this.state.arrow}
+
             </div>
 
         )
+    }
+}
+
+var sellers = []
+//1
+class OrderList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            page: [],
+            show: true
+
+        }
+
+        this.add_seller = this.add_seller.bind(this);
+        this.confirm_all = this.confirm_all.bind(this);
+    }
+
+
+
+    componentDidMount() {
+        console.log(items)
+        let page = []
+        Object.keys(items).forEach(seller => {
+            page.push(<OrderListCategory func={this.add_seller} key={"list_cat" + seller} seller={seller} />)
+        })
+        this.setState({ page })
+
+    }
+
+
+    add_seller(seller) {
+        if (!sellers.includes(seller))
+            sellers.push(seller)
+        else
+            sellers.splice(sellers.indexOf(seller), 1)
+        
+    }
+
+    confirm_all(){
+        console.log(this.props.items)
+    }
+
+    render() {
+
+        return (
+            <div>
+                <TitleComponent key={"title_list_comp"} title_name={"export_lists"} />
+                <div>Lists <img src={right_arrow} alt="back" onClick={this.props.back_to_list} /></div>
+                <Button onClick={this.confirm_all} style={{ color: "white", background: "#73D504" }}>Confirm all</Button>
+                {this.state.page}
+            </div>
+        )
+    }
+}
+
+
+//2
+class OrderListCategory extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            page: [],
+            show: true
+
+        }
+
+        this.remove_onClick = this.remove_onClick.bind(this)
+    }
+
+    componentDidMount() {
+        let page = []
+
+        for (let i = 0; i < items[this.props.seller].length; i++)
+            page.push(<OrderListItems item_name={items[this.props.seller][i].item_name} quantity={items[this.props.seller][i].quantity} unit={items[this.props.seller][i].unit} />)
+
+        this.setState({ page })
+    }
+
+    remove_onClick(e) {
+        if (e && $(e.target).attr('class')) {
+
+            if ($(e.target).attr('class').includes('order_toggler')) {
+                this.setState({ show: !this.state.show });
+            }
+        }
+        else
+            console.log("no e target enterd")
+    }
+
+    render() {
+
+        return (<div className="list_category_container ">
+            <OrderHeader export_list={true} cat_name={this.props.seller} func={this.props.func} on_click={this.remove_onClick} />
+            <Divider vertical={false} />
+            <Collapse key={"list_col" + this.props.seller} in={this.state.show}  >
+                {(props, ref) => <Panel {...props} ref={ref} orders={this.state.page} />}
+            </Collapse>
+            <Button style={{ color: "white", background: "#73D504" }}>Confirm</Button>
+        </div>)
+    }
+}
+
+
+//3
+class OrderListItems extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+
+
+        }
+    }
+
+    render() {
+        // reset items on list
+        items = {}
+
+        return (
+            <div className="order_list_items">
+                <div>{this.props.item_name}</div>
+                <div>{this.props.quantity} {" "} {this.props.unit}</div>
+            </div>)
     }
 }

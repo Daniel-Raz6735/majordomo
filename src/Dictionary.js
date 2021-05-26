@@ -81,6 +81,7 @@ export const Dictionary = new LocalizedStrings({
     new_item: "New item",
     unknown: "Unknown",
     cart: "Cart",
+    export_lists:"Export Lists",
 
     //settings page
     language: "Language",
@@ -165,6 +166,7 @@ export const Dictionary = new LocalizedStrings({
     add_item: "הוסף מוצר",
     new_item: "מוצר חדש",
     unknown: "לא ידוע",
+    export_lists:"ייצא רשימה",
 
     //settings page
     language: "שפה",
