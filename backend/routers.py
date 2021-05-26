@@ -1,5 +1,5 @@
 from fastapi.responses import HTMLResponse
-
+import requests
 from email_client import EmailManager
 from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
@@ -477,6 +477,13 @@ async def add_order_item(item: OrderItem):
     # await manager.broadcast(f"weights updated on #{client_time}", 1)
     # return process_create_query([[query, "add weights"]], res_code)
 
+
+@app.get('/test')
+async def test_web_socket_js(message: str = "bla"):
+    URL = "http://localhost:8888/ws_test"
+    PARAMS = {'message': message}
+    r = requests.get(url=URL, params=PARAMS)
+    return r.url
 
 #  todo add validation to method
 @app.delete('/order/remove/item')

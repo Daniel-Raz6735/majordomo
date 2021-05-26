@@ -11,7 +11,6 @@ import { base_url } from "..";
 import { getUnitById } from "../components/data_dictionary";
 
 
-
 class InventoryPage extends Component {
   // constructor(props) {
   //     super(props);
