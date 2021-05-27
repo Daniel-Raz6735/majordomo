@@ -6,10 +6,13 @@ const express = require('express');
 const port = 8888;
 const app = express();
 app.use(express.static('public'));
-app.get('/ws_test', (req, res) => {
+app.get('/weight_added', (req, res) => {
     console.log("message recived");
-    console.log(req.query.message);
-    brodcastAll(req.query.message);
+    var message = req.query.message
+    console.log(message);
+    brodcastAll(message);
+    res.send(message)
+    
 });
 
 server = HttpsServer({

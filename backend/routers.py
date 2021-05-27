@@ -478,13 +478,6 @@ async def add_order_item(item: OrderItem):
     # return process_create_query([[query, "add weights"]], res_code)
 
 
-@app.get('/test')
-async def test_web_socket_js(message: str = "bla"):
-    URL = "http://localhost:8888/ws_test"
-    PARAMS = {'message': message}
-    r = requests.get(url=URL, params=PARAMS)
-    return r.url
-
 #  todo add validation to method
 @app.delete('/order/remove/item')
 async def add_order_item(order_id: int, item_id: int, business_id: int):

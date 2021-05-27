@@ -1,8 +1,11 @@
 from fastapi import WebSocket, WebSocketDisconnect, HTTPException
+import requests
+
 
 class WebSocketManager:
     def __init__(self):
         self.active_connections = {}
+        self.URL = "http://localhost:8888/weight_added"
 
     async def connect_socket(self, websocket: WebSocket, business_id: int):
         await websocket.accept()
@@ -18,16 +21,21 @@ class WebSocketManager:
         await websocket.send_text(message)
 
     async def broadcast(self, message: str, business_id: int, websocket: WebSocket = None):
-        if business_id in self.active_connections:
-            for connection in self.active_connections[business_id]:
-                if websocket != connection:
-                    await connection.send_text(message)
-        else:
-            print("no client connected")
+        self.send_message_to_socket(message)
+        # if business_id in self.active_connections:
+        #     for connection in self.active_connections[business_id]:
+        #         if websocket != connection:
+        #             await connection.send_text(message)
+        # else:
+        #     print("no client connected")
 
     @staticmethod
     def get_socket_page():
         return html_sample
+
+    def send_message_to_socket(self, message: str = "bla"):
+        params = {'message': message}
+        requests.get(url=self.URL, params=params)
 
 
 html_sample = """
