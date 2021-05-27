@@ -1,23 +1,31 @@
 const WebSocket = require('ws');
 const http = require('http');
+const HttpsServer = require('https').createServer;
 const fs = require('fs');
 const express = require('express');
 const port = 8888;
 const app = express();
 app.use(express.static('public'));
-app.get('/ws_test', (req, res) => {
+app.get('/weight_added', (req, res) => {
     console.log("message recived");
-    console.log(req.query.message);
-    brodcastAll(req.query.message);
+    var message = req.query.message
+    console.log(message);
+    brodcastAll(message);
+    res.send(message)
+    
 });
 
-const httpsServer = http.createServer(app);
-httpsServer.listen(port, function listening() {
+server = HttpsServer({
+    cert: fs.readFileSync("/etc/letsencrypt/live/majordomo.cloudns.asia/fullchain.pem"),
+    key: fs.readFileSync("/etc/letsencrypt/live/majordomo.cloudns.asia/privkey.pem")
+})
+const https = http.createServer(app);
+https.listen(port, function listening() {
     console.log('listening on ' + port);
 });
 
 var WebSocketServer = WebSocket.Server
-    , wss = new WebSocketServer({ port: 8010 });
+    , wss = new WebSocketServer({server:server});
 wss.on('connection', function (ws) {
     ws.on('message', function (message) { brodcastAll(message); })
 });
@@ -37,3 +45,4 @@ function brodcastAll(message) {
         }
     });
 }
+server.listen(8010);
