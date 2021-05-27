@@ -1,25 +1,25 @@
 const WebSocket = require('ws');
 const http = require('http');
-const https = require('https').createServer;
+const HttpsServer = require('https').createServer;
 const fs = require('fs');
 const express = require('express');
 const port = 8888;
-// const app = express();
-// app.use(express.static('public'));
-// app.get('/ws_test', (req, res) => {
-//     console.log("message recived");
-//     console.log(req.query.message);
-//     brodcastAll(req.query.message);
-// });
+const app = express();
+app.use(express.static('public'));
+app.get('/ws_test', (req, res) => {
+    console.log("message recived");
+    console.log(req.query.message);
+    brodcastAll(req.query.message);
+});
 
 server = HttpsServer({
     cert: fs.readFileSync("/etc/letsencrypt/live/majordomo.cloudns.asia/fullchain.pem"),
     key: fs.readFileSync("/etc/letsencrypt/live/majordomo.cloudns.asia/privkey.pem")
 })
-// const httpsServer = http.createServer(app);
-// httpsServer.listen(port, function listening() {
-//     console.log('listening on ' + port);
-// });
+const https = http.createServer(app);
+https.listen(port, function listening() {
+    console.log('listening on ' + port);
+});
 
 var WebSocketServer = WebSocket.Server
     , wss = new WebSocketServer({server:server});
