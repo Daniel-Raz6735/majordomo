@@ -431,7 +431,7 @@ async def add_weights(lis: WeighingList, client_time: int):
         connection.insert_data(query, res_code)
         message = "weights updated for: "
         for container_id in data_inserted:
-            message += "container: " + container_id + " weight: " + data_inserted[container_id]
+            message += "container: " + str(container_id) + " weight: " + str(data_inserted[container_id])
         await manager.broadcast(message, 1)
         del connection
 
