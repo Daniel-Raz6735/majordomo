@@ -102,3 +102,13 @@
     background: black;
     width: 90%;
 }
+
+.confirm_all_btn{
+    width: fit-content;
+    margin-top: 20px;
+}
+
+.confirm_seller_button{
+    float: right;
+    margin: 10px 10px 10px 10px;
+}

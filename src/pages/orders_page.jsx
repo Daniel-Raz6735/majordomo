@@ -324,7 +324,7 @@ class Order extends Component {
             unit = this.props.order["unit"]
         }
 
-        console.log(this.props.order)
+
         let obj = { "item_name": this.props.item_name, "quantity": this.state.quantity, "unit": getUnitById(this.props.order["unit"]) }
         if (!items[this.props.supplier_name])
             items[this.props.supplier_name] = [obj]
@@ -441,6 +441,7 @@ class OrderList extends Component {
 
         this.add_seller = this.add_seller.bind(this);
         this.confirm_all = this.confirm_all.bind(this);
+        this.confirm_seller = this.confirm_seller.bind(this);
     }
 
 
@@ -449,32 +450,45 @@ class OrderList extends Component {
         console.log(items)
         let page = []
         Object.keys(items).forEach(seller => {
-            page.push(<OrderListCategory func={this.add_seller} key={"list_cat" + seller} seller={seller} />)
+            page.push(<OrderListCategory confirm_seller={this.confirm_seller} func={this.add_seller} key={"list_cat" + seller} seller={seller} />)
         })
         this.setState({ page })
 
     }
 
 
-    add_seller(seller) {
-        if (!sellers.includes(seller))
-            sellers.push(seller)
-        else
-            sellers.splice(sellers.indexOf(seller), 1)
-        
+    componentWillUnmount() {
+        sellers = []
     }
 
-    confirm_all(){
+
+    add_seller(seller) {
+        if (sellers) {
+            if (!sellers.includes(seller))
+                sellers.push(seller)
+            else
+                sellers.splice(sellers.indexOf(seller), 1)
+        }
+
+    }
+
+    confirm_all() {
         console.log(this.props.items)
+        console.log(sellers)
+    }
+
+    confirm_seller(seller) {
+        console.log(seller)
     }
 
     render() {
 
         return (
-            <div>
+            <div style={{ margin: "auto", width: "95%" }}>
                 <TitleComponent key={"title_list_comp"} title_name={"export_lists"} />
-                <div>Lists <img src={right_arrow} alt="back" onClick={this.props.back_to_list} /></div>
-                <Button onClick={this.confirm_all} style={{ color: "white", background: "#73D504" }}>Confirm all</Button>
+                <div style={{ float: "right" }}>Lists <img src={right_arrow} alt="back" onClick={this.props.back_to_list} /></div>
+
+                <div className="confirm_all_btn"><Button onClick={this.confirm_all} style={{ color: "white", background: "#73D504" }}>Confirm all</Button></div>
                 {this.state.page}
             </div>
         )
@@ -500,6 +514,8 @@ class OrderListCategory extends Component {
 
         for (let i = 0; i < items[this.props.seller].length; i++)
             page.push(<OrderListItems item_name={items[this.props.seller][i].item_name} quantity={items[this.props.seller][i].quantity} unit={items[this.props.seller][i].unit} />)
+        
+        page.push(<div className="confirm_seller_button" ><Button onClick={() => this.props.confirm_seller(this.props.seller)} style={{ color: "white", background: "#73D504" }}>Confirm</Button></div>)
 
         this.setState({ page })
     }
@@ -521,9 +537,9 @@ class OrderListCategory extends Component {
             <OrderHeader export_list={true} cat_name={this.props.seller} func={this.props.func} on_click={this.remove_onClick} />
             <Divider vertical={false} />
             <Collapse key={"list_col" + this.props.seller} in={this.state.show}  >
-                {(props, ref) => <Panel {...props} ref={ref} orders={this.state.page} />}
+                {(props, ref) => <Panel key={"list_panel" + this.props.seller} {...props} ref={ref} orders={this.state.page} />}
             </Collapse>
-            <Button style={{ color: "white", background: "#73D504" }}>Confirm</Button>
+            
         </div>)
     }
 }
