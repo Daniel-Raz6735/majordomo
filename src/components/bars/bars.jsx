@@ -51,25 +51,15 @@ export class SiteFrame extends Component {
     componentDidMount() {
 
     
-        var ws = ""
-        // var ws = new socket_client('wss://majordomo.cloudns.asia/ws/1/1');
-
-        if (!base_url.includes("majordomo.cloudns"))
-            ws = new socket_client('ws://127.0.0.1:8000/ws/1/1');
-        else
-            ws = new socket_client('wss://majordomo.cloudns.asia/ws/1/1')
-        // var wss = new socket_client('wss://majordomo.cloudns.asia/wss');
-
-
-        // wss.onopen = function () { console.log('wss open'); };
-        ws.onopen = function () { };
-        ws.onmessage = (message) => {
+        var wss = new socket_client('wss://majordomo.cloudns.asia:8010/wsw')
+        wss.onopen = function () { console.log('wss open'); };
+        wss.onmessage = (message) => {
             // const dataFromServer = JSON.parse(message.data);
-
-            // this.change_tab(this.state.tab_name);
-            window.location.reload()
+            refresh()
+            showNotification('info',"weight added", message.data);
+            console.log(message)
         }
-        this.setState({ socket: ws });
+        this.setState({ socket: wss });
 
         var tab_name = sessionStorage.getItem('tab_name') ? sessionStorage.getItem('tab_name') : "";
         this.setState({ tab_name: tab_name });
