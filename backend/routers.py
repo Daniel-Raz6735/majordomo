@@ -406,6 +406,7 @@ async def add_weights(lis: WeighingList, client_time: int):
         arr = []
         server_time = int(time.time())
         weight_list = lis.dict()
+        data_inserted = {}
         for weight in weight_list["weights"]:
             time_gap = client_time - weight["weighing_date"]
             weight_time = "to_timestamp(" + str(server_time - time_gap) + ")"
@@ -419,7 +420,7 @@ async def add_weights(lis: WeighingList, client_time: int):
                     raise HTTPException(status_code=404, detail="Container has no item configured for this business")
                 arr.insert(0, [weight_time, weight["business_id"], weight["container_id"], item_id,
                                weight["weight_value"], weight["last_user"]])
-
+                data_inserted[weight["container_id"]] = weight["weight_value"]
                 settings.notifications_handler.update_item(weight["business_id"],
                                                            item_id, weight["container_id"],
                                                            weight["weight_value"], 1, updater)
@@ -428,7 +429,10 @@ async def add_weights(lis: WeighingList, client_time: int):
                                                          "item_id", "weight_value", "last_user"],
                                                         arr)
         connection.insert_data(query, res_code)
-        await manager.broadcast(f"weights updated on #{client_time}", 1)
+        message = "weights updated for: "
+        for container_id in data_inserted:
+            message += "container: " + container_id + " weight: " + data_inserted[container_id]
+        await manager.broadcast(message, 1)
         del connection
 
     except HTTPException as error:
