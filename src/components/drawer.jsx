@@ -216,6 +216,7 @@ export class ItemPage extends Component {
     this.get_daily_update = this.get_daily_update.bind(this);
     this.get_weekly_update = this.get_weekly_update.bind(this);
     this.get_monthly_update = this.get_monthly_update.bind(this);
+    this.get_average_statistics_by_day = this.get_average_statistics_by_day.bind(this);
     this.state = {
       page: "",
       dropdown_content: "",
@@ -363,6 +364,71 @@ export class ItemPage extends Component {
     return result;
   }
 
+  get_average_statistics_by_day(res, days) {
+    var result = {
+      "minimum": 0,
+      "maximum": 0,
+      "usage": 0,
+      "stock": 0
+    };
+    var mini = [], maxi = [], minus = [], plus = []
+    if (res && typeof (res) == 'object') {
+      var keys = Object.keys(res).sort();
+      if (keys.length < 1)
+        return result;
+      let prev_weight = undefined;
+      for (let i = days; i >= 0; i--) {
+        let testDate = moment().subtract(i, 'days'),
+          day_plus = 0, day_minus = 0, local_mini = Number.MAX_VALUE, local_maxi = -Number.MAX_VALUE,
+          obj = res[get_date(testDate)]
+        if (obj !== undefined) {
+          Object.keys(obj).sort().forEach(key => {
+            let weight_info = obj[key],
+              new_weight = weight_info["weight"]
+            if (new_weight !== undefined) {
+              if (prev_weight !== undefined) {
+                let diffarence = new_weight - prev_weight
+                if (diffarence < 0)
+                  day_minus -= diffarence;
+                else
+                  day_plus += diffarence;
+              }
+              if (new_weight > local_maxi)
+                local_maxi = new_weight
+              if (new_weight < local_mini)
+                local_mini = new_weight
+              prev_weight = new_weight;
+            }
+
+
+
+
+          });
+
+          plus.push(day_plus)
+          minus.push(day_minus)
+          if (local_mini < Number.MAX_VALUE)
+            mini.push(local_mini)
+          else
+            mini.push(0)
+          if (local_maxi > -Number.MAX_VALUE)
+            maxi.push(local_maxi)
+          else
+            maxi.push(0)
+        }
+
+      }
+      const reducer = (accumulator, currentValue) => accumulator + currentValue;
+      var result = {
+        "minimum": (mini.reduce(reducer,0)/mini.length).toFixed(1).replace(/\.0+$/, ''),
+        "maximum": (maxi.reduce(reducer,0)/maxi.length).toFixed(1).replace(/\.0+$/, ''),
+        "usage": (minus.reduce(reducer,0)/minus.length).toFixed(1).replace(/\.0+$/, ''),
+        "stock": (plus.reduce(reducer,0)/plus.length).toFixed(1).replace(/\.0+$/, '')
+      };
+
+    }
+    return result;
+  }
   /*dilute the keys enterd up to num_of_keys */
   diluteKeys(res, num_of_keys, code) {
     if (!res || typeof (res) !== 'object')
@@ -463,7 +529,9 @@ export class ItemPage extends Component {
     let active_index = this.state.active_index, disabled = false,
       active_chart = this.state.dates_to_pull[active_index], chart,
       diluteing_metohd = this.state.diluteing_metohds[active_index],
-      res = this.state.date_dict;
+      res = this.state.date_dict,
+      reach = this.get_average_statistics_by_day(res, active_chart), 
+      cubes="";
     if (res) {
       if (res.length === 0) {
         chart = <div className="no_data">No data to show</div>
@@ -472,6 +540,9 @@ export class ItemPage extends Component {
       else {
         var relavent_data = diluteing_metohd(res)
         chart = <ChartComponent {...this.props} key={active_chart} num_of_days={active_chart} dict={relavent_data} />
+        cubes =[<InfoCube key={"cube" + 1} header={"Average usage"} info={reach["usage"]} dict={relavent_data} />,
+        <InfoCube key={"cube" + 2} header={"Lowest average"} info={reach["minimum"]} dict={relavent_data} />,
+        <InfoCube key={"cube" + 3} header={"Highest average"} info={reach["usage"]} dict={relavent_data} />]
       }
 
     }
@@ -494,7 +565,7 @@ export class ItemPage extends Component {
         <AlertNotifications keep_open={true} notifications_level={notifications_level} notification_info={notification_info} />
         <ItemDeatils business_id={this.props.business_id} item_id={this.props.item_id} dict={this.props.weight_info} />
         <div className="chart_container">
-          <h4>Usage</h4>
+          <h4>{Dictionary["item_weight"]}</h4>
           <div className="chart_header">
             <Dropdown disabled={disabled} title={Dictionary[active_chart]} activeKey={active_chart}>
               {this.state.dropdown_content}
@@ -505,9 +576,7 @@ export class ItemPage extends Component {
           </div>
         </div>
         <div className="cube_container">
-          <InfoCube key={"cube" + 1} header={"Daily usage"} additional_data="skl" dict={relavent_data} />
-          <InfoCube key={"cube" + 2} header={"Lowest"} additional_data="skl" dict={relavent_data} />
-          <InfoCube key={"cube" + 3} header={"Highest"} additional_data="skl" dict={relavent_data} />
+          {cubes}
         </div>
       </div>
     );
@@ -649,34 +718,15 @@ export class InfoCube extends Component {
     this.state = {
       weights: []
     };
-    // this.close = this.close.bind(this);
 
   }
-
-  // close(){
-
-  // }
-
-  componentDidMount() {
-    var weights = []
-    if (this.props.dict) {
-      Object.keys(this.props.dict).forEach(date => {
-        var weight = this.props.dict[date]["weight"]
-        if (weight !== undefined)
-          weights.push(weight);
-      })
-    }
-    this.setState({ weights })
-  }
-
 
   render() {
 
     var page = []
-
     if (this.props.additional_data) {
       page.push(<Divider key={"divider"} />)
-      page.push(<div> 12:15-12:20 </div>)
+      page.push(<div> {this.props.additional_data} </div>)
     }
 
 
@@ -684,7 +734,7 @@ export class InfoCube extends Component {
 
       <div className="info_cube">
         <div className={"cube_header"}>{this.props.header}</div>
-        <div className={"cube_number"}>23.5 kg</div>
+        <div className={"cube_number"}>{this.props.info}</div>
         {page}
       </div>
     );

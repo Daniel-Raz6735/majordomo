@@ -8,7 +8,7 @@ export function set_offset(date) {
 export function get_date(date) {
     //get string of day
     var today = moment();
-    if(today.format('YYYY')==date.format('YYYY'))
+    if(today.format('YYYY')===date.format('YYYY'))
         return date.format('MM/DD');
     return date.format('L');
 }

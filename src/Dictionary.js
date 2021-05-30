@@ -47,6 +47,7 @@ export const Dictionary = new LocalizedStrings({
     min: "Minimum",
     max: "Maximum",
     unset:"Unset",
+    item_weight:"Item weight",
 
     //notifications
     notifications: "Notifications",
@@ -134,6 +135,7 @@ export const Dictionary = new LocalizedStrings({
     min: "מינימום",
     max: "מקסימום",
     unset:"לא נקבע",
+    item_weight:"משקל מוצר",
 
     //notifications
     notifications: "התראות",
