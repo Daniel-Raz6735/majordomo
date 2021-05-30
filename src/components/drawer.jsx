@@ -90,8 +90,10 @@ export class CategoryDrawer extends React.Component {
     if (item_id) {
       cat_image = <div onClick={() => this.switchContent()}><img src={back_icon} alt="back" /></div>
 
-      if (this.props.weights_dict)
+      if (this.props.weights_dict) {
+        console.log(this.props.weights_dict[item_id])
         page = <ItemPage key={"item_page"} business_id={1} item_id={item_id} notification_level={this.props.weights_dict[item_id]["notification_level"]} weight_info={this.props.weights_dict[item_id]} />
+      }
 
       else
         console.log("No weights dict, can't render item")
@@ -474,7 +476,7 @@ export class ItemPage extends Component {
 
     }
     else
-      chart = <Loader speed="fast" size="xs" content="Loading..." center vertical />
+      chart = <Loader speed="fast" size="xs" content="Loading..." vertical />
     var notifications_level, notification_info
     if (this.props["item_id"] && this.props["business_id"] && this.props["weight_info"]) {
       notification_info = { ...this.props["weight_info"] }
@@ -498,16 +500,14 @@ export class ItemPage extends Component {
               {this.state.dropdown_content}
             </Dropdown>
           </div>
-          {chart}
+          <div className="chart_body">
+            {chart}
+          </div>
         </div>
         <div className="cube_container">
-          <InfoCube key={1} additional_data="skl" dict={relavent_data} />
-          <InfoCube key={2} additional_data="skl" dict={relavent_data} />
-          <InfoCube key={3} additional_data="skl" dict={relavent_data} />
-        </div>
-        <div className="cube_container">
-          <InfoCube key={4} additional_data="skl" dict={relavent_data} />
-          <InfoCube key={6} additional_data="skl" dict={relavent_data} />
+          <InfoCube key={"cube" + 1} header={"Daily usage"} additional_data="skl" dict={relavent_data} />
+          <InfoCube key={"cube" + 2} header={"Lowest"} additional_data="skl" dict={relavent_data} />
+          <InfoCube key={"cube" + 3} header={"Highest"} additional_data="skl" dict={relavent_data} />
         </div>
       </div>
     );
@@ -623,14 +623,11 @@ export class ChartComponent extends Component {
   }
 
   render() {
-
-    let temp = this.state.chart ? this.state.chart : <canvas className="usage_chart" id={this.state.chart_id} />
-
     return (
 
       <div>
         <canvas className="usage_chart" id={this.state.chart_id} />
-        {temp}
+        {this.state.chart}
       </div>
 
     );
@@ -676,8 +673,6 @@ export class InfoCube extends Component {
   render() {
 
     var page = []
-    page.push(<div>header</div>)
-    page.push(<div>23.5 kg</div>)
 
     if (this.props.additional_data) {
       page.push(<Divider key={"divider"} />)
@@ -688,6 +683,8 @@ export class InfoCube extends Component {
     return (
 
       <div className="info_cube">
+        <div className={"cube_header"}>{this.props.header}</div>
+        <div className={"cube_number"}>23.5 kg</div>
         {page}
       </div>
     );
@@ -723,18 +720,12 @@ class ItemDeatils extends Component {
   }
 
   componentDidMount() {
-
-
     let request = base_url + "/get/containers" + "?business_id=" + this.state.business_id + "&item_id=" + this.state.item_id + "&only_active_containers=true"
-    // let request = base_url + path
-
-    var callback = this.getItemContainers
+    var thisS = this
     $.ajax({
       url: request,
       success: function (res) {
-        callback(res)
-        // console.log(res)
-
+        thisS.getItemContainers(res)
       },
       error: function (err) {
         console.log(err)
@@ -752,7 +743,11 @@ class ItemDeatils extends Component {
     for (let i = 0; i < data.length; i++) {
       let container = data[i]
       str += i === data.length - 1 ? container["container_id"] : container["container_id"] + ","
-      cont_details.push(<div><span style={{ fontWeight: "bold" }}>{container["container_id"]}</span>: {container["weight"]} {getUnitById(container["weight"])} {" "}{getDate(container["date"])}  </div>)
+      cont_details.push(
+        <div>
+          <span className={"bold_text"} >{container["container_id"]}</span>
+          {": "} {container["weight"]} {getUnitById(container["weight"])} {" "}{getDate(container["date"])}
+        </div>)
     }
     // console.log(cont_details)
     this.setState({
@@ -763,7 +758,15 @@ class ItemDeatils extends Component {
 
 
   render() {
+    let dict = this.props.dict, minimum = Dictionary["unset"], maximum = Dictionary["unset"]
 
+    if (dict && dict["item_extended_details"]) {
+      let details = dict["item_extended_details"];
+      if (details["content_total_minimum"])
+        minimum = details["content_total_minimum"] + " " + Dictionary["kg"]
+      if (details["content_total_maximum"])
+        maximum = details["content_total_maximum"] + " " + Dictionary["kg"]
+    }
 
     let min_max_style = {
       fontWeight: "bold"
@@ -780,9 +783,15 @@ class ItemDeatils extends Component {
         <ContainerInformationTip key={this.state.item_id} container_details={this.state.container_details} str={this.state.str} />
 
         <Divider key={"divider1"} style={divider_style} vertical={true} />
-        <div className="item_min_max"><div style={min_max_style}>2.5 kg</div><div>{Dictionary["min"]}</div></div>
+        <div className="item_min_max">
+          <div style={min_max_style}>{minimum}</div>
+          <div>{Dictionary["min"]}</div>
+        </div>
         <Divider key={"divider2"} style={divider_style} vertical={true} />
-        <div className="item_min_max"><div style={min_max_style}>10 kg</div><div>{Dictionary["max"]}</div></div>
+        <div className="item_min_max">
+          <div style={min_max_style}>{maximum}</div>
+          <div>{Dictionary["max"]}</div>
+        </div>
       </div>
     )
   }

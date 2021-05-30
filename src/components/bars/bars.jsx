@@ -86,10 +86,11 @@ export class SiteFrame extends Component {
     process_initial_data(data, tab_name, saveTab = true) {
         // load the site with assential basic data for the basic site 
 
-        // download(JSON.stringify(data) , 'file.json', 'text/plain');
+        // download(JSON.stringify(data) , 'data.json', 'text/plain');
         if (typeof (data) == "object") {
             main_dict = create_initial_data_dict(data);
             // var dict = create_initial_data_dict(data);
+            // download(JSON.stringify(main_dict) , 'dict.json', 'text/plain');
             if (!main_dict) {
                 this.setState({ page: <PageNotFound status_code={500} /> })
                 console.log("Data rcived from server is corrupt")
@@ -99,7 +100,7 @@ export class SiteFrame extends Component {
                 confirm_papulation(main_dict, "process_initial_data", "initial data not recived well")
                 if (tab_name !== null)
                     this.change_tab(tab_name, saveTab)
-                // download(JSON.stringify(dict) , 'file.json', 'text/plain');
+                // download(JSON.stringify(main_dict) , 'dict.json', 'text/plain');
 
                 if (main_dict["preferences"]) {
                     sessionStorage.setItem("developer", main_dict["preferences"]["developer"])
@@ -214,8 +215,6 @@ export class SiteFrame extends Component {
         yDown = null;
     };
 
-
-
     render() {
 
 
@@ -224,20 +223,14 @@ export class SiteFrame extends Component {
 
             <div className="main_user_page_container"   >
                 <AlertManeger />
-
-
                 <div className="site_data_cover" onTouchStart={this.handleTouchStart} onTouchMove={this.handleTouchMove}  >
                     {this.state.page}
-
                 </div>
-
-
                 <footer id="footer_bar">
                     <div className="description" onClick={() => { this.change_tab("HomePage") }}>
                         <img alt="Home" className="bottom-bar-btn" src={home} />
                         <div className={this.state.buttons[0]}><div className="tester">{Dictionary["home"]}</div></div>
                     </div>
-
                     <div className="description" onClick={() => this.change_tab("InventoryPage")}>
                         <img alt="Inventory" className="bottom-bar-btn" src={inventory} />
                         <div className={this.state.buttons[1]}>

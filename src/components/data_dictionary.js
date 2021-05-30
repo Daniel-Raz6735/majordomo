@@ -1,3 +1,4 @@
+import { download } from './drawer';
 import { notifications_levels } from './notifications_data'
 import { set_offset } from './time_manager';
 
@@ -8,13 +9,14 @@ export function create_initial_data_dict(data) {
     var dict = {}
     if (data) {
         dict["preferences"] = data["preferences"]
+        dict["items"] = create_item_dict(data["items"])
         dict["orders"] = create_orders_dict(data["orders"])
-        dict["suppliers"] = create_suppliers_dict(data["suppliers"], dict["orders"], data["items"])
+        dict["suppliers"] = create_suppliers_dict(data["suppliers"], dict["orders"], dict["items"])
         dict["notifications"] = create_notification_dict(data["notifications"], dict["suppliers"], dict["orders"])
-        dict["weights"] = create_weights_dict(data["weights"], dict["suppliers"], dict["notifications"], dict["orders"])
+        dict["weights"] = create_weights_dict(data["weights"], dict["suppliers"], dict["notifications"], dict["orders"], dict["items"])
 
 
-        // download(JSON.stringify(dict) , 'dict.json', 'text/plain');
+        // download(JSON.stringify(dict), 'dict.json', 'text/plain');
         confirm_papulation(dict, "create_initial_data_dict", "feild not recived from server")
         if (!dict["weights"]) {
             console.log("no weights for user")
@@ -101,7 +103,7 @@ function create_notification_dict(notification_data, suppliers_data, orders_dict
     return dict
 }
 
-function create_weights_dict(weight_data, suppliers_data, notifications_data, orders_dict) {
+function create_weights_dict(weight_data, suppliers_data, notifications_data, orders_dict, items_dict) {
     var dict =
     {
         "category": {},
@@ -121,10 +123,13 @@ function create_weights_dict(weight_data, suppliers_data, notifications_data, or
                 category_name = element["category_name"],
                 unit = element["unit"],
                 barcode = element["barcode"],
-                notification_level = -1
+                notification_level = -1,
+                item_extended = undefined
             if (item_name && item_id && category_id && category_name) {
                 if (!dict["category"][category_id])
                     dict["category"][category_id] = {}
+                if (items_dict && items_dict[item_id])
+                    item_extended = items_dict[item_id]
                 if (notifications_data && notifications_data["category"]) {
                     var cat = notifications_data["category"]
                     if (cat)
@@ -142,7 +147,8 @@ function create_weights_dict(weight_data, suppliers_data, notifications_data, or
                     "unit": unit,
                     "notification_level": notification_level,
                     "barcode": barcode,
-                    "suppliers": []
+                    "suppliers": [],
+                    "item_extended_details": item_extended
                 }
                 if (orders_dict && orders_dict["items"] && orders_dict["items"][item_id])
                     weight_info["order_details"] = orders_dict["items"][item_id]
@@ -235,6 +241,20 @@ function create_suppliers_dict(suppliers_data, orders_dict, item_data) {
     });
     return dict
 }
+function create_item_dict(item_data) {
+    var dict = {}
+    if (!item_data)
+        return null
+    Object.keys(item_data).forEach(key => {
+        var element = item_data[key]
+        if (element && element["item_id"]) {
+            let item_id = element["item_id"]
+            dict[item_id] = element
+        }
+    });
+    return dict
+}
+
 function create_orders_dict(orders_data) {
     var dict = {
         "items": {},

@@ -162,6 +162,10 @@
     border-radius: 6px 6px 0 0;
 }
 
+.chart_body {
+    text-align: center;
+}
+
 .rs-dropdown-menu>.rs-dropdown-item-active>.rs-dropdown-item-content {
     color: rgba(253, 94, 83, 1);
 }
@@ -185,4 +189,16 @@
 
 .rs-tooltip .rs-tooltip-inner {
     text-align: unset;
+}
+
+.cube_header {
+    text-align: center;
+}
+
+.cube_number {
+    text-align: center;
+}
+
+.bold_text {
+    font-weight: "bold";
 }
