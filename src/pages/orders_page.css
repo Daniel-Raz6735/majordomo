@@ -87,7 +87,8 @@
 .order_list_items{
     display: flex;
     justify-content: space-between;
-    margin: 15px 50px 10px 10px;
+    margin: auto;
+    margin-top: 20px;
     width: 80%;   
 }
 
@@ -110,5 +111,5 @@
 
 .confirm_seller_button{
     float: right;
-    margin: 10px 10px 10px 10px;
+    margin: 20px 10px 10px 10px;
 }

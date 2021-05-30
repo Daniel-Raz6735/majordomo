@@ -16,6 +16,8 @@ import { getUnitById } from "../components/data_dictionary.js";
 
 
 
+
+
 const { Collapse } = Animation;
 
 export function sort_by_key_val(jsObj, sort_by_key, reverse) {
@@ -406,7 +408,7 @@ export class OrderHeader extends Component {
 
     render() {
         let clas = this.props.export_list ? "list_header order_toggler" : "order_header order_toggler"
-        let checkbox = this.props.export_list ? <div ><input onChange={() => this.props.func(this.props.cat_name)} style={{ width: "fit-content" }} type="checkbox" /></div> : ""
+        let checkbox = this.props.export_list ? <div ><input onChange={() => this.props.func(this.props.cat_name)} style={{ width: "30px", height: "30px" }} type="checkbox" /></div> : ""
 
 
         return (
@@ -421,12 +423,24 @@ export class OrderHeader extends Component {
                     <img src={envelope_icon} alt={Dictionary["email"]} className="order_symbol" />
                 </div>
                 {this.state.arrow}
-
+               
             </div>
 
         )
     }
 }
+
+
+var headers = {
+    supplier: 'Supplier'.replace(/,/g, ''), // remove commas to avoid errors
+    item: "Item",
+    amount: "Amount",
+    unit: "Unit"
+
+};
+
+
+var fileTitle = 'orders'; // or 'my-unique-title'
 
 var sellers = []
 //1
@@ -475,10 +489,46 @@ class OrderList extends Component {
     confirm_all() {
         console.log(this.props.items)
         console.log(sellers)
+
+
+        var itemsList = []
+
+        sellers.forEach(seller => {
+            this.props.items[seller].forEach(item => {
+                itemsList.push({ supplier: seller, item: item.item_name, amount: item.quantity ,unit: item.unit })
+            })
+        })
+
+        // var itemsFormatted = [];
+
+        // // format the data
+        // itemsNotFormatted.forEach((item) => {
+        //     itemsFormatted.push({
+        //         supplier: item.supplier.replace(/,/g, ''), // remove commas to avoid errors,
+        //         order: item.order,
+
+        //     });
+        // });
+
+        if (itemsList.length > 0)
+            exportCSVFile(headers, itemsList, fileTitle)
+
+
     }
 
     confirm_seller(seller) {
         console.log(seller)
+
+
+
+        var itemsList = []
+
+        this.props.items[seller].forEach(item => {
+            itemsList.push({ supplier: seller, item: item.item_name, amount: item.quantity ,unit: item.unit })
+        })
+
+        if (itemsList.length > 0)
+            exportCSVFile(headers, itemsList, fileTitle)
     }
 
     render() {
@@ -514,7 +564,7 @@ class OrderListCategory extends Component {
 
         for (let i = 0; i < items[this.props.seller].length; i++)
             page.push(<OrderListItems item_name={items[this.props.seller][i].item_name} quantity={items[this.props.seller][i].quantity} unit={items[this.props.seller][i].unit} />)
-        
+
         page.push(<div className="confirm_seller_button" ><Button onClick={() => this.props.confirm_seller(this.props.seller)} style={{ color: "white", background: "#73D504" }}>Confirm</Button></div>)
 
         this.setState({ page })
@@ -533,13 +583,15 @@ class OrderListCategory extends Component {
 
     render() {
 
+        let divider = this.state.show?<Divider vertical={false} />:""
+
         return (<div className="list_category_container ">
             <OrderHeader export_list={true} cat_name={this.props.seller} func={this.props.func} on_click={this.remove_onClick} />
-            <Divider vertical={false} />
+            {divider}
             <Collapse key={"list_col" + this.props.seller} in={this.state.show}  >
                 {(props, ref) => <Panel key={"list_panel" + this.props.seller} {...props} ref={ref} orders={this.state.page} />}
             </Collapse>
-            
+
         </div>)
     }
 }
@@ -566,3 +618,55 @@ class OrderListItems extends Component {
             </div>)
     }
 }
+
+function convertToCSV(objArray) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    var str = '';
+
+    for (var i = 0; i < array.length; i++) {
+        var line = '';
+        for (var index in array[i]) {
+            if (line != '') line += ','
+
+            line += array[i][index];
+        }
+
+        str += line + '\r\n';
+    }
+
+    return str;
+}
+
+function exportCSVFile(headers, data, fileTitle) {
+    if (headers) {
+        data.unshift(headers);
+    }
+
+    // Convert Object to JSON
+    var jsonObject = JSON.stringify(data);
+
+    console.log(jsonObject)
+
+    var csv = convertToCSV(jsonObject);
+
+    var exportedFilenmae = fileTitle + '.csv' || 'export.csv';
+
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    if (navigator.msSaveBlob) { // IE 10+
+        navigator.msSaveBlob(blob, exportedFilenmae);
+    } else {
+        var link = document.createElement("a");
+        if (link.download !== undefined) { // feature detection
+            // Browsers that support HTML5 download attribute
+            var url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", exportedFilenmae);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+}
+
+
