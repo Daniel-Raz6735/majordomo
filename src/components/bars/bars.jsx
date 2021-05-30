@@ -50,13 +50,13 @@ export class SiteFrame extends Component {
     }
     componentDidMount() {
 
-    
+
         var wss = new socket_client('wss://majordomo.cloudns.asia:8010/wsw')
         wss.onopen = function () { console.log('wss open'); };
         wss.onmessage = (message) => {
             // const dataFromServer = JSON.parse(message.data);
             refresh()
-            showNotification('info',"weight added", message.data);
+            showNotification('info', "weight added", message.data);
             console.log(message)
         }
         this.setState({ socket: wss });
@@ -65,7 +65,7 @@ export class SiteFrame extends Component {
         this.setState({ tab_name: tab_name });
         sessionStorage.removeItem('tab_name');
 
-        this.loadSite(1, tab_name);
+        this.loadSite(1, tab_name, false);
 
         //establishing a way for chield components to switch tabs across the app
         $("#reset_frame").change(() => { })
@@ -83,7 +83,7 @@ export class SiteFrame extends Component {
 
     }
 
-    process_initial_data(data, tab_name) {
+    process_initial_data(data, tab_name, saveTab = true) {
         // load the site with assential basic data for the basic site 
 
         // download(JSON.stringify(data) , 'file.json', 'text/plain');
@@ -97,8 +97,8 @@ export class SiteFrame extends Component {
             else {
                 update++;
                 confirm_papulation(main_dict, "process_initial_data", "initial data not recived well")
-                if (tab_name != null)
-                    this.change_tab(tab_name)
+                if (tab_name !== null)
+                    this.change_tab(tab_name, saveTab)
                 // download(JSON.stringify(dict) , 'file.json', 'text/plain');
 
                 if (main_dict["preferences"]) {
@@ -111,19 +111,17 @@ export class SiteFrame extends Component {
         }
     }
 
-    loadSite(business_id, tab_name) {
+    loadSite(business_id, tab_name, saveTab = true) {
         //request all information for a business
         var request = base_url + '/get/current_view',
             thisS = this;
-
-
         if (business_id) {
             request += "?business_id=" + business_id
 
             $.ajax({
                 url: request,
                 success: function (res) {
-                    thisS.process_initial_data(res, tab_name);
+                    thisS.process_initial_data(res, tab_name, saveTab);
                 },
                 error: function (err) {
                     thisS.setState({ page: <PageNotFound status_code={500} /> });
@@ -135,7 +133,7 @@ export class SiteFrame extends Component {
         }
 
     }
-    change_tab(tab_name) {
+    change_tab(tab_name, saveTab = true) {
         //changes the tab on this component by name
         var page = [], i = 0, dict = main_dict, key = tab_name + update;
 
@@ -169,6 +167,8 @@ export class SiteFrame extends Component {
             page: page,
             tab_name: tab_name
         })
+        if (saveTab)
+            sessionStorage.setItem("tab_name", tab_name)
     }
 
     getTouches(evt) {
@@ -195,17 +195,17 @@ export class SiteFrame extends Component {
 
         if (Math.abs(xDiff) > Math.abs(yDiff)) {/*most significant*/
             if (xDiff > 0) {
-                /* left swipe */ console.log("left")
-                if (tab_index+1 < 4) {
+                /* left swipe */
+                if (tab_index + 1 < 4) {
                     tab_index++
                     this.change_tab(tabs[tab_index])
                 }
             } else {
-                if (tab_index >0) {
+                if (tab_index > 0) {
                     tab_index--
                     this.change_tab(tabs[tab_index])
                 }
-                /* right swipe */console.log("right")
+                /* right swipe */
             }
         }
 
@@ -368,7 +368,7 @@ export class ButtonsComponent extends Component {
             width += 33;
         }
 
-        let list = this.props.orders?<img src={export_list} alt="export" onClick={this.props.export_func} />:""
+        let list = this.props.orders ? <img src={export_list} alt="export" onClick={this.props.export_func} /> : ""
         return (<div className="toolbar_buttons" style={{ width: width + "%" }}>
             {btns}
             {list}
