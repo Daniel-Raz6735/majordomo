@@ -90,8 +90,10 @@ export class CategoryDrawer extends React.Component {
     if (item_id) {
       cat_image = <div onClick={() => this.switchContent()}><img src={back_icon} alt="back" /></div>
 
-      if (this.props.weights_dict)
+      if (this.props.weights_dict) {
+        console.log(this.props.weights_dict[item_id])
         page = <ItemPage key={"item_page"} business_id={1} item_id={item_id} notification_level={this.props.weights_dict[item_id]["notification_level"]} weight_info={this.props.weights_dict[item_id]} />
+      }
 
       else
         console.log("No weights dict, can't render item")
@@ -214,6 +216,7 @@ export class ItemPage extends Component {
     this.get_daily_update = this.get_daily_update.bind(this);
     this.get_weekly_update = this.get_weekly_update.bind(this);
     this.get_monthly_update = this.get_monthly_update.bind(this);
+    this.get_average_statistics_by_day = this.get_average_statistics_by_day.bind(this);
     this.state = {
       page: "",
       dropdown_content: "",
@@ -361,6 +364,71 @@ export class ItemPage extends Component {
     return result;
   }
 
+  get_average_statistics_by_day(res, days) {
+    var result = {
+      "minimum": 0,
+      "maximum": 0,
+      "usage": 0,
+      "stock": 0
+    };
+    var mini = [], maxi = [], minus = [], plus = []
+    if (res && typeof (res) == 'object') {
+      var keys = Object.keys(res).sort();
+      if (keys.length < 1)
+        return result;
+      let prev_weight = undefined;
+      for (let i = days; i >= 0; i--) {
+        let testDate = moment().subtract(i, 'days'),
+          day_plus = 0, day_minus = 0, local_mini = Number.MAX_VALUE, local_maxi = -Number.MAX_VALUE,
+          obj = res[get_date(testDate)]
+        if (obj !== undefined) {
+          Object.keys(obj).sort().forEach(key => {
+            let weight_info = obj[key],
+              new_weight = weight_info["weight"]
+            if (new_weight !== undefined) {
+              if (prev_weight !== undefined) {
+                let diffarence = new_weight - prev_weight
+                if (diffarence < 0)
+                  day_minus -= diffarence;
+                else
+                  day_plus += diffarence;
+              }
+              if (new_weight > local_maxi)
+                local_maxi = new_weight
+              if (new_weight < local_mini)
+                local_mini = new_weight
+              prev_weight = new_weight;
+            }
+
+
+
+
+          });
+
+          plus.push(day_plus)
+          minus.push(day_minus)
+          if (local_mini < Number.MAX_VALUE)
+            mini.push(local_mini)
+          else
+            mini.push(0)
+          if (local_maxi > -Number.MAX_VALUE)
+            maxi.push(local_maxi)
+          else
+            maxi.push(0)
+        }
+
+      }
+      const reducer = (accumulator, currentValue) => accumulator + currentValue;
+      var result = {
+        "minimum": (mini.reduce(reducer,0)/mini.length).toFixed(1).replace(/\.0+$/, ''),
+        "maximum": (maxi.reduce(reducer,0)/maxi.length).toFixed(1).replace(/\.0+$/, ''),
+        "usage": (minus.reduce(reducer,0)/minus.length).toFixed(1).replace(/\.0+$/, ''),
+        "stock": (plus.reduce(reducer,0)/plus.length).toFixed(1).replace(/\.0+$/, '')
+      };
+
+    }
+    return result;
+  }
   /*dilute the keys enterd up to num_of_keys */
   diluteKeys(res, num_of_keys, code) {
     if (!res || typeof (res) !== 'object')
@@ -461,7 +529,9 @@ export class ItemPage extends Component {
     let active_index = this.state.active_index, disabled = false,
       active_chart = this.state.dates_to_pull[active_index], chart,
       diluteing_metohd = this.state.diluteing_metohds[active_index],
-      res = this.state.date_dict;
+      res = this.state.date_dict,
+      reach = this.get_average_statistics_by_day(res, active_chart), 
+      cubes="";
     if (res) {
       if (res.length === 0) {
         chart = <div className="no_data">No data to show</div>
@@ -470,11 +540,14 @@ export class ItemPage extends Component {
       else {
         var relavent_data = diluteing_metohd(res)
         chart = <ChartComponent {...this.props} key={active_chart} num_of_days={active_chart} dict={relavent_data} />
+        cubes =[<InfoCube key={"cube" + 1} header={"Average usage"} info={reach["usage"]} dict={relavent_data} />,
+        <InfoCube key={"cube" + 2} header={"Lowest average"} info={reach["minimum"]} dict={relavent_data} />,
+        <InfoCube key={"cube" + 3} header={"Highest average"} info={reach["usage"]} dict={relavent_data} />]
       }
 
     }
     else
-      chart = <Loader speed="fast" size="xs" content="Loading..." center vertical />
+      chart = <Loader speed="fast" size="xs" content="Loading..." vertical />
     var notifications_level, notification_info
     if (this.props["item_id"] && this.props["business_id"] && this.props["weight_info"]) {
       notification_info = { ...this.props["weight_info"] }
@@ -492,22 +565,18 @@ export class ItemPage extends Component {
         <AlertNotifications keep_open={true} notifications_level={notifications_level} notification_info={notification_info} />
         <ItemDeatils business_id={this.props.business_id} item_id={this.props.item_id} dict={this.props.weight_info} />
         <div className="chart_container">
-          <h4>Usage</h4>
+          <h4>{Dictionary["item_weight"]}</h4>
           <div className="chart_header">
             <Dropdown disabled={disabled} title={Dictionary[active_chart]} activeKey={active_chart}>
               {this.state.dropdown_content}
             </Dropdown>
           </div>
-          {chart}
+          <div className="chart_body">
+            {chart}
+          </div>
         </div>
         <div className="cube_container">
-          <InfoCube key={1} additional_data="skl" dict={relavent_data} />
-          <InfoCube key={2} additional_data="skl" dict={relavent_data} />
-          <InfoCube key={3} additional_data="skl" dict={relavent_data} />
-        </div>
-        <div className="cube_container">
-          <InfoCube key={4} additional_data="skl" dict={relavent_data} />
-          <InfoCube key={6} additional_data="skl" dict={relavent_data} />
+          {cubes}
         </div>
       </div>
     );
@@ -623,14 +692,11 @@ export class ChartComponent extends Component {
   }
 
   render() {
-
-    let temp = this.state.chart ? this.state.chart : <canvas className="usage_chart" id={this.state.chart_id} />
-
     return (
 
       <div>
         <canvas className="usage_chart" id={this.state.chart_id} />
-        {temp}
+        {this.state.chart}
       </div>
 
     );
@@ -652,42 +718,23 @@ export class InfoCube extends Component {
     this.state = {
       weights: []
     };
-    // this.close = this.close.bind(this);
 
   }
-
-  // close(){
-
-  // }
-
-  componentDidMount() {
-    var weights = []
-    if (this.props.dict) {
-      Object.keys(this.props.dict).forEach(date => {
-        var weight = this.props.dict[date]["weight"]
-        if (weight !== undefined)
-          weights.push(weight);
-      })
-    }
-    this.setState({ weights })
-  }
-
 
   render() {
 
     var page = []
-    page.push(<div>header</div>)
-    page.push(<div>23.5 kg</div>)
-
     if (this.props.additional_data) {
       page.push(<Divider key={"divider"} />)
-      page.push(<div> 12:15-12:20 </div>)
+      page.push(<div> {this.props.additional_data} </div>)
     }
 
 
     return (
 
       <div className="info_cube">
+        <div className={"cube_header"}>{this.props.header}</div>
+        <div className={"cube_number"}>{this.props.info}</div>
         {page}
       </div>
     );
@@ -723,18 +770,12 @@ class ItemDeatils extends Component {
   }
 
   componentDidMount() {
-
-
     let request = base_url + "/get/containers" + "?business_id=" + this.state.business_id + "&item_id=" + this.state.item_id + "&only_active_containers=true"
-    // let request = base_url + path
-
-    var callback = this.getItemContainers
+    var thisS = this
     $.ajax({
       url: request,
       success: function (res) {
-        callback(res)
-        // console.log(res)
-
+        thisS.getItemContainers(res)
       },
       error: function (err) {
         console.log(err)
@@ -752,7 +793,11 @@ class ItemDeatils extends Component {
     for (let i = 0; i < data.length; i++) {
       let container = data[i]
       str += i === data.length - 1 ? container["container_id"] : container["container_id"] + ","
-      cont_details.push(<div><span style={{ fontWeight: "bold" }}>{container["container_id"]}</span>: {container["weight"]} {getUnitById(container["weight"])} {" "}{getDate(container["date"])}  </div>)
+      cont_details.push(
+        <div>
+          <span className={"bold_text"} >{container["container_id"]}</span>
+          {": "} {container["weight"]} {getUnitById(container["weight"])} {" "}{getDate(container["date"])}
+        </div>)
     }
     // console.log(cont_details)
     this.setState({
@@ -763,7 +808,15 @@ class ItemDeatils extends Component {
 
 
   render() {
+    let dict = this.props.dict, minimum = Dictionary["unset"], maximum = Dictionary["unset"]
 
+    if (dict && dict["item_extended_details"]) {
+      let details = dict["item_extended_details"];
+      if (details["content_total_minimum"])
+        minimum = details["content_total_minimum"] + " " + Dictionary["kg"]
+      if (details["content_total_maximum"])
+        maximum = details["content_total_maximum"] + " " + Dictionary["kg"]
+    }
 
     let min_max_style = {
       fontWeight: "bold"
@@ -780,9 +833,15 @@ class ItemDeatils extends Component {
         <ContainerInformationTip key={this.state.item_id} container_details={this.state.container_details} str={this.state.str} />
 
         <Divider key={"divider1"} style={divider_style} vertical={true} />
-        <div className="item_min_max"><div style={min_max_style}>2.5 kg</div><div>{Dictionary["min"]}</div></div>
+        <div className="item_min_max">
+          <div style={min_max_style}>{minimum}</div>
+          <div>{Dictionary["min"]}</div>
+        </div>
         <Divider key={"divider2"} style={divider_style} vertical={true} />
-        <div className="item_min_max"><div style={min_max_style}>10 kg</div><div>{Dictionary["max"]}</div></div>
+        <div className="item_min_max">
+          <div style={min_max_style}>{maximum}</div>
+          <div>{Dictionary["max"]}</div>
+        </div>
       </div>
     )
   }

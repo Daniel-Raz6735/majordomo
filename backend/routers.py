@@ -300,7 +300,7 @@ async def get_current_view(business_id: int, user_email: str = "shlomow6@gmail.c
     message = "unable to load preference"
     user_preferences_query = readQ.get_user_preferences_query(user_email)
     message = "unable to load items"
-    items_query = readQ.get_items(business_id)
+    items_query = readQ.get_items(business_id=business_id)
     message = "unable to load weight"
     weight_query = readQ.get_current_weight_query(business_id)
     message = "unable to load notifications"
