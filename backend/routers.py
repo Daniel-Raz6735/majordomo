@@ -26,10 +26,10 @@ from typing import List
 
 
 class Settings(BaseSettings):
-    notifications_handler: NotificationsHandler = NotificationsHandler()
+    web_socket_manager = WebSocketManager()
+    notifications_handler: NotificationsHandler = NotificationsHandler(web_socket_manager)
     email_client = EmailManager()
     log_manager = LogManager()
-    web_socket_manager = WebSocketManager()
 
 
 settings = Settings()
@@ -432,7 +432,6 @@ async def add_weights(lis: WeighingList, client_time: int):
         message = "weights updated for: "
         for container_id in data_inserted:
             message += "container: " + str(container_id) + " weight: " + str(data_inserted[container_id])
-        await manager.broadcast(message, 1)
         del connection
 
     except HTTPException as error:

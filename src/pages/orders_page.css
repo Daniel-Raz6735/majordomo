@@ -70,8 +70,6 @@
     border-radius: 5px;
 }
 
-
-
 .order_item_name {
     width: 40%;
     text-align: center;
@@ -84,33 +82,40 @@
     height: 70px;
 }
 
-.order_list_items{
+.order_list_items {
     display: flex;
     justify-content: space-between;
     margin: auto;
     margin-top: 20px;
-    width: 80%;   
+    width: 80%;
 }
 
-.list_category_container{
+.list_category_container {
     box-shadow: 0px 0px 6px #00000054;
     margin: 10px;
     margin-bottom: 30px;
 }
 
-.rs-divider-horizontal{
+.rs-divider-horizontal {
     height: 1px;
     margin: auto;
     background: black;
     width: 90%;
 }
 
-.confirm_all_btn{
+.confirm_all_btn {
     width: fit-content;
     margin-top: 20px;
 }
 
-.confirm_seller_button{
+.confirm_seller_button {
     float: right;
     margin: 20px 10px 10px 10px;
+}
+
+.export_list {
+    margin: auto;
+    width: 95%;
+    height: 100%;
+    overflow: auto;
 }

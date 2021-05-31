@@ -54,10 +54,7 @@ export class SiteFrame extends Component {
         var wss = new socket_client('wss://majordomo.cloudns.asia:8010/wsw')
         wss.onopen = function () { console.log('wss open'); };
         wss.onmessage = (message) => {
-            // const dataFromServer = JSON.parse(message.data);
-            refresh()
-            showNotification('info', "weight added", message.data);
-            console.log(message)
+            websocket_notify(message)
         }
         this.setState({ socket: wss });
 
@@ -172,6 +169,8 @@ export class SiteFrame extends Component {
             sessionStorage.setItem("tab_name", tab_name)
     }
 
+
+
     getTouches(evt) {
         return evt.touches ||             // browser API
             evt.originalEvent.touches; // jQuery
@@ -265,6 +264,33 @@ export class SiteFrame extends Component {
     }
 }
 
+export function websocket_notify(message) {
+    const dataFromServer = JSON.parsweighte(message.data);
+    refresh()
+    if (dataFromServer && dataFromServer["cat"] && dataFromServer["message"] !== undefined) {
+        const cat = dataFromServer["cat"], message = dataFromServer["message"]
+        switch (cat) {
+            case "notification":
+                switch (message) {
+                    case 1:
+                        showNotification('error', "notification changed", "Item notification changd");
+                        break;
+                    case 2:
+                        showNotification('warning', "notification changed", "Item notification changd");
+                    default:
+                        break;
+                }
+
+                break;
+            case "weight":
+
+                break;
+
+            default:
+                break;
+        }
+    }
+}
 export function silent_refresh() {
     //refresh the site data using the silent trigger
     $("#silent_refresh").val("").change();

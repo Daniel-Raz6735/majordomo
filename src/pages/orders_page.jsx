@@ -36,7 +36,7 @@ export function sort_by_key_val(jsObj, sort_by_key, reverse) {
     return sortedArray;
 }
 
-export var items = {}
+export var items ={}
 
 
 //1
@@ -59,17 +59,6 @@ export class OrdersPage extends Component {
         this.back_to_list = this.back_to_list.bind(this);
 
 
-    }
-    componentDidMount() {
-        // this.sort_dict(1)
-
-
-
-    }
-
-    componentWillUnmount() {
-
-        items = {}
     }
 
     call_back(toggle_number) {
@@ -175,7 +164,7 @@ export class OrdersPage extends Component {
 
             );
         else
-            return (<div><OrderList items={items} back_to_list={this.back_to_list} /></div>)
+            return (<OrderList items={items} back_to_list={this.back_to_list} />)
 
     }
 } export default OrdersPage
@@ -496,14 +485,14 @@ class OrderList extends Component {
     }
 
     confirm_all() {
-        console.log(this.props.items)
+        console.log(items)
         console.log(sellers)
 
 
         var itemsList = []
 
         sellers.forEach(seller => {
-            this.props.items[seller].forEach(item => {
+            items[seller].forEach(item => {
                 itemsList.push({ supplier: seller, item: item.item_name, amount: item.quantity, unit: item.unit })
             })
         })
@@ -543,7 +532,7 @@ class OrderList extends Component {
     render() {
 
         return (
-            <div style={{ margin: "auto", width: "95%" }}>
+            <div className="export_list" >
                 <TitleComponent key={"title_list_comp"} title_name={"export_lists"} />
                 <div style={{ float: "right" }}>Lists <img src={right_arrow} alt="back" onClick={this.props.back_to_list} /></div>
                 <div className="confirm_all_btn"><Button onClick={this.confirm_all} style={{ color: "white", background: "#73D504" }}>Confirm all</Button></div>
@@ -617,7 +606,7 @@ class OrderListItems extends Component {
 
     render() {
         // reset items on list
-        items = {}
+        // items = {}
 
         return (
             <div className="order_list_items">

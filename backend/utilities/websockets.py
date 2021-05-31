@@ -5,7 +5,7 @@ import requests
 class WebSocketManager:
     def __init__(self):
         self.active_connections = {}
-        self.URL = "http://localhost:8888/weight_added"
+        self.URL = "http://localhost:8888/notify_client"
 
     async def connect_socket(self, websocket: WebSocket, business_id: int):
         await websocket.accept()
@@ -20,8 +20,8 @@ class WebSocketManager:
     async def send_personal_message(self, message: str, websocket: WebSocket):
         await websocket.send_text(message)
 
-    async def broadcast(self, message: str, business_id: int, websocket: WebSocket = None):
-        self.send_message_to_socket(message)
+    async def broadcast(self, message: str, cat: str, business_id: int, websocket: WebSocket = None):
+        self.send_message_to_socket(cat, message)
         # if business_id in self.active_connections:
         #     for connection in self.active_connections[business_id]:
         #         if websocket != connection:
@@ -33,8 +33,8 @@ class WebSocketManager:
     def get_socket_page():
         return html_sample
 
-    def send_message_to_socket(self, message: str = "bla"):
-        params = {'message': message}
+    def send_message_to_socket(self, cat: str = "message", message: str = "bla"):
+        params = {'message': message, "cat": cat}
         requests.get(url=self.URL, params=params)
 
 

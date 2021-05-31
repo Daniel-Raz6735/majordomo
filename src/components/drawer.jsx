@@ -534,7 +534,7 @@ export class ItemPage extends Component {
       cubes="";
     if (res) {
       if (res.length === 0) {
-        chart = <div className="no_data">No data to show</div>
+        chart = <div className="emptyChart">{Dictionary["no_data"]}</div>
         disabled = true
       }
       else {
@@ -542,7 +542,8 @@ export class ItemPage extends Component {
         chart = <ChartComponent {...this.props} key={active_chart} num_of_days={active_chart} dict={relavent_data} />
         cubes =[<InfoCube key={"cube" + 1} header={"Average usage"} info={reach["usage"]} dict={relavent_data} />,
         <InfoCube key={"cube" + 2} header={"Lowest average"} info={reach["minimum"]} dict={relavent_data} />,
-        <InfoCube key={"cube" + 3} header={"Highest average"} info={reach["usage"]} dict={relavent_data} />]
+        <InfoCube key={"cube" + 3} header={"Highest average"} info={reach["maximum"]} dict={relavent_data} />]
+        window.location.hash = '#cube_container';
       }
 
     }
@@ -575,7 +576,7 @@ export class ItemPage extends Component {
             {chart}
           </div>
         </div>
-        <div className="cube_container">
+        <div className="cube_container" id="cube_container">
           {cubes}
         </div>
       </div>
@@ -591,9 +592,9 @@ export class ChartComponent extends Component {
     this.state = {
       num_of_days: props.num_of_days,
       chart_id: "food_chart" + this.props.item_id + "chart" + props.num_of_days,
-      chart: null
+      chart: null,
+      render_the_chart:true
     };
-    this.pharse_date = this.pharse_date.bind(this);
     this.render_chart = this.render_chart.bind(this);
 
   }
@@ -622,37 +623,8 @@ export class ChartComponent extends Component {
     }
     else {
       //insert no data to show for this time period 
-      this.setState({ chart: <div>No data to show</div> })
+      this.setState({ render_the_chart:false})
     }
-  }
-
-  pharse_date(date) {
-    if (!date)
-      return date
-    var new_date = new Date(parseInt(date)),
-      absolute_today = get_old_date(new Date(), 1),
-      _24hAgo = new Date(),
-      diffarence = absolute_today.getTime() - new_date.getTime(),//old day is a day before at 00:00
-      year = new_date.getFullYear(),
-      dateStr = "",
-      timeStr = "",
-      res = "";
-    _24hAgo.setDate(new_date.getDate() - 1);
-
-    timeStr = new_date.getHours() + ":" + new_date.getMinutes();
-    dateStr = new_date.getDate() + "/" + (new_date.getMonth() + 1);
-    if (absolute_today.getFullYear() !== year)
-      dateStr += "/" + year
-
-    if (diffarence <= 86400) {//if the wight is yesterday or today
-      if ((_24hAgo.getTime() - new_date.getTime()) > 0) // if weight is between 24 houers ago and 00:00 of the previous day
-        res = dateStr + " " + timeStr
-      else
-        res = timeStr
-    }
-    else
-      res = dateStr
-    return res;
   }
 
 
@@ -692,11 +664,13 @@ export class ChartComponent extends Component {
   }
 
   render() {
+    if(this.state.render_the_chart)
+    return <canvas className="usage_chart" id={this.state.chart_id} />
+    else
     return (
 
-      <div>
-        <canvas className="usage_chart" id={this.state.chart_id} />
-        {this.state.chart}
+      <div className="emptyChart" > 
+        {Dictionary["no_data"]}
       </div>
 
     );
@@ -723,7 +697,7 @@ export class InfoCube extends Component {
 
   render() {
 
-    var page = []
+    var page = [], info =this.props.info==="NaN"?0:this.props.info
     if (this.props.additional_data) {
       page.push(<Divider key={"divider"} />)
       page.push(<div> {this.props.additional_data} </div>)
@@ -734,7 +708,7 @@ export class InfoCube extends Component {
 
       <div className="info_cube">
         <div className={"cube_header"}>{this.props.header}</div>
-        <div className={"cube_number"}>{this.props.info}</div>
+        <div className={"cube_number"}>{info}</div>
         {page}
       </div>
     );
