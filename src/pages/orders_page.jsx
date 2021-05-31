@@ -326,16 +326,24 @@ class Order extends Component {
             unit = this.props.order["unit"]
         }
 
-
+        // fill the items var with the relevent orders to show on export list
         let obj = { "item_name": this.props.item_name, "quantity": this.state.quantity, "unit": getUnitById(this.props.order["unit"]) }
         if (!items[this.props.supplier_name])
             items[this.props.supplier_name] = [obj]
-        else
-            items[this.props.supplier_name].push(obj)
+        else {
+
+            let inList = false
+            for (let i = 0; i < items[this.props.supplier_name].length; i++)
+                // case that the item was increment or decrement.    
+                if (items[this.props.supplier_name][i].item_name === obj.item_name) {
+                    inList = true
+                    items[this.props.supplier_name][i] = obj
+                }
+            if (!inList)
+                items[this.props.supplier_name].push(obj)
+        }
 
 
-
-        // unit = Dictionary[unit] ? Dictionary[unit] : Dictionary["unknown"]
         if (this.state) {
             return (
                 <div className="order_container"
@@ -423,14 +431,14 @@ export class OrderHeader extends Component {
                     <img src={envelope_icon} alt={Dictionary["email"]} className="order_symbol" />
                 </div>
                 {this.state.arrow}
-               
+
             </div>
 
         )
     }
 }
 
-
+console.log("orders")
 var headers = {
     supplier: 'Supplier'.replace(/,/g, ''), // remove commas to avoid errors
     item: "Item",
@@ -443,6 +451,7 @@ var headers = {
 var fileTitle = 'orders'; // or 'my-unique-title'
 
 var sellers = []
+
 //1
 class OrderList extends Component {
     constructor(props) {
@@ -495,7 +504,7 @@ class OrderList extends Component {
 
         sellers.forEach(seller => {
             this.props.items[seller].forEach(item => {
-                itemsList.push({ supplier: seller, item: item.item_name, amount: item.quantity ,unit: item.unit })
+                itemsList.push({ supplier: seller, item: item.item_name, amount: item.quantity, unit: item.unit })
             })
         })
 
@@ -524,7 +533,7 @@ class OrderList extends Component {
         var itemsList = []
 
         this.props.items[seller].forEach(item => {
-            itemsList.push({ supplier: seller, item: item.item_name, amount: item.quantity ,unit: item.unit })
+            itemsList.push({ supplier: seller, item: item.item_name, amount: item.quantity, unit: item.unit })
         })
 
         if (itemsList.length > 0)
@@ -537,7 +546,6 @@ class OrderList extends Component {
             <div style={{ margin: "auto", width: "95%" }}>
                 <TitleComponent key={"title_list_comp"} title_name={"export_lists"} />
                 <div style={{ float: "right" }}>Lists <img src={right_arrow} alt="back" onClick={this.props.back_to_list} /></div>
-
                 <div className="confirm_all_btn"><Button onClick={this.confirm_all} style={{ color: "white", background: "#73D504" }}>Confirm all</Button></div>
                 {this.state.page}
             </div>
@@ -583,7 +591,7 @@ class OrderListCategory extends Component {
 
     render() {
 
-        let divider = this.state.show?<Divider vertical={false} />:""
+        let divider = this.state.show ? <Divider vertical={false} /> : ""
 
         return (<div className="list_category_container ">
             <OrderHeader export_list={true} cat_name={this.props.seller} func={this.props.func} on_click={this.remove_onClick} />
@@ -626,7 +634,7 @@ function convertToCSV(objArray) {
     for (var i = 0; i < array.length; i++) {
         var line = '';
         for (var index in array[i]) {
-            if (line != '') line += ','
+            if (line !== '') line += ','
 
             line += array[i][index];
         }
@@ -645,7 +653,6 @@ function exportCSVFile(headers, data, fileTitle) {
     // Convert Object to JSON
     var jsonObject = JSON.stringify(data);
 
-    console.log(jsonObject)
 
     var csv = convertToCSV(jsonObject);
 
