@@ -171,10 +171,10 @@ class NotificationsHandler:
                     pass
                 if active_notification != new_notification_level:
                     self.notify_clients(business_id, item_id, new_notification_level, updater)
-                    await self.manager.broadcast("notification", new_notification_level, 1)
+                    self.manager.broadcast("notification", new_notification_level, 1)
                     item_info["active_notification"] = new_notification_level
                 else:
-                    await self.manager.broadcast("weight", " ", 1)
+                    self.manager.broadcast("weight", " ", 1)
         else:
             self.email_client.email_admin("Error loading item info",
                                           "Error loading item info business: "+ str(business_id)+" item: "+str(item_id))
