@@ -171,10 +171,10 @@ class NotificationsHandler:
                     pass
                 if active_notification != new_notification_level:
                     try:
+                        item_info["active_notification"] = new_notification_level
                         self.notify_clients(business_id, item_id, new_notification_level, updater)
                         message = str()+str()
                         await self.manager.broadcast("notification", new_notification_level, 1)
-                        item_info["active_notification"] = new_notification_level
                     except Exception as error:
                         await self.manager.broadcast("error", str(error), 1)
 
