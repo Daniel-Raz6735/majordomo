@@ -170,9 +170,14 @@ class NotificationsHandler:
                     maximum_per_day = item_info["maximum_per_day"]
                     pass
                 if active_notification != new_notification_level:
-                    self.notify_clients(business_id, item_id, new_notification_level, updater)
-                    await self.manager.broadcast("notification", new_notification_level, 1)
-                    item_info["active_notification"] = new_notification_level
+                    try:
+                        self.notify_clients(business_id, item_id, new_notification_level, updater)
+                        message = str()+str()
+                        await self.manager.broadcast("notification", new_notification_level, 1)
+                        item_info["active_notification"] = new_notification_level
+                    except Exception as error:
+                        await self.manager.broadcast("error", str(error), 1)
+
                 else:
                     await self.manager.broadcast("weight", str(" "+str(new_notification_level) + " active: "+str(active_notification)), 1)
         else:
