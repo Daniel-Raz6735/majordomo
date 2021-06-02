@@ -121,17 +121,17 @@ class NotificationsHandler:
             return self.alert_dict[business_id][item_id]
         return None
 
-    def update_item(self, business_id, item_id, container_id, weight, unit, updater):
+    async def update_item(self, business_id, item_id, container_id, weight, unit, updater):
         try:
             if self.alert_dict:
                 self.alert_dict[business_id][item_id]["containers"][container_id] = {'weight': weight, 'unit': unit}
-                self.test_item(business_id, item_id, updater)
+                await self.test_item(business_id, item_id, updater)
             else:
                 raise KeyError
         except KeyError:
             self.create_alert_dictionary()
 
-    def test_item(self, business_id, item_id, updater):
+    async def test_item(self, business_id, item_id, updater):
         """test an item in the alert dict and see if it needs a notification"""
         item_info = self.get_item(business_id, item_id)
         if item_info:
@@ -171,10 +171,10 @@ class NotificationsHandler:
                     pass
                 if active_notification != new_notification_level:
                     self.notify_clients(business_id, item_id, new_notification_level, updater)
-                    self.manager.broadcast("notification", new_notification_level, 1)
+                    await self.manager.broadcast("notification", new_notification_level, 1)
                     item_info["active_notification"] = new_notification_level
                 else:
-                    self.manager.broadcast("weight", " ", 1)
+                    await self.manager.broadcast("weight", " ", 1)
         else:
             self.email_client.email_admin("Error loading item info",
                                           "Error loading item info business: "+ str(business_id)+" item: "+str(item_id))

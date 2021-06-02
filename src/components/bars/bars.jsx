@@ -54,6 +54,7 @@ export class SiteFrame extends Component {
         var wss = new socket_client('wss://majordomo.cloudns.asia:8010/wsw')
         wss.onopen = function () { console.log('wss open'); };
         wss.onmessage = (message) => {
+            console.log("message recived")
             websocket_notify(message)
         }
         this.setState({ socket: wss });
@@ -266,6 +267,7 @@ export class SiteFrame extends Component {
 
 export function websocket_notify(message) {
     const dataFromServer = JSON.parsweighte(message.data);
+    console.log(dataFromServer)
     refresh()
     if (dataFromServer && dataFromServer["cat"] && dataFromServer["message"] !== undefined) {
         const cat = dataFromServer["cat"], message = dataFromServer["message"]

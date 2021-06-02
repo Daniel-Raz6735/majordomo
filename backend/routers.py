@@ -421,9 +421,9 @@ async def add_weights(lis: WeighingList, client_time: int):
                 arr.insert(0, [weight_time, weight["business_id"], weight["container_id"], item_id,
                                weight["weight_value"], weight["last_user"]])
                 data_inserted[weight["container_id"]] = weight["weight_value"]
-                settings.notifications_handler.update_item(weight["business_id"],
-                                                           item_id, weight["container_id"],
-                                                           weight["weight_value"], 1, updater)
+                await settings.notifications_handler.update_item(weight["business_id"],
+                                                                 item_id, weight["container_id"],
+                                                                 weight["weight_value"], 1, updater)
         query, res_code = updater.insert_to_table_query("weights",
                                                         ["weighing_date", "business_id", "container_id",
                                                          "item_id", "weight_value", "last_user"],
