@@ -55,6 +55,7 @@ export class SiteFrame extends Component {
         wss.onopen = function () { console.log('wss open'); };
         wss.onmessage = (message) => {
             console.log("message recived")
+            console.log(message)
             websocket_notify(message)
         }
         this.setState({ socket: wss });
@@ -266,13 +267,14 @@ export class SiteFrame extends Component {
 }
 
 export function websocket_notify(message) {
-    const dataFromServer = JSON.parsweighte(message.data);
+    const dataFromServer = JSON.parse(message.data);
     console.log(dataFromServer)
     refresh()
     if (dataFromServer && dataFromServer["cat"] && dataFromServer["message"] !== undefined) {
         const cat = dataFromServer["cat"], message = dataFromServer["message"]
         switch (cat) {
             case "notification":
+                console.log(message)
                 switch (message) {
                     case 1:
                         showNotification('error', "notification changed", "Item notification changd");
