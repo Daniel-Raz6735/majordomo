@@ -181,7 +181,7 @@ class NotificationsHandler:
                                                       "message": "Error adding the new notification",
                                                       "item id": item_id}, 1)
                 else:
-                    await self.manager.broadcast({"cat": "weight",, "item id": item_id,
+                    await self.manager.broadcast({"cat": "weight", "item id": item_id,
                                                   "new weight": item_info["sum"]}, 1)
         else:
             self.email_client.email_admin("Error loading item info",
