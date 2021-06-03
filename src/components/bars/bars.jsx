@@ -267,20 +267,25 @@ export class SiteFrame extends Component {
 export function websocket_notify(message) {
     const dataFromServer = JSON.parse(message.data);
     console.log(dataFromServer)
-    refresh()
-    if (dataFromServer && dataFromServer["cat"] && dataFromServer["message"] !== undefined) {
-        const cat = dataFromServer["cat"], message = dataFromServer["message"]
+
+    if (dataFromServer && dataFromServer["cat"]) {
+        const cat = dataFromServer["cat"]
+        console.log(dataFromServer)
         switch (cat) {
             case "notification":
-                console.log(message)
-                switch (message) {
+                var level = dataFromServer["notification level"], item_id = dataFromServer["item id"] ? dataFromServer["item id"] : "", weight = dataFromServer["new weight"]
+                if(main_dict&&main_dict["items"] && main_dict["items"][item_id] &&main_dict["items"][item_id]["item_name"])
+                    item_id = main_dict["items"][item_id]["item_name"]
+                switch (level) {
                     case "1":
-                        showNotification('warning', "notification changed", "Item " + " " + " turned critical");
+                        showNotification('warning', "notification changed", "Item " + item_id + " turned critical");
                         break;
                     case "2":
-                        showNotification('warning', "notification changed", "Item " + " " + " is low");
-                        case "3":
-                        showNotification('warning', "notification changed", "Item " + " " + " is Overflowing. Use quickly");
+                        showNotification('warning', "notification changed", "Item " + item_id + " is low");
+                        break;
+                    case "3":
+                        showNotification('warning', "notification changed", "Item " + item_id + " is Overflowing. Use quickly");
+                        break;
                     default:
                     case "-1":
                         break;
@@ -295,6 +300,7 @@ export function websocket_notify(message) {
                 break;
         }
     }
+    refresh()
 }
 export function silent_refresh() {
     //refresh the site data using the silent trigger
