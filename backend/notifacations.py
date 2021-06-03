@@ -173,13 +173,12 @@ class NotificationsHandler:
                     try:
                         item_info["active_notification"] = new_notification_level
                         self.notify_clients(business_id, item_id, new_notification_level, updater)
-                        message = str()+str()
                         await self.manager.broadcast("notification", new_notification_level, 1)
                     except Exception as error:
-                        await self.manager.broadcast("error", str(error), 1)
+                        await self.manager.broadcast("error", "Error adding the new notification", 1)
 
                 else:
-                    await self.manager.broadcast("weight", str(" "+str(new_notification_level) + " active: "+str(active_notification)), 1)
+                    await self.manager.broadcast("weight", " ", 1)
         else:
             self.email_client.email_admin("Error loading item info",
                                           "Error loading item info business: "+ str(business_id)+" item: "+str(item_id))
@@ -187,7 +186,6 @@ class NotificationsHandler:
     def notify_clients(self, business_id, item_id, notification_level, updater):
         """notify the clients connected that the a notification status """
         updater.add_notification(business_id, item_id, notification_level, remove_only=notification_level == -1)
-
 
     def convert_unit(self, source_unit, item_weight, target_unit=None):
         """convert units of items. if no target unit is entered so the system default is used

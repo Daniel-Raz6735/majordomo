@@ -20,7 +20,7 @@ class WebSocketManager:
     async def send_personal_message(self, message: str, websocket: WebSocket):
         await websocket.send_text(message)
 
-    async def broadcast(self, message: str, cat: str, business_id: int, websocket: WebSocket = None):
+    async def broadcast(self, cat: str, message: str, business_id: int, websocket: WebSocket = None):
         self.send_message_to_socket(cat, message)
         # if business_id in self.active_connections:
         #     for connection in self.active_connections[business_id]:

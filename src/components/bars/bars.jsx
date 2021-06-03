@@ -50,8 +50,12 @@ export class SiteFrame extends Component {
     }
     componentDidMount() {
 
-
-        var wss = new socket_client('wss://majordomo.cloudns.asia:8010/wsw')
+        var wssUrl = 'wss://majordomo.cloudns.asia:8010/wsw'
+        var wssUrl = 'ws://localhost:3333/wsw'
+        if (window.location.href.includes("majordomo-me")) {
+            wssUrl = 'wss://majordomo.cloudns.asia:8010/wsw'
+        }
+        var wss = new socket_client(wssUrl)
         wss.onopen = function () { console.log('wss open'); };
         wss.onmessage = (message) => {
             console.log("message recived")
