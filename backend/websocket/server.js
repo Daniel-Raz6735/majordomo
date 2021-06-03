@@ -9,6 +9,7 @@ app.use(express.static('public'));
 app.get('/notify_client', (req, res) => {
     console.log(req.query);
     brodcastAll(JSON.stringify(req.query));
+    res.send(req.query)
     // console.log("message recived");
     // var message = req.query.message
     // var cat = req.query.cat,
