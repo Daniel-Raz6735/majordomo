@@ -50,12 +50,10 @@ export class SiteFrame extends Component {
     }
     componentDidMount() {
 
-       
+
         var wss = new socket_client(wssUrl)
         wss.onopen = function () { console.log('wss open'); };
         wss.onmessage = (message) => {
-            console.log("message recived")
-            console.log(message)
             websocket_notify(message)
         }
         this.setState({ socket: wss });
@@ -276,12 +274,15 @@ export function websocket_notify(message) {
             case "notification":
                 console.log(message)
                 switch (message) {
-                    case 1:
-                        showNotification('error', "notification changed", "Item notification changd");
+                    case "1":
+                        showNotification('warning', "notification changed", "Item " + " " + " turned critical");
                         break;
-                    case 2:
-                        showNotification('warning', "notification changed", "Item notification changd");
+                    case "2":
+                        showNotification('warning', "notification changed", "Item " + " " + " is low");
+                        case "3":
+                        showNotification('warning', "notification changed", "Item " + " " + " is Overflowing. Use quickly");
                     default:
+                    case "-1":
                         break;
                 }
 

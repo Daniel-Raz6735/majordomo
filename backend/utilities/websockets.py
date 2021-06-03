@@ -20,8 +20,9 @@ class WebSocketManager:
     async def send_personal_message(self, message: str, websocket: WebSocket):
         await websocket.send_text(message)
 
-    async def broadcast(self, cat: str, message: str, business_id: int, websocket: WebSocket = None):
-        self.send_message_to_socket(cat, message)
+    async def broadcast(self, params_as_json, business_id: int, websocket: WebSocket = None):
+        # self.send_message_to_socket(cat, message)
+        requests.get(url=self.URL, params=params_as_json)
         # if business_id in self.active_connections:
         #     for connection in self.active_connections[business_id]:
         #         if websocket != connection:
@@ -35,6 +36,9 @@ class WebSocketManager:
 
     def send_message_to_socket(self, cat: str = "message", message: str = "bla"):
         params = {'message': message, "cat": cat}
+
+    def send_notification(self, item_id: int, weight: int, cat: str = "message"):
+        params = {"cat": cat, "item_id": item_id, "weight": weight}
         requests.get(url=self.URL, params=params)
 
 

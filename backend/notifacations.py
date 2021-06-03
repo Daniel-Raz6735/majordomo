@@ -173,15 +173,20 @@ class NotificationsHandler:
                     try:
                         item_info["active_notification"] = new_notification_level
                         self.notify_clients(business_id, item_id, new_notification_level, updater)
-                        await self.manager.broadcast("notification", new_notification_level, 1)
+                        json_message = {"cat": "notification", "notification level": new_notification_level,
+                                        "new weight": item_info["sum"], "item id": item_id}
+                        await self.manager.broadcast(json_message, 1)
                     except Exception as error:
-                        await self.manager.broadcast("error", "Error adding the new notification", 1)
-
+                        await self.manager.broadcast({"cat": "error",
+                                                      "message": "Error adding the new notification",
+                                                      "item id": item_id}, 1)
                 else:
-                    await self.manager.broadcast("weight", " ", 1)
+                    await self.manager.broadcast({"cat": "weight",, "item id": item_id,
+                                                  "new weight": item_info["sum"]}, 1)
         else:
             self.email_client.email_admin("Error loading item info",
-                                          "Error loading item info business: "+ str(business_id)+" item: "+str(item_id))
+                                          "Error loading item info business: " + str(business_id) + " item: " + str(
+                                              item_id))
 
     def notify_clients(self, business_id, item_id, notification_level, updater):
         """notify the clients connected that the a notification status """
@@ -193,14 +198,14 @@ class NotificationsHandler:
         if target_unit is None:
             target_unit = self.dict_unit
         if source_unit == KG:
-            if target_unit == KG: 
+            if target_unit == KG:
                 pass
             elif target_unit == LB:
                 item_weight *= 2.205
         elif source_unit == LB:
-            if target_unit == KG:  
+            if target_unit == KG:
                 item_weight /= 2.205
-            elif target_unit == LB:  
+            elif target_unit == LB:
                 pass
         return item_weight
 

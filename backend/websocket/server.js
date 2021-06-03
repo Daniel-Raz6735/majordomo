@@ -7,13 +7,13 @@ const port = 8888;
 const app = express();
 app.use(express.static('public'));
 app.get('/notify_client', (req, res) => {
-    console.log("message recived");
-    var message = req.query.message
-    var cat = req.query.cat,
-    data = {"cat":cat,"message":message}
-    console.log(message);
-    brodcastAll(JSON.stringify(data));
-    res.send(message)
+    console.log(req.query);
+    brodcastAll(JSON.stringify(req.query));
+    // console.log("message recived");
+    // var message = req.query.message
+    // var cat = req.query.cat,
+    // data = {"cat":cat,"message":message}
+    // res.send(message)
     
 });
 
