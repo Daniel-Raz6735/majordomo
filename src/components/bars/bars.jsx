@@ -11,7 +11,7 @@ import OrdersPage from "../../pages/orders_page"
 import { Button, Loader } from 'rsuite';
 import { create_initial_data_dict, confirm_papulation } from '../data_dictionary';
 import SettingPage from "../../pages/settings_page"
-import { base_url } from '../../index'
+import { base_url, wssUrl } from '../../index'
 import $ from 'jquery'
 import HomePage from "../../pages/home page/home_page"
 import { Notification as scrren_notification } from "rsuite";
