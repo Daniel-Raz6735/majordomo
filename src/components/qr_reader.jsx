@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import './qr_reader.css'
 import { Button, ControlLabel, Form, FormGroup, Loader, Modal, SelectPicker } from 'rsuite'
-import item_scan from '../images/icons/item_scan.svg'
-import chain_icon from '../images/icons/chain_icon.svg'
-import green_chain_icon from '../images/icons/green_chain_icon.svg'
-import scan_icon from '../images/icons/scan_icon.svg';
-import pairing_complete from '../images/icons/pairing_complete.svg';
+import container_scan from '../images/icons/Camera_area/container_scan.svg'
+import item_scan from '../images/icons/Camera_area/item_scan.svg'
+import chain_icon from '../images/icons/Camera_area/chain_icon.svg'
+import green_chain_icon from '../images/icons/Camera_area/green_chain_icon.svg'
+import scan_icon from '../images/icons/Camera_area/scan_icon.svg';
+import pairing_complete from '../images/icons/Camera_area/pairing_complete.svg';
 import { Dictionary } from '../Dictionary';
 import $ from 'jquery';
 import { base_url } from '..';
@@ -157,7 +158,7 @@ export class ModalDemo extends React.Component {
 
     // change active select filter
     change_active(kind) {
-        if (kind === "Item") {
+        if (kind === "Item ID") {
             this.setState({ item_found: false, is_item: true, scaned: false })
         }
         else if (kind === "Container ID")
@@ -286,7 +287,7 @@ export class ModalDemo extends React.Component {
                         <div className="filters_area">
                             <ScanFilter description={this.state.container_id} hasValue={this.state.container_id_found} change_active={this.change_active} active={!this.state.is_item && !this.state.scaned} key={"container" + this.state.is_item + this.state.scaned} type={"Container ID"} />
                             <img src={this.state.chain_icon_src} alt="chain" />
-                            <ScanFilter description={this.state.item_name} hasValue={this.state.item_found} change_active={this.change_active} active={this.state.is_item && !this.state.scaned} key={"item" + this.state.is_item + this.state.scaned} type={"Item"} />
+                            <ScanFilter description={this.state.item_name} hasValue={this.state.item_found} change_active={this.change_active} active={this.state.is_item && !this.state.scaned} key={"item" + this.state.is_item + this.state.scaned} type={"Item ID"} />
                         </div>
                         <div className="barcode_scan_area">
                             <FormGroup>
@@ -322,7 +323,8 @@ class ScanFilter extends Component {
     render() {
         let description = this.props.description
         let border = this.props.active ? "3px solid red" : "3px solid #00000054"
-        let className = this.props.active ? "pressed" : ""
+        let className = this.props.active ? "pressed" : "",
+        scanImage = this.props.type ==="Item ID"?item_scan:container_scan
         if (this.props.hasValue) {
             border = "3px solid #73D504"
         }
@@ -331,7 +333,7 @@ class ScanFilter extends Component {
             <div onClick={() => this.props.change_active(this.props.type)} className={"scan_btns_filter " + className} style={{ border: border }}>
                 <div>{this.state.type}</div>
                 <div>{description}</div>
-                <img style={{ marginTop: "10px" }} src={item_scan} alt="item_scan" />
+                <img style={{ marginTop: "10px" }} src={scanImage} alt={this.props.type+ "scan"} />
             </div>
         )
     }
