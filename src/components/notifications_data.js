@@ -7,7 +7,7 @@ import overflow_sign from '../images/icons/overflow sign.svg'
 import white_circle from '../images/icons/white circle warning.svg';
 import white_triangle from '../images/icons/white triangle_warning.svg';
 import white_overflow from '../images/icons/white overflow sign.svg';
-import { AddToOrder } from '../pages/inventory_page';
+import { AddToOrder } from '../pages/inventory page/inventory_page';
 import meet_and_fish from '../images/icons/category_symbols/meet_and_fish.svg'
 import dry_food from '../images/icons/category_symbols/dry_food.svg'
 import others from '../images/icons/category_symbols/others.svg'

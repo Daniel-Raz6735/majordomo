@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import { Button, Dropdown, Loader, Nav, Sidenav, Toggle } from "rsuite";
-import { NavBar } from "../components/bars/bars";
-import { Dictionary } from "../Dictionary";
-import profilePic from "../images/profile_pic.png";
+import { NavBar } from "../../components/bars/bars";
+import { Dictionary } from "../../Dictionary";
+import profilePic from "../../images/profile_pic.png";
 import './settings_page.css'
-import { changeLanguage } from '../Dictionary'
-import AdminPage from '../pages/Admin Page/admin_page';
+import { changeLanguage } from '../../Dictionary'
+import AdminPage from '../Admin Page/admin_page';
 import $ from 'jquery';
 
 var fake_settings = {

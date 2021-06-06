@@ -6,11 +6,11 @@ import profile from '../../images/profile.svg'
 import React, { Component } from 'react';
 import { auth } from '../../config/firebaseConfig'
 import { Dictionary, getTime } from '../../Dictionary';
-import InventoryPage from "../../pages/inventory_page"
-import OrdersPage from "../../pages/orders_page"
+import InventoryPage from "../../pages/inventory page/inventory_page"
+import OrdersPage from "../../pages/orders page/orders_page"
 import { Button, Loader } from 'rsuite';
 import { create_initial_data_dict, confirm_papulation } from '../data_dictionary';
-import SettingPage from "../../pages/settings_page"
+import SettingPage from "../../pages/settings page/settings_page"
 import { base_url, wssUrl } from '../../index'
 import $ from 'jquery'
 import HomePage from "../../pages/home page/home_page"
@@ -274,7 +274,7 @@ export function websocket_notify(message) {
         switch (cat) {
             case "notification":
                 var level = dataFromServer["notification level"], item_id = dataFromServer["item id"] ? dataFromServer["item id"] : "", weight = dataFromServer["new weight"]
-                if(main_dict&&main_dict["items"] && main_dict["items"][item_id] &&main_dict["items"][item_id]["item_name"])
+                if (main_dict && main_dict["items"] && main_dict["items"][item_id] && main_dict["items"][item_id]["item_name"])
                     item_id = main_dict["items"][item_id]["item_name"]
                 switch (level) {
                     case "1":
@@ -398,7 +398,7 @@ export class ButtonsComponent extends Component {
             width += 33;
         }
 
-        let list = this.props.orders ? <img src={export_list} alt="export" onClick={this.props.export_func} /> : ""
+        let list = this.props.orders ? <figure className="img_caption"><img src={export_list} alt="export" onClick={this.props.export_func} /><figcaption>Export List</figcaption></figure> : ""
         return (<div className="toolbar_buttons" style={{ width: width + "%" }}>
             {btns}
             {list}

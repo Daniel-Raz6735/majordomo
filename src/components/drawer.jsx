@@ -7,7 +7,7 @@ import { AlertNotifications } from './notifications';
 import './../components/drawer.css';
 import { Dictionary, getRTL, getLeftRight } from '../Dictionary';
 import { category_names, category_symbols, category_colors } from './notifications_data';
-import { AddItem } from '../pages/orders_page';
+import { AddItem } from '../pages/orders page/orders_page';
 import { InventoryTile } from '../pages/home page/home_page';
 import Chart from 'chart.js'
 import { base_url } from '../index';

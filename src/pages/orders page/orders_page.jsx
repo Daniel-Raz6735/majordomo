@@ -1,18 +1,18 @@
 import React, { Component } from "react";
-import { ButtonsComponent, refresh, TitleComponent } from "../components/bars/bars.jsx";
+import { ButtonsComponent, refresh, TitleComponent } from "../../components/bars/bars.jsx";
 import { Animation, Button, Divider } from 'rsuite';
-import whatsapp_icon from '../images/icons/contact/whatsapp.svg';
-import phone_icon from '../images/icons/contact/phone.svg';
-import envelope_icon from '../images/icons/contact/envelope.svg';
-import down_arrow from '../images/icons/arrows/down_arrow.svg';
+import whatsapp_icon from '../../images/icons/contact/whatsapp.svg';
+import phone_icon from '../../images/icons/contact/phone.svg';
+import envelope_icon from '../../images/icons/contact/envelope.svg';
+import down_arrow from '../../images/icons/arrows/down_arrow.svg';
 import $ from 'jquery'
 import './orders_page.css'
-import { Dictionary, getRTL } from "../Dictionary";
-import { CategoryDrawer, SearchBar } from "../components/drawer";
-import { Quantity } from "./inventory_page";
-import { base_url } from "../index.js";
-import right_arrow from '../images/icons/arrows/right_arrow.svg'
-import { getUnitById } from "../components/data_dictionary.js";
+import { Dictionary, getRTL } from "../../Dictionary";
+import { CategoryDrawer, SearchBar } from "../../components/drawer";
+import { Quantity } from "../inventory page/inventory_page";
+import { base_url } from "../../index.js";
+import right_arrow from '../../images/icons/arrows/right_arrow.svg'
+import { getUnitById } from "../../components/data_dictionary.js";
 
 
 

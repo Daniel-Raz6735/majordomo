@@ -3,7 +3,7 @@ import { Dictionary, getRTL } from '../Dictionary';
 import "./containers.css"
 import { base_url } from '../index'
 import $ from 'jquery'
-import { AddToOrder } from '../pages/inventory_page';
+import { AddToOrder } from '../pages/inventory page/inventory_page';
 import inventory_looks_good from '../images/icons/inventory looks good.svg'
 import empty_symbol from '../images/icons/empty_symbol.svg'
 import { getUnitById } from './data_dictionary';
