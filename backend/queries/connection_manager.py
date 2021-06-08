@@ -78,6 +78,17 @@ class Connection:
             print("error: ", error)
             raise HTTPException(status_code=400, detail=error_message)
 
+    def update_data(self, update_query, error_message):
+        """executes SQL update query"""
+        try:
+            print(update_query)
+            self.cur.execute(update_query)
+            self.conn.commit()
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("error: ", error)
+            raise HTTPException(status_code=400, detail=error_message)
+
 
 def init_connection():
     """initiate a connection with the DB"""

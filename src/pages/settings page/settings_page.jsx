@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import { Button, Dropdown, Loader, Nav, Sidenav, Toggle } from "rsuite";
-import { NavBar } from "../../components/bars/bars";
-import { Dictionary } from "../../Dictionary";
+import { NavBar, showNotification } from "../../components/bars/bars";
+import { determinLang, Dictionary } from "../../Dictionary";
 import profilePic from "../../images/profile_pic.png";
 import './settings_page.css'
 import { changeLanguage } from '../../Dictionary'
 import AdminPage from '../Admin Page/admin_page';
 import $ from 'jquery';
+import { base_url } from "../..";
 
 var fake_settings = {
   lang: "EN",
@@ -21,89 +22,92 @@ var fake_settings = {
 class SettingsPage extends Component {
   constructor(props) {
     super(props);
+    var settings = fake_settings
+    if (this.props.dict && this.props.dict["preferences"] && this.props.dict["preferences"][0])
+      settings = this.props.dict["preferences"][0]
     this.state = {
       expanded: true,
-      settings: this.props.dict && this.props.dict["preferences"] ? this.props.dict["preferences"] : fake_settings,
+      settings: settings,
       QR: false
     }
-    this.changeNotificationToggle = this.changeNotificationToggle.bind(this);
+    this.minimumReachToggle = this.minimumReachToggle.bind(this);
     this.changeFreshnessToggle = this.changeFreshnessToggle.bind(this);
+    this.switchLang = this.switchLang.bind(this);
+    this.changePreference = this.changePreference.bind(this);
 
   }
 
   componentDidMount() {
-    
+
+  }
+  changePreference(setting, errorMessage,successFunc=undefined) {
+    let settings = this.state.settings
+    var request = base_url + "/edit/preferences"
+    request += "?user_id=" + settings["user_id"] + "&" + setting
+    $.ajax({
+      method: "POST",
+      url: request,
+      success: function (res) {
+        if(successFunc)
+          successFunc()
+      },
+      error: function (err) {
+        showNotification('error', "Setting Change faild", errorMessage)
+        console.log(err)
+      }
+    });
   }
 
-  changeNotificationToggle(val) {
-    // preference[0]["minimum_reach_alerts"] = val
+
+
+  minimumReachToggle(val) {
+    this.changePreference("minimum_reach_alerts=" + val, "Unable to change minimum reach")
+  }
+  switchLang(lang) {
+    lang = determinLang(lang)
+    this.changePreference("lang=" + lang, "Unable to change Language", changeLanguage(lang))
   }
 
   changeFreshnessToggle(val) {
-    // preference[0]["freshness_alerts"] = val
+    this.changePreference("freshness_alerts=" + val, "Unable to change freshness")
   }
 
 
   render() {
-    let j
     if (this.state.settings && !this.state.QR) {
       let settings = this.state.settings
-
-      // j = preference[0]["lang"] === "EN" ? 0 : 1
-      j = settings["lang"] === "EN" ? 0 : 1
-
       return (
         <div className="settings_page_container">
 
           <div className="profile_details"><img className="profile_pic" alt="Profile" src={profilePic} /></div>
 
           <div className="side_nav_container">
-            {/* <button onClick={()=>this.setState({QR:true})} >QR Reader</button> */}
-            <ManegmentBTN dict={this.props.dict} />
-            <div className="settings_issues">
-              <Sidenav appearance="subtle" >
-                <div className={"settings_container"}>general settings</div>
-                <Nav>
-                  <DropdownToggle type={"general"} setting_name={Dictionary["language"]} options={["English", "עברית"]} chosen={j} />
-                </Nav>
-              </Sidenav>
+            {/* <ManegmentBTN dict={this.props.dict} /> */}
+            <SideNavWrapper title="general settings"
+              content={
+                [<DropdownToggle setting_name={"Integration"} options={["Priority", "Other"]} chosen={"Priority"} active={false} />
+                  , <DropdownToggle setting_name={Dictionary["language"]} options={["English", "עברית"]} chosen={"English"} onSelectFunction={changeLanguage} />
+                ]
+              } />
 
-              <Sidenav>
-                <Nav>
-                  <DropdownToggle type={"general"} setting_name={"Integration"} options={["Priority", "Other"]} chosen={0} />
-                </Nav>
-              </Sidenav>
+            <SideNavWrapper title="Notification"
+              content={
+                [<Toggler onChange={this.minimumReachToggle} setting_name={"Minimum reach"} checked={settings["minimum_reach_alerts"]} />,
+                <Toggler onChange={this.changeFreshnessToggle} setting_name={"Freshness"} checked={settings["freshness_alerts"]} />
+                ]
+              } />
 
-            </div>
+            <SideNavWrapper title="shlomo"
+              content={
+                [<DropdownToggle setting_name={"Supplier list"} />]
+              } />
 
-            <div className="settings_issues">
-              <Sidenav appearance="subtle" >
-                <div className={"settings_container"}>Notification</div>
-                <Nav>
-                  <DropdownToggle change1={this.changeNotificationToggle} change2={this.changeFreshnessToggle} minimum_reach={settings["minimum_reach_alerts"]} freshnses={settings["freshness_alerts"]} type={"notification"} />
-                  {/* <DropdownToggle change1={this.changeNotificationToggle} change2={this.changeFreshnessToggle} minimum_reach={preference[0]["minimum_reach_alerts"]} freshnses={preference[0]["freshness_alerts"]} type={"notification"} /> */}
-                  {/* <DropdownToggle change={this.changeNotificationToggle}  minimum_reach={settings["minimum_reach_alerts"]} freshnses={settings["freshness_alerts"]} type={"notification"} /> */}
-                </Nav>
-              </Sidenav>
-
-            </div>
-
-
-            <div className="system_issues">
-              <Sidenav appearance="subtle" >
-                <div className={"settings_container"}>System</div>
-                <Nav>
-                  <DropdownToggle type={"system"} setting_name={"Supplier list"} />
-                </Nav>
-              </Sidenav>
-
-              <Sidenav appearance="subtle" >
-                <Nav>
-                  <DropdownToggle type={"system"} setting_name={"Inventory"} />
-                </Nav>
-              </Sidenav>
-            </div>
-
+            <SideNavWrapper title="System"
+              content={
+                [<DropdownToggle setting_name={"Supplier list"} />,
+                <DropdownToggle setting_name={"Inventory"} />
+                ]
+              } />
 
 
 
@@ -131,71 +135,106 @@ const ManegmentBTN = (props) => {
 
   );
 }
+
 class DropdownToggle extends Component {
   constructor(props) {
     super(props);
-    var len = this.props.options ? this.props.options.length : 0
+    var options = this.props.options, len = 0, chosenIndex = 0
+    if (options && Array.isArray(options)) {
+      len = options.length;
+      chosenIndex = options.indexOf(this.props.chosen);
+    }
+    else
+      options = []
 
     this.state = {
-      text_class: new Array(len),
-      chosen: this.props.chosen ? this.props.chosen : 0,
+      chosenIndex: chosenIndex,
       event_key: this.props.eventKey ? this.props.event_key : 1,
-      options: this.props.options ? this.props.options : [],
+      options: options,
+      chosen: this.props.chosen,
+      open: true
     }
+    this.onSelectFunction = this.onSelectFunction.bind(this);
   }
 
-  componentDidMount() {
-
-    var len = this.props.options ? this.props.options.length : 0
-    var textArr = new Array(len)
-    textArr[this.state.chosen] = "chosen_option"
-    this.setState({ text_class: textArr })
-
+  onSelectFunction(ele) {
+    this.setState({ open: false })
+    if (this.props.onSelectFunction)
+      this.props.onSelectFunction(ele)
   }
+
   render() {
+    let page = [], options = this.state.options
+    for (let i = 0; i < options.length; i++) {
+      let event_key = String(this.state.event_key) + "-" + String(i),
+        className = i === this.state.chosenIndex ? "chosen_option" : ""
 
-    let test
-
-    switch (this.props.type) {
-      default:
-        break;
-
-      case "general":
-        let page = []
-        for (let i = 0; i < this.state.options.length; i++) {
-          let event_key = String(this.state.event_key) + "-" + String(i)
-          let lang = i === 0 ? "EN" : "HE"
-
-          page.push(<Dropdown.Item key={"dropdown_item" + i} eventKey={event_key} onSelect={changeLanguage(lang)} ><div className={this.state.text_class[i]} >{this.state.options[i]}</div></Dropdown.Item>)
-        }
-
-        test = <Dropdown toggleClassName='dropdown_title' eventKey={String(this.state.event_key)} title={<div className="title_container" ><div className="setting_name">{this.props.setting_name}</div><div className="setting_value">{this.props.options[this.state.chosen]}</div></div>} >
-          {page}
-        </Dropdown>
-        break;
-
-      case "notification":
-        test = <div>
-          <div className="notification_system_toggler"> <div className="title_container" ><div className="setting_name">Minimum reach</div><div className="setting_value"><Toggle onChange={this.props.change1} defaultChecked={this.props.minimum_reach} /></div></div></div>
-          <div className="notification_system_toggler"> <div className="title_container" ><div className="setting_name">Freshness</div><div className="setting_value"><Toggle onChange={this.props.change2} defaultChecked={this.props.freshnses} /></div></div></div>
-        </div>
-        break;
-
-      case "system":
-        test = <Dropdown toggleClassName='dropdown_title' title={<div className="title_container" ><div className="setting_name">{this.props.setting_name}</div><div className="setting_value"></div></div>}>
-
-        </Dropdown>
+      page.push(
+        <Dropdown.Item key={"dropdown_item" + i} eventKey={event_key} onSelect={() => this.onSelectFunction(options[i])} >
+          <div className={className} >
+            {options[i]}
+          </div>
+        </Dropdown.Item>)
     }
-
 
     return (
       <div className='dropdown_title'>
-        {test}
+        <Dropdown toggleClassName='dropdown_title' eventKey={String(this.state.event_key)} open={this.state.open}
+          title={<div className="title_container" >
+            <div className="setting_name">{this.props.setting_name}</div>
+            <div className="setting_value">{options[this.state.chosenIndex]}</div>
+          </div>} >
+          {page}
+        </Dropdown>
       </div>
+    );
+  }
+}
+class Toggler extends Component {
+  render() {
+    return (
+      <div className='dropdown_title'>
+        <div className="notification_system_toggler">
+          <div className="title_container" >
+            <div className="setting_name">{this.props.setting_name}</div>
+            <div className="setting_value">
+              <Toggle onChange={this.props.onChange} defaultChecked={this.props.checked} />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+class SideNavWrapper extends Component {
+
+  render() {
+    var content = this.props.content, page = []
+    if (Array.isArray(content)) {
+      content.forEach(obj => {
+        page.push(<Sidenav appearance="subtle" >
+          <Nav>
+            {obj}
+          </Nav>
+        </Sidenav>)
+      })
+
+    }
+    else
+      page = content
+    return (
+      <div className="system_issues">
+        <div className={"settings_container"}>{this.props.title}</div>
+        {page}
+      </div>
+
     );
 
   }
 }
+
+
+
 export default SettingsPage
 
 

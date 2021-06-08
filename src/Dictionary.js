@@ -46,8 +46,8 @@ export const Dictionary = new LocalizedStrings({
     1: "Past day",
     min: "Minimum",
     max: "Maximum",
-    unset:"Unset",
-    item_weight:"Item weight",
+    unset: "Unset",
+    item_weight: "Item weight",
     no_data: "No data to show",
 
     //notifications
@@ -84,7 +84,7 @@ export const Dictionary = new LocalizedStrings({
     new_item: "New item",
     unknown: "Unknown",
     cart: "Cart",
-    export_lists:"Export Lists",
+    export_lists: "Export Lists",
 
     //settings page
     language: "Language",
@@ -94,13 +94,13 @@ export const Dictionary = new LocalizedStrings({
     status_code: "Status code",
 
     //qr barcode
-    container_id:"Container ID",
-    item:"Item",
-    container_pairing:"Container Pairing",
-    container_not_in_list:"Container not in list",
-    item_not_in_list:"Item not in list",
+    container_id: "Container ID",
+    item: "Item",
+    container_pairing: "Container Pairing",
+    container_not_in_list: "Container not in list",
+    item_not_in_list: "Item not in list",
 
-    
+
 
 
 
@@ -135,8 +135,8 @@ export const Dictionary = new LocalizedStrings({
     1: "יום שעבר",
     min: "מינימום",
     max: "מקסימום",
-    unset:"לא נקבע",
-    item_weight:"משקל מוצר",
+    unset: "לא נקבע",
+    item_weight: "משקל מוצר",
     no_data: "אין מידע להציג",
 
     //notifications
@@ -172,7 +172,7 @@ export const Dictionary = new LocalizedStrings({
     add_item: "הוסף מוצר",
     new_item: "מוצר חדש",
     unknown: "לא ידוע",
-    export_lists:"ייצא רשימה",
+    export_lists: "ייצא רשימה",
 
     //settings page
     language: "שפה",
@@ -182,8 +182,8 @@ export const Dictionary = new LocalizedStrings({
     status_code: "קוד שגיאה",
 
     //qr barcode
-    container_id:"מזהה מיכל",
-    item:"מוצר",
+    container_id: "מזהה מיכל",
+    item: "מוצר",
 
   }
 });
@@ -198,11 +198,24 @@ if (language === null) {
   language = langs[0];
 }
 Dictionary.setLanguage(language);
+export function determinLang(lang) {
+  switch (lang) {
+    case "English":
+      lang = "EN"
+      break;
+    case "עברית":
+      lang = "HE"
+      break;
+
+    default:
+      break;
+  }
+  return lang;
+}
 
 //save new language in session storage and reload page
 export function changeLanguage(lang) {
-
-  return function () {
+  return () => {
     sessionStorage.setItem("current_language", lang);
     sessionStorage.setItem('tab_name', "SettingPage")
     window.location.reload();
