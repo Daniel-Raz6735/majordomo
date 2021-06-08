@@ -16,6 +16,18 @@ import { getUnitById } from "../../components/data_dictionary.js";
 
 
 
+var headers = {
+    supplier: 'Supplier'.replace(/,/g, ''), // remove commas to avoid errors
+    item: "Item",
+    amount: "Amount",
+    unit: "Unit"
+
+};
+
+
+var fileTitle = 'orders'; // or 'my-unique-title'
+
+var sellers = []
 
 
 const { Collapse } = Animation;
@@ -36,7 +48,7 @@ export function sort_by_key_val(jsObj, sort_by_key, reverse) {
     return sortedArray;
 }
 
-export var items ={}
+export var items = {}
 
 
 //1
@@ -49,7 +61,8 @@ export class OrdersPage extends Component {
             dict: props.dict,
             export: false,
             weight_sup_dict: null,
-            sorted_sellers: null
+            sorted_sellers: null,
+            term: ""
 
         }
         this.sort_dict = this.sort_dict.bind(this);
@@ -57,8 +70,14 @@ export class OrdersPage extends Component {
         this.sort_by_supplier = this.sort_by_supplier.bind(this);
         this.export_list = this.export_list.bind(this);
         this.back_to_list = this.back_to_list.bind(this);
+        this.handle_change = this.handle_change.bind(this);
 
 
+    }
+
+    handle_change(term) {
+        // console.log(e)
+        this.setState({ term })
     }
 
     call_back(toggle_number) {
@@ -127,7 +146,8 @@ export class OrdersPage extends Component {
                 sorted_sellers.forEach(supplier => {
 
                     var supplier_id = supplier[0]
-                    page.push(<OrderCategory key={"order_cat" + supplier + this.props.update} weights_dict={weight_sup_dict[supplier_id]} supplier={suppliers_dict[supplier_id]} />)
+                    let term = this.state.term
+                    page.push(<OrderCategory key={"order_cat" + supplier + this.props.update + this.state.term} term={term} weights_dict={weight_sup_dict[supplier_id]} supplier={suppliers_dict[supplier_id]} />)
                 })
 
             }
@@ -156,9 +176,9 @@ export class OrdersPage extends Component {
         if (!this.state.export)
             return (
                 <div className="orders_page_container">
-                    <TitleComponent key={"tile_comp"} title_name="orders" />
+                    <TitleComponent key={"tile_comp"} title_name="lists" />
                     <ButtonsComponent key="Order_btns" def_btn={1} btn_names={["item_type", "supplier"]} orders={true} export_func={this.export_list} callback={this.sort_dict} />
-                    <SearchBar key={"search_bar_order_page"} />
+                    <SearchBar handleChange={this.handle_change} key={"search_bar_order_page"} />
                     {page}
                 </div>
 
@@ -178,6 +198,7 @@ class OrderCategory extends Component {
         this.state = {
             page: [],
             show: true,
+            num_of_obj: 0
 
         };
 
@@ -213,8 +234,12 @@ class OrderCategory extends Component {
                     orders_details = sells_items[key]["order_details"]
 
                     if (orders_details) {
+                        // add orders that answer to serach input
+                        if (this.props.term && this.props.term.length > 0 && item_name.toLowerCase().startsWith(this.props.term.toLowerCase()))
+                            page.push(<Order key={"order" + key + this.props.term} supplier_name={this.props.supplier["name"]} order={orders_details} item_name={item_name} item_id={key} order_id={orders_details["order_id"]} />)
+                        else if (this.props.term.length === 0)
+                            page.push(<Order key={"order" + key} supplier_name={this.props.supplier["name"]} order={orders_details} item_name={item_name} item_id={key} order_id={orders_details["order_id"]} />)
 
-                        page.push(<Order key={"order" + key} supplier_name={this.props.supplier["name"]} order={orders_details} item_name={item_name} item_id={key} order_id={orders_details["order_id"]} />)
                     }
                 })
             }
@@ -229,15 +254,21 @@ class OrderCategory extends Component {
     render() {
 
         let supplier = this.props.supplier
+        var orders = this.render_supplier(this.props.supplier)
 
-        return (
-            <div className="notification_category_container">
-                <OrderHeader key={"header" + this.props.cat_type + this.props.category_id} cat_name={supplier["name"]} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
-                <Collapse in={this.state.show} key={this.props.category_id + "collapse" + this.props.cat_type} >
-                    {(props, ref) => <Panel {...props} ref={ref} key={this.props.category_id + " panel " + this.props.cat_type} orders={this.render_supplier(this.props.supplier)} />}
-                </Collapse>
-            </div>
-        );
+
+        if (!this.props.term || (this.props.term && this.props.term.length > 0 && orders.length - 1 > 0)) {
+
+            return (
+                <div className="notification_category_container">
+                    <OrderHeader key={"header" + this.props.cat_type + this.props.category_id} cat_name={supplier["name"]} cat_type={this.props.cat_type} on_click={this.remove_onClick} weights_dict={this.props.weights_dict} cat_id={this.props.category_id} />
+                    <Collapse in={this.state.show} key={this.props.category_id + "collapse" + this.props.cat_type} >
+                        {(props, ref) => <Panel {...props} ref={ref} key={this.props.category_id + " panel " + this.props.cat_type} orders={this.render_supplier(this.props.supplier)} />}
+                    </Collapse>
+                </div>
+            );
+        } else
+            return <div></div>
     }
 }
 
@@ -427,19 +458,7 @@ export class OrderHeader extends Component {
     }
 }
 
-console.log("orders")
-var headers = {
-    supplier: 'Supplier'.replace(/,/g, ''), // remove commas to avoid errors
-    item: "Item",
-    amount: "Amount",
-    unit: "Unit"
 
-};
-
-
-var fileTitle = 'orders'; // or 'my-unique-title'
-
-var sellers = []
 
 //1
 class OrderList extends Component {
