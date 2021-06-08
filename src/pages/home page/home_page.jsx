@@ -21,7 +21,7 @@ export class HomePage extends Component {
 
     }
     componentDidMount() {
-        
+        console.log(this.props.dict)
     }
 
 
@@ -32,7 +32,7 @@ export class HomePage extends Component {
 
         var tiles = this.props.dict["weights"]["category"]
 
-        let temp = notfication ? <NotificationPeeker key={"notification_peeker"} dict={notfication} /> : <OKNotification />
+        let temp = notfication ? <NotificationPeeker preferences={this.props.dict["preferences"][0]} key={"notification_peeker"} dict={notfication} /> : <OKNotification />
 
         return (
             <div className="home_page">
@@ -57,7 +57,8 @@ export class NotificationPeeker extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            page: []
+            page: [],
+
         }
 
     }
@@ -65,12 +66,16 @@ export class NotificationPeeker extends Component {
 
     componentDidMount() {
         var page = []
+        let minimum_reach = this.props.preferences["minimum_reach_alerts"]
         Object.keys(this.props.dict).forEach(level => {
             var level_dict = this.props.dict[level]
             Object.keys(level_dict).forEach(supplier_id => {
                 var supplier_info = level_dict[supplier_id]
                 Object.keys(supplier_info).forEach(item_id => {
                     var item_info = supplier_info[item_id]
+                    if (minimum_reach && item_info["notification_level"] === 2)
+                        return
+
                     page.push(<Notification key={"not" + item_id} notification_level={item_info["notification_level"]}
                         item_name={item_info["item_name"]} total_weight={item_info["total_weight"]}
                         unit={getUnitById(item_info["unit"])} order_details={item_info["order_details"]}

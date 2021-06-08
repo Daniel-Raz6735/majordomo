@@ -36,9 +36,8 @@ export class SiteFrame extends Component {
         this.state = {
             buttons: ["bottom_bar active", "bottom_bar", "bottom_bar", "bottom_bar"],
             page: <Loader speed="fast" size="lg" content="Loading..." center vertical />,
-
-
         }
+        
         this.change_tab = this.change_tab.bind(this);
         this.send_msg = this.send_msg.bind(this);
         this.process_initial_data = this.process_initial_data.bind(this);
