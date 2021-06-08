@@ -387,9 +387,19 @@ class ReadQueries:
         return final_query, 200
 
     @staticmethod
-    def get_user_preferences_query(user_email):
+    def get_user_preferences_query(user_id):
         """creates an SQL query that will return the user preferences"""
-        column_list = [[["user_id"], ["lang"], ["minimum_reach_alerts"], ["freshness_alerts"]], []]
+        column_list = [["user_id"], ["lang"], ["minimum_reach_alerts"], ["freshness_alerts"]]
+        conditions = [["user_id", "=", int(user_id)]]
+        final_query, res_code = DbQueries.select_query(["user_preference"],
+                                                       column_list,
+                                                       conditions)
+        if res_code != 200:
+            raise HTTPException(status_code=res_code, detail=final_query)
+        return final_query
+
+    def get_userid_by_email(self, user_email):
+        column_list = [[["user_id"]]]
         conditions = []
         if user_email:
             if ";" in user_email:
@@ -399,16 +409,19 @@ class ReadQueries:
                 raise HTTPException(status_code=400, detail="Invalid email")
             conditions.append(["AND", "users.email_user_name", "=", "'" + email[0] + "'"])
             conditions.append(["AND", "users.email_domain_name", "=", "'" + email[1] + "'"])
-            conditions.append(["AND", "users.user_id", "=", "user_preference.user_id"])
         else:
             raise HTTPException(status_code=400, detail=" user email not sent")
 
-        final_query, res_code = DbQueries.select_query(["user_preference", "users"],
+        final_query, res_code = DbQueries.select_query([["users"]],
                                                        column_list,
                                                        conditions)
         if res_code != 200:
             raise HTTPException(status_code=res_code, detail=final_query)
-        return final_query
+        res = self.connection.get_result(final_query)
+        try:
+            return res[0]["user_id"]
+        except (KeyError, IndexError):
+            raise HTTPException(status_code=404, detail="User not found")
 
     @staticmethod
     def select_connection(query, expecting_result=True):

@@ -103,8 +103,19 @@ def get_current_weight(business_id: int, item_ids: List[int] = None):
 def get_user_preferences(user_email: str):
     """gets preferences for a specific user based on user_email
         required parameters: user_email"""
-    query = readQ.get_user_preferences_query(user_email)
-    return process_read_query(query)
+    connection = Connection()
+    reader = readQ(connection)
+    user_id = reader.get_userid_by_email(user_email)
+    query = readQ.get_user_preferences_query(user_id)
+    return connection.get_result(query)
+
+
+@app.post('/edit/preferences')
+def edit_user_preferences(user_id: int, lang: str = None, minimum_reach_alerts: bool = None,
+                          freshness_alerts: bool = None):
+    connection = Connection()
+    query = updateQ.edit_user_preferences(user_id, lang, minimum_reach_alerts, freshness_alerts)
+    connection.update_data(query, "Unable to edit user preferences")
 
 
 @app.get('/get/notifications')
@@ -288,17 +299,15 @@ async def remove_container(container_id: int):
 
 
 @app.get('/get/current_view')
-async def get_current_view(business_id: int, user_email: str = "shlomow6@gmail.com"):
+async def get_current_view(business_id: int, user_id: int = 1):
     """gets all the info a user needs based on business_id
     output: "preferences": pre,
             "notifications": notifications,
             "weights": weights,
             "suppliers": suppliers,
             "orders": orders,"""
-    if ";" in user_email:
-        raise HTTPException(status_code=400, detail="Illegal email")
     message = "unable to load preference"
-    user_preferences_query = readQ.get_user_preferences_query(user_email)
+    user_preferences_query = readQ.get_user_preferences_query(user_id)
     message = "unable to load items"
     items_query = readQ.get_items(business_id=business_id)
     message = "unable to load weight"

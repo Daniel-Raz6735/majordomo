@@ -3,6 +3,7 @@ from queries.create_queries import CreateQueries as createQ
 from queries.connection_manager import Connection
 from fastapi import HTTPException
 from pydantic import BaseModel, BaseSettings
+from db_queries import DbQueries
 import time
 
 
@@ -136,8 +137,8 @@ class UpdateQueries:
 
         # add item to order
         insert_query, res_code = self.insert_to_table_query('order_content',
-                                                       ['item_id', "order_id", "amount", "unit"],
-                                                       [[item_id, order_id, amount, unit]])
+                                                            ['item_id', "order_id", "amount", "unit"],
+                                                            [[item_id, order_id, amount, unit]])
         if res_code != 200:
             raise HTTPException(status_code=500, detail="Server error")
         update_query, res_code = update_order_content_query(item_id, order_id, amount, unit, None, None)
@@ -145,7 +146,8 @@ class UpdateQueries:
         if res_code != 200:
             raise HTTPException(status_code=500, detail="Server error")
 
-        res , res_code = self.connection.insert_data(insert_query, "Parameter error", update_query, ['item_id', "order_id"])
+        res, res_code = self.connection.insert_data(insert_query, "Parameter error", update_query,
+                                                    ['item_id', "order_id"])
 
         return res, res_code, order_id
 
@@ -202,20 +204,20 @@ class UpdateQueries:
             if len(split_mail) != 2:
                 cols_to_set.append("email_domain_name")
 
-#         address: "vegetables place, JLM"
-# business_id: null
-# department_id: null
-# email_domain_name: "gmail.com"
-# email_user_name: "vegetables"
-# first_name: "vegetable"
-# last_name: "seller"
-# phone_number: "502001231"
-#         cols_to_set = ["amount", "unit"]
-#         vals_to_set = [amount, unit]
-#         if price_per_unit:
-#             cols_to_set.append("price_per_unit")
-#             vals_to_set.append(price_per_unit)
-#         return update_table_query("users ", cols_to_set, vals_to_set, conditions, include_t_name)
+    #         address: "vegetables place, JLM"
+    # business_id: null
+    # department_id: null
+    # email_domain_name: "gmail.com"
+    # email_user_name: "vegetables"
+    # first_name: "vegetable"
+    # last_name: "seller"
+    # phone_number: "502001231"
+    #         cols_to_set = ["amount", "unit"]
+    #         vals_to_set = [amount, unit]
+    #         if price_per_unit:
+    #             cols_to_set.append("price_per_unit")
+    #             vals_to_set.append(price_per_unit)
+    #         return update_table_query("users ", cols_to_set, vals_to_set, conditions, include_t_name)
 
     def add_notification(self, business_id, item_id, notification_level, message=None, remove_only=False):
         """remove all previous notifications and if not remove_only add a notification to the data """
@@ -234,9 +236,35 @@ class UpdateQueries:
         if business_id:
             conditions.append(["business_id", "=", int(business_id)])
         cols_to_set = ["using_end_date"]
-        vals_to_set = ["to_timestamp("+str(int(time.time()))+")"]
+        vals_to_set = ["to_timestamp(" + str(int(time.time())) + ")"]
         query, res_code = update_table_query("containers", cols_to_set, vals_to_set, conditions)
         return query
+
+    @staticmethod
+    def edit_user_preferences(user_id, lang=None, minimum_reach_alerts=None, freshness_alerts=None):
+        column_list = []
+        conditions = []
+        values = []
+        if user_id:
+            conditions.append(["user_id", "=", int(user_id)])
+        else:
+            raise HTTPException(status_code=400, detail=" user email not sent")
+
+        if lang is not None:
+            column_list.append("lang")
+            values.append(lang)
+        if minimum_reach_alerts is not None:
+            column_list.append("minimum_reach_alerts")
+            values.append(minimum_reach_alerts)
+        if freshness_alerts is not None:
+            column_list.append("freshness_alerts")
+            values.append(freshness_alerts)
+        if len(values) == 0:
+            raise HTTPException(status_code=400, detail="No information sent for user " + user_id)
+        final_query, res_code = update_table_query("user_preference", column_list, values, conditions)
+        if res_code != 200:
+            raise HTTPException(status_code=res_code, detail=final_query)
+        return final_query
 
     def add_container_to_business_query(self, business_id, container_id=None, item_id=None):
         """Creates an SQL query for adding a container to a business and connect it to an item provided item_id"""
@@ -260,7 +288,8 @@ class UpdateQueries:
     def add_notification_query(self, business_id, item_id, notification_level, message=None, worker_level=1):
         """Creates an SQL query for adding a new notification"""
         cols = ["date_created", "business_id", "food_item_id", "code", "active", "notification_worker_level"]
-        val = ["to_timestamp("+str(int(time.time()))+")", business_id, item_id, notification_level, True, worker_level]
+        val = ["to_timestamp(" + str(int(time.time())) + ")", business_id, item_id, notification_level, True,
+               worker_level]
         if message is not None:
             cols.append("message")
             val.append(message)
