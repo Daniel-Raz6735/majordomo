@@ -132,7 +132,13 @@ export class NotificationList extends Component {
             // confirm_papulation(notifications_dict,"NotificationList","render_by_category missing notification attribute")
 
             if (cat === "alerts") {
+                let preferences = this.props.dict["preferences"][0]
+                let minimum_reach = preferences["minimum_reach_alerts"]
+
                 for (let i = 1; i <= notification_colors.length; i++) {
+                    if (minimum_reach && i === 2)
+                        continue
+                        
                     if (notifications_data && notifications_data[i]) {
                         page.push(<AlertNotifications key={"alert_not" + i} notifications_level={i} notification_info={notifications_data[i]} />)
                     }
@@ -146,7 +152,7 @@ export class NotificationList extends Component {
                     var notifications_size = get_notifications_by_level(notifications_data, category_id) ? get_notifications_by_level(notifications_data, category_id)[1] : 0
 
 
-                    var addition = <NotificationCategory key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_data={notifications} weights_dict={weights_dict[category_id]} supplier_dict={this.props.dict["suppliers"]} />
+                    var addition = <NotificationCategory preferences={this.props.dict["preferences"][0]} key={"category" + cat + category_id} cat_type={cat} category_id={category_id} notification_data={notifications} weights_dict={weights_dict[category_id]} supplier_dict={this.props.dict["suppliers"]} />
                     temp.push([addition, notifications_size])
 
                     // page.push(addition)
@@ -215,11 +221,17 @@ export class NotificationCategory extends Component {
             confirm_papulation(notification_data, "extract items NotificationCategory")
             Object.keys(notification_data).forEach(notification_level => {
                 var items_in_level = notification_data[notification_level]
+                let minimum_reach = this.props.preferences["minimum_reach_alerts"]
 
+                if (minimum_reach && notification_level == 2) {
+                    return
+                }
 
                 if (items_in_level) {
+
                     Object.keys(items_in_level).forEach(item_id => {
                         var item_info = items_in_level[item_id]
+
                         page.push(<Notification key={item_id + notification_level + "notification"}
                             notification_level={item_info["notification_level"]} item_name={item_info["item_name"]}
                             total_weight={item_info["total_weight"]} item_id={item_id}
