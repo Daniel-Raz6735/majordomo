@@ -30,6 +30,7 @@ export const Dictionary = new LocalizedStrings({
     home: "Home",
     inventory: "Inventory",
     orders: "Orders",
+    lists: "Lists",
     profile: "Profile",
 
 
@@ -123,6 +124,7 @@ export const Dictionary = new LocalizedStrings({
     home: "בית",
     inventory: "מלאי",
     orders: "הזמנות",
+    lists: "רשימות",
     profile: "פרופיל",
 
     //containers

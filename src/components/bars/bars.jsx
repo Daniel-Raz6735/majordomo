@@ -240,7 +240,7 @@ export class SiteFrame extends Component {
                     <div className="description" onClick={() => { this.change_tab("OrdersPage") }}>
                         <img alt="Cart" className="bottom-bar-btn" src={cart} />
                         <div className={this.state.buttons[2]}>
-                            <div className="tester">{Dictionary["orders"]}</div>
+                            <div className="tester">{Dictionary["lists"]}</div>
                         </div>
                     </div>
 
