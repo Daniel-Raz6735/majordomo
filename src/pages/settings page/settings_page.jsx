@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import { Button, Dropdown, Loader, Nav, Sidenav, Toggle } from "rsuite";
-import { NavBar, showNotification } from "../../components/bars/bars";
+import { NavBar, refresh, showNotification } from "../../components/bars/bars";
 import { determinLang, Dictionary } from "../../Dictionary";
 import profilePic from "../../images/profile_pic.png";
 import './settings_page.css'
@@ -50,6 +50,7 @@ class SettingsPage extends Component {
       success: function (res) {
         if(successFunc)
           successFunc()
+          refresh()
       },
       error: function (err) {
         showNotification('error', "Setting Change faild", errorMessage)
