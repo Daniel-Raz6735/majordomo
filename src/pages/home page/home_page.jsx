@@ -20,11 +20,7 @@ export class HomePage extends Component {
 
 
     }
-    componentDidMount() {
-        console.log(this.props.dict)
-    }
-
-
+ 
     render() {
         var notfication
         if (this.props.dict["notifications"])
@@ -73,7 +69,7 @@ export class NotificationPeeker extends Component {
                 var supplier_info = level_dict[supplier_id]
                 Object.keys(supplier_info).forEach(item_id => {
                     var item_info = supplier_info[item_id]
-                    if (minimum_reach && item_info["notification_level"] === 2)
+                    if (!minimum_reach && item_info["notification_level"] === 2)
                         return
 
                     page.push(<Notification key={"not" + item_id} notification_level={item_info["notification_level"]}

@@ -136,9 +136,9 @@ export class NotificationList extends Component {
                 let minimum_reach = preferences["minimum_reach_alerts"]
 
                 for (let i = 1; i <= notification_colors.length; i++) {
-                    if (minimum_reach && i === 2)
+                    if (!minimum_reach && i === 2)
                         continue
-                        
+
                     if (notifications_data && notifications_data[i]) {
                         page.push(<AlertNotifications key={"alert_not" + i} notifications_level={i} notification_info={notifications_data[i]} />)
                     }
@@ -223,7 +223,7 @@ export class NotificationCategory extends Component {
                 var items_in_level = notification_data[notification_level]
                 let minimum_reach = this.props.preferences["minimum_reach_alerts"]
 
-                if (minimum_reach && notification_level == 2) {
+                if (!minimum_reach && notification_level == 2) {
                     return
                 }
 
@@ -338,10 +338,11 @@ export class AlertNotifications extends Component {
         if (notifications && level) {
             Object.keys(notifications).forEach(key => {
                 var notification = notifications[key],
-                    total_weight = notification["total_weight"] ? notification["total_weight"].toFixed(1).replace(/\.0+$/, '') : -1
+                total_weight = notification["total_weight"] ? notification["total_weight"].toFixed(1).replace(/\.0+$/, '') : -1
+                console.log( notification)
                 page.push(<div key={"div" + key} className="simple_notification">
                     <div className="cart_container">
-                        {action_btn(null, level, notification["item_name"], notification["order_details"], key, notification["supplier_id"])}
+                        {action_btn(null, level, notification["item_name"], notification["order_details"], notification["item_id"], notification["suppliers"][0])}
                     </div>
                     {notification["item_name"]}
                     <div className="center_items notification_weight">

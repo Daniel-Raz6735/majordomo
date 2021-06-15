@@ -91,7 +91,6 @@ export class CategoryDrawer extends React.Component {
       cat_image = <div onClick={() => this.switchContent()}><img src={back_icon} alt="back" /></div>
 
       if (this.props.weights_dict) {
-        console.log(this.props.weights_dict[item_id])
         page = <ItemPage key={"item_page"} business_id={1} item_id={item_id} notification_level={this.props.weights_dict[item_id]["notification_level"]} weight_info={this.props.weights_dict[item_id]} />
       }
 
