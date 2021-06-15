@@ -52,7 +52,7 @@
     flex-direction: column;
 }
 
-.rs-modal-content {
+.rs-modal-content_qr {
     display: flex;
     flex-direction: column;
     max-width: 450px;

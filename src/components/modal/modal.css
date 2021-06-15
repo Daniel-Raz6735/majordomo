@@ -1,0 +1,28 @@
+.modal_template_header {
+    height: 60px;
+}
+
+.modal_template {
+    width: 90%;
+    max-width: 400px;
+    margin: auto;
+}
+
+.rs-modal-content {
+    padding: 3%;
+    border: #73D527 3px solid;
+    border-radius: 13px;
+
+}
+
+.center_text {
+    margin: auto;
+    width: fit-content;
+    font-weight: bold;
+    font-size: x-large;
+}
+.model_template_content{
+    width: 80%;
+    margin:auto;
+    margin-bottom: 20px;
+}

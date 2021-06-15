@@ -279,30 +279,32 @@ export class ModalDemo extends React.Component {
         return (
             <div className="modal_qr">
                 <Modal size={"lg"} dialogClassName="add_container_area" show={this.state.show} onHide={this.close} >
-                    <Modal.Header style={{ textAlign: "center" }}>
-                        <Modal.Title>Container Pairing</Modal.Title>
-                    </Modal.Header>
+                    <div className={"rs-modal-content_qr"}>
+                        <Modal.Header style={{ textAlign: "center" }}>
+                            <Modal.Title>Container Pairing</Modal.Title>
+                        </Modal.Header>
 
-                    <Form fluid >
-                        <div className="filters_area">
-                            <ScanFilter description={this.state.container_id} hasValue={this.state.container_id_found} change_active={this.change_active} active={!this.state.is_item && !this.state.scaned} key={"container" + this.state.is_item + this.state.scaned} type={"Container ID"} />
-                            <img src={this.state.chain_icon_src} alt="chain" />
-                            <ScanFilter description={this.state.item_name} hasValue={this.state.item_found} change_active={this.change_active} active={this.state.is_item && !this.state.scaned} key={"item" + this.state.is_item + this.state.scaned} type={"Item ID"} />
-                        </div>
-                        <div className="barcode_scan_area">
-                            <FormGroup>
-                                {this.state.load}
-                                {comp}
+                        <Form fluid >
+                            <div className="filters_area">
+                                <ScanFilter description={this.state.container_id} hasValue={this.state.container_id_found} change_active={this.change_active} active={!this.state.is_item && !this.state.scaned} key={"container" + this.state.is_item + this.state.scaned} type={"Container ID"} />
+                                <img src={this.state.chain_icon_src} alt="chain" />
+                                <ScanFilter description={this.state.item_name} hasValue={this.state.item_found} change_active={this.change_active} active={this.state.is_item && !this.state.scaned} key={"item" + this.state.is_item + this.state.scaned} type={"Item ID"} />
+                            </div>
+                            <div className="barcode_scan_area">
+                                <FormGroup>
+                                    {this.state.load}
+                                    {comp}
+                                </FormGroup>
+                            </div>
+
+                            <FormGroup >
+                                {selectTitle}
+                                {select}
                             </FormGroup>
-                        </div>
 
-                        <FormGroup >
-                            {selectTitle}
-                            {select}
-                        </FormGroup>
-
-                    </Form>
-                    {submit}
+                        </Form>
+                        {submit}
+                    </div>
                 </Modal>
                 <img className="scan_icon" onClick={this.open} src={scan_icon} alt="Scan container" />
 
@@ -324,7 +326,7 @@ class ScanFilter extends Component {
         let description = this.props.description
         let border = this.props.active ? "3px solid red" : "3px solid #00000054"
         let className = this.props.active ? "pressed" : "",
-        scanImage = this.props.type ==="Item ID"?item_scan:container_scan
+            scanImage = this.props.type === "Item ID" ? item_scan : container_scan
         if (this.props.hasValue) {
             border = "3px solid #73D504"
         }
@@ -333,7 +335,7 @@ class ScanFilter extends Component {
             <div onClick={() => this.props.change_active(this.props.type)} className={"scan_btns_filter " + className} style={{ border: border }}>
                 <div>{this.state.type}</div>
                 <div>{description}</div>
-                <img style={{ marginTop: "10px" }} src={scanImage} alt={this.props.type+ "scan"} />
+                <img style={{ marginTop: "10px" }} src={scanImage} alt={this.props.type + "scan"} />
             </div>
         )
     }
