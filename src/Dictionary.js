@@ -217,12 +217,11 @@ export function determinLang(lang) {
 
 //save new language in session storage and reload page
 export function changeLanguage(lang) {
-  return () => {
-    sessionStorage.setItem("current_language", lang);
-    sessionStorage.setItem('tab_name', "SettingPage")
-    window.location.reload();
-  }
+  sessionStorage.setItem("current_language", lang);
+  sessionStorage.setItem('tab_name', "SettingPage")
+  window.location.reload();
 }
+
 //get the current page direction needed
 export function getRTL(lang) {
   let targetLang = lang ? lang : Dictionary.getLanguage();

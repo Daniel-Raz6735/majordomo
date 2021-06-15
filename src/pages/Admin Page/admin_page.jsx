@@ -8,19 +8,7 @@ import { base_url } from '../..';
 const { Column, HeaderCell, Cell } = Table;
 
 
-const users_columns = [
-    { column_name: "id", editble: false, data_key: "user_id", width: 65 },
-    { column_name: "First Name", editble: true, data_key: "first_name", width: 100 },
-    { column_name: "Last Name", editble: true, data_key: "last_name", width: 100 },
-    { column_name: "Email", editble: true, data_key: "email", width: 200 },
-    { column_name: "Phone number", editble: true, data_key: "phone_number", width: 150 },
-    { column_name: "Address", editble: true, data_key: "address", width: 200 },
-]
 
-const business_columns = [
-    { column_name: "Business id", editble: true, data_key: "business_id", width: 100 },
-    { column_name: "Department id", editble: true, data_key: "department_id", width: 100 },
-]
 
 const container_columns = [
     { column_name: "Container_id", editble: false, data_key: "container_id", width: 100 },
@@ -61,7 +49,7 @@ class AdminPage extends Component {
                             </Navbar.Header>
                             <Navbar.Body>
                                 <Nav>
-                                    <ControlUsers loadPage={this.loadPage} dict={this.props.dict} />
+                                    {/* <ControlUsers loadPage={this.loadPage} dict={this.props.dict} /> */}
                                     <ControlContainers loadPage={this.loadPage} dict={this.props.dict} />
                                 </Nav>
                                 <Nav pullRight>
@@ -87,50 +75,7 @@ class AdminPage extends Component {
 }
 export default AdminPage
 
-class ControlUsers extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        }
-
-        this.getUsers = this.getUsers.bind(this);
-        this.processUsers = this.processUsers.bind(this);
-
-    }
-
-    processUsers(data) {
-        console.log(data)
-        if (data && data["users"])
-            this.props.loadPage(<EditTable key={"user_table"} request_name={"user"} tableDataKey={"user_id"} columns={users_columns.concat(business_columns)} data={data["users"]} />)
-        else
-            console.log("unable to load users")
-
-    }
-    getUsers() {
-        var request = base_url + '/get/users';
-        var callback = this.processUsers
-        $.ajax({
-            url: request,
-            success: function (res) {
-                callback(res);
-
-            },
-            error: function (err) {
-                console.log(err)
-
-            }
-        });
-    }
-
-    render() {
-
-        return (
-            <Nav.Item icon={<Icon icon="user" />} ><div onClick={() => { this.getUsers() }}>users</div></Nav.Item>
-        )
-    }
-}
 class ControlContainers extends Component {
 
     constructor(props) {
@@ -281,7 +226,7 @@ const ActionCell = ({ rowData, handleEdit, handleSave, handleCancel, tableDataKe
     );
 };
 
-class EditTable extends Component {
+export class EditTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
