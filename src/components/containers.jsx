@@ -158,7 +158,7 @@ export class ItemBlock extends Component {
                     <div style={{ fontWeight: "bold", fontSize: "13pt" }}>
                         {this.state.name}
                     </div>
-                    <div className="center_items notification_weight" style={{ fontWeight: "bold" }} >{this.state.weight.toFixed(1).replace(/\.0+$/, '')} {" "} {getUnitById(this.state.unit)}</div>
+                    <div className="center_items notification_weight" >{this.state.weight.toFixed(1).replace(/\.0+$/, '')} {" "} {getUnitById(this.state.unit)}</div>
                     <div className="last_registred" style={{ direction: getRTL() }}>{Dictionary["last_registred"] + ":"}
                         <div className="weight_date">{this.state.weight_date} </div>
                     </div>

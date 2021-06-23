@@ -13,6 +13,32 @@
 /* .fade.in {
     opacity: 0.5;
 } */
+.modal_qr{
+    right: 0;
+    position: absolute;
+    bottom: 10%;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    align-items: center;
+    padding: 10px 0px 2px 13px;
+    border-color: red;
+    border-style: solid;
+    border-width: 2px 0px 2px 2px;
+    border-radius: 20px 0px 0px 20px;
+   
+}
+
+.scan_icon {
+    width: 68px;
+    background: white;
+
+}
+
+.pair_container{
+    font-size: 11px;
+    margin-right: 1px;
+}
 
 .scan_btns_filter {
     display: flex;
@@ -39,12 +65,12 @@
 }
 
 .barcode_scan_area {
+    display: flex;
+    justify-content: center;
     margin-top: 30px;
     margin-bottom: 30px;
     min-width: 300px;
     min-height: 100px;
-    display: flex;
-    justify-content: center;
 }
 
 .add_container_area {

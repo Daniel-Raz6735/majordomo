@@ -31,6 +31,8 @@ export class Scanner extends Component {
             return (
                 <div id="cmarArea">
                     <BarcodeScannerComponent
+                        height={270}
+                        width={300}
                         stopStream={this.state.stopStream}
                         onUpdate={(err, result) => {
                             // console.log(err)
@@ -307,7 +309,7 @@ export class ModalDemo extends React.Component {
                     </div>
                 </Modal>
                 <img className="scan_icon" onClick={this.open} src={scan_icon} alt="Scan container" />
-
+                <div className="pair_container">pair container</div>
             </div>
         );
     }

@@ -41,7 +41,7 @@
 }
 
 .header_symbols {
-    margin-left: 10px;
+    margin-left: 3px;
     height: 20px;
     width: 20px;
 }
@@ -119,6 +119,7 @@
     border: black 1px groove;
     display: flex;
     justify-content: center;
+    font-weight: bold;
 }
 
 .notification_message {
