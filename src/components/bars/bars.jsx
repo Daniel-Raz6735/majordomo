@@ -177,7 +177,6 @@ export class SiteFrame extends Component {
     }
 
     handleTouchStart(evt) {
-        console.log(evt)
         if (evt.target.className == "rs-drawer-body" || evt.target.className == "item_info")
             return
         const firstTouch = this.getTouches(evt)[0];

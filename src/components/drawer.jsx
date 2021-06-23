@@ -240,19 +240,21 @@ export class ItemPage extends Component {
       console.log("No item id enterd. nothing happend")
     else {
       request += "?business_id=" + business_id + "&item_id=" + item_id + "&min_date=" + min_date
-
-      var callback = this.devide_data
+      var thisS = this
       $.ajax({
         url: request,
         success: function (res) {
-          callback(res)
-
+          thisS.devide_data(res)
+  
         },
         error: function (err) {
           console.log(err)
         }
       });
     }
+  }
+  componentWillUnmount(){
+    window.location.hash = '';
   }
 
   devide_data(res) {
@@ -761,7 +763,6 @@ class ItemDeatils extends Component {
 
   // get all containers of the item
   getItemContainers(data) {
-    // console.log(data)
     let str = "", cont_details = []
     for (let i = 0; i < data.length; i++) {
       let container = data[i]
@@ -772,7 +773,6 @@ class ItemDeatils extends Component {
           {": "} {container["weight"]} {getUnitById(container["weight"])} {" "}{getDate(container["date"])}
         </div>)
     }
-    // console.log(cont_details)
     this.setState({
       str: str,
       container_details: cont_details

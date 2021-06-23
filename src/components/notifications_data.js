@@ -45,7 +45,6 @@ export const notification_dict = {
 }
 
 export function action_btn(defult_val, level, title, order_details, item_id, supplier_id) {
-    console.log(supplier_id)
     var val,
         unit = 1,
         is_in_order = false

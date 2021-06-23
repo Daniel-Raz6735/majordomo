@@ -339,7 +339,6 @@ export class AlertNotifications extends Component {
             Object.keys(notifications).forEach(key => {
                 var notification = notifications[key],
                 total_weight = notification["total_weight"] ? notification["total_weight"].toFixed(1).replace(/\.0+$/, '') : -1
-                console.log( notification)
                 page.push(<div key={"div" + key} className="simple_notification">
                     <div className="cart_container">
                         {action_btn(null, level, notification["item_name"], notification["order_details"], notification["item_id"], notification["suppliers"][0])}
