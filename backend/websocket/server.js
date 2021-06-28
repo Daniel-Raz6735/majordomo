@@ -1,9 +1,12 @@
 const WebSocket = require('ws');
 const http = require('http');
+const https = require('https');
 const HttpsServer = require('https').createServer;
+const HttpServer = require('http').createServer;
 const fs = require('fs');
 const express = require('express');
-const port = 8888;
+const http_port = 8888;
+const ws_port = 8010;
 const app = express();
 app.use(express.static('public'));
 app.get('/notify_client', (req, res) => {
@@ -18,17 +21,18 @@ app.get('/notify_client', (req, res) => {
     
 });
 
+// server = HttpServer({})
 server = HttpsServer({
     cert: fs.readFileSync("/etc/letsencrypt/live/majordomo.cloudns.asia/fullchain.pem"),
     key: fs.readFileSync("/etc/letsencrypt/live/majordomo.cloudns.asia/privkey.pem")
 })
-const https = http.createServer(app);
-https.listen(port, function listening() {
-    console.log('listening on ' + port);
+const https_serv = https.createServer(app);
+https_serv.listen(http_port, function listening() {
+    console.log('http listening on ' + http_port);
+
 });
 
-var WebSocketServer = WebSocket.Server
-    , wss = new WebSocketServer({server:server});
+var WebSocketServer = WebSocket.Server, wss = new WebSocketServer({server:server});
 wss.on('connection', function (ws) {
     ws.on('message', function (message) { brodcastAll(JSON.stringify("message",message)); })
 });
@@ -46,4 +50,5 @@ function brodcastAll(message) {
         }
     });
 }
-server.listen(8010);
+server.listen(ws_port);
+console.log('ws listening on ' + ws_port);
