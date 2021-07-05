@@ -73,7 +73,7 @@ export class CategoryDrawer extends React.Component {
 
     Object.keys(dict).forEach(key => {
       let item_name = (dict[key]["item_name"]).toLowerCase();
-      if (item_name.startsWith(e)) {
+      if (item_name.includes(e)) {
         newDict[key] = dict[key]
       }
     })

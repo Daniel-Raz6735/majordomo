@@ -28,12 +28,12 @@ export class HomePage extends Component {
 
         var tiles = this.props.dict["weights"]["category"]
 
+        
         let temp = notfication ? <NotificationPeeker preferences={this.props.dict["preferences"][0]} key={"notification_peeker"} dict={notfication} /> : <OKNotification />
 
         return (
             <div className="home_page">
                 <img alt="Majordomo logo" className="majordomoLogo" src={logo} ></img>
-                {/* <NotificationPeeker dict={notfication} /> */}
                 <div className="home_titles"><div>{Dictionary["notifications"]}</div>  <div>{getTime()}</div></div>
                 {temp}
                 <div className="home_titles"><div>Inventory Status</div>  <div>{getTime()}</div></div>

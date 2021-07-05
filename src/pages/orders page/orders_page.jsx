@@ -235,7 +235,7 @@ class OrderCategory extends Component {
 
                     if (orders_details) {
                         // add orders that answer to serach input
-                        if (this.props.term && this.props.term.length > 0 && item_name.toLowerCase().startsWith(this.props.term.toLowerCase()))
+                        if (this.props.term && this.props.term.length > 0 && item_name.toLowerCase().includes(this.props.term.toLowerCase()))
                             page.push(<Order key={"order" + key + this.props.term} supplier_name={this.props.supplier["name"]} order={orders_details} item_name={item_name} item_id={key} order_id={orders_details["order_id"]} />)
                         else if (this.props.term.length === 0)
                             page.push(<Order key={"order" + key} supplier_name={this.props.supplier["name"]} order={orders_details} item_name={item_name} item_id={key} order_id={orders_details["order_id"]} />)
@@ -503,11 +503,9 @@ class OrderList extends Component {
 
     }
 
+    // This function 
     confirm_all() {
-        console.log(items)
-        console.log(sellers)
-
-
+      
         var itemsList = []
 
         sellers.forEach(seller => {
@@ -516,17 +514,6 @@ class OrderList extends Component {
             })
         })
 
-        // var itemsFormatted = [];
-
-        // // format the data
-        // itemsNotFormatted.forEach((item) => {
-        //     itemsFormatted.push({
-        //         supplier: item.supplier.replace(/,/g, ''), // remove commas to avoid errors,
-        //         order: item.order,
-
-        //     });
-        // });
-
         if (itemsList.length > 0)
             exportCSVFile(headers, itemsList, fileTitle)
 
@@ -534,10 +521,7 @@ class OrderList extends Component {
     }
 
     confirm_seller(seller) {
-        console.log(seller)
-
-
-
+        
         var itemsList = []
 
         this.props.items[seller].forEach(item => {
@@ -562,7 +546,7 @@ class OrderList extends Component {
 }
 
 
-//2
+// 
 class OrderListCategory extends Component {
     constructor(props) {
         super(props);
@@ -571,13 +555,13 @@ class OrderListCategory extends Component {
             show: true
 
         }
-
         this.remove_onClick = this.remove_onClick.bind(this)
     }
 
     componentDidMount() {
         let page = []
 
+        // 
         for (let i = 0; i < items[this.props.seller].length; i++)
             page.push(<OrderListItems item_name={items[this.props.seller][i].item_name} quantity={items[this.props.seller][i].quantity} unit={items[this.props.seller][i].unit} />)
 
@@ -586,6 +570,7 @@ class OrderListCategory extends Component {
         this.setState({ page })
     }
 
+    // remove the div from been collapsible. 
     remove_onClick(e) {
         if (e && $(e.target).attr('class')) {
 
@@ -619,13 +604,10 @@ class OrderListItems extends Component {
         super(props);
         this.state = {
 
-
         }
     }
 
     render() {
-        // reset items on list
-        // items = {}
 
         return (
             <div className="order_list_items">

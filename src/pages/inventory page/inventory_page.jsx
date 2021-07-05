@@ -41,7 +41,6 @@ export class AddToOrder extends Component {
       kind: props.kind,
       title: props.title,
       is_in_order: props.is_in_order,
-      // defult_val: props.defult_val ? props.defult_val : 10,
       incraments: props.incraments ? props.incraments : 1,
       quantity: props.defult_val ? props.defult_val : 10,
       div_content: "",
@@ -86,16 +85,11 @@ export class AddToOrder extends Component {
       alert("enterd to much")
   }
 
-  // getQuantity(value) {
-  //   this.setState({value:value})
-
-  // }
-
+  
   addOrder(value) {
     var unit = this.state.unit,
       title = this.state.title
 
-    
     // order details dictionary
     let dict = {
       business_id: this.props.business_id,
@@ -116,19 +110,18 @@ export class AddToOrder extends Component {
       type: "POST",
       data: JSON.stringify(dict),
       contantType: "application/json",
-      // processData: true,
-      // enCode: true,
       success: function (res) {
         response = res
 
         let data = { "amount": dict["amount"], "unit": getUnitById(unit), "item_name": title }
+
+        // notify that add success with order details.
         scree_alert('success', data, "add_to_order");
         refresh()
           
       },
       error: function (err) {
         response = err
-        // scree_alert('error', dict["amount"], getUnitById(unit), title);
         let data = { "amount": dict["amount"], "unit": getUnitById(unit), "item_name": title }
         scree_alert('error', data, "add_to_order");
       }
@@ -161,8 +154,7 @@ export class AddToOrder extends Component {
   }
 
   componentDidMount() {
-    // var button_text = (this.state.is_in_order) ? Dictionary["edit_order"] : Dictionary["add_to_order"]
-    // btn = <img src={cart_plus} alt={Dictionary["add_to_order"]} onClick={() => this.open('xs')} style={{ "cursor": "pointer" }} />
+   
     let div_content = ""
 
     // add to order button.
