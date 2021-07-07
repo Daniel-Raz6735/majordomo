@@ -48,6 +48,7 @@
 }
 
 .toolbar_buttons {
+    width: 100%;
     margin: 10px auto 10px auto;
     display: flex;
     justify-content: space-evenly;
@@ -84,6 +85,21 @@
     transform: translateX(-50%) translateY(-50%);
 }
 
+.toolbar_orders_buttons{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.orders_buttons{
+    display: flex;
+
+    width: 55%;
+    justify-content: space-around;
+}
+
+
 .img_caption{
     text-align: center;
+    margin: unset;
 }

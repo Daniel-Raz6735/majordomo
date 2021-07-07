@@ -13,6 +13,7 @@ import { Quantity } from "../inventory page/inventory_page";
 import { base_url } from "../../index.js";
 import right_arrow from '../../images/icons/arrows/right_arrow.svg'
 import { getUnitById } from "../../components/data_dictionary.js";
+import export_list from '../../images/icons/orders/export_list.svg'
 
 
 
@@ -255,7 +256,7 @@ class OrderCategory extends Component {
 
         let supplier = this.props.supplier
         var orders = this.render_supplier(this.props.supplier)
-
+        // console.log(this.props.weights_dict)
 
         if (!this.props.term || (this.props.term && this.props.term.length > 0 && orders.length - 1 > 0)) {
 
@@ -432,11 +433,51 @@ export class OrderHeader extends Component {
             arrow: <img src={down_arrow} alt={"arrow up"} className="order_symbol" />
 
         }
+        this.exportFromLists = this.exportFromLists.bind(this);
+
+
+    }
+
+    exportFromLists() {
+
+        var cat_order = this.props.weights_dict
+
+        var items_list = []
+        Object.keys(cat_order).forEach(order => {
+
+            // skip rest of object
+            if(items_list.length >0 )
+            return
+
+            if (cat_order[order]["order_details"]) {
+                var temp = items[cat_order[order]["cat_name"]]
+
+                for (let i = 0; i < temp.length; i++)
+                    items_list.push({ supplier: cat_order[order]["cat_name"], item: temp[i]["item_name"], amount: temp[i]["quantity"], unit: temp[i]["unit"] })
+
+                exportCSVFile(headers, items_list, fileTitle)
+                
+            }
+        })
+
     }
 
     render() {
         let clas = this.props.export_list ? "list_header order_toggler" : "order_header order_toggler"
         let checkbox = this.props.export_list ? <div ><input onChange={() => this.props.func(this.props.cat_name)} style={{ width: "30px", height: "30px" }} type="checkbox" /></div> : ""
+        let commionicate
+
+        console.log(this.props.weights_dict)
+
+        if (this.props.export_list)
+            commionicate = <div className="centerPhotos">
+                <img src={phone_icon} alt={Dictionary["phone"]} className="order_symbol" />
+                <img src={whatsapp_icon} alt={Dictionary["whatsapp"]} className="order_symbol" />
+                <img src={envelope_icon} alt={Dictionary["email"]} className="order_symbol" />
+            </div>
+        else
+            if (this.props.weights_dict)
+                commionicate = <figure className="img_caption" style={{ marginLeft: "100px" }} onClick={this.exportFromLists}><img src={export_list} alt="export" /><figcaption>Export List</figcaption></figure>
 
 
         return (
@@ -445,11 +486,12 @@ export class OrderHeader extends Component {
                 <div className="order_item_name order_toggler">
                     {this.props.cat_name}
                 </div>
-                <div className="centerPhotos">
+                {/* <div className="centerPhotos">
                     <img src={phone_icon} alt={Dictionary["phone"]} className="order_symbol" />
                     <img src={whatsapp_icon} alt={Dictionary["whatsapp"]} className="order_symbol" />
                     <img src={envelope_icon} alt={Dictionary["email"]} className="order_symbol" />
-                </div>
+                </div> */}
+                {commionicate}
                 {this.state.arrow}
 
             </div>
@@ -505,7 +547,7 @@ class OrderList extends Component {
 
     // This function 
     confirm_all() {
-      
+
         var itemsList = []
 
         sellers.forEach(seller => {
@@ -521,7 +563,7 @@ class OrderList extends Component {
     }
 
     confirm_seller(seller) {
-        
+
         var itemsList = []
 
         this.props.items[seller].forEach(item => {

@@ -171,7 +171,7 @@ export class SiteFrame extends Component {
 
 
     getTouches(evt) {
-        
+
         return evt.touches ||             // browser API
             evt.originalEvent.touches; // jQuery
     }
@@ -403,9 +403,19 @@ export class ButtonsComponent extends Component {
             width += 33;
         }
 
-        let list = this.props.orders ? <figure className="img_caption"><img src={export_list} alt="export" onClick={this.props.export_func} /><figcaption>Export List</figcaption></figure> : ""
-        return (<div className="toolbar_buttons" style={{ width: width + "%" }}>
-            {btns}
+        let list = this.props.orders ? <figure className="img_caption"><img src={export_list} alt="export" onClick={this.props.export_func} /><figcaption>Export All</figcaption></figure> : ""
+        let buttns, clas
+
+        if (this.props.orders) {
+            buttns = <div className="orders_buttons">{btns}</div>
+            clas = "toolbar_orders_buttons"
+        }
+        else {
+            buttns = btns
+            clas = "toolbar_buttons"
+        }
+        return (<div className={clas}>
+            {buttns}
             {list}
         </div>);
     }
