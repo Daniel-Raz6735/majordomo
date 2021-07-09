@@ -3,7 +3,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-params = config(filename='email_info.ini', section='email')
+params = config(filename='config.ini', section='email')
 
 
 class EmailManager:
