@@ -124,14 +124,19 @@
 
 .cart_photo_container {
     margin: auto;
+    width: 35px;
+    height: 35px;
 }
 
 .cart_text_container {
     margin: auto;
-    margin-top: 10px;
 }
 
 .add_to_order_modal {
     width: 50%;
     margin: auto;
+}
+
+.add_to_order_text_btn{
+    margin-top: 10px;
 }

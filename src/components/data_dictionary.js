@@ -89,15 +89,14 @@ function create_notification_dict(notification_data, suppliers_data, orders_dict
                 if (!dict["alerts"][notification_level])
                     dict["alerts"][notification_level] = {}
                 dict["alerts"][notification_level][item_id] = { ...notification_to_insert };
-
                 if (suppliers_id)
-                    suppliers_id.forEach(supplier_id => {
-                        if (!dict["supplier"][notification_level])
-                            dict["supplier"][notification_level] = {}
-                        if (!dict["supplier"][notification_level][supplier_id])
-                            dict["supplier"][notification_level][supplier_id] = {}
-                        dict["supplier"][notification_level][supplier_id][item_id] = { ...notification_to_insert };
-                    })
+                suppliers_id.forEach(supplier_id => {
+                    if (!dict["supplier"][notification_level])
+                        dict["supplier"][notification_level] = {}
+                    if (!dict["supplier"][notification_level][supplier_id])
+                        dict["supplier"][notification_level][supplier_id] = {}
+                    dict["supplier"][notification_level][supplier_id][item_id] = { ...notification_to_insert };
+                })
             }
 
         }

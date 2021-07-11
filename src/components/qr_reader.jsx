@@ -171,7 +171,6 @@ export class ModalDemo extends React.Component {
     testExistenceInDict(value, data_dict) {
         console.log(data_dict)
         for (const [key, obj] of Object.entries(data_dict)) {
-            console.log(obj)
             if (obj["value"] == value)
                 return true;
         }

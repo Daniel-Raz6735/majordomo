@@ -64,7 +64,7 @@ class SettingsPage extends Component {
       success: function (res) {
         if (successFunc)
           successFunc()
-          refresh()
+        refresh()
       },
       error: function (err) {
         showNotification('error', "Setting Change faild", errorMessage)
@@ -100,7 +100,7 @@ class SettingsPage extends Component {
             {/* <ManegmentBTN dict={this.props.dict} /> */}
             <SideNavWrapper title="general settings"
               content={
-                [<DropdownToggle setting_name={"Integration"} options={["Priority", "Other"]} chosen={"Priority"} active={false} />
+                [<DropdownToggle setting_name={"Integration"} options={["Priority", "Other"]} chosen={"Priority"} disabled={true} />
                   , <DropdownToggle setting_name={Dictionary["language"]} options={["English", "עברית"]} chosen={"English"} onSelectFunction={changeLanguage} />
                 ]
               } />
@@ -167,7 +167,8 @@ class DropdownToggle extends Component {
       event_key: this.props.eventKey ? this.props.event_key : 1,
       options: options,
       chosen: this.props.chosen,
-      open: true
+      open: true,
+      disabled: this.props.disabled ? true : false
     }
     this.onSelectFunction = this.onSelectFunction.bind(this);
   }
@@ -184,7 +185,7 @@ class DropdownToggle extends Component {
     for (let i = 0; i < options.length; i++) {
       let event_key = String(this.state.event_key) + "-" + String(i),
         className = i === this.state.chosenIndex ? "chosen_option" : ""
-
+      if(!this.state.disabled)
       page.push(
         <Dropdown.Item key={"dropdown_item" + i} eventKey={event_key} onSelect={() => this.onSelectFunction(options[i])} >
           <div className={className} >
@@ -195,7 +196,7 @@ class DropdownToggle extends Component {
 
     return (
       <div className='dropdown_title'>
-        <Dropdown toggleClassName='dropdown_title' eventKey={String(this.state.event_key)}
+        <Dropdown toggleClassName='dropdown_title' disabled={this.state.disabled} eventKey={String(this.state.event_key)}
           title={<div className="title_container" >
             <div className="setting_name">{this.props.setting_name}</div>
             <div className="setting_value">{options[this.state.chosenIndex]}</div>
