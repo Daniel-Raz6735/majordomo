@@ -187,7 +187,7 @@ export class AddToOrder extends Component {
 
     return (
       <div className="add_to_cart_modal_container">
-        <ButtonToolbar><div className="add_to_order" onClick={() => this.open('xs')} >{this.state.div_content}</div> </ButtonToolbar>
+        <ButtonToolbar><div className="add_to_order add_to_order_text_btn" onClick={() => this.open('xs')} >{this.state.div_content}</div> </ButtonToolbar>
         <Modal dialogClassName="add_to_order_modal" size={'xs'} show={this.state.show} onHide={this.close}>
 
 

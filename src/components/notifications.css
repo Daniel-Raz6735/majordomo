@@ -99,10 +99,17 @@
 }
 
 .notification_item_name {
-    width: 15%;
+    width: 20%;
     overflow: hidden;
-}
+    justify-content: center;
+    text-align: center;
+    font-weight: bold;
 
+}
+.looks_good_card{
+    width: 100%;
+    text-align: center;
+}
 .left_notification_area {
     width: 20%;
     flex-direction: column;
@@ -114,7 +121,7 @@
 
 .notification_weight {
     height: 30px;
-    width: 75px;
+    width: 60px;
     border-radius: 7px;
     border: black 1px groove;
     display: flex;
@@ -179,4 +186,5 @@
 .cart_container {
     display: flex;
     flex-direction: column;
+    text-align: center;
 }

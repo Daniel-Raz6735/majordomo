@@ -380,7 +380,7 @@ export class OKNotification extends Component {
     render() {
         return (
             <div className="notification_container">
-                <div className="">{Dictionary["looks_good"]}  </div>
+                <div className="looks_good_card">{Dictionary["looks_good"]} </div>
                 <NotificationSymbol key={"not_symbol"} color={"rgba(115, 213, 4, 0.21)"} error_symbol={v_icon} />
             </div>
         )
