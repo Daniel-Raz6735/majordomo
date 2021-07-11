@@ -39,6 +39,7 @@ export class AddToOrder extends Component {
     this.state = {
       show: false,
       kind: props.kind,
+      className:"",
       title: props.title,
       is_in_order: props.is_in_order,
       incraments: props.incraments ? props.incraments : 1,
@@ -157,7 +158,7 @@ export class AddToOrder extends Component {
 
   componentDidMount() {
 
-    let div_content = ""
+    let div_content = "", className = ""
 
     // add to order button.
     if (this.state.kind === 0) {
@@ -177,10 +178,12 @@ export class AddToOrder extends Component {
 
     }
     // add to order from category drawer.
-    else if (this.state.kind === 1)
+    else if (this.state.kind === 1){
       div_content = Dictionary.add_to_order
+      className= "add_to_order_text_btn"
+    }
 
-    this.setState({ div_content })
+    this.setState({ div_content,className })
   }
 
 
@@ -189,7 +192,7 @@ export class AddToOrder extends Component {
 
     return (
       <div className="add_to_cart_modal_container">
-        <ButtonToolbar><div className="add_to_order add_to_order_text_btn" onClick={() => this.open('xs')} >{this.state.div_content}</div> </ButtonToolbar>
+        <ButtonToolbar><div className={"add_to_order "+this.state.className} onClick={() => this.open('xs')} >{this.state.div_content}</div> </ButtonToolbar>
         <Modal dialogClassName="add_to_order_modal" size={'xs'} show={this.state.show} onHide={this.close}>
 
 

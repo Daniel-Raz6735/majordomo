@@ -475,7 +475,7 @@ export class OrderHeader extends Component {
 
     render() {
         let clas = this.props.export_list ? "list_header order_toggler" : "order_header order_toggler"
-        let checkbox = this.props.export_list ? <div ><input onChange={() => this.props.func(this.props.cat_name)} style={{ width: "30px", height: "30px" }} type="checkbox" /></div> : ""
+        let checkbox = this.props.export_list ? <div ><input   onChange={() => this.props.func(this.props.cat_name)} style={{ width: "30px", height: "30px" }} type="checkbox" /></div> : ""
         let commionicate
 
 

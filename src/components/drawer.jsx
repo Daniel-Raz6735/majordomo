@@ -196,8 +196,8 @@ export class SearchBar extends React.Component {
 
       <div className="search">
         <InputGroup inside >
-          <Input onChange={e => this.props.handleChange(e, this.props.weights_dict)}
-            style={{ direction: lang, textAlign: text_align, boxShadow: "0 0 6px" + category_colors[this.props.cat_id], borderRadius: "5px" }} placeholder={Dictionary["serach_placeholder"] + "?"} />
+          <Input onChange={e => this.props.handleChange(e, this.props.weights_dict)}  
+            style={{ direction: lang, textAlign: text_align, margin: "10px", boxShadow: "0px 0px 6pt 0px " + category_colors[this.props.cat_id], borderRadius: "5px" }} placeholder={Dictionary["serach_placeholder"] + "?"} />
           <InputGroup.Button>
             <Icon icon="search" />
           </InputGroup.Button>
@@ -544,7 +544,7 @@ export class ItemPage extends Component {
         cubes =[<InfoCube key={"cube" + 1} header={"Average usage"} info={reach["usage"]} dict={relavent_data} />,
         <InfoCube key={"cube" + 2} header={"Lowest average"} info={reach["minimum"]} dict={relavent_data} />,
         <InfoCube key={"cube" + 3} header={"Highest average"} info={reach["maximum"]} dict={relavent_data} />]
-        window.location.hash = '#cube_container';
+        
       }
 
     }
@@ -563,7 +563,7 @@ export class ItemPage extends Component {
 
     return (
       <div className="item_info">
-        <h1 style={{ textAlign: "center" }}>{this.props.weight_info["item_name"]}</h1>
+        <div className={"item_info_title"} >{this.props.weight_info["item_name"]}</div>
         <AlertNotifications keep_open={true} notifications_level={notifications_level} notification_info={notification_info} />
         <ItemDeatils business_id={this.props.business_id} item_id={this.props.item_id} dict={this.props.weight_info} />
         <div className="chart_container">

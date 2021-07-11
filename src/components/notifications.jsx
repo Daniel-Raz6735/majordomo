@@ -338,12 +338,14 @@ export class AlertNotifications extends Component {
         if (notifications && level) {
             Object.keys(notifications).forEach(key => {
                 var notification = notifications[key],
-                total_weight = notification["total_weight"] ? notification["total_weight"].toFixed(1).replace(/\.0+$/, '') : -1
+                    total_weight = notification["total_weight"] ? notification["total_weight"].toFixed(1).replace(/\.0+$/, '') : -1
                 page.push(<div key={"div" + key} className="simple_notification">
                     <div className="cart_container">
                         {action_btn(null, level, notification["item_name"], notification["order_details"], notification["item_id"], notification["suppliers"][0])}
                     </div>
+                    <div className="center_items notification_item_name">
                     {notification["item_name"]}
+                    </div>
                     <div className="center_items notification_weight">
                         {total_weight + " "}
                         {getUnitById(notification["unit"])}
@@ -351,11 +353,10 @@ export class AlertNotifications extends Component {
                 </div>)
             })
         }
-
-
+        let className = this.state.keep_open?"alert_notifications item_drawer_alert_notifications":"alert_notifications"
 
         return (
-            <div className="alert_notifications" style={{ backgroundColor: color }}>
+            <div className={className} style={{ backgroundColor: color }}>
                 <div className="simple_notification_header" onClick={() => this.setState({ show: !this.state.show })}>
                     <div className="header_items" ><img className="header_symbols" alt="header symbol" src={notification_dict[level]["alert_filter_symbol"]} /></div>
                     {/* <div className="header_items" ><img className="header_symbols" alt="header symbol" src={notification_dict[level]["error_symbol"]} /></div> */}
@@ -394,7 +395,7 @@ const Panel = React.forwardRef(({ ...props }, ref) => (
         {...props}
         ref={ref}
         id="notification_collapse"
-        style={{ width: '100%', overflow: 'hidden' }}>
+        style={{ width: '100%', overflow: 'hidden', paddingBottom: "7px" }}>
         {props.notifications}
     </div>
 ));

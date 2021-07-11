@@ -155,7 +155,7 @@ export class ItemBlock extends Component {
             <div className="item_container">
                 <div className="item_squere_header" style={{ background: color }} > <div>{sym}</div><div>{messege}</div></div>
                 <div className="item_squere" onClick={() => this.props.openItem(this.props.item_id)}>
-                    <div style={{ fontWeight: "bold", fontSize: "13pt" }}>
+                    <div className="item_squere_title">
                         {this.state.name}
                     </div>
                     <div className="center_items notification_weight" >{this.state.weight.toFixed(1).replace(/\.0+$/, '')} {" "} {getUnitById(this.state.unit)}</div>

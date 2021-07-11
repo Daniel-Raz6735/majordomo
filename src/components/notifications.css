@@ -40,15 +40,19 @@
     flex-grow: 1;
 }
 
+
 .header_symbols {
-    margin-left: 3px;
     height: 20px;
     width: 20px;
+    margin: auto 5px auto 10px;
+}
+
+.header_symbols.notification_toggler{
+    margin: 0 3px 0 0;
 }
 
 .header_items {
-    margin-left: 8px;
-    margin-right: 8px;
+    font-size: 13pt;
 }
 
 .notification_cover {
@@ -104,12 +108,13 @@
     justify-content: center;
     text-align: center;
     font-weight: bold;
-
 }
-.looks_good_card{
+
+.looks_good_card {
     width: 100%;
     text-align: center;
 }
+
 .left_notification_area {
     width: 20%;
     flex-direction: column;
@@ -157,15 +162,18 @@
 
 .alert_notifications {
     width: 95%;
-    /* margin: auto; */
     display: flex;
     flex-direction: column;
     border-radius: 5px;
     margin-bottom: 15px;
 }
 
+.item_drawer_alert_notifications {
+    margin: auto;
+}
+
 .simple_notification_header {
-    height: 40px;
+    height: 47px;
     color: white;
     display: flex;
     align-items: center;
@@ -176,11 +184,14 @@
     justify-content: space-around;
     background-color: white;
     margin: auto;
-    width: 80%;
-    border-radius: 5px;
+    width: 93%;
+    border-radius: 12px;
     height: 60px;
     align-items: center;
     margin-bottom: 5px;
+}
+.notification_item_name{
+    font-weight: bold;
 }
 
 .cart_container {

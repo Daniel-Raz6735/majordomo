@@ -20,7 +20,7 @@ export class HomePage extends Component {
 
 
     }
- 
+
     render() {
         var notfication
         if (this.props.dict["notifications"])
@@ -28,7 +28,7 @@ export class HomePage extends Component {
 
         var tiles = this.props.dict["weights"]["category"]
 
-        
+
         let temp = notfication ? <NotificationPeeker preferences={this.props.dict["preferences"][0]} key={"notification_peeker"} dict={notfication} /> : <OKNotification />
 
         return (
@@ -98,19 +98,6 @@ export class NotificationPeeker extends Component {
 }
 export class InentoryTileContainer extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        }
-
-    }
-
-
-    componentDidMount() {
-
-    }
-
     render() {
         var page = []
 
@@ -137,7 +124,7 @@ export class InventoryTile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            page: []
+            alert_symbols: []
         }
 
     }
@@ -146,18 +133,20 @@ export class InventoryTile extends Component {
     componentDidMount() {
         let dict = this.props.weights_dict
         let temp = -999
-        let page = []
+        let alert_symbols = []
 
         if (dict) {
             Object.keys(dict).forEach(key => {
                 let notification_num = dict[key]["notification_level"]
                 if (notification_num !== -1 && temp !== notification_num) {
                     temp = notification_num
-                    page.push(<img key={"img" + key} className="header_symbols notification_toggler" src={notification_dict[notification_num]["error_symbol"]} alt="category symbol" />)
+                    alert_symbols.push(<img key={"img" + key} className="header_symbols notification_toggler" src={notification_dict[notification_num]["error_symbol"]} alt="category symbol" />)
                 }
             })
         }
-        this.setState({ page })
+        if (alert_symbols.length < 1)
+            alert_symbols.push(<div key={"img" + 0} style={{color:"transparent"}} className="header_symbols notification_toggler" />)
+        this.setState({ alert_symbols })
     }
 
     render() {
@@ -175,10 +164,9 @@ export class InventoryTile extends Component {
         return (
 
             <div className="inventory_tile" onClick={func} style={{ background: background }}>
-                <div className="home_page_cat_alerts">{this.state.page}</div>
+                <div className="home_page_cat_alerts">{this.state.alert_symbols}</div>
                 <img className="category_home_img" src={this.props.symbol} alt="category symbol" />
-                <div style={{ color: this.props.cat_color }}>{this.props.name} </div>
-
+                <div className="home_page_cat_symbols" style={{ color: this.props.cat_color }}>{this.props.name} </div>
             </div>
         );
 

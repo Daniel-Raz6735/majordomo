@@ -36,6 +36,7 @@ export class SiteFrame extends Component {
         this.state = {
             buttons: ["bottom_bar active", "bottom_bar", "bottom_bar", "bottom_bar"],
             page: <Loader speed="fast" size="lg" content="Loading..." center vertical />,
+            classesToIgnore: ["rs-drawer-body", "item_info"],
         }
 
         this.change_tab = this.change_tab.bind(this);
@@ -177,7 +178,8 @@ export class SiteFrame extends Component {
     }
 
     handleTouchStart(evt) {
-        if (evt.target.className == "rs-drawer-body" || evt.target.className == "item_info")
+
+        if (this.state.classesToIgnore.includes(evt.target.className))
             return
         const firstTouch = this.getTouches(evt)[0];
         xDown = firstTouch.clientX;
@@ -189,9 +191,8 @@ export class SiteFrame extends Component {
             return;
         }
 
-        if (evt.target.className == "rs-drawer-body" || evt.target.className == "item_info")
+        if (this.state.classesToIgnore.includes(evt.target.className))
             return
-
         var xUp = evt.touches[0].clientX;
         var yUp = evt.touches[0].clientY;
 

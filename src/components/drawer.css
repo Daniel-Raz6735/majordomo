@@ -18,7 +18,9 @@
     margin: unset;
     height: 60px;
 }
-
+.rs-drawer-top.rs-drawer-lg, .rs-drawer-bottom.rs-drawer-lg {
+    height: 90%;
+}
 .drawer_header {
     width: 100%;
     display: flex;
@@ -104,16 +106,18 @@
 
 .item_info {
     color: black;
+    padding-bottom: 19%;
 }
 
 .item_details {
     display: flex;
-    background-color: #D6D6D6;
+    width: 94%;
+    margin: 14px auto 7px auto;
+    background-color: #F9F9F9;
     justify-content: space-evenly;
     color: #A1A1A1;
     border-radius: 5pt;
-    margin-top: 35px;
-    margin-bottom: 10px;
+    border: 1px solid #D6D6D6;
 }
 
 .item_min_max {
@@ -193,10 +197,13 @@
 
 .cube_header {
     text-align: center;
+    word-spacing: 100vw;
 }
 
 .cube_number {
     text-align: center;
+    font-weight: bold;
+    font-size: 22px;
 }
 
 .bold_text {
@@ -206,6 +213,11 @@
 .emptyChart{
     line-height: 80px;
     height: 80px;
-    font-size: xx-large;
+    font-size: 25px;
 
+}
+.item_info_title{
+    text-align: center;
+    font-size: 33px;
+    font-weight: bolder;
 }
