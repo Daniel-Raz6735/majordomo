@@ -93,8 +93,7 @@
 
 .orders_buttons{
     display: flex;
-
-    width: 55%;
+    width: 62%;
     justify-content: space-around;
 }
 
@@ -102,4 +101,5 @@
 .img_caption{
     text-align: center;
     margin: unset;
+    width: 25%;
 }

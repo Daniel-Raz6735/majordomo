@@ -169,8 +169,10 @@ export class ModalDemo extends React.Component {
 
     //test dict and see if their is an item with the attribute 'value' that is equal to value
     testExistenceInDict(value, data_dict) {
+        console.log(data_dict)
         for (const [key, obj] of Object.entries(data_dict)) {
-            if (obj["value"] === value)
+            console.log(obj)
+            if (obj["value"] == value)
                 return true;
         }
         return false;

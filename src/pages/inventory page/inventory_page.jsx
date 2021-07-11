@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Badge, ButtonToolbar, Modal } from "rsuite";
 import { NotificationList } from "../../components/notifications";
 import { Dictionary, getRTL } from "../../Dictionary";
-import { refresh,  TitleComponent, showNotification} from "../../components/bars/bars";
+import { refresh, TitleComponent, showNotification } from "../../components/bars/bars";
 import './inventory_page.css'
 import cart_plus from '../../images/icons/orders/cart_plus.svg'
 import x_icon from '../../images/x_icon.svg'
@@ -85,7 +85,7 @@ export class AddToOrder extends Component {
       alert("enterd to much")
   }
 
-  
+
   addOrder(value) {
     var unit = this.state.unit,
       title = this.state.title
@@ -99,11 +99,13 @@ export class AddToOrder extends Component {
       amount: value,
       unit: unit
     }
-    
+
 
     let request = base_url + "/order/add/item"
 
     let response
+
+    console.log(dict)
 
     $.ajax({
       url: request,
@@ -118,7 +120,7 @@ export class AddToOrder extends Component {
         // notify that add success with order details.
         scree_alert('success', data, "add_to_order");
         refresh()
-          
+
       },
       error: function (err) {
         response = err
@@ -154,7 +156,7 @@ export class AddToOrder extends Component {
   }
 
   componentDidMount() {
-   
+
     let div_content = ""
 
     // add to order button.
@@ -220,9 +222,9 @@ export function scree_alert(funcName, data, type) {
 
   switch (type) {
     case "add_to_order":
-      default:
+    default:
       messeges = { "success": Dictionary["item_added"], "error": Dictionary["item_added_failed"] }
-      description =""+ data["amount"]+" "+ data["unit"]+" "+ data["item_name"]
+      description = "" + data["amount"] + " " + data["unit"] + " " + data["item_name"]
       break
 
 
@@ -236,8 +238,8 @@ export function scree_alert(funcName, data, type) {
       description = "test"
       break
   }
-  var title=funcName === 'success' ? messeges["success"] : messeges["error"]
-  showNotification(funcName,title,description)
+  var title = funcName === 'success' ? messeges["success"] : messeges["error"]
+  showNotification(funcName, title, description)
 
 }
 
@@ -256,7 +258,7 @@ export class Quantity extends Component {
     return (
       <div className="quantity_container">
         <div className="quantity_select minus_symbol" onClick={this.props.handleMinus} >-</div>
-        <input type="text" className="quantity_window" name="quantity window" style={{ cursor: "default" }}  dir={getRTL()} value={this.props.value + " " + Dictionary[getUnitById(this.props.unit)]} disabled />
+        <input type="text" className="quantity_window" name="quantity window" style={{ cursor: "default" }} dir={getRTL()} value={this.props.value + " " + Dictionary[getUnitById(this.props.unit)]} disabled />
         <div className="quantity_select plus_symbol" onClick={this.props.handlePlus}>+</div>
       </div>)
   }

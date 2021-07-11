@@ -37,13 +37,18 @@ export function sort_by_key_val(jsObj, sort_by_key, reverse) {
     //sort an array of key and value [key,val]
     var sortedArray = []
     Object.keys(jsObj).forEach(key => {
+
         // Push each JSON Object entry in array by [value, key]
         if (sort_by_key)
             sortedArray.push([jsObj[key], key]);
         else
             sortedArray.push([key, jsObj[key]]);
     })
-    sortedArray.sort()
+    console.log(sortedArray)
+    // sortedArray.sort()
+    sortedArray.sort((x, y) => {
+        return y[1] - x[1]
+    })
     if (reverse)
         sortedArray.reverse()
     return sortedArray;
@@ -136,17 +141,20 @@ export class OrdersPage extends Component {
 
                 Object.keys(suppliers_dict).forEach(key => {
 
+
                     if (orders_dict && orders_dict[key])
                         sellers[key] = Object.keys(orders_dict[key]).length
                     else
                         sellers[key] = 0
                 })
-                var sorted_sellers = sort_by_key_val(sellers, false, true)
-                var weight_sup_dict = dict["weights"]["supplier"]
 
+                var sorted_sellers = sort_by_key_val(sellers, false, false)
+                var weight_sup_dict = dict["weights"]["supplier"]
+             
                 sorted_sellers.forEach(supplier => {
 
                     var supplier_id = supplier[0]
+
                     let term = this.state.term
                     page.push(<OrderCategory key={"order_cat" + supplier + this.props.update + this.state.term} term={term} weights_dict={weight_sup_dict[supplier_id]} supplier={suppliers_dict[supplier_id]} />)
                 })
@@ -227,14 +235,17 @@ class OrderCategory extends Component {
         var page = []
         if (supplier) {
             var sells_items = supplier["sells_items"]
+           
 
             if (sells_items && Object.keys(sells_items).length > 0) {
                 Object.keys(sells_items).forEach(key => {
                     let temp = this.props.weights_dict && this.props.weights_dict[key] ? this.props.weights_dict[key] : null, item_name, orders_details
                     item_name = temp && temp["item_name"] ? temp["item_name"] : key
                     orders_details = sells_items[key]["order_details"]
+                   
 
                     if (orders_details) {
+
                         // add orders that answer to serach input
                         if (this.props.term && this.props.term.length > 0 && item_name.toLowerCase().includes(this.props.term.toLowerCase()))
                             page.push(<Order key={"order" + key + this.props.term} supplier_name={this.props.supplier["name"]} order={orders_details} item_name={item_name} item_id={key} order_id={orders_details["order_id"]} />)
@@ -446,8 +457,8 @@ export class OrderHeader extends Component {
         Object.keys(cat_order).forEach(order => {
 
             // skip rest of object
-            if(items_list.length >0 )
-            return
+            if (items_list.length > 0)
+                return
 
             if (cat_order[order]["order_details"]) {
                 var temp = items[cat_order[order]["cat_name"]]
@@ -456,7 +467,7 @@ export class OrderHeader extends Component {
                     items_list.push({ supplier: cat_order[order]["cat_name"], item: temp[i]["item_name"], amount: temp[i]["quantity"], unit: temp[i]["unit"] })
 
                 exportCSVFile(headers, items_list, fileTitle)
-                
+
             }
         })
 
@@ -467,7 +478,6 @@ export class OrderHeader extends Component {
         let checkbox = this.props.export_list ? <div ><input onChange={() => this.props.func(this.props.cat_name)} style={{ width: "30px", height: "30px" }} type="checkbox" /></div> : ""
         let commionicate
 
-        console.log(this.props.weights_dict)
 
         if (this.props.export_list)
             commionicate = <div className="centerPhotos">

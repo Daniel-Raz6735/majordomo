@@ -69,6 +69,7 @@ function create_notification_dict(notification_data, suppliers_data, orders_dict
                 notification_to_insert["order_details"] = orders_dict["items"][item_id]
 
             if (suppliers_data && suppliers_data["items"] && suppliers_data["items"][item_id]) {
+
                 suppliers_id = suppliers_data["items"][item_id]["suppliers"]
                 if (suppliers_id) {
                     notification_to_insert["suppliers"] = suppliers_data["suppliers"][suppliers_id]
@@ -89,13 +90,14 @@ function create_notification_dict(notification_data, suppliers_data, orders_dict
                     dict["alerts"][notification_level] = {}
                 dict["alerts"][notification_level][item_id] = { ...notification_to_insert };
 
-                suppliers_id.forEach(supplier_id => {
-                    if (!dict["supplier"][notification_level])
-                        dict["supplier"][notification_level] = {}
-                    if (!dict["supplier"][notification_level][supplier_id])
-                        dict["supplier"][notification_level][supplier_id] = {}
-                    dict["supplier"][notification_level][supplier_id][item_id] = { ...notification_to_insert };
-                })
+                if (suppliers_id)
+                    suppliers_id.forEach(supplier_id => {
+                        if (!dict["supplier"][notification_level])
+                            dict["supplier"][notification_level] = {}
+                        if (!dict["supplier"][notification_level][supplier_id])
+                            dict["supplier"][notification_level][supplier_id] = {}
+                        dict["supplier"][notification_level][supplier_id][item_id] = { ...notification_to_insert };
+                    })
             }
 
         }
