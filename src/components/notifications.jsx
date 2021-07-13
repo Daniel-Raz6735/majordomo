@@ -343,7 +343,7 @@ export class AlertNotifications extends Component {
                     <div className="cart_container">
                         {action_btn(null, level, notification["item_name"], notification["order_details"], notification["item_id"], notification["suppliers"][0])}
                     </div>
-                    <div className="center_items notification_item_name">
+                    <div className="center_items notification_item_name alert_notification_item_name">
                     {notification["item_name"]}
                     </div>
                     <div className="center_items notification_weight">

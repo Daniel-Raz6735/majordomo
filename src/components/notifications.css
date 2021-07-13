@@ -104,10 +104,16 @@
 
 .notification_item_name {
     width: 20%;
-    overflow: hidden;
+    
     justify-content: center;
     text-align: center;
     font-weight: bold;
+    overflow: visible;
+    word-spacing: 100vw;
+   
+}
+.alert_notification_item_name{
+     overflow: hidden;
 }
 
 .looks_good_card {
@@ -190,9 +196,7 @@
     align-items: center;
     margin-bottom: 5px;
 }
-.notification_item_name{
-    font-weight: bold;
-}
+
 
 .cart_container {
     display: flex;

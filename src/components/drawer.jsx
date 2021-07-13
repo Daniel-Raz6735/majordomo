@@ -196,11 +196,11 @@ export class SearchBar extends React.Component {
 
       <div className="search">
         <InputGroup inside >
-          <Input onChange={e => this.props.handleChange(e, this.props.weights_dict)}  
-            style={{ direction: lang, textAlign: text_align, margin: "10px", boxShadow: "0px 0px 6pt 0px " + category_colors[this.props.cat_id], borderRadius: "5px" }} placeholder={Dictionary["serach_placeholder"] + "?"} />
-          <InputGroup.Button>
+          <InputGroup.Button style={{top:"10px"}}>
             <Icon icon="search" />
           </InputGroup.Button>
+          <Input onChange={e => this.props.handleChange(e, this.props.weights_dict)}  
+            style={{ direction: lang, textAlign: text_align, margin: "10px", boxShadow: "0px 0px 6pt 0px " + category_colors[this.props.cat_id], borderRadius: "5px" }} placeholder={Dictionary["serach_placeholder"] + "?"} />          
         </InputGroup>
       </div>
     );
