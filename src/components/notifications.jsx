@@ -134,9 +134,13 @@ export class NotificationList extends Component {
             if (cat === "alerts") {
                 let preferences = this.props.dict["preferences"][0]
                 let minimum_reach = preferences["minimum_reach_alerts"]
+                let freshness = preferences["freshness_alerts"]
 
                 for (let i = 1; i <= notification_colors.length; i++) {
                     if (!minimum_reach && i === 2)
+                        continue
+
+                    if (!freshness && i === 3)
                         continue
 
                     if (notifications_data && notifications_data[i]) {
@@ -222,10 +226,14 @@ export class NotificationCategory extends Component {
             Object.keys(notification_data).forEach(notification_level => {
                 var items_in_level = notification_data[notification_level]
                 let minimum_reach = this.props.preferences["minimum_reach_alerts"]
+                let freshness = this.props.preferences["freshness_alerts"]
 
-                if (!minimum_reach && notification_level == 2) {
+                if (!minimum_reach && notification_level == 2)
                     return
-                }
+
+                if (!freshness && notification_level == 3)
+                    return
+
 
                 if (items_in_level) {
 
@@ -344,7 +352,7 @@ export class AlertNotifications extends Component {
                         {action_btn(null, level, notification["item_name"], notification["order_details"], notification["item_id"], notification["suppliers"][0])}
                     </div>
                     <div className="center_items notification_item_name alert_notification_item_name">
-                    {notification["item_name"]}
+                        {notification["item_name"]}
                     </div>
                     <div className="center_items notification_weight">
                         {total_weight + " "}
@@ -353,7 +361,7 @@ export class AlertNotifications extends Component {
                 </div>)
             })
         }
-        let className = this.state.keep_open?"alert_notifications item_drawer_alert_notifications":"alert_notifications"
+        let className = this.state.keep_open ? "alert_notifications item_drawer_alert_notifications" : "alert_notifications"
 
         return (
             <div className={className} style={{ backgroundColor: color }}>
