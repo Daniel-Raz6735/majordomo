@@ -63,6 +63,8 @@ export class NotificationPeeker extends Component {
     componentDidMount() {
         var page = []
         let minimum_reach = this.props.preferences["minimum_reach_alerts"]
+        let freshness = this.props.preferences["freshness_alerts"]
+        console.log(this.props.preferences)
         Object.keys(this.props.dict).forEach(level => {
             var level_dict = this.props.dict[level]
             Object.keys(level_dict).forEach(supplier_id => {
@@ -71,6 +73,10 @@ export class NotificationPeeker extends Component {
                     var item_info = supplier_info[item_id]
                     if (!minimum_reach && item_info["notification_level"] === 2)
                         return
+
+                    if (!freshness && item_info["notification_level"] === 3)
+                        return
+
 
                     page.push(<Notification key={"not" + item_id} notification_level={item_info["notification_level"]}
                         item_name={item_info["item_name"]} total_weight={item_info["total_weight"]}
@@ -145,7 +151,7 @@ export class InventoryTile extends Component {
             })
         }
         if (alert_symbols.length < 1)
-            alert_symbols.push(<div key={"img" + 0} style={{color:"transparent"}} className="header_symbols notification_toggler" />)
+            alert_symbols.push(<div key={"img" + 0} style={{ color: "transparent" }} className="header_symbols notification_toggler" />)
         this.setState({ alert_symbols })
     }
 
