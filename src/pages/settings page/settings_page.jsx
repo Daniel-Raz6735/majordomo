@@ -112,20 +112,14 @@ class SettingsPage extends Component {
                 ]
               } />
 
-            <SideNavWrapper title={Dictionary["users"]}
-              content={
-                [<UsersList />]
-              } />
+
+            <UsersList key="users" />
+
 
             <SideNavWrapper title={Dictionary["system"]}
               content={
-                [<DropdownToggle setting_name={Dictionary["supplier_list"]} />,
-                <DropdownToggle setting_name={Dictionary["inventory"]} />
-                ]
+                [<DropdownToggle setting_name={"Inventory"} />]
               } />
-
-
-
           </div>
           <NavBar />
 
@@ -197,7 +191,6 @@ class DropdownToggle extends Component {
               {options[i]}
             </div>
           </Dropdown.Item>)
-
     }
 
     return (
@@ -292,12 +285,10 @@ export class ControlUsers extends Component {
   getUsers() {
     var request = base_url + '/get/users';
     var thisS = this
-    console.log(request)
     $.ajax({
       url: request,
       success: function (res) {
         thisS.processUsers(res)
-        console.log(res)
       },
       error: function (err) {
         console.log(err)
@@ -327,7 +318,9 @@ export class UsersList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: [<Loader speed="fast" size="xs" content="Loading..." vertical />]
+      user_modals: [<Loader speed="fast" size="xs" content="Loading..." vertical />],
+      supplier_modals: [<Loader speed="fast" size="xs" content="Loading..." vertical />],
+      business_id:this.props.business_id?this.props.business_id:1
 
     }
 
@@ -341,12 +334,16 @@ export class UsersList extends Component {
   }
   processUsers(data) {
     if (data && data["users"] && data["users"].length > 0) {
-      var users = data["users"], page = []
+      var users = data["users"], supplier_modals = [], user_modals = []
       users.forEach(user => {
-        page.push(<UserModal user={user} />)
+        if (user && user["business_id"] === this.state.business_id)
+          user_modals.push(<UserModal user={user} />)
+        else
+          supplier_modals.push(<UserModal user={user} />)
       })
       this.setState({
-        page: page
+        user_modals,
+        supplier_modals
       })
     }
     else
@@ -356,12 +353,10 @@ export class UsersList extends Component {
   getUsers() {
     var request = base_url + '/get/users';
     var thisS = this
-    console.log(request)
     $.ajax({
       url: request,
       success: function (res) {
         thisS.processUsers(res)
-        console.log(res)
       },
       error: function (err) {
         console.log(err)
@@ -372,26 +367,31 @@ export class UsersList extends Component {
   render() {
 
     return (
-
-      <Dropdown toggleClassName='dropdown_title' eventKey={String(this.state.event_key)} onToggle={(open) => { if (open) this.getUsers(); console.log("toggle") }} onOpen={this.getUsers}
-        title={<div className="title_container"
-        // onOpen= {()=>{ this.getUsers() }} >
-        // on= {()=>{ console.log("blallbl") }} >
-        >
-          <div className="setting_name">{Dictionary["users"]}</div>
-        </div>} >
-        {this.state.page}
-      </Dropdown>
+      <SideNavWrapper title="Users"
+        content={
+          [
+            <Dropdown toggleClassName='dropdown_title' eventKey={String(this.state.event_key)} onToggle={(open) => { if (open) this.getUsers(); console.log("toggle") }} onOpen={this.getUsers}
+              title={<div className="title_container">
+                <div className="setting_name">{"Users"}</div>
+              </div>} >
+              {this.state.user_modals}
+            </Dropdown>,
+            <Dropdown toggleClassName='dropdown_title' eventKey={String(this.state.event_key)} onToggle={(open) => { if (open) this.getUsers(); console.log("toggle") }} onOpen={this.getUsers}
+              title={<div className="title_container">
+                <div className="setting_name">{"Suppliers"}</div>
+              </div>} >
+              {this.state.supplier_modals}
+            </Dropdown>]} />
+      // <DropdownToggle setting_name={"Supplier list"}setting_name={Dictionary["language"]} options={["English", "עברית"]} chosen={"English"} onSelectFunction={changeLanguage}  />]} />
       // <Nav.Item icon={<Icon icon="user" />} ><div onClick={() => }>users</div></Nav.Item>
     )
   }
 }
 
-export class UserModal extends React.Component {
+export class UserModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      business_id: this.props.business_id ? this.props.business_id : 1,
       item_data: [],
       container_data: [],
 
@@ -410,7 +410,7 @@ export class UserModal extends React.Component {
 
   render() {
     var first_name = "", last_name = "", id = "", user = this.props.user
-    if (user && user["business_id"] === this.state.business_id) {
+    if (user) {
       if (user["user_id"]) {
         if (user["first_name"])
           first_name = user["first_name"]
@@ -418,11 +418,9 @@ export class UserModal extends React.Component {
           last_name = " " + user["last_name"]
         id = user["user_id"]
       }
-
     }
     else
       return ""
-    console.log(user)
     let name = first_name + last_name
 
     return (
@@ -433,6 +431,7 @@ export class UserModal extends React.Component {
     );
   }
 }
+
 
 export class UserInfo extends React.Component {
   constructor(props) {
@@ -457,12 +456,46 @@ export class UserInfo extends React.Component {
       return ""
     return (
       <div className="user_info">
-        <b>User id:</b> {this.state.id}<p />
-        <b>First name:</b> {this.state.first_name}<p />
-        <b>Last name:</b> {this.state.last_name}<p />
-        <b>Email:</b> {this.state.email}<p />
-        <b>Address:</b> {this.state.address}<p />
-        <b>Phone number:</b> +{this.state.phone_number}<p />
+        <b>{Dictionary["user_id"]}:</b> {this.state.id}<p />
+        <b>{Dictionary["first_name"]}:</b> {this.state.first_name}<p />
+        <b>{Dictionary["last_name"]}:</b> {this.state.last_name}<p />
+        <b>{Dictionary["email"]}:</b> {this.state.email}<p />
+        <b>{Dictionary["address"]}:</b> {this.state.address}<p />
+        <b>{Dictionary["phone_number"]}:</b> +{this.state.phone_number}<p />
+      </div>
+    );
+  }
+}
+// #todo customize to item
+export class ItemExtendedInfo extends React.Component {
+  constructor(props) {
+    super(props);
+    var user = this.props.user
+    if (user && user["user_id"]) {
+      this.state = {
+        id: user["user_id"],
+        first_name: user["first_name"] ? user["first_name"] : "",
+        last_name: user["last_name"] ? user["last_name"] : "",
+        email: user["email"] ? user["email"] : "",
+        address: user["address"] ? user["address"] : "",
+        phone_number: user["phone_number"] ? pharsePhoneNumber(user["phone_number"]) : ""
+
+      };
+    }
+
+  }
+
+  render() {
+    if (!this.state.id)
+      return ""
+    return (
+      <div className="user_info">
+        <b>{Dictionary["user_id"]}:</b> {this.state.id}<p />
+        <b>{Dictionary["first_name"]}:</b> {this.state.first_name}<p />
+        <b>{Dictionary["last_name"]}:</b> {this.state.last_name}<p />
+        <b>{Dictionary["email"]}:</b> {this.state.email}<p />
+        <b>{Dictionary["address"]}:</b> {this.state.address}<p />
+        <b>{Dictionary["phone_number"]}:</b> +{this.state.phone_number}<p />
       </div>
     );
   }

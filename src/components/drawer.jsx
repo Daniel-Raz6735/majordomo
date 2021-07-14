@@ -207,7 +207,8 @@ export class SearchBar extends React.Component {
   }
 }
 export class ItemPage extends Component {
-  /* shows all of the information about an item and its statistics*/
+  /* shows all of the information about an item and its statistics 
+  including daily avarege weight */
   constructor(props) {
     super(props);
     this.devide_data = this.devide_data.bind(this);
@@ -245,6 +246,7 @@ export class ItemPage extends Component {
         url: request,
         success: function (res) {
           thisS.devide_data(res)
+          
   
         },
         error: function (err) {
@@ -253,9 +255,7 @@ export class ItemPage extends Component {
       });
     }
   }
-  componentWillUnmount(){
-    window.location.hash = '';
-  }
+
 
   devide_data(res) {
     /*devide the data to diffarent dates and add a dropdown item stating the category*/
@@ -281,6 +281,7 @@ export class ItemPage extends Component {
       dropdown_content.push(<Dropdown.Item key={"drop_item" + days} eventKey={days} onSelect={() => { this.setState({ active_index: j }) }}>{Dictionary[days]}</Dropdown.Item>)
     })
     this.setState({ page, dropdown_content, date_dict });
+    
   }
 
 
@@ -365,6 +366,7 @@ export class ItemPage extends Component {
     return result;
   }
 
+  /*this function calculates 4 parameters avareges. daily minimum, daily maximum, daily usage, daily stock  */
   get_average_statistics_by_day(res, days) {
     var result = {
       "minimum": 0,
@@ -383,7 +385,7 @@ export class ItemPage extends Component {
           day_plus = 0, day_minus = 0, local_mini = Number.MAX_VALUE, local_maxi = -Number.MAX_VALUE,
           obj = res[get_date(testDate)]
         if (obj !== undefined) {
-          Object.keys(obj).sort().forEach(key => {
+          Object.keys(obj).sort().forEach(key => {//loop over all weights of this day 
             let weight_info = obj[key],
               new_weight = weight_info["weight"]
             if (new_weight !== undefined) {
@@ -405,28 +407,35 @@ export class ItemPage extends Component {
 
 
           });
-
+          let last_weight = prev_weight===undefined?0:prev_weight
           plus.push(day_plus)
           minus.push(day_minus)
           if (local_mini < Number.MAX_VALUE)
             mini.push(local_mini)
           else
-            mini.push(0)
+            mini.push(last_weight)
           if (local_maxi > -Number.MAX_VALUE)
             maxi.push(local_maxi)
           else
-            maxi.push(0)
+            maxi.push(last_weight)
         }
 
       }
-      const reducer = (accumulator, currentValue) => accumulator + currentValue;
+      const reducer = (accumulator, currentValue) => accumulator + currentValue; //accumulate all values in array  
       var result = {
         "minimum": (mini.reduce(reducer,0)/mini.length).toFixed(1).replace(/\.0+$/, ''),
         "maximum": (maxi.reduce(reducer,0)/maxi.length).toFixed(1).replace(/\.0+$/, ''),
         "usage": (minus.reduce(reducer,0)/minus.length).toFixed(1).replace(/\.0+$/, ''),
         "stock": (plus.reduce(reducer,0)/plus.length).toFixed(1).replace(/\.0+$/, '')
       };
-
+      if(mini.length===2){//if representing today and yesterday
+        result = {
+          "minimum": mini.pop().toFixed(1).replace(/\.0+$/, ''),
+          "maximum": maxi.pop().toFixed(1).replace(/\.0+$/, ''),
+          "usage": minus.pop().toFixed(1).replace(/\.0+$/, ''),
+          "stock": plus.pop().toFixed(1).replace(/\.0+$/, '')
+        };
+      }
     }
     return result;
   }
