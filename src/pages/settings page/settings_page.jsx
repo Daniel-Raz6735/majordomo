@@ -98,29 +98,29 @@ class SettingsPage extends Component {
 
           <div className="side_nav_container">
             {/* <ManegmentBTN dict={this.props.dict} /> */}
-            <SideNavWrapper title="general settings"
+            <SideNavWrapper title={Dictionary["general_settings"]}
               content={
-                [<DropdownToggle setting_name={"Integration"} options={["Priority", "Other"]} chosen={"Priority"} disabled={true} />
+                [<DropdownToggle setting_name={Dictionary["integration"]} options={["Priority", Dictionary["other"]]} chosen={"Priority"} disabled={true} />
                   , <DropdownToggle setting_name={Dictionary["language"]} options={["English", "עברית"]} chosen={"English"} onSelectFunction={changeLanguage} />
                 ]
               } />
 
-            <SideNavWrapper title="Notification"
+            <SideNavWrapper title={Dictionary["notifications"]}
               content={
-                [<Toggler onChange={this.minimumReachToggle} setting_name={"Minimum reach"} checked={settings["minimum_reach_alerts"]} />,
-                <Toggler onChange={this.changeFreshnessToggle} setting_name={"Freshness"} checked={settings["freshness_alerts"]} />
+                [<Toggler onChange={this.minimumReachToggle} setting_name={Dictionary["minimum_reach"]} checked={settings["minimum_reach_alerts"]} />,
+                <Toggler onChange={this.changeFreshnessToggle} setting_name={Dictionary["freshness"]} checked={settings["freshness_alerts"]} />
                 ]
               } />
 
-            <SideNavWrapper title="Users"
+            <SideNavWrapper title={Dictionary["users"]}
               content={
                 [<UsersList />]
               } />
 
-            <SideNavWrapper title="System"
+            <SideNavWrapper title={Dictionary["system"]}
               content={
-                [<DropdownToggle setting_name={"Supplier list"} />,
-                <DropdownToggle setting_name={"Inventory"} />
+                [<DropdownToggle setting_name={Dictionary["supplier_list"]} />,
+                <DropdownToggle setting_name={Dictionary["inventory"]} />
                 ]
               } />
 
@@ -158,6 +158,8 @@ class DropdownToggle extends Component {
     if (options && Array.isArray(options)) {
       len = options.length;
       chosenIndex = options.indexOf(this.props.chosen);
+      if (sessionStorage.getItem("current_language") === 'HE')
+        chosenIndex = 1
     }
     else
       options = []
@@ -168,16 +170,19 @@ class DropdownToggle extends Component {
       options: options,
       chosen: this.props.chosen,
       open: true,
-      disabled: this.props.disabled ? true : false
+      disabled: this.props.disabled ? true : false,
+      lang_changed: false
     }
     this.onSelectFunction = this.onSelectFunction.bind(this);
   }
 
   onSelectFunction(ele) {
     // this.setState({ open: false })
-    console.log("bla")
+    // console.log("bla")
     if (this.props.onSelectFunction)
       this.props.onSelectFunction(ele)
+
+
   }
 
   render() {
@@ -185,13 +190,14 @@ class DropdownToggle extends Component {
     for (let i = 0; i < options.length; i++) {
       let event_key = String(this.state.event_key) + "-" + String(i),
         className = i === this.state.chosenIndex ? "chosen_option" : ""
-      if(!this.state.disabled)
-      page.push(
-        <Dropdown.Item key={"dropdown_item" + i} eventKey={event_key} onSelect={() => this.onSelectFunction(options[i])} >
-          <div className={className} >
-            {options[i]}
-          </div>
-        </Dropdown.Item>)
+      if (!this.state.disabled)
+        page.push(
+          <Dropdown.Item key={"dropdown_item" + i} eventKey={event_key} onSelect={() => this.onSelectFunction(options[i])} >
+            <div className={className} >
+              {options[i]}
+            </div>
+          </Dropdown.Item>)
+
     }
 
     return (
@@ -307,7 +313,7 @@ export class ControlUsers extends Component {
       <Dropdown toggleClassName='dropdown_title' eventKey={String(this.state.event_key)} onToggle={(open) => { if (open) this.getUsers(); console.log("toggle") }} onOpen={this.getUsers}
         title={<div className="title_container"
         >
-          <div className="setting_name">{"Users"}</div>
+          <div className="setting_name">{Dictionary["users"]}</div>
         </div>} >
         {this.state.page}
       </Dropdown>
@@ -372,7 +378,7 @@ export class UsersList extends Component {
         // onOpen= {()=>{ this.getUsers() }} >
         // on= {()=>{ console.log("blallbl") }} >
         >
-          <div className="setting_name">{"Users"}</div>
+          <div className="setting_name">{Dictionary["users"]}</div>
         </div>} >
         {this.state.page}
       </Dropdown>

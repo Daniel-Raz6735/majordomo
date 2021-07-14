@@ -61,7 +61,7 @@ export function action_btn(defult_val, level, title, order_details, item_id, sup
     switch (level) {
         case 3: //item is overflow case
             // return <img src={suggest_dish} alt={Dictionary["add_to_order"]} />
-            return <SuggestDish button_text={"Suggest Dish"} />
+            return <SuggestDish button_text={Dictionary["suggest_dish"]} />
         case 0:// item is critical
         case 1:// item is in danger
         case 2:// item looks good

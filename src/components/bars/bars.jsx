@@ -404,11 +404,11 @@ export class ButtonsComponent extends Component {
             width += 33;
         }
 
-        let list = this.props.orders ? <figure className="img_caption"><img src={export_list} alt="export" onClick={this.props.export_func} /><figcaption>Export All</figcaption></figure> : ""
+        let list = this.props.orders ? <figure className="img_caption"><img src={export_list} alt="export" onClick={this.props.export_func} /><figcaption>{Dictionary["export_all"]}</figcaption></figure> : ""
         let buttns, clas
 
         if (this.props.orders) {
-            buttns = <div className="orders_buttons">{btns}</div>
+            // buttns = <div className="orders_buttons">{btns}</div>
             clas = "toolbar_orders_buttons"
         }
         else {

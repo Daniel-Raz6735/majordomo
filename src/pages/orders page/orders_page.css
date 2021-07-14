@@ -27,8 +27,13 @@
     align-items: center;
     color: white;
     height: 30px;
-    margin-top: 10px;
+    
 
+}
+
+.order_toggler{
+    font-weight: bold;
+   
 }
 
 .order_page_plus_symbol {
@@ -95,7 +100,7 @@
 .list_category_container {
     box-shadow: 0px 0px 6px #00000054;
     margin: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
 .rs-divider-horizontal {

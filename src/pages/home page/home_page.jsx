@@ -36,7 +36,7 @@ export class HomePage extends Component {
                 <img alt="Majordomo logo" className="majordomoLogo" src={logo} ></img>
                 <div className="home_titles"><div>{Dictionary["notifications"]}</div>  <div>{getTime()}</div></div>
                 {temp}
-                <div className="home_titles"><div>Inventory Status</div>  <div>{getTime()}</div></div>
+                <div className="home_titles"><div>{Dictionary["inventory_status"]}</div>  <div>{getTime()}</div></div>
                 <InentoryTileContainer key={"tile"} dict={tiles} />
                 <ModalDemo dict={this.props.dict} />
             </div>

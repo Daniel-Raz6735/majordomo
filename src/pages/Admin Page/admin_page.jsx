@@ -5,6 +5,7 @@ import LoginComponent from '../login page/LoginPage';
 import './admin_page.css';
 import $ from 'jquery';
 import { base_url } from '../..';
+import { Dictionary } from '../../Dictionary';
 const { Column, HeaderCell, Cell } = Table;
 
 
@@ -170,7 +171,7 @@ class ControlContainers extends Component {
 
 
                             <FormGroup controlId={"container_id"}>
-                                <ControlLabel>Container ID</ControlLabel>
+                                <ControlLabel>{Dictionary["container_id"]}</ControlLabel>
                                 <FormControl value={this.state.container_id} name="container_id" />
                                 <HelpBlock>Required</HelpBlock>
                             </FormGroup>

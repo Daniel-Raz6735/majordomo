@@ -487,13 +487,13 @@ export class OrderHeader extends Component {
             </div>
         else
             if (this.props.weights_dict)
-                commionicate = <figure className="img_caption" style={{ marginLeft: "100px" }} onClick={this.exportFromLists}><img src={export_list} alt="export" /><figcaption>Export List</figcaption></figure>
+                commionicate = <figure className="img_caption" style={{ marginLeft: "100px" }} onClick={this.exportFromLists}><img src={export_list} alt="export" /><figcaption>{Dictionary["export_list"]}</figcaption></figure>
 
 
         return (
             <div className={clas} onClick={(e) => this.props.on_click(e)}  >
                 {checkbox}
-                <div className="order_item_name order_toggler">
+                <div className="order_item_name order_toggler" style={{textAlign:"unset"}}>
                     {this.props.cat_name}
                 </div>
                 {/* <div className="centerPhotos">
@@ -589,8 +589,8 @@ class OrderList extends Component {
         return (
             <div className="export_list" >
                 <TitleComponent key={"title_list_comp"} title_name={"export_lists"} />
-                <div style={{ float: "right" }}>Lists <img src={right_arrow} alt="back" onClick={this.props.back_to_list} /></div>
-                <div className="confirm_all_btn"><Button onClick={this.confirm_all} style={{ color: "white", background: "#73D504" }}>Confirm all</Button></div>
+                <div style={{ float: "right" }}>{Dictionary["lists"]} <img src={right_arrow} alt="back" onClick={this.props.back_to_list} /></div>
+                <div className="confirm_all_btn"><Button onClick={this.confirm_all} style={{ color: "white", background: "#73D504" }}>{Dictionary["confirm_all"]}</Button></div>
                 {this.state.page}
             </div>
         )
@@ -617,7 +617,7 @@ class OrderListCategory extends Component {
         for (let i = 0; i < items[this.props.seller].length; i++)
             page.push(<OrderListItems item_name={items[this.props.seller][i].item_name} quantity={items[this.props.seller][i].quantity} unit={items[this.props.seller][i].unit} />)
 
-        page.push(<div className="confirm_seller_button" ><Button onClick={() => this.props.confirm_seller(this.props.seller)} style={{ color: "white", background: "#73D504" }}>Confirm</Button></div>)
+        page.push(<div className="confirm_seller_button" ><Button onClick={() => this.props.confirm_seller(this.props.seller)} style={{ color: "white", background: "#73D504" }}>{Dictionary["confirm"]}</Button></div>)
 
         this.setState({ page })
     }

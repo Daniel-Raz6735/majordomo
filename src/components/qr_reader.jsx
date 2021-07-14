@@ -284,14 +284,14 @@ export class ModalDemo extends React.Component {
                 <Modal size={"lg"} dialogClassName="add_container_area" show={this.state.show} onHide={this.close} >
                     <div className={"rs-modal-content_qr"}>
                         <Modal.Header style={{ textAlign: "center" }}>
-                            <Modal.Title>Container Pairing</Modal.Title>
+                            <Modal.Title>{Dictionary["pair_container"]}</Modal.Title>
                         </Modal.Header>
 
                         <Form fluid >
                             <div className="filters_area">
-                                <ScanFilter description={this.state.container_id} hasValue={this.state.container_id_found} change_active={this.change_active} active={!this.state.is_item && !this.state.scaned} key={"container" + this.state.is_item + this.state.scaned} type={"Container ID"} />
+                                <ScanFilter description={this.state.container_id} hasValue={this.state.container_id_found} change_active={this.change_active} active={!this.state.is_item && !this.state.scaned} key={"container" + this.state.is_item + this.state.scaned} type={Dictionary["container_id"]} />
                                 <img src={this.state.chain_icon_src} alt="chain" />
-                                <ScanFilter description={this.state.item_name} hasValue={this.state.item_found} change_active={this.change_active} active={this.state.is_item && !this.state.scaned} key={"item" + this.state.is_item + this.state.scaned} type={"Item ID"} />
+                                <ScanFilter description={this.state.item_name} hasValue={this.state.item_found} change_active={this.change_active} active={this.state.is_item && !this.state.scaned} key={"item" + this.state.is_item + this.state.scaned} type={Dictionary["item"]} />
                             </div>
                             <div className="barcode_scan_area">
                                 <FormGroup>
@@ -310,7 +310,7 @@ export class ModalDemo extends React.Component {
                     </div>
                 </Modal>
                 <img className="scan_icon" onClick={this.open} src={scan_icon} alt="Scan container" />
-                <div className="pair_container">pair container</div>
+                <div className="pair_container">{Dictionary["pair_container"]}</div>
             </div>
         );
     }

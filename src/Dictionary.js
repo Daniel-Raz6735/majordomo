@@ -25,6 +25,9 @@ export const Dictionary = new LocalizedStrings({
     alerts: 'Alerts',
     show_items: "Show items",
 
+    //home page
+    inventory_status:"Inventory Status",
+
 
     //bottom bar
     home: "Home",
@@ -85,10 +88,21 @@ export const Dictionary = new LocalizedStrings({
     new_item: "New item",
     unknown: "Unknown",
     cart: "Cart",
+    export_list: "Export List",
     export_lists: "Export Lists",
+    export_all: "Export All",
+    confirm:"Confirm",
+    confirm_all:"Confirm all",
 
     //settings page
     language: "Language",
+    users:"Users",
+    system:"System",
+    general_settings:"General Settings",
+    integration:"Integration",
+    minimum_reach:"Minimum reach",
+    freshness:"Freshness",
+    supplier_list:"Supplier list",
 
     //messages
     page_not_found: "Sorry, the page you were looking for was not found",
@@ -100,6 +114,7 @@ export const Dictionary = new LocalizedStrings({
     container_pairing: "Container Pairing",
     container_not_in_list: "Container not in list",
     item_not_in_list: "Item not in list",
+    pair_container:"Pair Container"
 
 
 
@@ -118,6 +133,10 @@ export const Dictionary = new LocalizedStrings({
     alerts: 'התראות',
     item_type: 'סוג מוצר',
     show_items: "צפייה במוצרים",
+
+    //home page
+    inventory_status:"מצב המלאי",
+
 
 
     //bottom bar
@@ -172,12 +191,23 @@ export const Dictionary = new LocalizedStrings({
     phone: "טלפון",
     whatsapp: "ווטסטאפ",
     add_item: "הוסף מוצר",
-    new_item: "מוצר חדש",
+    new_item: "הוסף מוצר",
     unknown: "לא ידוע",
-    export_lists: "ייצא רשימה",
+    export_list: "ייצא רשימה",
+    export_lists: "ייצא רשימות",
+    export_all: "ייצא הכל",
+    confirm:"אשר",
+    confirm_all:"אשר הכל",
 
     //settings page
     language: "שפה",
+    users:"משתמשים",
+    system:"הגדרות מערכת",
+    general_settings:"הגדרות כלליות",
+    integration:"אינטגרציה",
+    minimum_reach:"רף מינימום",
+    freshness:"טריות",
+    supplier_list:"רשימת ספקים",
 
     //messages
     page_not_found: "מתנצלים, הדף שחיפשתם לא נמצא.",
@@ -186,6 +216,7 @@ export const Dictionary = new LocalizedStrings({
     //qr barcode
     container_id: "מזהה מיכל",
     item: "מוצר",
+    pair_container:"צימוד מיכל"
 
   }
 });
@@ -201,6 +232,7 @@ if (language === null) {
 }
 Dictionary.setLanguage(language);
 export function determinLang(lang) {
+  
   switch (lang) {
     case "English":
       lang = "EN"
@@ -217,7 +249,8 @@ export function determinLang(lang) {
 
 //save new language in session storage and reload page
 export function changeLanguage(lang) {
-  sessionStorage.setItem("current_language", lang);
+  
+  sessionStorage.setItem("current_language", determinLang(lang));
   sessionStorage.setItem('tab_name', "SettingPage")
   window.location.reload();
 }

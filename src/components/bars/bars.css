@@ -86,9 +86,10 @@
 }
 
 .toolbar_orders_buttons{
-    display: flex;
+    /* display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center; */
+    float: right;
 }
 
 .orders_buttons{
