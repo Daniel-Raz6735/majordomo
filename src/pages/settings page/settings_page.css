@@ -62,10 +62,11 @@
 
 .profile_details {
     height: 150px;
+    display: flex;
 }
 
-.settings_issues {
-    margin-bottom: 30px;
+.system_issues {
+    margin-bottom: 40px;
 }
 
 .notification_system_toggler {

@@ -89,6 +89,12 @@ export const Dictionary = new LocalizedStrings({
 
     //settings page
     language: "Language",
+    user_id: "User id",
+    first_name:"First name",
+    last_name:"Last name",
+    address:"Address",
+    phone_number:"Phone number",
+    
 
     //messages
     page_not_found: "Sorry, the page you were looking for was not found",
@@ -178,6 +184,11 @@ export const Dictionary = new LocalizedStrings({
 
     //settings page
     language: "שפה",
+    user_id: "מזהה משתמש",
+    first_name:"שם פרטי",
+    last_name:"שם משפחה",
+    address:"כתובת",
+    phone_number:"מספר טלפון",
 
     //messages
     page_not_found: "מתנצלים, הדף שחיפשתם לא נמצא.",

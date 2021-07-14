@@ -64,7 +64,6 @@ export class NotificationPeeker extends Component {
         var page = []
         let minimum_reach = this.props.preferences["minimum_reach_alerts"]
         let freshness = this.props.preferences["freshness_alerts"]
-        console.log(this.props.preferences)
         Object.keys(this.props.dict).forEach(level => {
             var level_dict = this.props.dict[level]
             Object.keys(level_dict).forEach(supplier_id => {
