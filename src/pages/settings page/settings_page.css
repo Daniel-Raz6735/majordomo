@@ -76,3 +76,6 @@
 .user_btn{
     width: 100%;
 }
+#IconLogo{
+    cursor: pointer;
+}

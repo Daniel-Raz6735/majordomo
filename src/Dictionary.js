@@ -37,9 +37,6 @@ export const Dictionary = new LocalizedStrings({
     profile: "Profile",
 
 
-
-
-
     //containers
     unknown_date: "unknown date",
     last_registred: "last registred at",
@@ -108,6 +105,10 @@ export const Dictionary = new LocalizedStrings({
     last_name:"Last name",
     address:"Address",
     phone_number:"Phone number",
+    suppliers:"Suppliers",
+    item_id:"Item id",
+    category:"Category",
+    item_name:"Item name",
     
 
     //messages
@@ -120,12 +121,8 @@ export const Dictionary = new LocalizedStrings({
     container_pairing: "Container Pairing",
     container_not_in_list: "Container not in list",
     item_not_in_list: "Item not in list",
-    pair_container:"Pair Container"
-
-
-
-
-
+    pair_container:"Pair Container",
+    barcode:"Barcode",
 
   },
   HE: {
@@ -219,6 +216,10 @@ export const Dictionary = new LocalizedStrings({
     last_name:"שם משפחה",
     address:"כתובת",
     phone_number:"מספר טלפון",
+    suppliers:"ספקים",
+    item_id:"מזהה מוצר",
+    category:"קטגוריה",
+    item_name:"שם מוצר",
 
     //messages
     page_not_found: "מתנצלים, הדף שחיפשתם לא נמצא.",
@@ -227,7 +228,8 @@ export const Dictionary = new LocalizedStrings({
     //qr barcode
     container_id: "מזהה מיכל",
     item: "מוצר",
-    pair_container:"צימוד מיכל"
+    pair_container:"צימוד מיכל",
+    barcode:"ברקוד",
 
   }
 });
