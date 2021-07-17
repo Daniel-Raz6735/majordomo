@@ -58,6 +58,7 @@
 .settings_page_container {
     display: flex;
     flex-direction: column;
+    padding-bottom: 15%;
 }
 
 .profile_details {
@@ -75,4 +76,7 @@
 
 .user_btn{
     width: 100%;
+}
+#IconLogo{
+    cursor: pointer;
 }
