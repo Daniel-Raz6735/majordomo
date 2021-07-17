@@ -97,7 +97,7 @@ class SettingsPage extends Component {
         <div className="settings_page_container">
 
           <div className="profile_details"><img className="profile_pic" alt="Profile" src={profilePic} />
-            <Icon icon={"exit"} style={{ cursor: "pointer" }} id="logoutBtn" onClick={() => {
+            <Icon icon={"exit"} style={{ cursor: "pointer",fontWeight: "bold" }} id="logoutBtn" onClick={() => {
               auth.signOut()
               window.location.reload();
 
