@@ -196,7 +196,7 @@ export class SearchBar extends React.Component {
 
       <div className="search">
         <InputGroup inside >
-          <InputGroup.Button style={{top:"10px"}}>
+          <InputGroup.Button style={{top:"10px",left: "10px"}}>
             <Icon icon="search" />
           </InputGroup.Button>
           <Input onChange={e => this.props.handleChange(e, this.props.weights_dict)}  
