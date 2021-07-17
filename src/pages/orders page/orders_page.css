@@ -20,7 +20,7 @@
     background-color: #73D504;
     border-radius: 4px;
     text-align: center;
-    font-size: 16pt;
+    font-size: 12pt;
     color: white;
     display: flex;
     justify-content: center;
@@ -79,7 +79,7 @@
 
 .order_item_name {
     width: 40%;
-    text-align: center;
+    /* text-align: center; */
 }
 
 .delete_order_btn {

@@ -35,7 +35,7 @@ export class Scanner extends Component {
                         width={300}
                         stopStream={this.state.stopStream}
                         onUpdate={(err, result) => {
-                            // console.log(err)
+                            console.log(err)
                             // console.log(result)
                             if (result) {
                                 this.props.handleScan(result)
@@ -44,7 +44,9 @@ export class Scanner extends Component {
                             // else
                             //     console.log(err)
                             // this.handleError(err);
-                        }} />
+                        }}
+
+                        onError={this.props.handleError} />
                 </div >
             )
     }
@@ -57,6 +59,7 @@ export class ModalDemo extends React.Component {
             business_id: this.props.business_id ? this.props.business_id : 1,
             item_data: [],
             container_data: [],
+            error: false
 
         };
         this.close = this.close.bind(this);
@@ -72,6 +75,7 @@ export class ModalDemo extends React.Component {
         this.removeCamera = this.removeCamera.bind(this);
         this.testExistenceInDict = this.testExistenceInDict.bind(this);
         this.resetComp = this.resetComp.bind(this);
+        this.handleError = this.handleError.bind(this);
 
     }
 
@@ -216,6 +220,10 @@ export class ModalDemo extends React.Component {
         }
     }
 
+    handleError() {
+        this.setState({ error: true })
+    }
+
     removeCamera() {
         //turn off the camera 
         this.setState({ stopStream: true })
@@ -261,7 +269,9 @@ export class ModalDemo extends React.Component {
 
         let value = this.state.is_item ? this.state.item_name : this.state.container_id;
 
-        let comp = this.state.pairing_complete ? <img src={pairing_complete} alt="Pairing Complete" /> : <Scanner handleScan={this.handleScan} is_item={this.state.is_item} switchState={this.state.switchState} scaned={this.state.scaned} />
+        let comp = this.state.pairing_complete ? <img src={pairing_complete} alt="Pairing Complete" /> : <Scanner handleScan={this.handleScan} handleError={this.handleError} is_item={this.state.is_item} switchState={this.state.switchState} scaned={this.state.scaned} />
+        if (this.state.error)
+            comp = <div>Camera not avillable</div>
 
         let submit = this.state.container_id_found && this.state.item_found && !this.state.pairing_complete ? <Button className="pair_btn" onClick={this.handleSubmit} style={{}}>Pair</Button> : ""
 

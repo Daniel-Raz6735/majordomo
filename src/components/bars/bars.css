@@ -98,6 +98,12 @@
     justify-content: space-around;
 }
 
+.export_all_btn{
+    display: flex;
+    align-items: flex-end;
+    font-weight: bold;
+}
+
 
 .img_caption{
     text-align: center;

@@ -384,7 +384,7 @@ class Order extends Component {
                     onMouseDown={this.handleButtonPress}
                     onMouseUp={this.handleButtonRelease}
                     onMouseLeave={this.handleButtonRelease} >
-                    <div className="order_item_name">
+                    <div className="order_item_name" >
                         {this.props.item_name}
                     </div>
                     <Quantity handlePlus={this.handlePlus} handleMinus={this.handleMinus} defult_val={quantity} value={this.state.quantity} unit={unit} />
