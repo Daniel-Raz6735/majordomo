@@ -97,11 +97,11 @@ class SettingsPage extends Component {
         <div className="settings_page_container">
 
           <div className="profile_details"><img className="profile_pic" alt="Profile" src={profilePic} />
-          <Icon icon={"exit"} style={{ cursor: "pointer"}} id="logoutBtn" onClick={() => {
-                    auth.signOut()
-                    window.location.reload();
-                    
-                }} >{Dictionary.signOut}</Icon>
+            <Icon icon={"exit"} style={{ cursor: "pointer" }} id="logoutBtn" onClick={() => {
+              auth.signOut()
+              window.location.reload();
+
+            }} >{Dictionary.signOut}</Icon>
           </div>
 
           <div className="side_nav_container">
@@ -119,17 +119,15 @@ class SettingsPage extends Component {
                 <Toggler onChange={this.changeFreshnessToggle} setting_name={Dictionary["freshness"]} checked={settings["freshness_alerts"]} />
                 ]
               } />
-
+            <UsersList key="users" />
 
             <SideNavWrapper title={Dictionary["system"]}
               content={
                 [<ItemsList dict={this.props.dict} />]
               } />
-            <UsersList key="users" />
-
 
           </div>
-          <NavBar />
+          {/* <NavBar /> */}
 
         </div>
 
@@ -343,9 +341,9 @@ export class UsersList extends Component {
       var users = data["users"], supplier_modals = [], user_modals = []
       users.forEach(user => {
         if (user && user["business_id"] === this.state.business_id)
-          user_modals.push(<UserModal key={"user"+user["user_id"]} user={user} />)
+          user_modals.push(<UserModal key={"user" + user["user_id"]} user={user} />)
         else
-          supplier_modals.push(<UserModal user={user} key={"supplier"+user["user_id"]} />)
+          supplier_modals.push(<UserModal user={user} key={"supplier" + user["user_id"]} />)
       })
       this.setState({
         user_modals,
@@ -374,7 +372,7 @@ export class UsersList extends Component {
 
     return (
       <SideNavWrapper title="Users"
-      key={"user_side_nav"}
+        key={"user_side_nav"}
         content={
           [
             <Dropdown toggleClassName='dropdown_title' eventKey={String(this.state.event_key)} onToggle={(open) => { if (open) this.getUsers(); console.log("toggle") }} onOpen={this.getUsers}
@@ -407,7 +405,6 @@ export class ItemsList extends Component {
       Object.keys(dict).forEach(item => {
         let item_info = dict[item]
         if (item_info["item_id"]) {
-          console.log(item_info)
           item_modals.push(<ItemModal item_info={item_info} {...this.props} />)
         }
       })
@@ -416,7 +413,6 @@ export class ItemsList extends Component {
 
     else
       console.log("unable to load users")
-    this.setState({ item_modals: <div></div> })
   }
 
   render() {
@@ -477,7 +473,7 @@ export class ItemModal extends Component {
     this.state = {};
     this.close = this.close.bind(this);
     this.open = this.open.bind(this);
-    
+
   }
 
   close() {
@@ -488,9 +484,7 @@ export class ItemModal extends Component {
   }
 
   render() {
-    console.log("A")
     var name = "", id = "", item_info = this.props.item_info
-    console.log(item_info)
     if (item_info) {
       if (item_info["item_id"]) {
         if (item_info["item_name"])
@@ -498,15 +492,16 @@ export class ItemModal extends Component {
         id = item_info["item_id"]
       }
     }
-    else{
+    else {
       console.log("item not found")
       return ""
 
     }
+
     return (
       <Dropdown.Item key={"dropdown_item" + id}   >
         <ModalTemplate
-          modalContent={<ItemExtendedInfo item_info={item_info} />} modalSize="lg" btnContent={name} modal_head={name}  {...this.props} />
+          modalContent={<ItemExtendedInfo item_info={item_info} {...this.props} />} modalSize="lg" btnContent={name} modal_head={name} />
       </Dropdown.Item>
     );
   }
@@ -548,26 +543,32 @@ export class UserInfo extends React.Component {
 export class ItemExtendedInfo extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      event_key: 1
+    }
     var item_info = this.props.item_info
+
     if (item_info && item_info["item_id"]) {
-      let category = ""
-      console.log(this.props.dict)
-      if (this.props.dict && this.props.dict["category"])
+      let category = "", item_id = item_info["item_id"] ? item_info["item_id"] : "", cat_id = item_info["category_id"] ? item_info["category_id"] : undefined
+      if (item_id && cat_id && this.props.dict && this.props.dict["weights"]
+        && this.props.dict["weights"]["category"] && this.props.dict["weights"]["category"][cat_id]
+        && this.props.dict["weights"]["category"][cat_id][item_id] &&
+        this.props.dict["weights"]["category"][cat_id][item_id]["cat_name"]) {
+        category = this.props.dict["weights"]["category"][cat_id][item_id]["cat_name"]
+      }
       this.state = {
-        name: item_info["name"] ? item_info["name"] : "",
+        id: item_id,
         category: category,
-        id: item_info["item_id"] ? item_info["item_id"] : "",
+        name: item_info["item_name"] ? item_info["item_name"] : "",
+        barcode: item_info["barcode"] ? item_info["barcode"] : "",
         minimum: item_info["content_total_minimum"] ? item_info["content_total_minimum"] : "",
         maximum: item_info["content_total_maximum"] ? item_info["content_total_maximum"] : "",
-        barcode: item_info["barcode"] ? item_info["barcode"] : "",
       };
     }
   }
 
-  // category_id: 1
-
   render() {
-    if (!this.state.id)
+    if (!this.state["id"])
       return ""
     return (
       <div className="item_info">
