@@ -26,7 +26,7 @@ server = HttpsServer({
     cert: fs.readFileSync("/etc/letsencrypt/live/majordomo.cloudns.asia/fullchain.pem"),
     key: fs.readFileSync("/etc/letsencrypt/live/majordomo.cloudns.asia/privkey.pem")
 })
-const https_serv = http.createServer(app);
+const https_serv = https.createServer(app);
 https_serv.listen(http_port, function listening() {
     console.log('http listening on ' + http_port);
 
