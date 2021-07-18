@@ -664,7 +664,7 @@ class OrderListItems extends Component {
         return (
             <div className="order_list_items">
                 <div>{this.props.item_name}</div>
-                <div>{this.props.quantity} {" "} {this.props.unit}</div>
+                <div style={{ direction: getRTL() }}>{this.props.quantity} {" "} {Dictionary[this.props.unit]}</div>
             </div>)
     }
 }
