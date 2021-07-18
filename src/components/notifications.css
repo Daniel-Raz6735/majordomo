@@ -113,7 +113,7 @@
    
 }
 .alert_notification_item_name{
-     overflow: hidden;
+     overflow: visible;
 }
 
 .looks_good_card {
