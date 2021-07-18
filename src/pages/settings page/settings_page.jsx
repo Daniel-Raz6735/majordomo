@@ -11,7 +11,6 @@ import AdminPage, { EditTable } from '../Admin Page/admin_page';
 import $ from 'jquery';
 import { base_url } from "../..";
 import { ModalTemplate } from "../../components/modal/madal";
-import { ThemeProvider } from "react-bootstrap";
 
 
 var fake_settings = {
@@ -97,7 +96,7 @@ class SettingsPage extends Component {
         <div className="settings_page_container">
 
           <div className="profile_details"><img className="profile_pic" alt="Profile" src={profilePic} />
-            <Icon icon={"exit"} style={{ cursor: "pointer",fontWeight: "bold" }} id="logoutBtn" onClick={() => {
+            <Icon icon={"exit"} id="logoutBtn" onClick={() => {
               auth.signOut()
               window.location.reload();
 
@@ -127,7 +126,6 @@ class SettingsPage extends Component {
               } />
 
           </div>
-          {/* <NavBar /> */}
 
         </div>
 

@@ -80,3 +80,9 @@
 #IconLogo{
     cursor: pointer;
 }
+#logoutBtn{
+    cursor: pointer;
+    font-weight: bold;
+    position: absolute;
+    margin: 5px 0 0 5px;
+}

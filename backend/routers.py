@@ -442,6 +442,7 @@ async def add_weights(lis: WeighingList, client_time: int):
         for container_id in data_inserted:
             message += "container: " + str(container_id) + " weight: " + str(data_inserted[container_id])
         del connection
+        return message
 
     except HTTPException as error:
         raise error
