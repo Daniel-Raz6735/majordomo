@@ -37,4 +37,3 @@ backend/old_firebase/smartcontainerdemo-a97e4-firebase-adminsdk-khgwn-f0206e819a
 .firebase/hosting.YnVpbGQ.cache
 backend/queries/send_requests.py
 backend/utilities/logs.py
-src/index.js
