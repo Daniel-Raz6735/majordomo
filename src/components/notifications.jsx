@@ -354,9 +354,9 @@ export class AlertNotifications extends Component {
                     <div className="center_items notification_item_name alert_notification_item_name">
                         {notification["item_name"]}
                     </div>
-                    <div className="center_items notification_weight">
+                    <div className="center_items notification_weight" style={{ direction: getRTL() }}>
                         {total_weight + " "}
-                        {getUnitById(notification["unit"])}
+                        {Dictionary[getUnitById(notification["unit"])]}
                     </div>
                 </div>)
             })

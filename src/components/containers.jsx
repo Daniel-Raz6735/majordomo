@@ -130,7 +130,7 @@ export class ItemBlock extends Component {
         let sym
         let color = this.props.symbol !== -1 ? notification_colors[this.props.symbol - 1] : styleArr[3]
         let source = this.props.symbol !== -1 ? notification_dict[this.props.symbol]["alert_filter_symbol"] : inventory_looks_good
-        let messege = this.props.symbol !== -1 ? notification_dict[this.props.symbol]["message"] : " looks good"
+        let messege = this.props.symbol !== -1 ? notification_dict[this.props.symbol]["message"] : Dictionary["looks_good2"]
 
         switch (this.props.symbol) {
             case 3:
@@ -158,7 +158,7 @@ export class ItemBlock extends Component {
                     <div className="item_squere_title">
                         {this.state.name}
                     </div>
-                    <div className="center_items notification_weight" >{this.state.weight.toFixed(1).replace(/\.0+$/, '')} {" "} {getUnitById(this.state.unit)}</div>
+                    <div className="center_items notification_weight" style={{ direction: getRTL() }}>{this.state.weight.toFixed(1).replace(/\.0+$/, '')} {" "} {Dictionary[getUnitById(this.state.unit)]}</div>
                     <div className="last_registred" style={{ direction: getRTL() }}>{Dictionary["last_registred"] + ":"}
                         <div className="weight_date">{this.state.weight_date} </div>
                     </div>
