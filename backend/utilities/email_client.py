@@ -1,9 +1,9 @@
-from config import config
+from .configManager import ConfigManager
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-params = config(filename='config.ini', section='email')
+params = ConfigManager.config(section='email')
 
 
 class EmailManager:
@@ -37,7 +37,6 @@ def send_email(target_address, subject, text, html=None):
     server.sendmail(source_address, target_address, message.as_string())
     server.quit()
     
-
 
 demo_text = """
     Hi,

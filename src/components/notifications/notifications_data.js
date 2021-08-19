@@ -1,20 +1,20 @@
-import { Dictionary } from '../Dictionary';
-import cart_plus from '../images/icons/orders/cart_plus.svg'
-import suggest_dish from '../images/icons/suggest_dish.svg'
-import yellow_warning from '../images/icons/triangle_warning.svg'
-import circle_warning from '../images/icons/circle red warning.svg'
-import overflow_sign from '../images/icons/overflow sign.svg'
-import white_circle from '../images/icons/white circle warning.svg';
-import white_triangle from '../images/icons/white triangle_warning.svg';
-import white_overflow from '../images/icons/white overflow sign.svg';
-import { AddToOrder } from '../pages/inventory page/inventory_page';
-import meet_and_fish from '../images/icons/category_symbols/meet_and_fish.svg'
-import dry_food from '../images/icons/category_symbols/dry_food.svg'
-import others from '../images/icons/category_symbols/others.svg'
-import dairy from '../images/icons/category_symbols/dairy.svg'
-import vegetables from '../images/icons/category_symbols/vegetables.svg'
-import fruit from '../images/icons/category_symbols/fruit.svg'
-import inventory_looks_good from '../images/icons/inventory looks good.svg'
+import { Dictionary } from '../dictionary/Dictionary';
+import cart_plus from '../../images/icons/orders/cart_plus.svg'
+import suggest_dish from '../../images/icons/suggest_dish.svg'
+import yellow_warning from '../../images/icons/triangle_warning.svg'
+import circle_warning from '../../images/icons/circle red warning.svg'
+import overflow_sign from '../../images/icons/overflow sign.svg'
+import white_circle from '../../images/icons/white circle warning.svg';
+import white_triangle from '../../images/icons/white triangle_warning.svg';
+import white_overflow from '../../images/icons/white overflow sign.svg';
+import { AddToOrder } from '../../pages/inventory page/inventory_page';
+import meet_and_fish from '../../images/icons/category_symbols/meet_and_fish.svg'
+import dry_food from '../../images/icons/category_symbols/dry_food.svg'
+import others from '../../images/icons/category_symbols/others.svg'
+import dairy from '../../images/icons/category_symbols/dairy.svg'
+import vegetables from '../../images/icons/category_symbols/vegetables.svg'
+import fruit from '../../images/icons/category_symbols/fruit.svg'
+import inventory_looks_good from '../../images/icons/inventory looks good.svg'
 
 export const notifications_levels = [3, 2, 1], notification_colors = ["#FD5E53", "#F1C033", "#F78745"],
     action_symbol = [cart_plus, cart_plus, suggest_dish]

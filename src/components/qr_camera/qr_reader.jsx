@@ -2,16 +2,16 @@ import React, { Component } from 'react'
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import './qr_reader.css'
 import { Button, ControlLabel, Form, FormGroup, Loader, Modal, SelectPicker } from 'rsuite'
-import container_scan from '../images/icons/Camera_area/container_scan.svg'
-import item_scan from '../images/icons/Camera_area/item_scan.svg'
-import chain_icon from '../images/icons/Camera_area/chain_icon.svg'
-import green_chain_icon from '../images/icons/Camera_area/green_chain_icon.svg'
-import scan_icon from '../images/icons/Camera_area/scan_icon.svg';
-import pairing_complete from '../images/icons/Camera_area/pairing_complete.svg';
-import { Dictionary } from '../Dictionary';
+import container_scan from '../../images/icons/Camera_area/container_scan.svg'
+import item_scan from '../../images/icons/Camera_area/item_scan.svg'
+import chain_icon from '../../images/icons/Camera_area/chain_icon.svg'
+import green_chain_icon from '../../images/icons/Camera_area/green_chain_icon.svg'
+import scan_icon from '../../images/icons/Camera_area/scan_icon.svg';
+import pairing_complete from '../../images/icons/Camera_area/pairing_complete.svg';
+import { Dictionary } from '../dictionary/Dictionary';
 import $ from 'jquery';
-import { base_url } from '..';
-import { showNotification } from './bars/bars';
+import { base_url } from '../../index';
+import { showNotification } from '../bars/bars';
 
 export class Scanner extends Component {
     state = {
@@ -70,8 +70,6 @@ export class ModalDemo extends React.Component {
         this.get_items = this.get_items.bind(this);
         this.get_containers = this.get_containers.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        // this.found_id = this.found_id.bind(this);
-        // this.found_item = this.found_item.bind(this);
         this.removeCamera = this.removeCamera.bind(this);
         this.testExistenceInDict = this.testExistenceInDict.bind(this);
         this.resetComp = this.resetComp.bind(this);
@@ -94,8 +92,6 @@ export class ModalDemo extends React.Component {
             url: request,
             success: function (res) {
                 callback(res)
-                // console.log(res)
-
             },
             error: function (err) {
                 console.log(err)

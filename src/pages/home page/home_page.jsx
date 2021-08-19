@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import logo from '../../images/icons/Majordomo logo.svg';
 import './home_page.css'
-import { Notification, OKNotification } from '../../components/notifications'
-import { category_names, category_symbols, notification_dict } from '../../components/notifications_data';
-import { CategoryDrawer } from '../../components/drawer';
-import { Dictionary, getTime } from '../../Dictionary';
-import { getUnitById } from '../../components/data_dictionary';
-import { ModalDemo } from '../../components/qr_reader';
+import { Notification, OKNotification } from '../../components/notifications/notifications'
+import { category_names, category_symbols, notification_dict } from '../../components/notifications/notifications_data';
+import { CategoryDrawer } from '../../components/drawer/drawer';
+import { Dictionary, getTime } from '../../components/dictionary/Dictionary';
+import { getUnitById } from '../../components/data_parsing';
+import { ModalDemo } from '../../components/qr_camera/qr_reader';
 
 
 

@@ -10,8 +10,8 @@ var url = ""
 export var wssUrl =""
 url = "http://127.0.0.1:8000"
 wssUrl = 'ws://localhost:8010/wsw'
-url = "https://majordomo.cloudns.asia:443"
-wssUrl = 'wss://majordomo.cloudns.asia/wsw'
+// url = "https://majordomo.cloudns.asia:443"
+// wssUrl = 'wss://majordomo.cloudns.asia/wsw'
 if (window.location.href.includes("majordomo-me")) {
     wssUrl = '  wss://majordomo.cloudns.asia/wsw'
     url = "https://majordomo.cloudns.asia:443"

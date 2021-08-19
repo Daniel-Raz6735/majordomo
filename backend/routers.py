@@ -1,38 +1,34 @@
 from fastapi.responses import HTMLResponse
-import requests
-from email_client import EmailManager
+from utilities.email_client import EmailManager
 from queries.read_queries import ReadQueries as readQ
 from queries.create_queries import CreateQueries as createQ
 from queries.update_queries import UpdateQueries as updateQ
-from queries.update_queries import UserInfo
 from queries.delete_queries import DeleteQueries as deleteQ
-from utilities.logs import LogManager
+from utilities.logManager import LogManager
 from utilities.websockets import WebSocketManager
-from queries.connection_manager import Connection
+from utilities.configManager import ConfigManager
+from utilities.connection_manager import Connection
 from notifacations import NotificationsHandler
-from threading import Thread
+from settings import Settings
 import psycopg2
-import schedule
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
+from fastapi import WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-from typing import Optional, List, Dict
-from flask import request
-from fastapi import FastAPI, Request
+from typing import Optional
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, BaseSettings
 import time
 from typing import List
 
-
-class Settings(BaseSettings):
-    web_socket_manager = WebSocketManager()
-    notifications_handler: NotificationsHandler = NotificationsHandler(web_socket_manager)
-    email_client = EmailManager()
-    log_manager = LogManager()
-
+# import os
+# import sys
+#
+# sys.path.insert(0, os.getcwd())
 
 settings = Settings()
+notifications_handler = NotificationsHandler(settings.web_socket_manager)
+settings.add_notification_handler(notifications_handler)
 app = FastAPI()
 origins = [
     "http://localhost",
@@ -104,7 +100,7 @@ def get_user_preferences(user_email: str):
     """gets preferences for a specific user based on user_email
         required parameters: user_email"""
     connection = Connection()
-    reader = readQ(connection)
+    reader = readQ(settings,connection)
     user_id = reader.get_userid_by_email(user_email)
     query = readQ.get_user_preferences_query(user_id)
     return connection.get_result(query)
@@ -146,7 +142,7 @@ async def get_items(business_id: int):
     """get all items of business """
     pass
     connection = Connection()
-    reader = readQ(connection)
+    reader = readQ(settings, connection)
     query = reader.get_items(business_id=business_id)
     return connection.get_result(query)
 
@@ -164,7 +160,7 @@ async def get_item_history(business_id: int, item_id: int, min_date: Optional[in
     if not min_date and not max_date:
         raise HTTPException(status_code=404, detail="No date to reference")
     connection = Connection()
-    reading = readQ(connection)
+    reading = readQ(settings, connection)
     query, res_code = reading.get_weight_history(item_id, business_id, min_date, max_date)
     if res_code != 200:
         raise HTTPException(status_code=500, detail="Unable to create a history query")
@@ -194,7 +190,7 @@ async def pair_container_to_item(business_id: int, container_id: int, item_id: i
     removes all previous container pairings"""
     connection = Connection()
     updater = updateQ(connection)
-    reader = readQ(connection)
+    reader = readQ(settings, connection)
     container_query = reader.get_container_by_id_query(container_id)
     container_res = connection.get_result(container_query)
     try:
@@ -220,7 +216,7 @@ async def add_container_to_business(business_id: int, container_id: Optional[int
     returns the container id of the container added"""
     connection = Connection()
     updater = updateQ(connection)
-    reader = readQ(connection)
+    reader = readQ(settings, connection)
     have_container_id = container_id is not None
     business_query = reader.get_business_query(business_id)
     business_info = connection.get_result(business_query)
@@ -266,7 +262,7 @@ def edit_user():
     res = {}
     try:
         connection = Connection()
-        reader = readQ(connection)
+        reader = readQ(settings, connection)
         updater = updateQ(connection)
         updater.edit_user()
         arr = []
@@ -410,7 +406,7 @@ async def add_weights(lis: WeighingList, client_time: int):
     """gets a WeighingList and inserts it in to the database"""
     try:
         connection = Connection()
-        reader = readQ(connection)
+        reader = readQ(settings, connection)
         updater = updateQ(connection)
         arr = []
         server_time = int(time.time())
@@ -484,11 +480,6 @@ async def add_order_item(item: OrderItem):
 
     del connection
     return res, res_code
-    # query, res_code = createQ.insert_to_table_query("weights",
-    #                                                 ["weighing_date", "container_id", "weight_value", "last_user"],
-    #                                                 arr)
-    # await manager.broadcast(f"weights updated on #{client_time}", 1)
-    # return process_create_query([[query, "add weights"]], res_code)
 
 
 #  todo add validation to method
@@ -496,7 +487,7 @@ async def add_order_item(item: OrderItem):
 async def add_order_item(order_id: int, item_id: int, business_id: int):
     """remove item from order"""
     connection = Connection()
-    deleter = deleteQ(connection)
+    deleter = deleteQ(settings, connection)
     query = deleter.remove_order_item(order_id, item_id, business_id)
     connection.execute_query(query, "Unable to delete item from order")
     del connection
@@ -515,7 +506,8 @@ def process_read_query(query, res_code=200):
 def process_create_query(query, res_code):
     if res_code != 200:
         return query
-    result, res_code = createQ.insert_connection(query)
+    cr = createQ(settings=settings)
+    result, res_code = cr.insert_connection(query)
     if res_code == 200:
         return JSONResponse(content=jsonable_encoder(result[0]))
     else:

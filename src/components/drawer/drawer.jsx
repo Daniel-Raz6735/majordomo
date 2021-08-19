@@ -1,21 +1,21 @@
 import { Drawer, Icon, InputGroup, Input, Divider, Dropdown, Loader, Whisper, Tooltip, } from 'rsuite';
 import React, { Component } from 'react';
-import x_icon from '../images/x_icon.svg'
-import back_icon from '../images/icons/arrows/right_arrow.svg'
-import { Containers } from './containers';
-import { AlertNotifications } from './notifications';
-import './../components/drawer.css';
-import { Dictionary, getRTL, getLeftRight } from '../Dictionary';
-import { category_names, category_symbols, category_colors } from './notifications_data';
-import { AddItem } from '../pages/orders page/orders_page';
-import { InventoryTile } from '../pages/home page/home_page';
+import x_icon from '../../images/x_icon.svg'
+import back_icon from '../../images/icons/arrows/right_arrow.svg'
+import { Containers } from '../containers/containers';
+import { AlertNotifications } from '../notifications/notifications';
+import './drawer.css';
+import { Dictionary, getRTL, getLeftRight } from '../dictionary/Dictionary';
+import { category_names, category_symbols, category_colors } from '../notifications/notifications_data';
+import { AddItem } from '../../pages/orders page/orders_page';
+import { InventoryTile } from '../../pages/home page/home_page';
 import Chart from 'chart.js'
-import { base_url } from '../index';
+import { base_url } from '../../index';
 import $ from 'jquery';
-import info_symbol from '../images/icons/info_symbol.svg'
-import { data_dict, getUnitById } from './data_dictionary';
-import { getDate } from './containers'
-import { get_date, get_time, set_offset, get_hours, get_table_key } from './time_manager';
+import info_symbol from '../../images/icons/info_symbol.svg'
+import { data_dict, getUnitById } from '../data_parsing';
+import { getDate } from '../containers/containers'
+import { get_date, get_time, set_offset, get_hours, get_table_key } from '../time_manager';
 import moment from 'moment';
 
 
@@ -812,7 +812,7 @@ class ItemDeatils extends Component {
     return (
       <div className="item_details">
 
-        <ContainerInformationTip key={this.state.item_id} container_details={this.state.container_details} str={this.state.str} />
+        <ContainerInformationTip key={this.state.item_id+"tip"} container_details={this.state.container_details} str={this.state.str} />
 
         <Divider key={"divider1"} style={divider_style} vertical={true} />
         <div className="item_min_max">

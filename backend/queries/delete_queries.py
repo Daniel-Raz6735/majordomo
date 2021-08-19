@@ -1,5 +1,5 @@
-from queries.connection_manager import Connection
-from db_queries import DbQueries
+# from queries.connection_manager import Connection
+from .db_queries import DbQueries
 
 
 # def drop_table_query(table_name):
@@ -16,10 +16,11 @@ from db_queries import DbQueries
 
 
 class DeleteQueries:
-    def __init__(self, connection=False):
+    def __init__(self, settings, connection=False):
         if not connection:
-            connection = Connection()
+            connection = settings.connection_manager.Connection()
         self.connection = connection
+        self.settings = settings
 
     def remove_order_item(self, order_id, item_id, business_id):
         """remove an item from an order based on order id"""

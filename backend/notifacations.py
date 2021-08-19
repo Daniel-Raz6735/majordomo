@@ -1,10 +1,10 @@
 import schedule
 import psycopg2
 
-from email_client import EmailManager
+from settings import Settings
 from queries.read_queries import ReadQueries as readQ
-from queries.update_queries import UpdateQueries as updateQ
-from queries.connection_manager import Connection
+from utilities.email_client import EmailManager
+from utilities.connection_manager import Connection
 
 ITEM_CRITICAL = 1
 ITEM_LOW = 2
@@ -50,7 +50,7 @@ class NotificationsHandler:
         alert_dict = {}
         connection = Connection()
         try:
-            reader = readQ(connection)
+            reader = readQ(Settings(), connection)
             rules_query = reader.get_rules_query()
             rules = connection.get_result(rules_query)
             if rules:

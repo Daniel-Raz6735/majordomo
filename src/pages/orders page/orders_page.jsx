@@ -7,12 +7,12 @@ import envelope_icon from '../../images/icons/contact/envelope.svg';
 import down_arrow from '../../images/icons/arrows/down_arrow.svg';
 import $ from 'jquery'
 import './orders_page.css'
-import { Dictionary, getRTL } from "../../Dictionary";
-import { CategoryDrawer, SearchBar } from "../../components/drawer";
+import { Dictionary, getRTL } from "../../components/dictionary/Dictionary";
+import { CategoryDrawer, SearchBar } from "../../components/drawer/drawer";
 import { Quantity } from "../inventory page/inventory_page";
 import { base_url } from "../../index.js";
 import right_arrow from '../../images/icons/arrows/right_arrow.svg'
-import { getUnitById } from "../../components/data_dictionary.js";
+import { getUnitById } from "../../components/data_parsing.js";
 import export_list from '../../images/icons/orders/export_list.svg'
 
 

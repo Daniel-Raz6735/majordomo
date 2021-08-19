@@ -1,16 +1,15 @@
 from fastapi import HTTPException
 from psycopg2.extras import RealDictCursor
-from config import config
-from db_queries import DbQueries
-from queries.connection_manager import Connection
+from .db_queries import DbQueries
 import psycopg2
 
 
 class ReadQueries:
-    def __init__(self, connection=False):
+    def __init__(self, settings, connection=False):
         if not connection:
-            connection = Connection()
+            connection = settings.connection_manager.Connection()
         self.connection = connection
+        self.settings = settings
 
     @staticmethod
     def get_rules_query(business_id=None):
@@ -423,8 +422,7 @@ class ReadQueries:
         except (KeyError, IndexError):
             raise HTTPException(status_code=404, detail="User not found")
 
-    @staticmethod
-    def select_connection(query, expecting_result=True):
+    def select_connection(self, query, expecting_result=True):
         """this function connects with the DB and executes the query sent from the user. the result will be one of the following:
         if there is a return value: returned Sql value as a list, 200
         if not expecting result is needed it will return "processed OK", 200
@@ -436,7 +434,7 @@ class ReadQueries:
         results = []
         try:
             # read connection parameters
-            params = config()
+            params = self.settings.config_manager.config()
 
             # connect to the PostgreSQL server
             print('Connecting to the PostgreSQL database...')

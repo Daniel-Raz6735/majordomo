@@ -5,11 +5,11 @@ import cart from '../../images/icons/cart.svg'
 import profile from '../../images/profile.svg'
 import React, { Component } from 'react';
 import { auth } from '../../config/firebaseConfig'
-import { Dictionary, getTime } from '../../Dictionary';
+import { Dictionary, getTime } from '../dictionary/Dictionary';
 import InventoryPage from "../../pages/inventory page/inventory_page"
 import OrdersPage from "../../pages/orders page/orders_page"
 import { Button, Loader } from 'rsuite';
-import { create_initial_data_dict, confirm_papulation } from '../data_dictionary';
+import { create_initial_data_dict, confirm_papulation } from '../data_parsing';
 import SettingPage from "../../pages/settings page/settings_page"
 import { base_url, wssUrl } from '../../index'
 import $ from 'jquery'

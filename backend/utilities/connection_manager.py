@@ -1,6 +1,6 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from config import config
+from .configManager import ConfigManager
 from fastapi import HTTPException
 
 
@@ -10,17 +10,19 @@ class Connection:
     self contains : conn - the connection to the DB.
                     cur - the connection cursor"""
 
-    def __init__(self):
+    def __init__(self, active=True):
         """establish a connection with the DB"""
         # DB connection parameters
-        params = config()
+        params = ConfigManager.config()
+        self.conn = None
+        self.cur = None
+        if active:
+            # connect to the PostgreSQL server
+            print('Connecting to the PostgreSQL database...')
+            self.conn = psycopg2.connect(**params, cursor_factory=RealDictCursor)
 
-        # connect to the PostgreSQL server
-        print('Connecting to the PostgreSQL database...')
-        self.conn = psycopg2.connect(**params, cursor_factory=RealDictCursor)
-
-        # create a cursor
-        self.cur = self.conn.cursor()
+            # create a cursor
+            self.cur = self.conn.cursor()
 
     def __del__(self):
         """close the class connection"""
@@ -93,7 +95,7 @@ class Connection:
 def init_connection():
     """initiate a connection with the DB"""
     # DB connection parameters
-    params = config()
+    params = ConfigManager.config()
 
     # connect to the PostgreSQL server
     print('Connecting to the PostgreSQL database...')

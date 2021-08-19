@@ -1,9 +1,9 @@
-from queries.read_queries import ReadQueries as readQ
-from queries.create_queries import CreateQueries as createQ
-from queries.connection_manager import Connection
+from .read_queries import ReadQueries as readQ
+from .create_queries import CreateQueries as createQ
+# from .connection_manager import Connection
 from fastapi import HTTPException
 from pydantic import BaseModel, BaseSettings
-from db_queries import DbQueries
+from .db_queries import DbQueries
 import time
 
 

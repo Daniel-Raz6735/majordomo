@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { Badge, ButtonToolbar, Modal } from "rsuite";
-import { NotificationList } from "../../components/notifications";
-import { Dictionary, getRTL } from "../../Dictionary";
+import { NotificationList } from "../../components/notifications/notifications";
+import { Dictionary, getRTL } from "../../components/dictionary/Dictionary";
 import { refresh, TitleComponent, showNotification } from "../../components/bars/bars";
 import './inventory_page.css'
 import cart_plus from '../../images/icons/orders/cart_plus.svg'
 import x_icon from '../../images/x_icon.svg'
 import $ from 'jquery'
 import { base_url } from "../..";
-import { getUnitById } from "../../components/data_dictionary";
+import { getUnitById } from "../../components/data_parsing";
 
 
 class InventoryPage extends Component {

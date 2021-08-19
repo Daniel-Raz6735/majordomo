@@ -2,8 +2,8 @@ import React from 'react';
 import LocalizedStrings from 'react-localization';
 import Dropdown, { DropdownContent, DropdownTrigger } from 'react-simple-dropdown';
 import './Dictionary.css';
-import israelFlag from './images/icons/israel.svg';
-import usaFlag from './images/icons/USA.svg';
+import israelFlag from '../../images/icons/israel.svg';
+import usaFlag from '../../images/icons/USA.svg';
 
 
 

@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import { Button, Dropdown, Icon, Loader, Nav, Sidenav, Toggle } from "rsuite";
 import { NavBar, refresh, showNotification } from "../../components/bars/bars";
-import { determinLang, Dictionary } from "../../Dictionary";
+import { determinLang, Dictionary } from "../../components/dictionary/Dictionary";
 import { auth } from '../../config/firebaseConfig'
 import profilePic from "../../images/profile_pic.png";
 import './settings_page.css'
-import { changeLanguage } from '../../Dictionary'
+import { changeLanguage } from '../../components/dictionary/Dictionary'
 import AdminPage, { EditTable } from '../Admin Page/admin_page';
 import $ from 'jquery';
 import { base_url } from "../..";

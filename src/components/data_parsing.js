@@ -1,7 +1,5 @@
-import { download } from './drawer';
-import { notifications_levels } from './notifications_data'
+import { notifications_levels } from './notifications/notifications_data'
 import { set_offset } from './time_manager';
-
 export var data_dict;
 
 export function create_initial_data_dict(data) {
@@ -341,10 +339,3 @@ export function getUnitById(id) {
     }
 }
 
-// function download(content, fileName, contentType) {
-//     var a = document.createElement("a");
-//     var file = new Blob([content], { type: contentType });
-//     a.href = URL.createObjectURL(file);
-//     a.download = fileName;
-//     a.click();
-// }

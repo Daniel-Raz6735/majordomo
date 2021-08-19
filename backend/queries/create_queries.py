@@ -1,14 +1,6 @@
 from psycopg2.extras import RealDictCursor
-from config import config
-from queries.read_queries import ReadQueries as readQ
-from queries.connection_manager import Connection
+from .read_queries import ReadQueries as readQ
 import psycopg2
-
-
-def create():
-    code, query = db_queries.add_table_code()
-    code = select_connection(query)
-    return str(code)
 
 
 def dictionify_res(rows):
@@ -20,16 +12,6 @@ def dictionify_res(rows):
                 row_data[info] = row[info]
             res.append(row_data)
     return res
-
-def load_dummy_data(tables_to_read, tables):
-    if not tables_to_read or not tables:
-        return 500
-    for table in tables_to_read:
-        query, res_code = db_queries.insert_to_table_query(table, tables[table]["column"], tables[table]["data"])
-        res, res_code = select_connection(query,expecting_result=False)
-    return res_code
-
-
 
 
 def create_table_query(table_name, cols=None):
@@ -49,12 +31,12 @@ def create_table_query(table_name, cols=None):
 
 
 class CreateQueries:
-    def __init__(self, connection=False):
+    def __init__(self, settings, connection=False):
+        self.settings = settings
         if not connection:
-            connection = Connection()
+            connection = settings.connection_manager.Connection()
         self.connection = connection
         self.reader = readQ(self.connection)
-
 
     def add_empty_order(self, business_id, supplier_id):
         """creates SQL query that will add an empty order between the business and the supplier"""
@@ -64,8 +46,7 @@ class CreateQueries:
         if res_code != 200:
             return query, res_code
 
-    @staticmethod
-    def insert_connection(query, expecting_result=False):
+    def insert_connection(self, query, expecting_result=False):
         """this function connects with the DB and executes the query sent from the user. the result will be one of the following:
         if there is a return value: returned Sql value as a list, 200
         if not expecting result is needed it will return "processed OK", 200
@@ -76,7 +57,7 @@ class CreateQueries:
         results = []
         try:
             # read connection parameters
-            params = config()
+            params = self.settings.config_manager.config()
 
             # connect to the PostgreSQL server
             print('Connecting to the PostgreSQL database...')

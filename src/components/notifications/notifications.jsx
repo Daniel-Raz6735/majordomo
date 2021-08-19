@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import "./notifications.css"
-import { base_url } from '../index'
-// import fake_data from '../fake_data.json'
+import { base_url } from '../../index'
 import $ from 'jquery'
 import { Animation } from 'rsuite';
-import { action_btn, notification_dict, category_symbols, category_colors, notification_colors } from './notifications_data';
-import { Dictionary, getRTL } from '../Dictionary';
-import { CategoryDrawer } from './drawer';
-import v_icon from '../images/icons/v icon.svg'
-import { ButtonsComponent } from './bars/bars';
-import { confirm_papulation, getUnitById } from './data_dictionary';
-import { notifications_levels } from './notifications_data';
+import { action_btn, notification_dict, category_symbols, category_colors, notification_colors,notifications_levels } from './notifications_data';
+import { Dictionary, getRTL } from '../dictionary/Dictionary';
+import { CategoryDrawer } from '../drawer/drawer';
+import v_icon from '../../images/icons/v icon.svg'
+import { ButtonsComponent } from '../bars/bars';
+import { confirm_papulation, getUnitById } from '../data_parsing';
 
 
 

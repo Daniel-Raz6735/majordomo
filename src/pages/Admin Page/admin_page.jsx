@@ -5,7 +5,7 @@ import LoginComponent from '../login page/LoginPage';
 import './admin_page.css';
 import $ from 'jquery';
 import { base_url } from '../..';
-import { Dictionary } from '../../Dictionary';
+import { Dictionary } from '../../components/dictionary/Dictionary';
 const { Column, HeaderCell, Cell } = Table;
 
 
