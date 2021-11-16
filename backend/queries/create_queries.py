@@ -36,7 +36,7 @@ class CreateQueries:
         if not connection:
             connection = settings.connection_manager.Connection()
         self.connection = connection
-        self.reader = readQ(self.connection)
+        self.reader = readQ(settings, self.connection)
 
     def add_empty_order(self, business_id, supplier_id):
         """creates SQL query that will add an empty order between the business and the supplier"""

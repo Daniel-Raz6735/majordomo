@@ -81,10 +81,11 @@ def update_order_content_query(item_id, order_id, amount, unit, price_per_unit=N
 
 
 class UpdateQueries:
-    def __init__(self, connection):
+    def __init__(self, settings, connection):
         self.connection = connection
-        self.reader = readQ(self.connection)
-        self.creator = createQ(self.connection)
+        self.settings = settings
+        self.reader = readQ(settings, connection)
+        self.creator = createQ(settings, connection)
 
     def __del__(self):
         del self.connection
